@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Produtos - Sistema da Loja</title>
+
+    <link
+        rel="stylesheet"
+        href="admin.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="produtos.css"
+    >
+
+</head>
+
+
+<body>
+
+
+    <div class="layout-admin">
+
+
+        <!-- ======================================
+             MENU LATERAL
+        ======================================= -->
+
+        <aside class="menu-lateral">
+
+
+            <div class="logo-admin">
+
+                <div class="logo-icone">
+                    SL
+                </div>
+
+                <div>
+
+                    <strong>
+                        Sistema da Loja
+                    </strong>
+
+                    <span>
+                        Administração
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="usuario-logado">
+
+                <div class="avatar-admin">
+                    A
+                </div>
+
+                <div class="dados-usuario">
+
+                    <strong id="nomeAdministrador">
+                        Administrador
+                    </strong>
+
+                    <span>
+                        Administrador
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <nav class="menu">
+
+
+                <div class="titulo-menu">
+                    PRINCIPAL
+                </div>
+
+
+                <a
+                    href="admin.html"
+                    class="item-menu"
+                >
+
+                    <span class="icone-menu">
+                        ▦
+                    </span>
+
+                    <span>
+                        Dashboard
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="usuarios.html"
+                    class="item-menu"
+                >
+
+                    <span class="icone-menu">
+                        👥
+                    </span>
+
+                    <span>
+                        Usuários
+                    </span>
+
+                </a>
+
+
+                <div class="titulo-menu">
+                    ESTOQUE E VENDAS
+                </div>
+
+
+                <a
+                    href="produtos.html"
+                    class="item-menu ativo"
+                >
+
+                    <span class="icone-menu">
+                        📦
+                    </span>
+
+                    <span>
+                        Produtos
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="#"
+                    class="item-menu"
+                    data-futuro="categorias"
+                >
+
+                    <span class="icone-menu">
+                        🗂️
+                    </span>
+
+                    <span>
+                        Categorias
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="#"
+                    class="item-menu"
+                    data-futuro="estoque"
+                >
+
+                    <span class="icone-menu">
+                        📊
+                    </span>
+
+                    <span>
+                        Estoque
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="#"
+                    class="item-menu"
+                    data-futuro="vendas"
+                >
+
+                    <span class="icone-menu">
+                        🛒
+                    </span>
+
+                    <span>
+                        Vendas
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="#"
+                    class="item-menu"
+                    data-futuro="clientes"
+                >
+
+                    <span class="icone-menu">
+                        👤
+                    </span>
+
+                    <span>
+                        Clientes
+                    </span>
+
+                </a>
+
+
+                <div class="titulo-menu">
+                    FINANCEIRO
+                </div>
+
+
+                <a
+                    href="#"
+                    class="item-menu"
+                    data-futuro="financeiro"
+                >
+
+                    <span class="icone-menu">
+                        💰
+                    </span>
+
+                    <span>
+                        Financeiro
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="#"
+                    class="item-menu"
+                    data-futuro="relatorios"
+                >
+
+                    <span class="icone-menu">
+                        📈
+                    </span>
+
+                    <span>
+                        Relatórios
+                    </span>
+
+                </a>
+
+
+            </nav>
+
+
+            <div class="area-sair">
+
+                <button
+                    type="button"
+                    id="btnSair"
+                    class="botao-sair"
+                >
+
+                    <span>
+                        ⇥
+                    </span>
+
+                    Sair
+
+                </button>
+
+            </div>
+
+
+        </aside>
+
+
+        <!-- ======================================
+             CONTEÚDO
+        ======================================= -->
+
+        <main class="conteudo-admin">
+
+
+            <header class="cabecalho-admin">
+
+                <div>
+
+                    <h1>
+                        Produtos
+                    </h1>
+
+                    <p>
+                        Cadastro e gerenciamento dos produtos da loja
+                    </p>
+
+                </div>
+
+
+                <div class="data-atual">
+
+                    <span>
+                        Hoje
+                    </span>
+
+                    <strong id="dataAtual">
+                        --
+                    </strong>
+
+                </div>
+
+            </header>
+
+
+            <div
+                id="mensagemAdmin"
+                class="mensagem-admin"
+            ></div>
+
+
+            <!-- ==================================
+                 FORMULÁRIO
+            =================================== -->
+
+            <section class="painel-produtos">
+
+
+                <div class="titulo-painel">
+
+                    <div>
+
+                        <h2 id="tituloFormulario">
+                            Cadastrar produto
+                        </h2>
+
+                        <p>
+                            Informe os dados do produto.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <form id="formProduto">
+
+
+                    <div class="campos-produto">
+
+
+                        <div class="campo-produto campo-grande">
+
+                            <label for="nomeProduto">
+                                Nome do produto
+                            </label>
+
+                            <input
+                                type="text"
+                                id="nomeProduto"
+                                placeholder="Ex.: Camiseta básica"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="campo-produto">
+
+                            <label for="skuProduto">
+                                SKU / Código
+                            </label>
+
+                            <input
+                                type="text"
+                                id="skuProduto"
+                                placeholder="Ex.: CAM-001"
+                            >
+
+                        </div>
+
+
+                        <div class="campo-produto">
+
+                            <label for="categoriaProduto">
+                                Categoria
+                            </label>
+
+                            <select id="categoriaProduto">
+
+                                <option value="">
+                                    Sem categoria
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="campo-produto">
+
+                            <label for="precoCusto">
+                                Preço de custo
+                            </label>
+
+                            <input
+                                type="number"
+                                id="precoCusto"
+                                min="0"
+                                step="0.01"
+                                placeholder="0,00"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="campo-produto">
+
+                            <label for="precoVenda">
+                                Preço de venda
+                            </label>
+
+                            <input
+                                type="number"
+                                id="precoVenda"
+                                min="0"
+                                step="0.01"
+                                placeholder="0,00"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="campo-produto">
+
+                            <label for="estoque">
+                                Estoque inicial
+                            </label>
+
+                            <input
+                                type="number"
+                                id="estoque"
+                                min="0"
+                                step="0.001"
+                                value="0"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="campo-produto">
+
+                            <label for="estoqueMinimo">
+                                Estoque mínimo
+                            </label>
+
+                            <input
+                                type="number"
+                                id="estoqueMinimo"
+                                min="0"
+                                step="0.001"
+                                value="0"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="campo-produto campo-status">
+
+                            <label>
+                                Status
+                            </label>
+
+                            <label class="checkbox-status">
+
+                                <input
+                                    type="checkbox"
+                                    id="produtoAtivo"
+                                    checked
+                                >
+
+                                <span>
+                                    Produto ativo
+                                </span>
+
+                            </label>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="acoes-produto">
+
+
+                        <button
+                            type="submit"
+                            class="botao-principal"
+                            id="btnSalvar"
+                        >
+                            Cadastrar produto
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="botao-secundario"
+                            id="btnCancelar"
+                        >
+                            Cancelar
+                        </button>
+
+
+                    </div>
+
+
+                </form>
+
+
+            </section>
+
+
+            <!-- ==================================
+                 LISTA
+            =================================== -->
+
+            <section class="painel-produtos">
+
+
+                <div class="titulo-painel titulo-lista">
+
+                    <div>
+
+                        <h2>
+                            Produtos cadastrados
+                        </h2>
+
+                        <p>
+                            Produtos disponíveis no sistema.
+                        </p>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        class="botao-atualizar"
+                        id="btnAtualizar"
+                    >
+                        🔄 Atualizar
+                    </button>
+
+                </div>
+
+
+                <div
+                    id="carregando"
+                    class="carregando"
+                >
+                    Carregando produtos...
+                </div>
+
+
+                <div class="tabela-wrapper">
+
+                    <table class="tabela-produtos">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Produto
+                                </th>
+
+                                <th>
+                                    SKU
+                                </th>
+
+                                <th>
+                                    Categoria
+                                </th>
+
+                                <th>
+                                    Custo
+                                </th>
+
+                                <th>
+                                    Venda
+                                </th>
+
+                                <th>
+                                    Estoque
+                                </th>
+
+                                <th>
+                                    Status
+                                </th>
+
+                                <th>
+                                    Ações
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody id="listaProdutos">
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+
+                <div
+                    id="semProdutos"
+                    class="sem-produtos"
+                >
+                    Nenhum produto cadastrado.
+                </div>
+
+
+            </section>
+
+
+        </main>
+
+
+    </div>
+
+
+    <!-- ==========================================
+         SUPABASE
+    =========================================== -->
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+    ></script>
+
+
+    <script src="js/config.js"></script>
+
+    <script src="js/produtos.js"></script>
+
+
+</body>
+
+</html>

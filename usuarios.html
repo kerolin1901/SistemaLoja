@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Usuários - Sistema da Loja</title>
+
+    <link
+        rel="stylesheet"
+        href="admin.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="usuarios.css"
+    >
+
+</head>
+
+
+<body>
+
+
+    <div class="layout-admin">
+
+
+        <!-- ======================================
+             MENU LATERAL
+        ======================================= -->
+
+        <aside class="menu-lateral">
+
+
+            <!-- LOGO -->
+
+            <div class="logo-admin">
+
+                <div class="logo-icone">
+                    SL
+                </div>
+
+                <div>
+
+                    <strong>
+                        Sistema da Loja
+                    </strong>
+
+                    <span>
+                        Administração
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- USUÁRIO LOGADO -->
+
+            <div class="usuario-logado">
+
+                <div class="avatar-admin">
+                    A
+                </div>
+
+                <div class="dados-usuario">
+
+                    <strong id="nomeAdministrador">
+                        Administrador
+                    </strong>
+
+                    <span>
+                        Administrador
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- MENU -->
+
+            <nav class="menu">
+
+                <div class="titulo-menu">
+                    PRINCIPAL
+                </div>
+
+
+                <a
+                    href="admin.html"
+                    class="item-menu"
+                >
+
+                    <span class="icone-menu">
+                        ▦
+                    </span>
+
+                    <span>
+                        Dashboard
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="usuarios.html"
+                    class="item-menu ativo"
+                >
+
+                    <span class="icone-menu">
+                        👥
+                    </span>
+
+                    <span>
+                        Usuários
+                    </span>
+
+                </a>
+
+
+                <div class="titulo-menu">
+                    ESTOQUE E VENDAS
+                </div>
+
+
+                <a
+                    href="#"
+                    class="item-menu"
+                    data-futuro="produtos"
+                >
+
+                    <span class="icone-menu">
+                        📦
+                    </span>
+
+                    <span>
+                        Produtos
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="#"
+                    class="item-menu"
+                    data-futuro="categorias"
+                >
+
+                    <span class="icone-menu">
+                        🗂️
+                    </span>
+
+                    <span>
+                        Categorias
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="#"
+                    class="item-menu"
+                    data-futuro="estoque"
+                >
+
+                    <span class="icone-menu">
+                        📊
+                    </span>
+
+                    <span>
+                        Estoque
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="#"
+                    class="item-menu"
+                    data-futuro="vendas"
+                >
+
+                    <span class="icone-menu">
+                        🛒
+                    </span>
+
+                    <span>
+                        Vendas
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="#"
+                    class="item-menu"
+                    data-futuro="clientes"
+                >
+
+                    <span class="icone-menu">
+                        👤
+                    </span>
+
+                    <span>
+                        Clientes
+                    </span>
+
+                </a>
+
+
+                <div class="titulo-menu">
+                    FINANCEIRO
+                </div>
+
+
+                <a
+                    href="#"
+                    class="item-menu"
+                    data-futuro="financeiro"
+                >
+
+                    <span class="icone-menu">
+                        💰
+                    </span>
+
+                    <span>
+                        Financeiro
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="#"
+                    class="item-menu"
+                    data-futuro="relatorios"
+                >
+
+                    <span class="icone-menu">
+                        📈
+                    </span>
+
+                    <span>
+                        Relatórios
+                    </span>
+
+                </a>
+
+            </nav>
+
+
+            <!-- SAIR -->
+
+            <div class="area-sair">
+
+                <button
+                    type="button"
+                    id="btnSair"
+                    class="botao-sair"
+                >
+
+                    <span>
+                        ⇥
+                    </span>
+
+                    Sair
+
+                </button>
+
+            </div>
+
+
+        </aside>
+
+
+        <!-- ======================================
+             CONTEÚDO PRINCIPAL
+        ======================================= -->
+
+        <main class="conteudo-admin">
+
+
+            <!-- CABEÇALHO -->
+
+            <header class="cabecalho-admin">
+
+                <div>
+
+                    <h1>
+                        Usuários
+                    </h1>
+
+                    <p>
+                        Gerenciamento de usuários do sistema
+                    </p>
+
+                </div>
+
+
+                <div class="data-atual">
+
+                    <span>
+                        Hoje
+                    </span>
+
+                    <strong id="dataAtual">
+                        --
+                    </strong>
+
+                </div>
+
+            </header>
+
+
+            <!-- MENSAGEM -->
+
+            <div
+                id="mensagemAdmin"
+                class="mensagem-admin"
+            ></div>
+
+
+            <!-- ==================================
+                 CADASTRAR USUÁRIO
+            =================================== -->
+
+            <section class="painel-usuarios">
+
+
+                <div class="titulo-painel">
+
+                    <div>
+
+                        <h2>
+                            Cadastrar vendedor
+                        </h2>
+
+                        <p>
+                            Crie um novo usuário para realizar
+                            vendas no sistema.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <form id="formUsuario">
+
+
+                    <div class="campos-usuario">
+
+
+                        <div class="campo-usuario">
+
+                            <label for="nomeCompleto">
+                                Nome completo
+                            </label>
+
+                            <input
+                                type="text"
+                                id="nomeCompleto"
+                                placeholder="Digite o nome completo"
+                                autocomplete="name"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="campo-usuario">
+
+                            <label for="usuario">
+                                Usuário
+                            </label>
+
+                            <input
+                                type="text"
+                                id="usuario"
+                                placeholder="Ex.: joao"
+                                autocomplete="username"
+                                spellcheck="false"
+                                required
+                            >
+
+                            <small>
+                                Letras, números, ponto,
+                                hífen ou underline.
+                            </small>
+
+                        </div>
+
+
+                        <div class="campo-usuario">
+
+                            <label for="senha">
+                                Senha
+                            </label>
+
+                            <input
+                                type="password"
+                                id="senha"
+                                placeholder="Digite a senha"
+                                autocomplete="new-password"
+                                required
+                            >
+
+                            <small>
+                                Mínimo de 6 caracteres.
+                            </small>
+
+                        </div>
+
+
+                        <div class="campo-usuario">
+
+                            <label for="tipo">
+                                Tipo
+                            </label>
+
+                            <select id="tipo">
+
+                                <option value="vendedor">
+                                    Vendedor
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="acoes-usuario">
+
+                        <button
+                            type="submit"
+                            class="botao-cadastrar"
+                            id="btnCadastrar"
+                        >
+                            Cadastrar vendedor
+                        </button>
+
+                    </div>
+
+
+                    <div
+                        id="mensagem"
+                        class="mensagem"
+                    ></div>
+
+
+                </form>
+
+            </section>
+
+
+            <!-- ==================================
+                 USUÁRIOS CADASTRADOS
+            =================================== -->
+
+            <section class="painel-usuarios">
+
+
+                <div class="titulo-painel titulo-lista">
+
+                    <div>
+
+                        <h2>
+                            Usuários cadastrados
+                        </h2>
+
+                        <p>
+                            Usuários que possuem acesso ao sistema.
+                        </p>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        class="botao-atualizar"
+                        id="btnAtualizar"
+                    >
+                        🔄 Atualizar
+                    </button>
+
+                </div>
+
+
+                <div
+                    id="carregando"
+                    class="carregando"
+                >
+                    Carregando usuários...
+                </div>
+
+
+                <div class="tabela-wrapper">
+
+                    <table class="tabela-usuarios">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Nome
+                                </th>
+
+                                <th>
+                                    Usuário
+                                </th>
+
+                                <th>
+                                    Tipo
+                                </th>
+
+                                <th>
+                                    Status
+                                </th>
+
+                                <th>
+                                    Ação
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody id="listaUsuarios">
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+
+                <div
+                    id="semUsuarios"
+                    class="sem-usuarios"
+                >
+                    Nenhum usuário encontrado.
+                </div>
+
+
+            </section>
+
+
+        </main>
+
+    </div>
+
+
+    <!-- ==========================================
+         SUPABASE
+    ========================================== -->
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+    ></script>
+
+
+    <script src="js/config.js"></script>
+
+
+    <script src="js/usuarios.js"></script>
+
+
+</body>
+
+</html>

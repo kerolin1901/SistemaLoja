@@ -1,0 +1,508 @@
+/* ==========================================
+   SISTEMA DA LOJA
+   ÁREA DO VENDEDOR
+========================================== */
+
+* {
+    box-sizing: border-box;
+}
+
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+    background: #f5f7fb;
+    color: #1f2937;
+}
+
+
+button,
+input,
+select {
+    font-family: inherit;
+}
+
+
+/* ==========================================
+   LAYOUT
+========================================== */
+
+.layout-vendedor {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 250px minmax(0, 1fr);
+}
+
+
+/* ==========================================
+   MENU LATERAL
+========================================== */
+
+.menu-lateral-vendedor {
+    min-height: 100vh;
+    background: #111827;
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    padding: 22px 16px;
+}
+
+
+/* ==========================================
+   LOGO
+========================================== */
+
+.logo-vendedor {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 5px 8px 25px;
+}
+
+
+.logo-icone {
+    width: 42px;
+    height: 42px;
+    border-radius: 11px;
+    background: #2563eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+}
+
+
+.logo-vendedor strong {
+    display: block;
+    font-size: 15px;
+}
+
+
+.logo-vendedor span {
+    display: block;
+    margin-top: 4px;
+    color: #9ca3af;
+    font-size: 11px;
+}
+
+
+/* ==========================================
+   USUÁRIO
+========================================== */
+
+.usuario-vendedor {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 15px 9px;
+    margin-bottom: 20px;
+    border-top: 1px solid #374151;
+    border-bottom: 1px solid #374151;
+}
+
+
+.avatar-vendedor {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: #2563eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+}
+
+
+.dados-vendedor {
+    min-width: 0;
+}
+
+
+.dados-vendedor strong {
+    display: block;
+    font-size: 13px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+.dados-vendedor span {
+    display: block;
+    margin-top: 3px;
+    color: #9ca3af;
+    font-size: 11px;
+}
+
+
+/* ==========================================
+   MENU
+========================================== */
+
+.menu-vendedor {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+
+.titulo-menu {
+    margin: 15px 9px 7px;
+    color: #6b7280;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+}
+
+
+.item-menu {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 11px 12px;
+    border-radius: 8px;
+    color: #d1d5db;
+    text-decoration: none;
+    font-size: 13px;
+}
+
+
+.item-menu:hover {
+    background: #1f2937;
+    color: #ffffff;
+}
+
+
+.item-menu.ativo {
+    background: #2563eb;
+    color: #ffffff;
+}
+
+
+.item-menu span:first-child {
+    width: 20px;
+    text-align: center;
+}
+
+
+/* ==========================================
+   SAIR
+========================================== */
+
+.area-sair {
+    margin-top: auto;
+    padding-top: 20px;
+}
+
+
+.botao-sair {
+    width: 100%;
+    border: 0;
+    background: transparent;
+    color: #d1d5db;
+    padding: 11px 12px;
+    border-radius: 8px;
+    text-align: left;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+
+.botao-sair:hover {
+    background: #1f2937;
+    color: #ffffff;
+}
+
+
+.botao-sair span {
+    margin-right: 9px;
+}
+
+
+/* ==========================================
+   CONTEÚDO
+========================================== */
+
+.conteudo-vendedor {
+    min-width: 0;
+    padding: 30px;
+}
+
+
+/* ==========================================
+   CABEÇALHO
+========================================== */
+
+.cabecalho-vendedor {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+
+.cabecalho-vendedor h1 {
+    margin: 0 0 6px;
+    font-size: 28px;
+}
+
+
+.cabecalho-vendedor p {
+    margin: 0;
+    color: #6b7280;
+    font-size: 14px;
+}
+
+
+.data-atual {
+    text-align: right;
+}
+
+
+.data-atual span {
+    display: block;
+    color: #6b7280;
+    font-size: 12px;
+}
+
+
+.data-atual strong {
+    display: block;
+    margin-top: 4px;
+    font-size: 13px;
+}
+
+
+/* ==========================================
+   BOAS-VINDAS
+========================================== */
+
+.painel-boas-vindas {
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 25px;
+    padding: 30px;
+    margin-bottom: 25px;
+    border-radius: 14px;
+    background: #ffffff;
+    box-shadow:
+        0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+
+.etiqueta {
+    display: inline-block;
+    margin-bottom: 10px;
+    color: #2563eb;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+}
+
+
+.painel-boas-vindas h2 {
+    margin: 0 0 9px;
+    font-size: 23px;
+}
+
+
+.painel-boas-vindas p {
+    max-width: 700px;
+    margin: 0;
+    color: #6b7280;
+    line-height: 1.6;
+    font-size: 14px;
+}
+
+
+.ilustracao {
+    width: 90px;
+    height: 90px;
+    flex-shrink: 0;
+    border-radius: 20px;
+    background: #eff6ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 42px;
+}
+
+
+/* ==========================================
+   PAINEL
+========================================== */
+
+.painel {
+    min-width: 0;
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 25px;
+    margin-bottom: 25px;
+    box-shadow:
+        0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+
+.titulo-painel {
+    margin-bottom: 20px;
+}
+
+
+.titulo-painel h2 {
+    margin: 0 0 6px;
+    font-size: 20px;
+}
+
+
+.titulo-painel p {
+    margin: 0;
+    color: #6b7280;
+    font-size: 14px;
+}
+
+
+/* ==========================================
+   ATALHOS
+========================================== */
+
+.atalhos {
+    display: grid;
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+    gap: 15px;
+}
+
+
+.atalho {
+    min-width: 0;
+    border: 1px solid #e5e7eb;
+    background: #ffffff;
+    border-radius: 11px;
+    padding: 20px;
+    text-align: left;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+
+.atalho:hover {
+    border-color: #2563eb;
+    box-shadow:
+        0 4px 12px rgba(37, 99, 235, 0.10);
+}
+
+
+.atalho > span {
+    display: block;
+    margin-bottom: 13px;
+    font-size: 25px;
+}
+
+
+.atalho strong {
+    display: block;
+    font-size: 14px;
+}
+
+
+.atalho small {
+    display: block;
+    margin-top: 5px;
+    color: #6b7280;
+    font-size: 12px;
+}
+
+
+/* ==========================================
+   AVISO
+========================================== */
+
+.aviso-painel {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+}
+
+
+.aviso-icone {
+    flex-shrink: 0;
+    font-size: 22px;
+}
+
+
+.aviso-painel strong {
+    display: block;
+    margin-bottom: 5px;
+}
+
+
+.aviso-painel p {
+    margin: 0;
+    color: #6b7280;
+    line-height: 1.5;
+    font-size: 13px;
+}
+
+
+/* ==========================================
+   RESPONSIVO
+========================================== */
+
+@media (max-width: 1000px) {
+
+    .atalhos {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+
+@media (max-width: 750px) {
+
+    .layout-vendedor {
+        grid-template-columns: 1fr;
+    }
+
+
+    .menu-lateral-vendedor {
+        min-height: auto;
+    }
+
+
+    .conteudo-vendedor {
+        padding: 20px;
+    }
+
+
+    .cabecalho-vendedor {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+
+    .data-atual {
+        text-align: left;
+    }
+
+
+    .painel-boas-vindas {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+
+    .atalhos {
+        grid-template-columns: 1fr;
+    }
+
+}

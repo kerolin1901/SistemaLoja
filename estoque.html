@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Sistema da Loja - Estoque</title>
+
+    <link rel="stylesheet" href="admin.css">
+    <link rel="stylesheet" href="estoque.css">
+</head>
+
+<body>
+
+    <div class="layout-admin">
+
+        <!-- ==========================================
+             MENU LATERAL
+        ========================================== -->
+
+        <aside class="menu-lateral">
+
+            <div class="logo-admin">
+
+                <h1>Sistema da Loja</h1>
+
+                <span>
+                    Administração
+                </span>
+
+            </div>
+
+
+            <div class="usuario-logado">
+
+                <div class="avatar-admin">
+                    A
+                </div>
+
+                <div>
+
+                    <strong id="nomeAdministrador">
+                        Administrador
+                    </strong>
+
+                    <small>
+                        Administrador
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <nav class="menu">
+
+                <div class="titulo-menu">
+                    PRINCIPAL
+                </div>
+
+
+                <a
+                    href="admin.html"
+                    class="item-menu"
+                >
+                    <span>🏠</span>
+                    Dashboard
+                </a>
+
+
+                <a
+                    href="usuarios.html"
+                    class="item-menu"
+                >
+                    <span>👥</span>
+                    Usuários
+                </a>
+
+
+                <div class="titulo-menu">
+                    ESTOQUE E VENDAS
+                </div>
+
+
+                <a
+                    href="produtos.html"
+                    class="item-menu"
+                >
+                    <span>📦</span>
+                    Produtos
+                </a>
+
+
+                <a
+                    href="categorias.html"
+                    class="item-menu"
+                >
+                    <span>🗂️</span>
+                    Categorias
+                </a>
+
+
+                <a
+                    href="estoque.html"
+                    class="item-menu ativo"
+                >
+                    <span>📋</span>
+                    Estoque
+                </a>
+
+
+                <a
+                    href="#"
+                    class="item-menu"
+                    data-futuro="vendas"
+                >
+                    <span>🛒</span>
+                    Vendas
+                </a>
+
+
+                <a
+                    href="#"
+                    class="item-menu"
+                    data-futuro="clientes"
+                >
+                    <span>👤</span>
+                    Clientes
+                </a>
+
+
+                <div class="titulo-menu">
+                    FINANCEIRO
+                </div>
+
+
+                <a
+                    href="#"
+                    class="item-menu"
+                    data-futuro="financeiro"
+                >
+                    <span>💰</span>
+                    Financeiro
+                </a>
+
+
+                <a
+                    href="#"
+                    class="item-menu"
+                    data-futuro="relatorios"
+                >
+                    <span>📊</span>
+                    Relatórios
+                </a>
+
+            </nav>
+
+
+            <div class="area-sair">
+
+                <button
+                    type="button"
+                    class="botao-sair"
+                    id="btnSair"
+                >
+                    🚪 Sair
+                </button>
+
+            </div>
+
+        </aside>
+
+
+        <!-- ==========================================
+             CONTEÚDO
+        ========================================== -->
+
+        <main class="conteudo-admin">
+
+            <header class="cabecalho-admin">
+
+                <div>
+
+                    <h2>
+                        Estoque
+                    </h2>
+
+                    <p id="dataAtual">
+                        Controle de estoque
+                    </p>
+
+                </div>
+
+            </header>
+
+
+            <!-- ==========================================
+                 CARDS
+            ========================================== -->
+
+            <section class="cards-estoque">
+
+                <div class="card-estoque">
+
+                    <div class="icone-estoque">
+                        📦
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Produtos
+                        </span>
+
+                        <strong id="totalProdutos">
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card-estoque">
+
+                    <div class="icone-estoque">
+                        📊
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Itens em estoque
+                        </span>
+
+                        <strong id="totalItens">
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card-estoque">
+
+                    <div class="icone-estoque">
+                        ⚠️
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Estoque baixo
+                        </span>
+
+                        <strong id="totalEstoqueBaixo">
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ==========================================
+                 MOVIMENTAÇÃO
+            ========================================== -->
+
+            <section class="painel-estoque">
+
+                <div class="cabecalho-painel">
+
+                    <div>
+
+                        <h2>
+                            Movimentar estoque
+                        </h2>
+
+                        <p>
+                            Registre entradas, saídas e ajustes
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <form id="formMovimentacao">
+
+                    <div class="campos-estoque">
+
+                        <div class="campo-estoque">
+
+                            <label for="produtoEstoque">
+                                Produto
+                            </label>
+
+                            <select
+                                id="produtoEstoque"
+                                required
+                            >
+
+                                <option value="">
+                                    Selecione um produto
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="campo-estoque">
+
+                            <label for="tipoMovimentacao">
+                                Tipo
+                            </label>
+
+                            <select
+                                id="tipoMovimentacao"
+                                required
+                            >
+
+                                <option value="entrada">
+                                    Entrada
+                                </option>
+
+                                <option value="saida">
+                                    Saída
+                                </option>
+
+                                <option value="ajuste">
+                                    Ajuste
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="campo-estoque">
+
+                            <label for="quantidadeMovimentacao">
+                                Quantidade
+                            </label>
+
+                            <input
+                                type="number"
+                                id="quantidadeMovimentacao"
+                                min="0.001"
+                                step="0.001"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="campo-estoque">
+
+                            <label for="motivoMovimentacao">
+                                Motivo
+                            </label>
+
+                            <input
+                                type="text"
+                                id="motivoMovimentacao"
+                                maxlength="200"
+                                placeholder="Ex.: Compra de mercadoria"
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="acoes-estoque">
+
+                        <button
+                            type="submit"
+                            class="botao-principal"
+                        >
+                            Registrar movimentação
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="botao-secundario"
+                            id="btnCancelarMovimentacao"
+                        >
+                            Cancelar
+                        </button>
+
+                    </div>
+
+
+                    <div
+                        id="mensagemEstoque"
+                        class="mensagem-estoque"
+                    ></div>
+
+                </form>
+
+            </section>
+
+
+            <!-- ==========================================
+                 ESTOQUE ATUAL
+            ========================================== -->
+
+            <section class="painel-estoque">
+
+                <div class="cabecalho-painel">
+
+                    <div>
+
+                        <h2>
+                            Estoque atual
+                        </h2>
+
+                        <p>
+                            Quantidade disponível por produto
+                        </p>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        class="botao-secundario"
+                        id="btnAtualizarEstoque"
+                    >
+                        🔄 Atualizar
+                    </button>
+
+                </div>
+
+
+                <div
+                    id="carregandoEstoque"
+                    class="carregando"
+                >
+                    Carregando estoque...
+                </div>
+
+
+                <div
+                    id="semEstoque"
+                    class="sem-dados"
+                    style="display: none;"
+                >
+                    Nenhum produto cadastrado.
+                </div>
+
+
+                <div class="tabela-container">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Produto
+                                </th>
+
+                                <th>
+                                    SKU
+                                </th>
+
+                                <th>
+                                    Categoria
+                                </th>
+
+                                <th>
+                                    Estoque
+                                </th>
+
+                                <th>
+                                    Mínimo
+                                </th>
+
+                                <th>
+                                    Status
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody id="listaEstoque"></tbody>
+
+                    </table>
+
+                </div>
+
+            </section>
+
+
+            <!-- ==========================================
+                 HISTÓRICO
+            ========================================== -->
+
+            <section class="painel-estoque">
+
+                <div class="cabecalho-painel">
+
+                    <div>
+
+                        <h2>
+                            Últimas movimentações
+                        </h2>
+
+                        <p>
+                            Histórico das últimas movimentações
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    id="carregandoMovimentacoes"
+                    class="carregando"
+                >
+                    Carregando movimentações...
+                </div>
+
+
+                <div
+                    id="semMovimentacoes"
+                    class="sem-dados"
+                    style="display: none;"
+                >
+                    Nenhuma movimentação registrada.
+                </div>
+
+
+                <div class="tabela-container">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Data
+                                </th>
+
+                                <th>
+                                    Produto
+                                </th>
+
+                                <th>
+                                    Tipo
+                                </th>
+
+                                <th>
+                                    Quantidade
+                                </th>
+
+                                <th>
+                                    Estoque anterior
+                                </th>
+
+                                <th>
+                                    Estoque novo
+                                </th>
+
+                                <th>
+                                    Motivo
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody id="listaMovimentacoes"></tbody>
+
+                    </table>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+    <!-- ==========================================
+         SCRIPTS
+    ========================================== -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="js/config.js"></script>
+
+    <script src="js/estoque.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,332 @@
+/* ==========================================
+   SISTEMA DA LOJA
+   CLIENTES
+========================================== */
+
+
+/* ==========================================
+   PAINEL DO FORMULÁRIO
+========================================== */
+
+.painel-clientes {
+    margin-bottom: 24px;
+}
+
+
+/* ==========================================
+   TÍTULO DO PAINEL
+========================================== */
+
+.titulo-painel {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 24px;
+}
+
+.titulo-painel h2 {
+    margin: 0 0 6px;
+}
+
+.titulo-painel p {
+    margin: 0;
+    color: #6b7280;
+}
+
+
+/* ==========================================
+   FORMULÁRIO
+========================================== */
+
+.grid-formulario {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.campo-formulario {
+    min-width: 0;
+}
+
+.campo-formulario label {
+    display: block;
+    margin-bottom: 7px;
+    font-weight: 600;
+    color: #374151;
+}
+
+.campo-formulario input,
+.campo-formulario textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #111827;
+    font-size: 14px;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.campo-formulario input:focus,
+.campo-formulario textarea:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.10);
+}
+
+.campo-formulario textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.campo-grande {
+    grid-column: span 1;
+}
+
+.campo-completo {
+    grid-column: 1 / -1;
+}
+
+
+/* ==========================================
+   AÇÕES DO FORMULÁRIO
+========================================== */
+
+.acoes-formulario {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+
+/* ==========================================
+   BOTÕES
+========================================== */
+
+.botao-principal,
+.botao-secundario {
+    border: 0;
+    border-radius: 8px;
+    padding: 11px 18px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.botao-principal {
+    background: #2563eb;
+    color: #ffffff;
+}
+
+.botao-principal:hover {
+    background: #1d4ed8;
+}
+
+.botao-secundario {
+    background: #f3f4f6;
+    color: #374151;
+}
+
+.botao-secundario:hover {
+    background: #e5e7eb;
+}
+
+
+/* ==========================================
+   TABELA
+========================================== */
+
+.tabela-container {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.tabela-clientes {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 850px;
+}
+
+.tabela-clientes th {
+    text-align: left;
+    padding: 13px 12px;
+    background: #f9fafb;
+    border-bottom: 1px solid #e5e7eb;
+    color: #374151;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.tabela-clientes td {
+    padding: 14px 12px;
+    border-bottom: 1px solid #e5e7eb;
+    color: #4b5563;
+    font-size: 14px;
+    vertical-align: middle;
+}
+
+.tabela-clientes tbody tr:hover {
+    background: #f9fafb;
+}
+
+
+/* ==========================================
+   NOME DO CLIENTE
+========================================== */
+
+.nome-cliente-tabela {
+    font-weight: 700;
+    color: #111827;
+}
+
+
+/* ==========================================
+   STATUS
+========================================== */
+
+.status-cliente {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 9px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.status-ativo {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.status-inativo {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+
+/* ==========================================
+   AÇÕES DA TABELA
+========================================== */
+
+.acoes-cliente {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    flex-wrap: wrap;
+}
+
+.botao-acao {
+    border: 0;
+    border-radius: 6px;
+    padding: 7px 10px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.botao-editar {
+    background: #eff6ff;
+    color: #1d4ed8;
+}
+
+.botao-editar:hover {
+    background: #dbeafe;
+}
+
+.botao-status {
+    background: #f3f4f6;
+    color: #374151;
+}
+
+.botao-status:hover {
+    background: #e5e7eb;
+}
+
+.botao-excluir {
+    background: #fef2f2;
+    color: #b91c1c;
+}
+
+.botao-excluir:hover {
+    background: #fee2e2;
+}
+
+
+/* ==========================================
+   ESTADOS
+========================================== */
+
+.estado-lista {
+    padding: 35px 20px;
+    text-align: center;
+    color: #6b7280;
+}
+
+
+/* ==========================================
+   MENSAGENS
+========================================== */
+
+.mensagem-admin {
+    margin-bottom: 20px;
+    padding: 12px 15px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.mensagem-sucesso {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.mensagem-erro {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.mensagem-info {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+
+/* ==========================================
+   RESPONSIVO
+========================================== */
+
+@media (max-width: 900px) {
+
+    .grid-formulario {
+        grid-template-columns: 1fr;
+    }
+
+    .campo-grande,
+    .campo-completo {
+        grid-column: 1;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .titulo-painel {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .acoes-formulario {
+        flex-direction: column;
+    }
+
+    .acoes-formulario button {
+        width: 100%;
+    }
+
+}

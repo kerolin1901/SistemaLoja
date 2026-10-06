@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Sistema da Loja</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+</head>
+
+
+<body>
+
+    <main class="pagina-login">
+
+        <section class="caixa-login">
+
+
+            <!-- ======================================
+                 LOGO / TÍTULO
+            ======================================= -->
+
+            <div class="logo">
+
+                <h1>
+                    Sistema da Loja
+                </h1>
+
+                <p>
+                    Gestão completa da sua loja
+                </p>
+
+            </div>
+
+
+            <!-- ======================================
+                 FORMULÁRIO
+            ======================================= -->
+
+            <div class="formulario">
+
+
+                <!-- USUÁRIO -->
+
+                <label for="usuario">
+                    Usuário
+                </label>
+
+                <input
+                    type="text"
+                    id="usuario"
+                    placeholder="Digite seu usuário"
+                    autocomplete="username"
+                    spellcheck="false"
+                >
+
+
+                <!-- SENHA -->
+
+                <label for="senha">
+                    Senha
+                </label>
+
+                <input
+                    type="password"
+                    id="senha"
+                    placeholder="Digite sua senha"
+                    autocomplete="current-password"
+                >
+
+
+                <!-- BOTÃO -->
+
+                <button
+                    type="button"
+                    id="btnEntrar"
+                >
+                    Entrar
+                </button>
+
+
+                <!-- MENSAGEM -->
+
+                <div
+                    id="mensagem"
+                    class="mensagem"
+                ></div>
+
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- ======================================
+         SUPABASE
+    ======================================= -->
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+    ></script>
+
+
+    <!-- ======================================
+         CONFIGURAÇÃO
+    ======================================= -->
+
+    <script src="js/config.js"></script>
+
+
+    <!-- ======================================
+         LOGIN
+    ======================================= -->
+
+    <script src="js/login.js"></script>
+
+
+</body>
+
+</html>

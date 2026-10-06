@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Painel do Vendedor - Sistema da Loja</title>
+
+    <link
+        rel="stylesheet"
+        href="vendedor.css"
+    >
+
+</head>
+
+
+<body>
+
+
+    <div class="layout-vendedor">
+
+
+        <!-- ======================================
+             MENU LATERAL
+        ======================================= -->
+
+        <aside class="menu-lateral-vendedor">
+
+
+            <!-- LOGO -->
+
+            <div class="logo-vendedor">
+
+                <div class="logo-icone">
+                    SL
+                </div>
+
+                <div>
+
+                    <strong>
+                        Sistema da Loja
+                    </strong>
+
+                    <span>
+                        Área do Vendedor
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- USUÁRIO -->
+
+            <div class="usuario-vendedor">
+
+                <div
+                    class="avatar-vendedor"
+                    id="avatarVendedor"
+                >
+                    V
+                </div>
+
+                <div class="dados-vendedor">
+
+                    <strong id="nomeVendedor">
+                        Vendedor
+                    </strong>
+
+                    <span>
+                        Vendedor
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- MENU -->
+
+            <nav class="menu-vendedor">
+
+
+                <div class="titulo-menu">
+                    PRINCIPAL
+                </div>
+
+
+                <a
+                    href="vendedor.html"
+                    class="item-menu ativo"
+                >
+
+                    <span>
+                        ▦
+                    </span>
+
+                    Dashboard
+
+                </a>
+
+
+                <div class="titulo-menu">
+                    VENDAS
+                </div>
+
+
+                <a
+                    href="#"
+                    class="item-menu"
+                    data-futuro="produtos"
+                >
+
+                    <span>
+                        📦
+                    </span>
+
+                    Produtos
+
+                </a>
+
+
+                <a
+                    href="#"
+                    class="item-menu"
+                    data-futuro="vendas"
+                >
+
+                    <span>
+                        🛒
+                    </span>
+
+                    Vendas
+
+                </a>
+
+
+                <a
+                    href="#"
+                    class="item-menu"
+                    data-futuro="clientes"
+                >
+
+                    <span>
+                        👤
+                    </span>
+
+                    Clientes
+
+                </a>
+
+
+                <a
+                    href="#"
+                    class="item-menu"
+                    data-futuro="estoque"
+                >
+
+                    <span>
+                        📊
+                    </span>
+
+                    Estoque
+
+                </a>
+
+
+            </nav>
+
+
+            <!-- SAIR -->
+
+            <div class="area-sair">
+
+                <button
+                    type="button"
+                    id="btnSair"
+                    class="botao-sair"
+                >
+
+                    <span>
+                        ⇥
+                    </span>
+
+                    Sair
+
+                </button>
+
+            </div>
+
+
+        </aside>
+
+
+        <!-- ======================================
+             CONTEÚDO
+        ======================================= -->
+
+        <main class="conteudo-vendedor">
+
+
+            <!-- CABEÇALHO -->
+
+            <header class="cabecalho-vendedor">
+
+                <div>
+
+                    <h1>
+                        Dashboard
+                    </h1>
+
+                    <p>
+                        Área de trabalho do vendedor
+                    </p>
+
+                </div>
+
+
+                <div class="data-atual">
+
+                    <span>
+                        Hoje
+                    </span>
+
+                    <strong id="dataAtual">
+                        --
+                    </strong>
+
+                </div>
+
+            </header>
+
+
+            <!-- ==================================
+                 BOAS-VINDAS
+            =================================== -->
+
+            <section class="painel-boas-vindas">
+
+                <div>
+
+                    <span class="etiqueta">
+                        ÁREA DO VENDEDOR
+                    </span>
+
+                    <h2 id="tituloBoasVindas">
+                        Bem-vindo!
+                    </h2>
+
+                    <p>
+                        Aqui você poderá consultar produtos,
+                        realizar vendas, cadastrar clientes
+                        e consultar o estoque.
+                    </p>
+
+                </div>
+
+
+                <div class="ilustracao">
+                    🛒
+                </div>
+
+            </section>
+
+
+            <!-- ==================================
+                 ACESSOS
+            =================================== -->
+
+            <section class="painel">
+
+                <div class="titulo-painel">
+
+                    <div>
+
+                        <h2>
+                            Acessos rápidos
+                        </h2>
+
+                        <p>
+                            Principais funções disponíveis
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="atalhos">
+
+
+                    <button
+                        type="button"
+                        class="atalho"
+                        data-futuro="produtos"
+                    >
+
+                        <span>
+                            📦
+                        </span>
+
+                        <strong>
+                            Produtos
+                        </strong>
+
+                        <small>
+                            Consultar produtos
+                        </small>
+
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="atalho"
+                        data-futuro="vendas"
+                    >
+
+                        <span>
+                            🛒
+                        </span>
+
+                        <strong>
+                            Nova venda
+                        </strong>
+
+                        <small>
+                            Registrar uma venda
+                        </small>
+
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="atalho"
+                        data-futuro="clientes"
+                    >
+
+                        <span>
+                            👤
+                        </span>
+
+                        <strong>
+                            Clientes
+                        </strong>
+
+                        <small>
+                            Consultar clientes
+                        </small>
+
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="atalho"
+                        data-futuro="estoque"
+                    >
+
+                        <span>
+                            📊
+                        </span>
+
+                        <strong>
+                            Estoque
+                        </strong>
+
+                        <small>
+                            Consultar estoque
+                        </small>
+
+                    </button>
+
+
+                </div>
+
+            </section>
+
+
+            <!-- ==================================
+                 AVISO
+            =================================== -->
+
+            <section class="painel aviso-painel">
+
+                <div class="aviso-icone">
+                    ℹ️
+                </div>
+
+                <div>
+
+                    <strong>
+                        Área do vendedor
+                    </strong>
+
+                    <p>
+                        Os valores de custo, lucro e
+                        informações financeiras não ficam
+                        disponíveis nesta área.
+                    </p>
+
+                </div>
+
+            </section>
+
+
+        </main>
+
+
+    </div>
+
+
+    <!-- ==========================================
+         SUPABASE
+    =========================================== -->
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+    ></script>
+
+
+    <!-- CONFIGURAÇÃO -->
+
+    <script src="js/config.js"></script>
+
+
+    <!-- VENDEDOR -->
+
+    <script src="js/vendedor.js"></script>
+
+
+</body>
+
+</html>
