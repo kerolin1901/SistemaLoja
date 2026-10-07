@@ -42,8 +42,6 @@
         <aside class="menu-lateral">
 
 
-            <!-- LOGO -->
-
             <div class="logo-admin">
 
                 <h1>
@@ -53,8 +51,6 @@
 
             </div>
 
-
-            <!-- USUÁRIO -->
 
             <div class="usuario-admin">
 
@@ -72,14 +68,8 @@
             </div>
 
 
-            <!-- MENU -->
-
             <nav class="menu-admin">
 
-
-                <!-- ==================================
-                     PRINCIPAL
-                =================================== -->
 
                 <div class="menu-titulo">
                     PRINCIPAL
@@ -93,10 +83,6 @@
                     📊 Dashboard Geral
                 </a>
 
-
-                <!-- ==================================
-                     ADMINISTRAÇÃO
-                =================================== -->
 
                 <div class="menu-titulo">
                     ADMINISTRAÇÃO
@@ -121,10 +107,6 @@
 
             </nav>
 
-
-            <!-- ==================================
-                 SAIR
-            =================================== -->
 
             <div class="menu-rodape">
 
@@ -177,7 +159,7 @@
 
 
             <!-- ======================================
-                 CADASTRAR LOJA
+                 CADASTRAR / EDITAR LOJA
             ======================================= -->
 
             <section class="painel">
@@ -186,11 +168,11 @@
 
                     <div>
 
-                        <h3>
+                        <h3 id="tituloFormulario">
                             Cadastrar nova loja
                         </h3>
 
-                        <p>
+                        <p id="descricaoFormulario">
                             Informe o nome da nova loja.
                         </p>
 
@@ -230,6 +212,16 @@
                             class="botao-principal"
                         >
                             Cadastrar Loja
+                        </button>
+
+
+                        <button
+                            type="button"
+                            id="btnCancelarEdicao"
+                            class="botao-secundario botao-cancelar-edicao"
+                            style="display: none;"
+                        >
+                            Cancelar
                         </button>
 
                     </div>
@@ -301,6 +293,10 @@
                                 </th>
 
                                 <th>
+                                    Administradores
+                                </th>
+
+                                <th>
                                     Status
                                 </th>
 
@@ -343,7 +339,7 @@
 
 
     <!-- ==========================================
-         CONFIGURAÇÃO SUPABASE
+         CONFIGURAÇÃO
     =========================================== -->
 
     <script src="js/config.js"></script>

@@ -1,12 +1,12 @@
 /* ==========================================
    SISTEMA DA LOJA
-   CADASTRO DE LOJAS
+   ADMINISTRADOR GERAL
    LOJAS.CSS
 ========================================== */
 
 
 /* ==========================================
-   RESET DA PÁGINA
+   RESET
 ========================================== */
 
 * {
@@ -15,14 +15,13 @@
 
 
 /* ==========================================
-   LAYOUT PRINCIPAL
+   LAYOUT
 ========================================== */
 
 .layout-admin {
     display: flex;
 
     width: 100%;
-
     min-height: 100vh;
 
     background: #f5f6f8;
@@ -35,17 +34,13 @@
 
 .menu-lateral {
     width: 250px;
-
     min-width: 250px;
-
     min-height: 100vh;
 
     display: flex;
-
     flex-direction: column;
 
     background: #111827;
-
     color: #ffffff;
 }
 
@@ -57,7 +52,8 @@
 .logo-admin {
     padding: 24px 20px;
 
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom:
+        1px solid rgba(255, 255, 255, 0.08);
 }
 
 
@@ -67,9 +63,7 @@
     color: #ffffff;
 
     font-size: 25px;
-
     line-height: 1.05;
-
     font-weight: 800;
 }
 
@@ -81,7 +75,8 @@
 .usuario-admin {
     padding: 18px 20px;
 
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom:
+        1px solid rgba(255, 255, 255, 0.08);
 }
 
 
@@ -91,7 +86,6 @@
     color: #ffffff;
 
     font-size: 14px;
-
     font-weight: 700;
 }
 
@@ -116,38 +110,26 @@
 }
 
 
-/* ==========================================
-   TÍTULO DO MENU
-========================================== */
-
 .menu-titulo {
     margin: 16px 9px 7px;
 
     color: #6b7280;
 
     font-size: 10px;
-
     font-weight: 800;
 
     letter-spacing: 0.7px;
 }
 
 
-/* ==========================================
-   ITENS DO MENU
-========================================== */
-
 .menu-item {
     display: flex;
-
     align-items: center;
 
     width: 100%;
-
     min-height: 38px;
 
     margin-bottom: 3px;
-
     padding: 9px 11px;
 
     border-radius: 7px;
@@ -157,9 +139,7 @@
     text-decoration: none;
 
     font-size: 13px;
-
     font-weight: 500;
-
     line-height: 1.2;
 
     white-space: nowrap;
@@ -187,24 +167,25 @@
 
 
 /* ==========================================
-   RODAPÉ DO MENU
+   RODAPÉ
 ========================================== */
 
 .menu-rodape {
     padding: 14px;
 
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    border-top:
+        1px solid rgba(255, 255, 255, 0.08);
 }
 
 
 .btn-sair {
     width: 100%;
-
     min-height: 38px;
 
     padding: 9px 12px;
 
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    border:
+        1px solid rgba(255, 255, 255, 0.12);
 
     border-radius: 7px;
 
@@ -213,7 +194,6 @@
     color: #d1d5db;
 
     font-size: 13px;
-
     font-weight: 600;
 
     cursor: pointer;
@@ -232,14 +212,13 @@
 
 
 /* ==========================================
-   CONTEÚDO PRINCIPAL
+   CONTEÚDO
 ========================================== */
 
 .conteudo-admin {
     flex: 1;
 
     min-width: 0;
-
     min-height: 100vh;
 
     padding: 28px;
@@ -254,9 +233,7 @@
 
 .cabecalho-admin {
     display: flex;
-
     align-items: center;
-
     justify-content: space-between;
 
     margin-bottom: 24px;
@@ -269,7 +246,6 @@
     color: #1f2937;
 
     font-size: 25px;
-
     font-weight: 800;
 }
 
@@ -291,12 +267,12 @@
     width: 100%;
 
     margin-bottom: 22px;
-
     padding: 22px;
 
     background: #ffffff;
 
-    border: 1px solid #e5e7eb;
+    border:
+        1px solid #e5e7eb;
 
     border-radius: 10px;
 
@@ -305,15 +281,9 @@
 }
 
 
-/* ==========================================
-   TÍTULO DO PAINEL
-========================================== */
-
 .titulo-painel {
     display: flex;
-
     align-items: center;
-
     justify-content: space-between;
 
     gap: 20px;
@@ -328,7 +298,6 @@
     color: #1f2937;
 
     font-size: 17px;
-
     font-weight: 700;
 }
 
@@ -352,13 +321,11 @@
     width: 100%;
 
     margin-bottom: 20px;
-
     padding: 13px 16px;
 
     border-radius: 8px;
 
     font-size: 13px;
-
     font-weight: 600;
 }
 
@@ -370,7 +337,8 @@
 
     color: #047857;
 
-    border: 1px solid #a7f3d0;
+    border:
+        1px solid #a7f3d0;
 }
 
 
@@ -381,7 +349,8 @@
 
     color: #b91c1c;
 
-    border: 1px solid #fecaca;
+    border:
+        1px solid #fecaca;
 }
 
 
@@ -391,7 +360,6 @@
 
 .formulario-loja {
     display: flex;
-
     flex-direction: column;
 
     gap: 18px;
@@ -402,7 +370,6 @@
 
 .campo-formulario {
     display: flex;
-
     flex-direction: column;
 
     gap: 7px;
@@ -415,19 +382,18 @@
     color: #374151;
 
     font-size: 13px;
-
     font-weight: 700;
 }
 
 
 .campo-formulario input {
     width: 100%;
-
     min-height: 40px;
 
     padding: 10px 13px;
 
-    border: 1px solid #d1d5db;
+    border:
+        1px solid #d1d5db;
 
     border-radius: 7px;
 
@@ -436,7 +402,6 @@
     color: #1f2937;
 
     font-family: inherit;
-
     font-size: 13px;
 
     outline: none;
@@ -461,12 +426,11 @@
 
 
 /* ==========================================
-   AÇÕES DO FORMULÁRIO
+   AÇÕES FORMULÁRIO
 ========================================== */
 
 .acoes-formulario {
     display: flex;
-
     align-items: center;
 
     gap: 10px;
@@ -487,9 +451,7 @@
     color: #ffffff;
 
     font-family: inherit;
-
     font-size: 13px;
-
     font-weight: 700;
 
     cursor: pointer;
@@ -513,7 +475,7 @@
 
 
 /* ==========================================
-   BOTÃO ATUALIZAR
+   BOTÃO SECUNDÁRIO
 ========================================== */
 
 .botao-secundario {
@@ -521,7 +483,8 @@
 
     padding: 8px 13px;
 
-    border: 1px solid #d1d5db;
+    border:
+        1px solid #d1d5db;
 
     border-radius: 7px;
 
@@ -530,9 +493,7 @@
     color: #374151;
 
     font-family: inherit;
-
     font-size: 12px;
-
     font-weight: 600;
 
     cursor: pointer;
@@ -547,6 +508,20 @@
     background: #f9fafb;
 
     border-color: #9ca3af;
+}
+
+
+.botao-cancelar-edicao {
+    color: #b91c1c;
+
+    border-color: #fecaca;
+}
+
+
+.botao-cancelar-edicao:hover {
+    background: #fef2f2;
+
+    border-color: #fca5a5;
 }
 
 
@@ -596,7 +571,7 @@
 .tabela-lojas {
     width: 100%;
 
-    min-width: 650px;
+    min-width: 850px;
 
     border-collapse: collapse;
 
@@ -608,7 +583,8 @@
 .tabela-lojas td {
     padding: 12px;
 
-    border-bottom: 1px solid #eeeeee;
+    border-bottom:
+        1px solid #eeeeee;
 
     text-align: left;
 
@@ -624,7 +600,6 @@
     color: #4b5563;
 
     font-size: 11px;
-
     font-weight: 800;
 
     text-transform: uppercase;
@@ -653,6 +628,31 @@
 
 
 /* ==========================================
+   CONTADOR ADMINISTRADORES
+========================================== */
+
+.quantidade-administradores {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    min-width: 30px;
+
+    padding: 4px 9px;
+
+    border-radius: 20px;
+
+    background: #eff6ff;
+
+    color: #1d4ed8;
+
+    font-size: 11px;
+    font-weight: 700;
+}
+
+
+/* ==========================================
    STATUS
 ========================================== */
 
@@ -660,7 +660,6 @@
     display: inline-flex;
 
     align-items: center;
-
     justify-content: center;
 
     min-width: 55px;
@@ -670,19 +669,18 @@
     border-radius: 20px;
 
     font-size: 11px;
-
     font-weight: 700;
 }
 
 
-.status-loja.ativo {
+.status-loja.status-ativa {
     background: #dcfce7;
 
     color: #166534;
 }
 
 
-.status-loja.inativo {
+.status-loja.status-inativa {
     background: #fee2e2;
 
     color: #991b1b;
@@ -690,10 +688,20 @@
 
 
 /* ==========================================
-   BOTÃO DE STATUS
+   AÇÕES DA LOJA
 ========================================== */
 
-.botao-status {
+.acoes-loja {
+    display: flex;
+    align-items: center;
+
+    gap: 7px;
+
+    flex-wrap: wrap;
+}
+
+
+.botao-loja {
     min-height: 30px;
 
     padding: 6px 10px;
@@ -703,24 +711,36 @@
     font-family: inherit;
 
     font-size: 11px;
-
     font-weight: 700;
 
     cursor: pointer;
 
     transition:
         opacity 0.2s ease,
-        background 0.2s ease;
+        transform 0.15s ease;
 }
 
 
-.botao-status:hover {
+.botao-loja:hover {
     opacity: 0.85;
+
+    transform: translateY(-1px);
 }
 
 
-.botao-status.desativar {
-    border: 1px solid #fecaca;
+.botao-editar-loja {
+    border:
+        1px solid #bfdbfe;
+
+    background: #eff6ff;
+
+    color: #1d4ed8;
+}
+
+
+.botao-desativar {
+    border:
+        1px solid #fecaca;
 
     background: #fff1f2;
 
@@ -728,8 +748,9 @@
 }
 
 
-.botao-status.ativar {
-    border: 1px solid #bbf7d0;
+.botao-ativar {
+    border:
+        1px solid #bbf7d0;
 
     background: #f0fdf4;
 
@@ -737,8 +758,18 @@
 }
 
 
+.botao-excluir-loja {
+    border:
+        1px solid #f1aaaa;
+
+    background: #ffe5e5;
+
+    color: #b91c1c;
+}
+
+
 /* ==========================================
-   SCROLLBAR DO MENU
+   SCROLLBAR
 ========================================== */
 
 .menu-admin::-webkit-scrollbar {
@@ -827,10 +858,30 @@
 
     .acoes-formulario {
         width: 100%;
+
+        flex-direction: column;
+        align-items: stretch;
     }
 
 
     .botao-principal {
+        width: 100%;
+    }
+
+
+    .botao-cancelar-edicao {
+        width: 100%;
+    }
+
+
+    .acoes-loja {
+        flex-direction: column;
+
+        align-items: stretch;
+    }
+
+
+    .botao-loja {
         width: 100%;
     }
 
