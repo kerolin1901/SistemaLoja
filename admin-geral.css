@@ -11,9 +11,7 @@
 
 .layout-admin-geral {
     display: flex;
-
     min-height: 100vh;
-
     background: #f5f6f8;
 }
 
@@ -24,15 +22,12 @@
 
 .menu-geral {
     width: 250px;
-
     min-height: 100vh;
 
     display: flex;
-
     flex-direction: column;
 
     background: #111827;
-
     color: #fff;
 }
 
@@ -43,7 +38,6 @@
 
 .logo-geral {
     padding: 25px 22px;
-
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
@@ -52,9 +46,7 @@
     margin: 0;
 
     font-size: 25px;
-
     line-height: 1.05;
-
     font-weight: 800;
 
     color: #fff;
@@ -67,7 +59,6 @@
 
 .usuario-geral {
     display: flex;
-
     align-items: center;
 
     gap: 12px;
@@ -80,13 +71,10 @@
 
 .icone-geral {
     width: 40px;
-
     height: 40px;
 
     display: flex;
-
     align-items: center;
-
     justify-content: center;
 
     border-radius: 10px;
@@ -99,7 +87,6 @@
 
 .nome-usuario-geral {
     font-size: 14px;
-
     font-weight: 700;
 
     color: #fff;
@@ -130,7 +117,6 @@
     margin: 15px 10px 8px;
 
     font-size: 10px;
-
     font-weight: 800;
 
     letter-spacing: 0.8px;
@@ -141,7 +127,6 @@
 
 .menu-geral-item {
     display: flex;
-
     align-items: center;
 
     gap: 10px;
@@ -166,7 +151,6 @@
 
 .menu-geral-item:hover {
     background: rgba(255, 255, 255, 0.07);
-
     color: #fff;
 }
 
@@ -240,7 +224,6 @@
     display: flex;
 
     align-items: center;
-
     justify-content: space-between;
 
     gap: 20px;
@@ -358,7 +341,7 @@
     display: grid;
 
     grid-template-columns:
-        repeat(3, minmax(0, 1fr));
+        repeat(4, minmax(0, 1fr));
 
     gap: 18px;
 
@@ -388,13 +371,11 @@
 
 .card-icone {
     width: 48px;
-
     height: 48px;
 
     display: flex;
 
     align-items: center;
-
     justify-content: center;
 
     flex-shrink: 0;
@@ -468,6 +449,121 @@
 
 
 /* ==========================================
+   TABELA RESUMO DAS LOJAS
+========================================== */
+
+.tabela-geral-container {
+    width: 100%;
+
+    overflow-x: auto;
+}
+
+
+.tabela-geral {
+    width: 100%;
+
+    border-collapse: collapse;
+
+    font-size: 13px;
+}
+
+
+.tabela-geral th {
+    padding: 12px 14px;
+
+    text-align: left;
+
+    background: #f9fafb;
+
+    border-bottom: 1px solid #e5e7eb;
+
+    color: #374151;
+
+    font-size: 12px;
+
+    font-weight: 700;
+}
+
+
+.tabela-geral td {
+    padding: 13px 14px;
+
+    border-bottom: 1px solid #f0f1f3;
+
+    color: #4b5563;
+}
+
+
+.tabela-geral tbody tr:last-child td {
+    border-bottom: none;
+}
+
+
+.tabela-geral tbody tr:hover {
+    background: #fafafa;
+}
+
+
+/* ==========================================
+   STATUS
+========================================== */
+
+.status-geral {
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 5px 9px;
+
+    border-radius: 999px;
+
+    font-size: 11px;
+
+    font-weight: 700;
+}
+
+
+.status-geral.ativo {
+    background: #dcfce7;
+
+    color: #166534;
+}
+
+
+.status-geral.inativo {
+    background: #fee2e2;
+
+    color: #991b1b;
+}
+
+
+/* ==========================================
+   CARREGAMENTO / VAZIO
+========================================== */
+
+.carregando-geral,
+.vazio-geral {
+    display: none;
+
+    padding: 20px;
+
+    text-align: center;
+
+    font-size: 13px;
+
+    color: #6b7280;
+}
+
+
+.carregando-geral.exibir,
+.vazio-geral.exibir {
+    display: block;
+}
+
+
+/* ==========================================
    ATALHOS
 ========================================== */
 
@@ -524,13 +620,11 @@
 
 .atalho-icone {
     width: 45px;
-
     height: 45px;
 
     display: flex;
 
     align-items: center;
-
     justify-content: center;
 
     flex-shrink: 0;
@@ -615,20 +709,20 @@
    RESPONSIVO
 ========================================== */
 
+@media (max-width: 1100px) {
+
+    .cards-geral {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+
 @media (max-width: 900px) {
 
     .menu-geral {
         width: 220px;
-    }
-
-
-    .cards-geral {
-        grid-template-columns: 1fr;
-    }
-
-
-    .atalhos-gerais {
-        grid-template-columns: 1fr;
     }
 
 }
@@ -679,6 +773,21 @@
         width: 100%;
 
         box-sizing: border-box;
+    }
+
+
+    .cards-geral {
+        grid-template-columns: 1fr;
+    }
+
+
+    .atalhos-gerais {
+        grid-template-columns: 1fr;
+    }
+
+
+    .tabela-geral {
+        min-width: 500px;
     }
 
 }

@@ -183,7 +183,7 @@
 
 
             <!-- ======================================
-                 CARDS
+                 CARDS - LOJAS
             ======================================= -->
 
             <section class="cards-geral">
@@ -256,7 +256,178 @@
 
 
             <!-- ======================================
-                 ÁREA PRINCIPAL
+                 CARDS - USUÁRIOS
+            ======================================= -->
+
+            <section class="cards-geral">
+
+
+                <div class="card-geral">
+
+                    <div class="card-icone">
+                        👥
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Administradores
+                        </span>
+
+                        <strong id="totalAdministradores">
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card-geral">
+
+                    <div class="card-icone">
+                        🟢
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Administradores ativos
+                        </span>
+
+                        <strong id="administradoresAtivos">
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card-geral">
+
+                    <div class="card-icone">
+                        🔴
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Administradores inativos
+                        </span>
+
+                        <strong id="administradoresInativos">
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card-geral">
+
+                    <div class="card-icone">
+                        👤
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Vendedores
+                        </span>
+
+                        <strong id="totalVendedores">
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+            </section>
+
+
+            <!-- ======================================
+                 RESUMO DAS LOJAS
+            ======================================= -->
+
+            <section class="painel-geral">
+
+
+                <div class="titulo-painel-geral">
+
+                    <div>
+
+                        <h3>
+                            Resumo das lojas
+                        </h3>
+
+                        <p>
+                            Visão administrativa das lojas cadastradas no sistema.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="tabela-geral-container">
+
+                    <table class="tabela-geral">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Loja
+                                </th>
+
+                                <th>
+                                    Status
+                                </th>
+
+                                <th>
+                                    Administradores
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody id="listaResumoLojas">
+
+                        </tbody>
+
+                    </table>
+
+
+                    <div
+                        id="carregandoResumoLojas"
+                        class="carregando-geral"
+                    >
+                        Carregando informações...
+                    </div>
+
+
+                    <div
+                        id="vazioResumoLojas"
+                        class="vazio-geral"
+                    >
+                        Nenhuma loja cadastrada.
+                    </div>
+
+                </div>
+
+
+            </section>
+
+
+            <!-- ======================================
+                 ATALHOS
             ======================================= -->
 
             <section class="painel-geral">
@@ -281,10 +452,6 @@
                 <div class="atalhos-gerais">
 
 
-                    <!-- ==================================
-                         LOJAS
-                    =================================== -->
-
                     <a
                         href="lojas.html"
                         class="atalho-geral"
@@ -308,10 +475,6 @@
 
                     </a>
 
-
-                    <!-- ==================================
-                         ADMINISTRADORES
-                    =================================== -->
 
                     <a
                         href="administradores.html"
@@ -359,8 +522,10 @@
                     </strong>
 
                     <p>
-                        Este painel é exclusivo para o administrador geral do sistema.
-                        As lojas e seus administradores serão gerenciados a partir daqui.
+                        Este painel apresenta somente informações
+                        administrativas do sistema. Os dados de vendas,
+                        produtos, clientes, estoque e financeiro pertencem
+                        individualmente a cada loja e não são exibidos aqui.
                     </p>
 
                 </div>

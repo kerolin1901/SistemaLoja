@@ -24,21 +24,36 @@ const lojasAtivas =
 const lojasInativas =
     document.getElementById("lojasInativas");
 
+const totalAdministradores =
+    document.getElementById("totalAdministradores");
+
+const administradoresAtivos =
+    document.getElementById("administradoresAtivos");
+
+const administradoresInativos =
+    document.getElementById("administradoresInativos");
+
+const totalVendedores =
+    document.getElementById("totalVendedores");
+
+const listaResumoLojas =
+    document.getElementById("listaResumoLojas");
+
+const carregandoResumoLojas =
+    document.getElementById(
+        "carregandoResumoLojas"
+    );
+
+const vazioResumoLojas =
+    document.getElementById(
+        "vazioResumoLojas"
+    );
+
 const mensagem =
     document.getElementById("mensagem");
 
 const btnSair =
     document.getElementById("btnSair");
-
-const btnAdministradores =
-    document.getElementById(
-        "btnAdministradores"
-    );
-
-const btnAdministradoresCard =
-    document.getElementById(
-        "btnAdministradoresCard"
-    );
 
 
 /* ==========================================
@@ -200,52 +215,76 @@ async function protegerAdministradorGeral() {
 
 
 /* ==========================================
-   CARREGAR RESUMO DAS LOJAS
+   CARREGAR RESUMO ADMINISTRATIVO
 ========================================== */
 
-async function carregarResumoLojas() {
+async function carregarResumoAdministrativo() {
 
     try {
 
+        if (carregandoResumoLojas) {
+
+            carregandoResumoLojas.classList.add(
+                "exibir"
+            );
+        }
+
+
+        if (vazioResumoLojas) {
+
+            vazioResumoLojas.classList.remove(
+                "exibir"
+            );
+        }
+
+
+        if (listaResumoLojas) {
+
+            listaResumoLojas.innerHTML = "";
+        }
+
+
+        /* ======================================
+           CARREGAR LOJAS
+        ======================================= */
+
         const {
             data: lojas,
-            error
+            error: erroLojas
         } =
             await supabaseClient
                 .from("lojas")
                 .select(
                     "id, nome, ativo"
+                )
+                .order(
+                    "nome",
+                    {
+                        ascending: true
+                    }
                 );
 
 
-        if (error) {
+        if (erroLojas) {
 
-            console.error(
-                "Erro ao carregar lojas:",
-                error
-            );
-
-
-            mostrarMensagem(
-                "Não foi possível carregar o resumo das lojas.",
-                "erro"
-            );
-
-
-            return;
+            throw erroLojas;
         }
 
 
-        const lista =
+        const listaLojas =
             lojas || [];
 
 
+        /* ======================================
+           CARDS DAS LOJAS
+        ======================================= */
+
         const total =
-            lista.length;
+            listaLojas.length;
 
 
         const ativas =
-            lista.filter(
+            listaLojas.filter(
                 function (loja) {
 
                     return loja.ativo === true;
@@ -255,7 +294,7 @@ async function carregarResumoLojas() {
 
 
         const inativas =
-            lista.filter(
+            listaLojas.filter(
                 function (loja) {
 
                     return loja.ativo !== true;
@@ -285,60 +324,241 @@ async function carregarResumoLojas() {
         }
 
 
+        /* ======================================
+           CARREGAR PERFIS
+        ======================================= */
+
+        const {
+            data: perfis,
+            error: erroPerfis
+        } =
+            await supabaseClient
+                .from("perfis")
+                .select(
+                    "id, nome_completo, usuario, tipo, ativo, loja_id"
+                );
+
+
+        if (erroPerfis) {
+
+            throw erroPerfis;
+        }
+
+
+        const listaPerfis =
+            perfis || [];
+
+
+        /* ======================================
+           CONTADORES
+        ======================================= */
+
+        const administradores =
+            listaPerfis.filter(
+                function (perfil) {
+
+                    return perfil.tipo === "admin";
+
+                }
+            );
+
+
+        const vendedores =
+            listaPerfis.filter(
+                function (perfil) {
+
+                    return perfil.tipo === "vendedor";
+
+                }
+            );
+
+
+        const administradoresAtivosLista =
+            administradores.filter(
+                function (perfil) {
+
+                    return perfil.ativo === true;
+
+                }
+            );
+
+
+        const administradoresInativosLista =
+            administradores.filter(
+                function (perfil) {
+
+                    return perfil.ativo !== true;
+
+                }
+            );
+
+
+        if (totalAdministradores) {
+
+            totalAdministradores.textContent =
+                administradores.length;
+        }
+
+
+        if (administradoresAtivos) {
+
+            administradoresAtivos.textContent =
+                administradoresAtivosLista.length;
+        }
+
+
+        if (administradoresInativos) {
+
+            administradoresInativos.textContent =
+                administradoresInativosLista.length;
+        }
+
+
+        if (totalVendedores) {
+
+            totalVendedores.textContent =
+                vendedores.length;
+        }
+
+
+        /* ======================================
+           RESUMO POR LOJA
+        ======================================= */
+
+        if (
+            !listaResumoLojas ||
+            listaLojas.length === 0
+        ) {
+
+            if (vazioResumoLojas) {
+
+                vazioResumoLojas.classList.add(
+                    "exibir"
+                );
+            }
+
+            return;
+        }
+
+
+        listaLojas.forEach(
+            function (loja) {
+
+                const administradoresDaLoja =
+                    administradores.filter(
+                        function (administrador) {
+
+                            return (
+                                administrador.loja_id ===
+                                loja.id
+                            );
+
+                        }
+                    ).length;
+
+
+                const tr =
+                    document.createElement("tr");
+
+
+                const tdNome =
+                    document.createElement("td");
+
+
+                tdNome.textContent =
+                    loja.nome ||
+                    "Loja sem nome";
+
+
+                const tdStatus =
+                    document.createElement("td");
+
+
+                const status =
+                    document.createElement("span");
+
+
+                status.className =
+                    "status-geral " +
+                    (
+                        loja.ativo === true
+                            ? "ativo"
+                            : "inativo"
+                    );
+
+
+                status.textContent =
+                    loja.ativo === true
+                        ? "Ativa"
+                        : "Inativa";
+
+
+                tdStatus.appendChild(
+                    status
+                );
+
+
+                const tdAdministradores =
+                    document.createElement("td");
+
+
+                tdAdministradores.textContent =
+                    administradoresDaLoja;
+
+
+                tr.appendChild(
+                    tdNome
+                );
+
+
+                tr.appendChild(
+                    tdStatus
+                );
+
+
+                tr.appendChild(
+                    tdAdministradores
+                );
+
+
+                listaResumoLojas.appendChild(
+                    tr
+                );
+
+            }
+        );
+
+
     } catch (erro) {
 
         console.error(
-            "Erro inesperado:",
+            "Erro ao carregar resumo administrativo:",
             erro
         );
 
 
         mostrarMensagem(
-            "Ocorreu um erro ao carregar o resumo.",
+            "Não foi possível carregar o resumo administrativo.",
             "erro"
         );
+
+
+        if (listaResumoLojas) {
+
+            listaResumoLojas.innerHTML = "";
+        }
+
+
+    } finally {
+
+        if (carregandoResumoLojas) {
+
+            carregandoResumoLojas.classList.remove(
+                "exibir"
+            );
+        }
+
     }
-}
-
-
-/* ==========================================
-   ADMINISTRADORES
-========================================== */
-
-function abrirAdministradores() {
-
-    mostrarMensagem(
-        "A área de Administradores será criada na próxima etapa.",
-        "sucesso"
-    );
-}
-
-
-if (btnAdministradores) {
-
-    btnAdministradores.addEventListener(
-        "click",
-        function (evento) {
-
-            evento.preventDefault();
-
-            abrirAdministradores();
-
-        }
-    );
-}
-
-
-if (btnAdministradoresCard) {
-
-    btnAdministradoresCard.addEventListener(
-        "click",
-        function () {
-
-            abrirAdministradores();
-
-        }
-    );
 }
 
 
@@ -396,7 +616,7 @@ async function iniciarAdministradorGeral() {
     }
 
 
-    await carregarResumoLojas();
+    await carregarResumoAdministrativo();
 }
 
 
