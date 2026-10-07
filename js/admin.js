@@ -6,13 +6,6 @@
 
 
 /* ==========================================
-   PROTEGER PAINEL
-========================================== */
-
-protegerAdmin();
-
-
-/* ==========================================
    SUPABASE
 ========================================== */
 
@@ -29,15 +22,12 @@ const nomeAdministrador =
 const avatarAdministrador =
     document.querySelector(".avatar-admin");
 
-const btnSair =
-    document.getElementById("btnSair");
-
 const dataAtual =
     document.getElementById("dataAtual");
 
 
 /* ==========================================
-   MOSTRAR ADMINISTRADOR
+   VERIFICAR ADMINISTRADOR
 ========================================== */
 
 async function carregarAdministrador() {
@@ -50,6 +40,11 @@ async function carregarAdministrador() {
         const usuario =
             resultado.data.user;
 
+
+        /* ======================================
+           NÃO ESTÁ LOGADO
+        ====================================== */
+
         if (!usuario) {
 
             window.location.href =
@@ -59,6 +54,10 @@ async function carregarAdministrador() {
         }
 
 
+        /* ======================================
+           BUSCAR PERFIL
+        ====================================== */
+
         const perfilResultado =
             await adminSupabase
                 .from("perfis")
@@ -67,12 +66,22 @@ async function carregarAdministrador() {
                 .single();
 
 
+        /* ======================================
+           PERFIL NÃO ENCONTRADO
+        ====================================== */
+
         if (
             perfilResultado.error ||
             !perfilResultado.data
         ) {
 
-            await adminSupabase.auth.signOut();
+            await adminSupabase.auth.signOut({
+                scope: "local"
+            });
+
+            sessionStorage.removeItem(
+                "sistemaLojaPerfil"
+            );
 
             window.location.href =
                 "index.html";
@@ -85,6 +94,10 @@ async function carregarAdministrador() {
             perfilResultado.data;
 
 
+        /* ======================================
+           NÃO É ADMIN
+        ====================================== */
+
         if (perfil.tipo !== "admin") {
 
             window.location.href =
@@ -94,9 +107,19 @@ async function carregarAdministrador() {
         }
 
 
+        /* ======================================
+           USUÁRIO DESATIVADO
+        ====================================== */
+
         if (!perfil.ativo) {
 
-            await adminSupabase.auth.signOut();
+            await adminSupabase.auth.signOut({
+                scope: "local"
+            });
+
+            sessionStorage.removeItem(
+                "sistemaLojaPerfil"
+            );
 
             alert(
                 "Seu usuário está desativado."
@@ -109,6 +132,10 @@ async function carregarAdministrador() {
         }
 
 
+        /* ======================================
+           MOSTRAR NOME
+        ====================================== */
+
         if (nomeAdministrador) {
 
             nomeAdministrador.textContent =
@@ -116,6 +143,10 @@ async function carregarAdministrador() {
                 "Administrador";
         }
 
+
+        /* ======================================
+           MOSTRAR AVATAR
+        ====================================== */
 
         if (avatarAdministrador) {
 
@@ -130,17 +161,26 @@ async function carregarAdministrador() {
         }
 
 
+        /* ======================================
+           SALVAR PERFIL
+        ====================================== */
+
         sessionStorage.setItem(
             "sistemaLojaPerfil",
             JSON.stringify(perfil)
         );
 
+    }
 
-    } catch (erro) {
+    catch (erro) {
 
         console.error(
             "Erro ao carregar administrador:",
             erro
+        );
+
+        sessionStorage.removeItem(
+            "sistemaLojaPerfil"
         );
 
         window.location.href =
@@ -156,6 +196,7 @@ async function carregarAdministrador() {
 function mostrarDataAtual() {
 
     if (!dataAtual) {
+
         return;
     }
 
@@ -178,15 +219,22 @@ function mostrarDataAtual() {
 
 
 /* ==========================================
-   SAIR
+   SAIR DO SISTEMA
 ========================================== */
 
 async function sair() {
 
     try {
 
+        console.log(
+            "Saindo do sistema..."
+        );
+
+
         const resultado =
-            await adminSupabase.auth.signOut();
+            await adminSupabase.auth.signOut({
+                scope: "local"
+            });
 
 
         if (resultado.error) {
@@ -204,6 +252,37 @@ async function sair() {
         }
 
 
+        /* ======================================
+           LIMPAR PERFIL
+        ====================================== */
+
+        sessionStorage.removeItem(
+            "sistemaLojaPerfil"
+        );
+
+
+        /* ======================================
+           VOLTAR PARA LOGIN
+        ====================================== */
+
+        window.location.href =
+            "index.html";
+
+    }
+
+    catch (erro) {
+
+        console.error(
+            "Erro ao sair:",
+            erro
+        );
+
+
+        /* ======================================
+           MESMO COM ERRO,
+           LIMPAR SESSÃO LOCAL
+        ====================================== */
+
         sessionStorage.removeItem(
             "sistemaLojaPerfil"
         );
@@ -211,24 +290,12 @@ async function sair() {
 
         window.location.href =
             "index.html";
-
-
-    } catch (erro) {
-
-        console.error(
-            "Erro ao sair:",
-            erro
-        );
-
-        alert(
-            "Ocorreu um erro ao sair."
-        );
     }
 }
 
 
 /* ==========================================
-   ÁREAS AINDA NÃO DESENVOLVIDAS
+   ÁREAS FUTURAS
 ========================================== */
 
 function configurarMenuFuturo() {
@@ -259,23 +326,42 @@ function configurarMenuFuturo() {
                     nome +
                     '" será desenvolvida nesta etapa.'
                 );
-
             }
         );
-
     });
 }
 
 
 /* ==========================================
-   EVENTOS
+   CONFIGURAR BOTÃO SAIR
 ========================================== */
 
-if (btnSair) {
+function configurarBotaoSair() {
 
-    btnSair.addEventListener(
+    const botaoSair =
+        document.getElementById(
+            "btnSair"
+        );
+
+
+    if (!botaoSair) {
+
+        console.error(
+            "Botão btnSair não encontrado."
+        );
+
+        return;
+    }
+
+
+    botaoSair.addEventListener(
         "click",
         sair
+    );
+
+
+    console.log(
+        "Botão Sair configurado."
     );
 }
 
@@ -288,10 +374,30 @@ async function iniciarAdmin() {
 
     mostrarDataAtual();
 
+    configurarBotaoSair();
+
     await carregarAdministrador();
 
     configurarMenuFuturo();
 }
 
 
-iniciarAdmin();
+/* ==========================================
+   INICIAR PÁGINA
+========================================== */
+
+if (
+    document.readyState === "loading"
+) {
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        iniciarAdmin
+    );
+
+}
+else {
+
+    iniciarAdmin();
+
+}
