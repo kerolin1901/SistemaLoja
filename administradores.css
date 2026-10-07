@@ -1,0 +1,786 @@
+/* ==========================================
+   SISTEMA DA LOJA
+   ADMINISTRADORES
+========================================== */
+
+.layout-admin {
+
+    display: flex;
+
+    min-height: 100vh;
+
+    width: 100%;
+
+    background: #f5f7fb;
+
+}
+
+
+.menu-lateral {
+
+    width: 250px;
+
+    min-width: 250px;
+
+    min-height: 100vh;
+
+    background: #111827;
+
+    color: #ffffff;
+
+    display: flex;
+
+    flex-direction: column;
+
+    position: fixed;
+
+    left: 0;
+
+    top: 0;
+
+    bottom: 0;
+
+    z-index: 100;
+
+}
+
+
+.logo-admin {
+
+    padding: 24px 20px;
+
+    border-bottom: 1px solid
+        rgba(255,255,255,0.08);
+
+}
+
+
+.logo-admin h1 {
+
+    margin: 0;
+
+    color: #ffffff;
+
+    font-size: 23px;
+
+    line-height: 1.05;
+
+    font-weight: 800;
+
+}
+
+
+.usuario-admin {
+
+    padding: 20px;
+
+    border-bottom: 1px solid
+        rgba(255,255,255,0.08);
+
+}
+
+
+.nome-usuario {
+
+    color: #ffffff;
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    margin-bottom: 5px;
+
+}
+
+
+.tipo-usuario {
+
+    color: #9ca3af;
+
+    font-size: 11px;
+
+}
+
+
+.menu-admin {
+
+    padding: 18px 12px;
+
+    flex: 1;
+
+    overflow-y: auto;
+
+}
+
+
+.menu-titulo {
+
+    color: #6b7280;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    letter-spacing: 0.8px;
+
+    margin: 12px 10px 8px;
+
+}
+
+
+.menu-item {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    width: 100%;
+
+    min-height: 40px;
+
+    box-sizing: border-box;
+
+    padding: 10px 12px;
+
+    margin-bottom: 4px;
+
+    border-radius: 7px;
+
+    color: #d1d5db;
+
+    text-decoration: none;
+
+    font-size: 13px;
+
+    font-weight: 500;
+
+}
+
+
+.menu-item:hover {
+
+    background: rgba(255,255,255,0.08);
+
+    color: #ffffff;
+
+}
+
+
+.menu-item.ativo {
+
+    background: #2563eb;
+
+    color: #ffffff;
+
+    font-weight: 700;
+
+}
+
+
+.menu-rodape {
+
+    padding: 15px 12px;
+
+    border-top: 1px solid
+        rgba(255,255,255,0.08);
+
+}
+
+
+.btn-sair {
+
+    width: 100%;
+
+    min-height: 40px;
+
+    border: none;
+
+    border-radius: 7px;
+
+    background: transparent;
+
+    color: #d1d5db;
+
+    cursor: pointer;
+
+    font-size: 13px;
+
+    text-align: left;
+
+    padding: 10px 12px;
+
+}
+
+
+.btn-sair:hover {
+
+    background: rgba(255,255,255,0.08);
+
+    color: #ffffff;
+
+}
+
+
+.conteudo-admin {
+
+    margin-left: 250px;
+
+    width: calc(100% - 250px);
+
+    min-height: 100vh;
+
+    padding: 30px;
+
+    box-sizing: border-box;
+
+}
+
+
+.cabecalho-admin {
+
+    margin-bottom: 25px;
+
+}
+
+
+.cabecalho-admin h2 {
+
+    margin: 0 0 6px;
+
+    color: #111827;
+
+    font-size: 27px;
+
+}
+
+
+.cabecalho-admin p {
+
+    margin: 0;
+
+    color: #6b7280;
+
+    font-size: 13px;
+
+}
+
+
+.mensagem {
+
+    margin-bottom: 18px;
+
+    padding: 12px 15px;
+
+    border-radius: 8px;
+
+    font-size: 13px;
+
+}
+
+
+.mensagem:empty {
+
+    display: none;
+
+}
+
+
+.mensagem.erro {
+
+    background: #fee2e2;
+
+    color: #991b1b;
+
+}
+
+
+.mensagem.sucesso {
+
+    background: #dcfce7;
+
+    color: #166534;
+
+}
+
+
+.cards-administradores {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 18px;
+
+    margin-bottom: 24px;
+
+}
+
+
+.card-administrador {
+
+    background: #ffffff;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 10px;
+
+    min-height: 95px;
+
+    padding: 18px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 15px;
+
+    box-shadow:
+        0 2px 8px
+        rgba(0,0,0,0.04);
+
+}
+
+
+.icone-administrador {
+
+    width: 45px;
+
+    height: 45px;
+
+    min-width: 45px;
+
+    border-radius: 9px;
+
+    background: #eef4ff;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 21px;
+
+}
+
+
+.card-administrador span {
+
+    display: block;
+
+    color: #6b7280;
+
+    font-size: 11px;
+
+    margin-bottom: 5px;
+
+}
+
+
+.card-administrador strong {
+
+    display: block;
+
+    color: #111827;
+
+    font-size: 24px;
+
+}
+
+
+.painel {
+
+    background: #ffffff;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 10px;
+
+    padding: 22px;
+
+    margin-bottom: 24px;
+
+    box-shadow:
+        0 2px 8px
+        rgba(0,0,0,0.04);
+
+}
+
+
+.titulo-painel {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    margin-bottom: 20px;
+
+}
+
+
+.titulo-painel h3 {
+
+    margin: 0 0 5px;
+
+    color: #111827;
+
+    font-size: 17px;
+
+}
+
+
+.titulo-painel p {
+
+    margin: 0;
+
+    color: #6b7280;
+
+    font-size: 12px;
+
+}
+
+
+/* ==========================================
+   FORMULÁRIO
+========================================== */
+
+.form-grid-administrador {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 18px;
+
+}
+
+
+.campo-administrador {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 7px;
+
+}
+
+
+.campo-administrador label {
+
+    color: #374151;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+}
+
+
+.campo-administrador input,
+
+.campo-administrador select {
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+    min-height: 42px;
+
+    padding: 10px 12px;
+
+    border: 1px solid #d1d5db;
+
+    border-radius: 7px;
+
+    background: #ffffff;
+
+    color: #111827;
+
+    font-size: 13px;
+
+    outline: none;
+
+}
+
+
+.campo-administrador input:focus,
+
+.campo-administrador select:focus {
+
+    border-color: #2563eb;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(37,99,235,0.10);
+
+}
+
+
+.acoes-administrador {
+
+    display: flex;
+
+    gap: 10px;
+
+    margin-top: 20px;
+
+}
+
+
+.botao-principal {
+
+    border: none;
+
+    background: #2563eb;
+
+    color: #ffffff;
+
+    padding: 10px 16px;
+
+    border-radius: 7px;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+}
+
+
+.botao-principal:hover {
+
+    background: #1d4ed8;
+
+}
+
+
+.botao-principal:disabled {
+
+    opacity: 0.6;
+
+    cursor: not-allowed;
+
+}
+
+
+.botao-secundario {
+
+    border: 1px solid #d1d5db;
+
+    background: #ffffff;
+
+    color: #374151;
+
+    padding: 9px 13px;
+
+    border-radius: 7px;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+}
+
+
+.botao-secundario:hover {
+
+    background: #f3f4f6;
+
+}
+
+
+/* ==========================================
+   TABELA
+========================================== */
+
+.tabela-container {
+
+    width: 100%;
+
+    overflow-x: auto;
+
+}
+
+
+.tabela-administradores {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+    min-width: 650px;
+
+}
+
+
+.tabela-administradores th {
+
+    background: #f8fafc;
+
+    color: #6b7280;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    text-align: left;
+
+    padding: 12px;
+
+    border-bottom: 1px solid #e5e7eb;
+
+}
+
+
+.tabela-administradores td {
+
+    padding: 14px 12px;
+
+    border-bottom: 1px solid #f0f0f0;
+
+    color: #374151;
+
+    font-size: 13px;
+
+}
+
+
+.tabela-administradores tbody tr:hover {
+
+    background: #fafcff;
+
+}
+
+
+.nome-loja {
+
+    color: #1d4ed8;
+
+    font-weight: 600;
+
+}
+
+
+.sem-loja {
+
+    color: #9ca3af;
+
+    font-style: italic;
+
+}
+
+
+.status-administrador {
+
+    display: inline-flex;
+
+    padding: 5px 10px;
+
+    border-radius: 20px;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+}
+
+
+.status-ativo {
+
+    background: #dcfce7;
+
+    color: #166534;
+
+}
+
+
+.status-inativo {
+
+    background: #fee2e2;
+
+    color: #991b1b;
+
+}
+
+
+.carregando,
+
+.sem-registros {
+
+    padding: 30px;
+
+    text-align: center;
+
+    color: #6b7280;
+
+    font-size: 13px;
+
+    background: #f9fafb;
+
+    border-radius: 8px;
+
+}
+
+
+@media (max-width: 900px) {
+
+    .cards-administradores {
+
+        grid-template-columns: 1fr;
+
+    }
+
+    .form-grid-administrador {
+
+        grid-template-columns: 1fr;
+
+    }
+
+}
+
+
+@media (max-width: 650px) {
+
+    .layout-admin {
+
+        flex-direction: column;
+
+    }
+
+    .menu-lateral {
+
+        position: relative;
+
+        width: 100%;
+
+        min-width: 100%;
+
+        min-height: auto;
+
+    }
+
+    .conteudo-admin {
+
+        margin-left: 0;
+
+        width: 100%;
+
+        padding: 18px;
+
+    }
+
+}

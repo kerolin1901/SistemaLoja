@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Sistema da Loja - Administrador Geral</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="admin-geral.css"
+    >
+
+</head>
+
+
+<body>
+
+    <div class="layout-admin-geral">
+
+
+        <!-- ==========================================
+             MENU LATERAL
+        =========================================== -->
+
+        <aside class="menu-geral">
+
+
+            <div class="logo-geral">
+
+                <h1>
+                    Sistema<br>
+                    da Loja
+                </h1>
+
+            </div>
+
+
+            <div class="usuario-geral">
+
+                <div class="icone-geral">
+                    👑
+                </div>
+
+                <div>
+
+                    <div
+                        id="nomeUsuario"
+                        class="nome-usuario-geral"
+                    >
+                        Administrador Geral
+                    </div>
+
+                    <div class="tipo-usuario-geral">
+                        Administrador Geral
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <nav class="menu-geral-navegacao">
+
+
+                <div class="menu-geral-titulo">
+                    PRINCIPAL
+                </div>
+
+
+                <a
+                    href="admin-geral.html"
+                    class="menu-geral-item ativo"
+                >
+                    📊 Dashboard Geral
+                </a>
+
+
+                <div class="menu-geral-titulo">
+                    ADMINISTRAÇÃO
+                </div>
+
+
+                <a
+                    href="lojas.html"
+                    class="menu-geral-item"
+                >
+                    🏪 Lojas
+                </a>
+
+
+                <a
+                    href="administradores.html"
+                    class="menu-geral-item"
+                >
+                    👥 Administradores
+                </a>
+
+
+            </nav>
+
+
+            <div class="menu-geral-rodape">
+
+                <button
+                    type="button"
+                    id="btnSair"
+                    class="btn-sair-geral"
+                >
+                    🚪 Sair
+                </button>
+
+            </div>
+
+
+        </aside>
+
+
+        <!-- ==========================================
+             CONTEÚDO
+        =========================================== -->
+
+        <main class="conteudo-geral">
+
+
+            <header class="cabecalho-geral">
+
+                <div>
+
+                    <h2>
+                        Dashboard Geral
+                    </h2>
+
+                    <p>
+                        Administração geral do Sistema da Loja
+                    </p>
+
+                </div>
+
+
+                <div class="identificacao-geral">
+
+                    <span>
+                        👑
+                    </span>
+
+                    <div>
+
+                        <strong id="nomeCabecalho">
+                            Administrador Geral
+                        </strong>
+
+                        <small>
+                            Acesso geral
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </header>
+
+
+            <!-- ======================================
+                 MENSAGEM
+            ======================================= -->
+
+            <div
+                id="mensagem"
+                class="mensagem-geral"
+            ></div>
+
+
+            <!-- ======================================
+                 CARDS
+            ======================================= -->
+
+            <section class="cards-geral">
+
+
+                <div class="card-geral">
+
+                    <div class="card-icone">
+                        🏪
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Lojas cadastradas
+                        </span>
+
+                        <strong id="totalLojas">
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card-geral">
+
+                    <div class="card-icone">
+                        ✅
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Lojas ativas
+                        </span>
+
+                        <strong id="lojasAtivas">
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card-geral">
+
+                    <div class="card-icone">
+                        ⛔
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Lojas inativas
+                        </span>
+
+                        <strong id="lojasInativas">
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+            </section>
+
+
+            <!-- ======================================
+                 ÁREA PRINCIPAL
+            ======================================= -->
+
+            <section class="painel-geral">
+
+                <div class="titulo-painel-geral">
+
+                    <div>
+
+                        <h3>
+                            Administração
+                        </h3>
+
+                        <p>
+                            Acesso rápido às principais funções do administrador geral.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="atalhos-gerais">
+
+
+                    <!-- ==================================
+                         LOJAS
+                    =================================== -->
+
+                    <a
+                        href="lojas.html"
+                        class="atalho-geral"
+                    >
+
+                        <div class="atalho-icone">
+                            🏪
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Lojas
+                            </strong>
+
+                            <span>
+                                Cadastrar e gerenciar lojas
+                            </span>
+
+                        </div>
+
+                    </a>
+
+
+                    <!-- ==================================
+                         ADMINISTRADORES
+                    =================================== -->
+
+                    <a
+                        href="administradores.html"
+                        class="atalho-geral"
+                    >
+
+                        <div class="atalho-icone">
+                            👥
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Administradores
+                            </strong>
+
+                            <span>
+                                Gerenciar administradores das lojas
+                            </span>
+
+                        </div>
+
+                    </a>
+
+
+                </div>
+
+            </section>
+
+
+            <!-- ======================================
+                 INFORMAÇÃO
+            ======================================= -->
+
+            <section class="informacao-geral">
+
+                <div class="informacao-icone">
+                    💡
+                </div>
+
+                <div>
+
+                    <strong>
+                        Administrador Geral
+                    </strong>
+
+                    <p>
+                        Este painel é exclusivo para o administrador geral do sistema.
+                        As lojas e seus administradores serão gerenciados a partir daqui.
+                    </p>
+
+                </div>
+
+            </section>
+
+
+        </main>
+
+    </div>
+
+
+    <!-- ==========================================
+         SUPABASE
+    =========================================== -->
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+    ></script>
+
+
+    <!-- ==========================================
+         CONFIGURAÇÃO
+    =========================================== -->
+
+    <script src="js/config.js"></script>
+
+
+    <!-- ==========================================
+         ADMINISTRADOR GERAL
+    =========================================== -->
+
+    <script src="js/admin-geral.js"></script>
+
+
+</body>
+
+</html>

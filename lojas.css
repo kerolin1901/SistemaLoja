@@ -1,0 +1,837 @@
+/* ==========================================
+   SISTEMA DA LOJA
+   CADASTRO DE LOJAS
+   LOJAS.CSS
+========================================== */
+
+
+/* ==========================================
+   RESET DA PÁGINA
+========================================== */
+
+* {
+    box-sizing: border-box;
+}
+
+
+/* ==========================================
+   LAYOUT PRINCIPAL
+========================================== */
+
+.layout-admin {
+    display: flex;
+
+    width: 100%;
+
+    min-height: 100vh;
+
+    background: #f5f6f8;
+}
+
+
+/* ==========================================
+   MENU LATERAL
+========================================== */
+
+.menu-lateral {
+    width: 250px;
+
+    min-width: 250px;
+
+    min-height: 100vh;
+
+    display: flex;
+
+    flex-direction: column;
+
+    background: #111827;
+
+    color: #ffffff;
+}
+
+
+/* ==========================================
+   LOGO
+========================================== */
+
+.logo-admin {
+    padding: 24px 20px;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+
+.logo-admin h1 {
+    margin: 0;
+
+    color: #ffffff;
+
+    font-size: 25px;
+
+    line-height: 1.05;
+
+    font-weight: 800;
+}
+
+
+/* ==========================================
+   USUÁRIO
+========================================== */
+
+.usuario-admin {
+    padding: 18px 20px;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+
+.nome-usuario {
+    margin-bottom: 4px;
+
+    color: #ffffff;
+
+    font-size: 14px;
+
+    font-weight: 700;
+}
+
+
+.tipo-usuario {
+    color: #9ca3af;
+
+    font-size: 11px;
+}
+
+
+/* ==========================================
+   MENU
+========================================== */
+
+.menu-admin {
+    flex: 1;
+
+    padding: 15px 12px;
+
+    overflow-y: auto;
+}
+
+
+/* ==========================================
+   TÍTULO DO MENU
+========================================== */
+
+.menu-titulo {
+    margin: 16px 9px 7px;
+
+    color: #6b7280;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 0.7px;
+}
+
+
+/* ==========================================
+   ITENS DO MENU
+========================================== */
+
+.menu-item {
+    display: flex;
+
+    align-items: center;
+
+    width: 100%;
+
+    min-height: 38px;
+
+    margin-bottom: 3px;
+
+    padding: 9px 11px;
+
+    border-radius: 7px;
+
+    color: #d1d5db;
+
+    text-decoration: none;
+
+    font-size: 13px;
+
+    font-weight: 500;
+
+    line-height: 1.2;
+
+    white-space: nowrap;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease;
+}
+
+
+.menu-item:hover {
+    background: rgba(255, 255, 255, 0.07);
+
+    color: #ffffff;
+}
+
+
+.menu-item.ativo {
+    background: #2563eb;
+
+    color: #ffffff;
+
+    font-weight: 700;
+}
+
+
+/* ==========================================
+   RODAPÉ DO MENU
+========================================== */
+
+.menu-rodape {
+    padding: 14px;
+
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+
+.btn-sair {
+    width: 100%;
+
+    min-height: 38px;
+
+    padding: 9px 12px;
+
+    border: 1px solid rgba(255, 255, 255, 0.12);
+
+    border-radius: 7px;
+
+    background: transparent;
+
+    color: #d1d5db;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease;
+}
+
+
+.btn-sair:hover {
+    background: rgba(255, 255, 255, 0.07);
+
+    color: #ffffff;
+}
+
+
+/* ==========================================
+   CONTEÚDO PRINCIPAL
+========================================== */
+
+.conteudo-admin {
+    flex: 1;
+
+    min-width: 0;
+
+    min-height: 100vh;
+
+    padding: 28px;
+
+    background: #f5f6f8;
+}
+
+
+/* ==========================================
+   CABEÇALHO
+========================================== */
+
+.cabecalho-admin {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin-bottom: 24px;
+}
+
+
+.cabecalho-admin h2 {
+    margin: 0;
+
+    color: #1f2937;
+
+    font-size: 25px;
+
+    font-weight: 800;
+}
+
+
+.cabecalho-admin p {
+    margin: 6px 0 0;
+
+    color: #6b7280;
+
+    font-size: 13px;
+}
+
+
+/* ==========================================
+   PAINÉIS
+========================================== */
+
+.painel {
+    width: 100%;
+
+    margin-bottom: 22px;
+
+    padding: 22px;
+
+    background: #ffffff;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 10px;
+
+    box-shadow:
+        0 2px 8px rgba(0, 0, 0, 0.03);
+}
+
+
+/* ==========================================
+   TÍTULO DO PAINEL
+========================================== */
+
+.titulo-painel {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    margin-bottom: 18px;
+}
+
+
+.titulo-painel h3 {
+    margin: 0;
+
+    color: #1f2937;
+
+    font-size: 17px;
+
+    font-weight: 700;
+}
+
+
+.titulo-painel p {
+    margin: 5px 0 0;
+
+    color: #6b7280;
+
+    font-size: 12px;
+}
+
+
+/* ==========================================
+   MENSAGEM
+========================================== */
+
+.mensagem {
+    display: none;
+
+    width: 100%;
+
+    margin-bottom: 20px;
+
+    padding: 13px 16px;
+
+    border-radius: 8px;
+
+    font-size: 13px;
+
+    font-weight: 600;
+}
+
+
+.mensagem.sucesso {
+    display: block;
+
+    background: #ecfdf5;
+
+    color: #047857;
+
+    border: 1px solid #a7f3d0;
+}
+
+
+.mensagem.erro {
+    display: block;
+
+    background: #fef2f2;
+
+    color: #b91c1c;
+
+    border: 1px solid #fecaca;
+}
+
+
+/* ==========================================
+   FORMULÁRIO
+========================================== */
+
+.formulario-loja {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 18px;
+
+    width: 100%;
+}
+
+
+.campo-formulario {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 7px;
+
+    width: 100%;
+}
+
+
+.campo-formulario label {
+    color: #374151;
+
+    font-size: 13px;
+
+    font-weight: 700;
+}
+
+
+.campo-formulario input {
+    width: 100%;
+
+    min-height: 40px;
+
+    padding: 10px 13px;
+
+    border: 1px solid #d1d5db;
+
+    border-radius: 7px;
+
+    background: #ffffff;
+
+    color: #1f2937;
+
+    font-family: inherit;
+
+    font-size: 13px;
+
+    outline: none;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.campo-formulario input:focus {
+    border-color: #2563eb;
+
+    box-shadow:
+        0 0 0 3px rgba(37, 99, 235, 0.10);
+}
+
+
+.campo-formulario input::placeholder {
+    color: #9ca3af;
+}
+
+
+/* ==========================================
+   AÇÕES DO FORMULÁRIO
+========================================== */
+
+.acoes-formulario {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+}
+
+
+.botao-principal {
+    min-height: 38px;
+
+    padding: 9px 17px;
+
+    border: none;
+
+    border-radius: 7px;
+
+    background: #2563eb;
+
+    color: #ffffff;
+
+    font-family: inherit;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        opacity 0.2s ease;
+}
+
+
+.botao-principal:hover {
+    background: #1d4ed8;
+}
+
+
+.botao-principal:disabled {
+    opacity: 0.6;
+
+    cursor: not-allowed;
+}
+
+
+/* ==========================================
+   BOTÃO ATUALIZAR
+========================================== */
+
+.botao-secundario {
+    min-height: 36px;
+
+    padding: 8px 13px;
+
+    border: 1px solid #d1d5db;
+
+    border-radius: 7px;
+
+    background: #ffffff;
+
+    color: #374151;
+
+    font-family: inherit;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease;
+}
+
+
+.botao-secundario:hover {
+    background: #f9fafb;
+
+    border-color: #9ca3af;
+}
+
+
+/* ==========================================
+   CARREGANDO
+========================================== */
+
+.carregando {
+    padding: 25px 10px;
+
+    color: #6b7280;
+
+    text-align: center;
+
+    font-size: 13px;
+}
+
+
+/* ==========================================
+   SEM REGISTROS
+========================================== */
+
+.sem-registros {
+    padding: 25px 10px;
+
+    color: #6b7280;
+
+    text-align: center;
+
+    font-size: 13px;
+}
+
+
+/* ==========================================
+   TABELA
+========================================== */
+
+.tabela-container {
+    width: 100%;
+
+    margin-top: 18px;
+
+    overflow-x: auto;
+}
+
+
+.tabela-lojas {
+    width: 100%;
+
+    min-width: 650px;
+
+    border-collapse: collapse;
+
+    background: #ffffff;
+}
+
+
+.tabela-lojas th,
+.tabela-lojas td {
+    padding: 12px;
+
+    border-bottom: 1px solid #eeeeee;
+
+    text-align: left;
+
+    font-size: 13px;
+
+    vertical-align: middle;
+}
+
+
+.tabela-lojas th {
+    background: #f8f9fa;
+
+    color: #4b5563;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    text-transform: uppercase;
+}
+
+
+.tabela-lojas td {
+    color: #374151;
+}
+
+
+.tabela-lojas tbody tr:hover {
+    background: #fafafa;
+}
+
+
+/* ==========================================
+   NOME DA LOJA
+========================================== */
+
+.nome-loja {
+    color: #1f2937;
+
+    font-weight: 700;
+}
+
+
+/* ==========================================
+   STATUS
+========================================== */
+
+.status-loja {
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-width: 55px;
+
+    padding: 4px 9px;
+
+    border-radius: 20px;
+
+    font-size: 11px;
+
+    font-weight: 700;
+}
+
+
+.status-loja.ativo {
+    background: #dcfce7;
+
+    color: #166534;
+}
+
+
+.status-loja.inativo {
+    background: #fee2e2;
+
+    color: #991b1b;
+}
+
+
+/* ==========================================
+   BOTÃO DE STATUS
+========================================== */
+
+.botao-status {
+    min-height: 30px;
+
+    padding: 6px 10px;
+
+    border-radius: 6px;
+
+    font-family: inherit;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        opacity 0.2s ease,
+        background 0.2s ease;
+}
+
+
+.botao-status:hover {
+    opacity: 0.85;
+}
+
+
+.botao-status.desativar {
+    border: 1px solid #fecaca;
+
+    background: #fff1f2;
+
+    color: #b91c1c;
+}
+
+
+.botao-status.ativar {
+    border: 1px solid #bbf7d0;
+
+    background: #f0fdf4;
+
+    color: #15803d;
+}
+
+
+/* ==========================================
+   SCROLLBAR DO MENU
+========================================== */
+
+.menu-admin::-webkit-scrollbar {
+    width: 5px;
+}
+
+
+.menu-admin::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+
+.menu-admin::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+
+    border-radius: 10px;
+}
+
+
+/* ==========================================
+   RESPONSIVO
+========================================== */
+
+@media (max-width: 900px) {
+
+    .menu-lateral {
+        width: 220px;
+
+        min-width: 220px;
+    }
+
+
+    .conteudo-admin {
+        padding: 20px;
+    }
+
+}
+
+
+@media (max-width: 700px) {
+
+    .layout-admin {
+        flex-direction: column;
+    }
+
+
+    .menu-lateral {
+        width: 100%;
+
+        min-width: 100%;
+
+        min-height: auto;
+    }
+
+
+    .menu-admin {
+        max-height: 300px;
+    }
+
+
+    .conteudo-admin {
+        width: 100%;
+
+        padding: 18px;
+    }
+
+
+    .cabecalho-admin {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+
+    .titulo-painel {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+
+    .botao-secundario {
+        width: 100%;
+    }
+
+
+    .acoes-formulario {
+        width: 100%;
+    }
+
+
+    .botao-principal {
+        width: 100%;
+    }
+
+}

@@ -5,11 +5,14 @@
 
 
 /* ==========================================
-   CONFIGURAÇÃO DO ADMIN
+   CONFIGURAÇÃO DOS ADMINISTRADORES
 ========================================== */
 
 const EMAIL_ADMIN =
     "wlpesca@outlook.com";
+
+const EMAIL_ADMIN_GERAL =
+    "amaraldesigner@outlook.com.br";
 
 
 /* ==========================================
@@ -83,7 +86,7 @@ function obterEmailLogin(usuario) {
 
 
     /* ==========================================
-       ADMINISTRADOR
+       ADMINISTRADOR DA LOJA
     ========================================== */
 
     if (
@@ -96,10 +99,20 @@ function obterEmailLogin(usuario) {
 
 
     /* ==========================================
-       VENDEDORES
-       
-       Os vendedores não precisam saber
-       desse e-mail.
+       ADMINISTRADOR GERAL
+    ========================================== */
+
+    if (
+        usuarioNormalizado === "admingeral"
+    ) {
+
+        return EMAIL_ADMIN_GERAL;
+
+    }
+
+
+    /* ==========================================
+       VENDEDORES E DEMAIS USUÁRIOS
     ========================================== */
 
     return (
@@ -263,7 +276,7 @@ async function entrar() {
                 .from("perfis")
 
                 .select(
-                    "id, nome_completo, usuario, tipo, ativo"
+                    "id, nome_completo, usuario, tipo, ativo, loja_id"
                 )
 
                 .eq(
@@ -355,7 +368,23 @@ async function entrar() {
 
 
         /* ==========================================
-           REDIRECIONAR ADMIN
+           REDIRECIONAR ADMINISTRADOR GERAL
+        ========================================== */
+
+        if (
+            perfil.tipo === "admin_geral"
+        ) {
+
+            window.location.href =
+                "admin-geral.html";
+
+            return;
+
+        }
+
+
+        /* ==========================================
+           REDIRECIONAR ADMINISTRADOR DA LOJA
         ========================================== */
 
         if (

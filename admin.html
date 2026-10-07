@@ -1,24 +1,36 @@
 <!DOCTYPE html>
+
 <html lang="pt-BR">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>Sistema da Loja - Administração</title>
 
     <link rel="stylesheet" href="admin.css">
 
     <!-- SUPABASE -->
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <!-- CONFIGURAÇÃO -->
+
     <script src="js/config.js"></script>
+
 </head>
+
 
 <body>
 
+
     <div class="layout-admin">
+
 
         <!-- ==========================================
              MENU LATERAL
@@ -26,95 +38,199 @@
 
         <aside class="menu-lateral">
 
+
             <div class="logo-admin">
-                <h1>Sistema<br>da Loja</h1>
+
+                <h1>
+                    Sistema<br>
+                    da Loja
+                </h1>
+
             </div>
+
 
             <div class="usuario-logado">
 
+
                 <div class="avatar-admin">
+
                     A
+
                 </div>
+
 
                 <div>
+
                     <strong id="nomeAdministrador">
+
                         Administrador
+
                     </strong>
 
+
                     <span>
+
                         Administrador
+
                     </span>
+
                 </div>
+
 
             </div>
 
 
             <nav class="menu">
 
+
                 <!-- PRINCIPAL -->
 
                 <div class="titulo-menu">
+
                     PRINCIPAL
+
                 </div>
 
-                <a href="admin.html" class="item-menu ativo">
+
+                <a
+                    href="admin.html"
+                    class="item-menu ativo"
+                >
+
                     <span>🏠</span>
+
                     Dashboard
+
                 </a>
 
-                <a href="usuarios.html" class="item-menu">
+
+                <a
+                    href="usuarios.html"
+                    class="item-menu"
+                >
+
                     <span>👥</span>
+
                     Usuários
+
+                </a>
+
+
+                <!-- LOJAS -->
+
+                <a
+                    href="lojas.html"
+                    class="item-menu"
+                >
+
+                    <span>🏪</span>
+
+                    Lojas
+
                 </a>
 
 
                 <!-- ESTOQUE E VENDAS -->
 
                 <div class="titulo-menu">
+
                     ESTOQUE E VENDAS
+
                 </div>
 
-                <a href="produtos.html" class="item-menu">
+
+                <a
+                    href="produtos.html"
+                    class="item-menu"
+                >
+
                     <span>📦</span>
+
                     Produtos
+
                 </a>
 
-                <a href="categorias.html" class="item-menu">
+
+                <a
+                    href="categorias.html"
+                    class="item-menu"
+                >
+
                     <span>🗂️</span>
+
                     Categorias
+
                 </a>
 
-                <a href="estoque.html" class="item-menu">
+
+                <a
+                    href="estoque.html"
+                    class="item-menu"
+                >
+
                     <span>📋</span>
+
                     Estoque
+
                 </a>
 
-                <a href="vendas.html" class="item-menu">
+
+                <a
+                    href="vendas.html"
+                    class="item-menu"
+                >
+
                     <span>🛒</span>
+
                     Vendas
+
                 </a>
 
-                <a href="clientes.html" class="item-menu">
+
+                <a
+                    href="clientes.html"
+                    class="item-menu"
+                >
+
                     <span>👤</span>
+
                     Clientes
+
                 </a>
 
 
                 <!-- FINANCEIRO -->
 
                 <div class="titulo-menu">
+
                     FINANCEIRO
+
                 </div>
 
-                <a href="financeiro.html" class="item-menu">
+
+                <a
+                    href="financeiro.html"
+                    class="item-menu"
+                >
+
                     <span>💰</span>
+
                     Financeiro
+
                 </a>
 
-                <a href="relatorios.html" class="item-menu">
+
+                <a
+                    href="relatorios.html"
+                    class="item-menu"
+                >
+
                     <span>📊</span>
+
                     Relatórios
+
                 </a>
+
 
             </nav>
 
@@ -123,17 +239,22 @@
 
             <div class="area-sair">
 
+
                 <button
                     type="button"
                     class="botao-sair"
-                    id="btnSair">
+                    id="btnSair"
+                >
 
                     🚪
+
                     Sair
 
                 </button>
 
+
             </div>
+
 
         </aside>
 
@@ -144,15 +265,27 @@
 
         <main class="conteudo-admin">
 
+
             <header class="cabecalho-admin">
 
+
                 <div>
-                    <h2>Dashboard</h2>
+
+                    <h2>
+
+                        Dashboard
+
+                    </h2>
+
 
                     <p>
+
                         Administração do sistema
+
                     </p>
+
                 </div>
+
 
             </header>
 
@@ -169,23 +302,36 @@
                 <a
                     href="usuarios.html"
                     class="card-dashboard"
-                    style="text-decoration: none; color: inherit;">
+                    style="text-decoration: none; color: inherit;"
+                >
+
 
                     <div class="icone-card">
+
                         👥
+
                     </div>
+
 
                     <div>
 
+
                         <span>
+
                             Usuários
+
                         </span>
 
+
                         <strong>
+
                             Gerenciar
+
                         </strong>
 
+
                     </div>
+
 
                 </a>
 
@@ -195,23 +341,36 @@
                 <a
                     href="produtos.html"
                     class="card-dashboard"
-                    style="text-decoration: none; color: inherit;">
+                    style="text-decoration: none; color: inherit;"
+                >
+
 
                     <div class="icone-card">
+
                         📦
+
                     </div>
+
 
                     <div>
 
+
                         <span>
+
                             Produtos
+
                         </span>
 
+
                         <strong>
+
                             Gerenciar
+
                         </strong>
 
+
                     </div>
+
 
                 </a>
 
@@ -221,23 +380,36 @@
                 <a
                     href="estoque.html"
                     class="card-dashboard"
-                    style="text-decoration: none; color: inherit;">
+                    style="text-decoration: none; color: inherit;"
+                >
+
 
                     <div class="icone-card">
+
                         📋
+
                     </div>
+
 
                     <div>
 
+
                         <span>
+
                             Estoque
+
                         </span>
 
+
                         <strong>
+
                             Controlar
+
                         </strong>
 
+
                     </div>
+
 
                 </a>
 
@@ -247,25 +419,39 @@
                 <a
                     href="financeiro.html"
                     class="card-dashboard"
-                    style="text-decoration: none; color: inherit;">
+                    style="text-decoration: none; color: inherit;"
+                >
+
 
                     <div class="icone-card">
+
                         💰
+
                     </div>
+
 
                     <div>
 
+
                         <span>
+
                             Financeiro
+
                         </span>
 
+
                         <strong>
+
                             Gerenciar
+
                         </strong>
+
 
                     </div>
 
+
                 </a>
+
 
             </section>
 
@@ -276,19 +462,28 @@
 
             <section class="painel-boas-vindas">
 
+
                 <div>
 
+
                     <h2>
+
                         Bem-vindo ao Sistema da Loja!
+
                     </h2>
 
+
                     <p>
+
                         Utilize o menu lateral para administrar
                         usuários, produtos, categorias, estoque,
                         vendas e clientes.
+
                     </p>
 
+
                 </div>
+
 
             </section>
 
@@ -299,15 +494,23 @@
 
             <section class="painel">
 
+
                 <div class="titulo-painel">
 
+
                     <h3>
+
                         Acesso rápido
+
                     </h3>
 
+
                     <p>
+
                         Principais áreas do sistema
+
                     </p>
+
 
                 </div>
 
@@ -319,19 +522,30 @@
 
                     <a
                         href="usuarios.html"
-                        class="atalho">
+                        class="atalho"
+                    >
+
 
                         <span>
+
                             👥
+
                         </span>
 
+
                         <strong>
+
                             Usuários
+
                         </strong>
 
+
                         <small>
+
                             Gerenciar usuários
+
                         </small>
+
 
                     </a>
 
@@ -340,19 +554,30 @@
 
                     <a
                         href="produtos.html"
-                        class="atalho">
+                        class="atalho"
+                    >
+
 
                         <span>
+
                             📦
+
                         </span>
 
+
                         <strong>
+
                             Produtos
+
                         </strong>
 
+
                         <small>
+
                             Cadastrar produtos
+
                         </small>
+
 
                     </a>
 
@@ -361,19 +586,30 @@
 
                     <a
                         href="categorias.html"
-                        class="atalho">
+                        class="atalho"
+                    >
+
 
                         <span>
+
                             📁
+
                         </span>
 
+
                         <strong>
+
                             Categorias
+
                         </strong>
 
+
                         <small>
+
                             Organizar produtos
+
                         </small>
+
 
                     </a>
 
@@ -382,23 +618,36 @@
 
                     <a
                         href="estoque.html"
-                        class="atalho">
+                        class="atalho"
+                    >
+
 
                         <span>
+
                             📋
+
                         </span>
 
+
                         <strong>
+
                             Estoque
+
                         </strong>
 
+
                         <small>
+
                             Controlar estoque
+
                         </small>
+
 
                     </a>
 
+
                 </div>
+
 
             </section>
 
@@ -409,18 +658,27 @@
 
             <section class="aviso-painel">
 
+
                 <strong>
+
                     Atenção
+
                 </strong>
 
+
                 <span>
+
                     Utilize o menu lateral para acessar
                     todas as áreas disponíveis do sistema.
+
                 </span>
+
 
             </section>
 
+
         </main>
+
 
     </div>
 
@@ -428,7 +686,9 @@
     <!-- JAVASCRIPT -->
 
     <script src="js/login.js"></script>
+
     <script src="js/admin.js"></script>
+
 
 </body>
 

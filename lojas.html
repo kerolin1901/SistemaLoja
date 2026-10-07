@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Sistema da Loja - Lojas</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="admin.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="lojas.css"
+    >
+
+</head>
+
+
+<body>
+
+    <div class="layout-admin">
+
+
+        <!-- ==========================================
+             MENU LATERAL
+        =========================================== -->
+
+        <aside class="menu-lateral">
+
+
+            <!-- LOGO -->
+
+            <div class="logo-admin">
+
+                <h1>
+                    Sistema<br>
+                    da Loja
+                </h1>
+
+            </div>
+
+
+            <!-- USUÁRIO -->
+
+            <div class="usuario-admin">
+
+                <div
+                    id="nomeUsuario"
+                    class="nome-usuario"
+                >
+                    Administrador Geral
+                </div>
+
+                <div class="tipo-usuario">
+                    Administrador Geral
+                </div>
+
+            </div>
+
+
+            <!-- MENU -->
+
+            <nav class="menu-admin">
+
+
+                <!-- ==================================
+                     PRINCIPAL
+                =================================== -->
+
+                <div class="menu-titulo">
+                    PRINCIPAL
+                </div>
+
+
+                <a
+                    href="admin-geral.html"
+                    class="menu-item"
+                >
+                    📊 Dashboard Geral
+                </a>
+
+
+                <!-- ==================================
+                     ADMINISTRAÇÃO
+                =================================== -->
+
+                <div class="menu-titulo">
+                    ADMINISTRAÇÃO
+                </div>
+
+
+                <a
+                    href="lojas.html"
+                    class="menu-item ativo"
+                >
+                    🏪 Lojas
+                </a>
+
+
+                <a
+                    href="administradores.html"
+                    class="menu-item"
+                >
+                    👥 Administradores
+                </a>
+
+
+            </nav>
+
+
+            <!-- ==================================
+                 SAIR
+            =================================== -->
+
+            <div class="menu-rodape">
+
+                <button
+                    type="button"
+                    id="btnSair"
+                    class="btn-sair"
+                >
+                    🚪 Sair
+                </button>
+
+            </div>
+
+
+        </aside>
+
+
+        <!-- ==========================================
+             CONTEÚDO PRINCIPAL
+        =========================================== -->
+
+        <main class="conteudo-admin">
+
+
+            <header class="cabecalho-admin">
+
+                <div>
+
+                    <h2>
+                        Lojas
+                    </h2>
+
+                    <p>
+                        Cadastro e gerenciamento das lojas
+                    </p>
+
+                </div>
+
+            </header>
+
+
+            <!-- ======================================
+                 MENSAGEM
+            ======================================= -->
+
+            <div
+                id="mensagem"
+                class="mensagem"
+            ></div>
+
+
+            <!-- ======================================
+                 CADASTRAR LOJA
+            ======================================= -->
+
+            <section class="painel">
+
+                <div class="titulo-painel">
+
+                    <div>
+
+                        <h3>
+                            Cadastrar nova loja
+                        </h3>
+
+                        <p>
+                            Informe o nome da nova loja.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <form
+                    id="formLoja"
+                    class="formulario-loja"
+                >
+
+                    <div class="campo-formulario">
+
+                        <label for="nomeLoja">
+                            Nome da loja
+                        </label>
+
+                        <input
+                            type="text"
+                            id="nomeLoja"
+                            name="nomeLoja"
+                            placeholder="Digite o nome da loja"
+                            autocomplete="off"
+                            maxlength="100"
+                        >
+
+                    </div>
+
+
+                    <div class="acoes-formulario">
+
+                        <button
+                            type="submit"
+                            id="btnCadastrar"
+                            class="botao-principal"
+                        >
+                            Cadastrar Loja
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </section>
+
+
+            <!-- ======================================
+                 LISTA DE LOJAS
+            ======================================= -->
+
+            <section class="painel">
+
+                <div class="titulo-painel">
+
+                    <div>
+
+                        <h3>
+                            Lojas cadastradas
+                        </h3>
+
+                        <p>
+                            Lojas disponíveis no sistema.
+                        </p>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        id="btnAtualizar"
+                        class="botao-secundario"
+                    >
+                        🔄 Atualizar
+                    </button>
+
+                </div>
+
+
+                <div
+                    id="carregando"
+                    class="carregando"
+                >
+                    Carregando lojas...
+                </div>
+
+
+                <div
+                    id="semLojas"
+                    class="sem-registros"
+                    style="display: none;"
+                >
+                    Nenhuma loja cadastrada.
+                </div>
+
+
+                <div class="tabela-container">
+
+                    <table class="tabela-lojas">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Loja
+                                </th>
+
+                                <th>
+                                    Status
+                                </th>
+
+                                <th>
+                                    Criada em
+                                </th>
+
+                                <th>
+                                    Ação
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody id="listaLojas">
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </section>
+
+
+        </main>
+
+    </div>
+
+
+    <!-- ==========================================
+         SUPABASE
+    =========================================== -->
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+    ></script>
+
+
+    <!-- ==========================================
+         CONFIGURAÇÃO SUPABASE
+    =========================================== -->
+
+    <script src="js/config.js"></script>
+
+
+    <!-- ==========================================
+         LOGIN / SESSÃO
+    =========================================== -->
+
+    <script src="js/login.js"></script>
+
+
+    <!-- ==========================================
+         LOJAS
+    =========================================== -->
+
+    <script src="js/lojas.js"></script>
+
+
+</body>
+
+</html>
