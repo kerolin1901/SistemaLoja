@@ -1,0 +1,973 @@
+/* ==========================================
+   SISTEMA DA LOJA
+   FINANCEIRO
+========================================== */
+
+
+/* ==========================================
+   CARDS GERAIS
+========================================== */
+
+.cards-financeiro {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 20px;
+
+    margin-bottom: 24px;
+
+}
+
+
+.card-financeiro {
+
+    background: #ffffff;
+
+    border-radius: 18px;
+
+    padding: 22px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 16px;
+
+    box-shadow:
+        0 8px 25px rgba(0, 0, 0, 0.08);
+
+    border-left: 5px solid #2563eb;
+
+}
+
+
+.card-financeiro.entrada {
+
+    border-left-color: #16a34a;
+
+}
+
+
+.card-financeiro.saida {
+
+    border-left-color: #dc2626;
+
+}
+
+
+.card-financeiro.saldo {
+
+    border-left-color: #2563eb;
+
+}
+
+
+.icone-financeiro {
+
+    width: 52px;
+
+    height: 52px;
+
+    border-radius: 15px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 24px;
+
+    background: #f1f5f9;
+
+}
+
+
+.card-financeiro span {
+
+    display: block;
+
+    color: #64748b;
+
+    font-size: 13px;
+
+    margin-bottom: 6px;
+
+}
+
+
+.card-financeiro strong {
+
+    display: block;
+
+    font-size: 24px;
+
+    color: #0f172a;
+
+}
+
+
+/* ==========================================
+   PAINEL
+========================================== */
+
+.painel-financeiro {
+
+    background: #ffffff;
+
+    border-radius: 18px;
+
+    padding: 26px;
+
+    margin-bottom: 24px;
+
+    box-shadow:
+        0 8px 25px rgba(0, 0, 0, 0.08);
+
+}
+
+
+.titulo-painel-financeiro {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    margin-bottom: 22px;
+
+}
+
+
+.titulo-painel-financeiro h2 {
+
+    margin: 0;
+
+    color: #0f172a;
+
+    font-size: 20px;
+
+}
+
+
+.titulo-painel-financeiro p {
+
+    margin: 6px 0 0;
+
+    color: #64748b;
+
+    font-size: 14px;
+
+}
+
+
+/* ==========================================
+   FLUXO DE CAIXA
+========================================== */
+
+.fluxo-caixa {
+
+    border-top: 4px solid #2563eb;
+
+}
+
+
+.filtros-fluxo {
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        minmax(0, 1fr)
+        auto;
+
+    gap: 16px;
+
+    align-items: end;
+
+    padding: 18px;
+
+    background: #f8fafc;
+
+    border-radius: 14px;
+
+    margin-bottom: 22px;
+
+}
+
+
+.campo-fluxo {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 7px;
+
+}
+
+
+.campo-fluxo label {
+
+    color: #334155;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+}
+
+
+.campo-fluxo input {
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+    padding: 12px 13px;
+
+    border: 1px solid #cbd5e1;
+
+    border-radius: 10px;
+
+    background: #ffffff;
+
+    color: #0f172a;
+
+    font-size: 14px;
+
+    outline: none;
+
+}
+
+
+.campo-fluxo input:focus {
+
+    border-color: #2563eb;
+
+    box-shadow:
+        0 0 0 3px rgba(37, 99, 235, 0.10);
+
+}
+
+
+.botao-campo-fluxo {
+
+    justify-content: flex-end;
+
+}
+
+
+.botao-consultar-fluxo {
+
+    min-height: 43px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    padding: 11px 18px;
+
+    background: #2563eb;
+
+    color: #ffffff;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+}
+
+
+.botao-consultar-fluxo:hover {
+
+    background: #1d4ed8;
+
+}
+
+
+/* ==========================================
+   RESUMO DO PERÍODO
+========================================== */
+
+.resumo-fluxo {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 16px;
+
+    margin-bottom: 20px;
+
+}
+
+
+.card-resumo-fluxo {
+
+    padding: 20px;
+
+    border-radius: 14px;
+
+    background: #f8fafc;
+
+    border-left: 4px solid #2563eb;
+
+}
+
+
+.card-resumo-fluxo span {
+
+    display: block;
+
+    color: #64748b;
+
+    font-size: 13px;
+
+    margin-bottom: 8px;
+
+}
+
+
+.card-resumo-fluxo strong {
+
+    display: block;
+
+    font-size: 23px;
+
+    color: #0f172a;
+
+}
+
+
+.card-resumo-fluxo.entrada-fluxo {
+
+    border-left-color: #16a34a;
+
+}
+
+
+.card-resumo-fluxo.saida-fluxo {
+
+    border-left-color: #dc2626;
+
+}
+
+
+.card-resumo-fluxo.caixa-fluxo {
+
+    border-left-color: #2563eb;
+
+}
+
+
+/* ==========================================
+   PERÍODO
+========================================== */
+
+.periodo-selecionado {
+
+    padding: 12px 15px;
+
+    border-radius: 10px;
+
+    background: #eff6ff;
+
+    color: #1e40af;
+
+    font-size: 13px;
+
+    margin-bottom: 24px;
+
+}
+
+
+/* ==========================================
+   SUBTÍTULO
+========================================== */
+
+.subtitulo-fluxo {
+
+    margin-bottom: 15px;
+
+}
+
+
+.subtitulo-fluxo h3 {
+
+    margin: 0;
+
+    color: #0f172a;
+
+    font-size: 17px;
+
+}
+
+
+.subtitulo-fluxo p {
+
+    margin: 5px 0 0;
+
+    color: #64748b;
+
+    font-size: 13px;
+
+}
+
+
+/* ==========================================
+   TABELA DO FLUXO
+========================================== */
+
+.tabela-fluxo-container {
+
+    width: 100%;
+
+    overflow-x: auto;
+
+}
+
+
+.tabela-fluxo {
+
+    width: 100%;
+
+    min-width: 650px;
+
+    border-collapse: collapse;
+
+}
+
+
+.tabela-fluxo th {
+
+    padding: 13px;
+
+    text-align: left;
+
+    background: #f8fafc;
+
+    color: #475569;
+
+    font-size: 12px;
+
+    border-bottom: 1px solid #e2e8f0;
+
+}
+
+
+.tabela-fluxo td {
+
+    padding: 13px;
+
+    border-bottom: 1px solid #e2e8f0;
+
+    color: #334155;
+
+    font-size: 14px;
+
+}
+
+
+.tabela-fluxo tbody tr:hover td {
+
+    background: #f8fafc;
+
+}
+
+
+.tabela-fluxo tfoot td {
+
+    background: #f1f5f9;
+
+    font-weight: 700;
+
+    color: #0f172a;
+
+    border-top: 2px solid #cbd5e1;
+
+}
+
+
+/* ==========================================
+   VALORES DO FLUXO
+========================================== */
+
+.valor-fluxo-entrada {
+
+    color: #15803d !important;
+
+    font-weight: 700;
+
+}
+
+
+.valor-fluxo-saida {
+
+    color: #dc2626 !important;
+
+    font-weight: 700;
+
+}
+
+
+.valor-fluxo-caixa {
+
+    color: #2563eb !important;
+
+    font-weight: 700;
+
+}
+
+
+.valor-fluxo-caixa-negativo {
+
+    color: #dc2626 !important;
+
+    font-weight: 700;
+
+}
+
+
+/* ==========================================
+   ESTADO DO FLUXO
+========================================== */
+
+.estado-fluxo {
+
+    text-align: center;
+
+    padding: 30px 20px;
+
+    color: #64748b;
+
+    font-size: 14px;
+
+}
+
+
+/* ==========================================
+   FORMULÁRIO
+========================================== */
+
+.grid-financeiro {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 18px;
+
+}
+
+
+.campo-financeiro {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 7px;
+
+}
+
+
+.campo-financeiro.campo-largo {
+
+    grid-column: span 2;
+
+}
+
+
+.campo-financeiro label {
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    color: #334155;
+
+}
+
+
+.campo-financeiro input,
+.campo-financeiro select {
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+    padding: 12px 13px;
+
+    border: 1px solid #cbd5e1;
+
+    border-radius: 10px;
+
+    background: #ffffff;
+
+    color: #0f172a;
+
+    font-size: 14px;
+
+    outline: none;
+
+}
+
+
+.campo-financeiro input:focus,
+.campo-financeiro select:focus {
+
+    border-color: #2563eb;
+
+    box-shadow:
+        0 0 0 3px rgba(37, 99, 235, 0.10);
+
+}
+
+
+/* ==========================================
+   BOTÕES
+========================================== */
+
+.acoes-financeiro {
+
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: 10px;
+
+    margin-top: 22px;
+
+}
+
+
+.botao-principal-financeiro,
+.botao-secundario-financeiro,
+.botao-atualizar-financeiro {
+
+    border: none;
+
+    border-radius: 10px;
+
+    padding: 11px 17px;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+}
+
+
+.botao-principal-financeiro {
+
+    background: #2563eb;
+
+    color: white;
+
+}
+
+
+.botao-principal-financeiro:hover {
+
+    background: #1d4ed8;
+
+}
+
+
+.botao-secundario-financeiro {
+
+    background: #e2e8f0;
+
+    color: #334155;
+
+}
+
+
+.botao-secundario-financeiro:hover {
+
+    background: #cbd5e1;
+
+}
+
+
+.botao-atualizar-financeiro {
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+}
+
+
+.botao-atualizar-financeiro:hover {
+
+    background: #dbeafe;
+
+}
+
+
+/* ==========================================
+   MENSAGEM
+========================================== */
+
+.mensagem-financeiro {
+
+    display: none;
+
+    padding: 13px 16px;
+
+    border-radius: 10px;
+
+    margin-bottom: 20px;
+
+    font-size: 14px;
+
+}
+
+
+.mensagem-financeiro.sucesso {
+
+    display: block;
+
+    background: #dcfce7;
+
+    color: #166534;
+
+}
+
+
+.mensagem-financeiro.erro {
+
+    display: block;
+
+    background: #fee2e2;
+
+    color: #991b1b;
+
+}
+
+
+/* ==========================================
+   TABELA FINANCEIRA
+========================================== */
+
+.tabela-financeiro-container {
+
+    width: 100%;
+
+    overflow-x: auto;
+
+}
+
+
+.tabela-financeiro {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+    min-width: 800px;
+
+}
+
+
+.tabela-financeiro th {
+
+    padding: 13px;
+
+    text-align: left;
+
+    background: #f8fafc;
+
+    color: #475569;
+
+    font-size: 12px;
+
+    border-bottom: 1px solid #e2e8f0;
+
+}
+
+
+.tabela-financeiro td {
+
+    padding: 13px;
+
+    border-bottom: 1px solid #e2e8f0;
+
+    color: #334155;
+
+    font-size: 14px;
+
+}
+
+
+.tabela-financeiro tr:hover td {
+
+    background: #f8fafc;
+
+}
+
+
+/* ==========================================
+   TIPO
+========================================== */
+
+.tipo-financeiro {
+
+    display: inline-block;
+
+    padding: 5px 9px;
+
+    border-radius: 20px;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+}
+
+
+.tipo-entrada {
+
+    background: #dcfce7;
+
+    color: #166534;
+
+}
+
+
+.tipo-saida {
+
+    background: #fee2e2;
+
+    color: #991b1b;
+
+}
+
+
+.valor-entrada {
+
+    color: #15803d;
+
+    font-weight: 700;
+
+}
+
+
+.valor-saida {
+
+    color: #dc2626;
+
+    font-weight: 700;
+
+}
+
+
+/* ==========================================
+   EXCLUIR
+========================================== */
+
+.botao-excluir-financeiro {
+
+    border: none;
+
+    background: #fee2e2;
+
+    color: #b91c1c;
+
+    padding: 7px 10px;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+}
+
+
+.botao-excluir-financeiro:hover {
+
+    background: #fecaca;
+
+}
+
+
+/* ==========================================
+   RESPONSIVO
+========================================== */
+
+@media (max-width: 1000px) {
+
+    .cards-financeiro {
+
+        grid-template-columns: 1fr;
+
+    }
+
+    .resumo-fluxo {
+
+        grid-template-columns: 1fr;
+
+    }
+
+    .filtros-fluxo {
+
+        grid-template-columns: 1fr;
+
+    }
+
+    .grid-financeiro {
+
+        grid-template-columns: 1fr;
+
+    }
+
+    .campo-financeiro.campo-largo {
+
+        grid-column: span 1;
+
+    }
+
+}
+
+
+@media (max-width: 700px) {
+
+    .titulo-painel-financeiro {
+
+        align-items: flex-start;
+
+        flex-direction: column;
+
+    }
+
+    .acoes-financeiro {
+
+        flex-direction: column;
+
+    }
+
+    .botao-principal-financeiro,
+    .botao-secundario-financeiro {
+
+        width: 100%;
+
+    }
+
+}
