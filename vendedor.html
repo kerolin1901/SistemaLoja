@@ -10,11 +10,16 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Painel do Vendedor - Sistema da Loja</title>
+    <title>Dashboard - Vendedor - Sistema da Loja</title>
 
     <link
         rel="stylesheet"
         href="vendedor.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="vendedor-dashboard.css"
     >
 
 </head>
@@ -32,8 +37,6 @@
 
         <aside class="menu-lateral-vendedor">
 
-
-            <!-- LOGO -->
 
             <div class="logo-vendedor">
 
@@ -55,8 +58,6 @@
 
             </div>
 
-
-            <!-- USUÁRIO -->
 
             <div class="usuario-vendedor">
 
@@ -81,8 +82,6 @@
 
             </div>
 
-
-            <!-- MENU -->
 
             <nav class="menu-vendedor">
 
@@ -170,8 +169,6 @@
             </nav>
 
 
-            <!-- SAIR -->
-
             <div class="area-sair">
 
                 <button
@@ -212,7 +209,7 @@
                     </h1>
 
                     <p>
-                        Área de trabalho do vendedor
+                        Área de trabalho do vendedor.
                     </p>
 
                 </div>
@@ -237,20 +234,24 @@
                  BOAS-VINDAS
             =================================== -->
 
-            <section class="painel-boas-vindas">
+            <section class="painel-boas-vindas-vendedor">
+
 
                 <div>
 
-                    <span class="etiqueta">
+                    <span class="etiqueta-vendedor">
                         ÁREA DO VENDEDOR
                     </span>
 
-                    <h2 id="tituloBoasVindas">
-                        Bem-vindo!
+                    <h2>
+                        Bem-vindo,
+                        <span id="nomeVendedorBoasVindas">
+                            Vendedor!
+                        </span>
                     </h2>
 
                     <p>
-                        Aqui você poderá consultar produtos,
+                        Aqui você pode consultar produtos,
                         realizar vendas, cadastrar clientes
                         e consultar o estoque.
                     </p>
@@ -258,9 +259,280 @@
                 </div>
 
 
-                <div class="ilustracao">
+                <div class="icone-dashboard-vendedor">
                     🛒
                 </div>
+
+
+            </section>
+
+
+            <!-- ==================================
+                 RESUMO DO DIA
+            =================================== -->
+
+            <section class="secao-dashboard-vendedor">
+
+
+                <div class="titulo-secao-dashboard">
+
+                    <div>
+
+                        <h2>
+                            Resumo de hoje
+                        </h2>
+
+                        <p>
+                            Suas vendas realizadas hoje.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="cards-dashboard-vendedor">
+
+
+                    <div class="card-dashboard-vendedor">
+
+                        <span>
+                            🛒 Vendas hoje
+                        </span>
+
+                        <strong id="vendasHoje">
+                            0
+                        </strong>
+
+                        <small>
+                            vendas finalizadas
+                        </small>
+
+                    </div>
+
+
+                    <div class="card-dashboard-vendedor">
+
+                        <span>
+                            💰 Total vendido
+                        </span>
+
+                        <strong id="totalVendidoHoje">
+                            R$ 0,00
+                        </strong>
+
+                        <small>
+                            vendas de hoje
+                        </small>
+
+                    </div>
+
+
+                    <div class="card-dashboard-vendedor">
+
+                        <span>
+                            📦 Produtos vendidos
+                        </span>
+
+                        <strong id="produtosVendidosHoje">
+                            0
+                        </strong>
+
+                        <small>
+                            unidades hoje
+                        </small>
+
+                    </div>
+
+
+                    <div class="card-dashboard-vendedor">
+
+                        <span>
+                            👤 Clientes atendidos
+                        </span>
+
+                        <strong id="clientesAtendidosHoje">
+                            0
+                        </strong>
+
+                        <small>
+                            clientes hoje
+                        </small>
+
+                    </div>
+
+
+                </div>
+
+
+            </section>
+
+
+            <!-- ==================================
+                 ATENÇÃO
+            =================================== -->
+
+            <section class="secao-dashboard-vendedor">
+
+
+                <div class="titulo-secao-dashboard">
+
+                    <div>
+
+                        <h2>
+                            Atenção
+                        </h2>
+
+                        <p>
+                            Produtos que precisam de atenção.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="cards-alerta-vendedor">
+
+
+                    <a
+                        href="vendedor-estoque.html"
+                        class="card-alerta-vendedor"
+                    >
+
+                        <div class="icone-alerta">
+                            ⚠️
+                        </div>
+
+                        <div>
+
+                            <strong id="estoqueBaixo">
+                                0
+                            </strong>
+
+                            <span>
+                                Produtos com estoque baixo
+                            </span>
+
+                        </div>
+
+                    </a>
+
+
+                    <a
+                        href="vendedor-estoque.html"
+                        class="card-alerta-vendedor card-alerta-vermelho"
+                    >
+
+                        <div class="icone-alerta">
+                            🚨
+                        </div>
+
+                        <div>
+
+                            <strong id="produtosEsgotados">
+                                0
+                            </strong>
+
+                            <span>
+                                Produtos esgotados
+                            </span>
+
+                        </div>
+
+                    </a>
+
+
+                </div>
+
+
+            </section>
+
+
+            <!-- ==================================
+                 ÚLTIMAS VENDAS
+            =================================== -->
+
+            <section class="painel painel-ultimas-vendas">
+
+
+                <div class="titulo-ultimas-vendas">
+
+                    <div>
+
+                        <h2>
+                            Últimas vendas
+                        </h2>
+
+                        <p>
+                            Suas últimas vendas finalizadas.
+                        </p>
+
+                    </div>
+
+
+                    <a
+                        href="vendedor-vendas.html"
+                        class="link-ver-vendas"
+                    >
+                        Nova venda
+                    </a>
+
+                </div>
+
+
+                <div class="tabela-dashboard-container">
+
+                    <table class="tabela-dashboard-vendedor">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Venda
+                                </th>
+
+                                <th>
+                                    Cliente
+                                </th>
+
+                                <th>
+                                    Pagamento
+                                </th>
+
+                                <th>
+                                    Total
+                                </th>
+
+                                <th>
+                                    Data
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody id="listaUltimasVendas">
+
+                            <tr>
+
+                                <td
+                                    colspan="5"
+                                    class="dashboard-carregando"
+                                >
+                                    Carregando vendas...
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
 
             </section>
 
@@ -269,9 +541,10 @@
                  ACESSOS RÁPIDOS
             =================================== -->
 
-            <section class="painel">
+            <section class="painel painel-acessos-vendedor">
 
-                <div class="titulo-painel">
+
+                <div class="titulo-ultimas-vendas">
 
                     <div>
 
@@ -280,7 +553,7 @@
                         </h2>
 
                         <p>
-                            Principais funções disponíveis
+                            Principais funções disponíveis.
                         </p>
 
                     </div>
@@ -288,14 +561,12 @@
                 </div>
 
 
-                <div class="atalhos">
+                <div class="atalhos-vendedor">
 
-
-                    <!-- PRODUTOS -->
 
                     <a
                         href="vendedor-produtos.html"
-                        class="atalho"
+                        class="atalho-vendedor"
                     >
 
                         <span>
@@ -313,11 +584,9 @@
                     </a>
 
 
-                    <!-- NOVA VENDA -->
-
                     <a
                         href="vendedor-vendas.html"
-                        class="atalho"
+                        class="atalho-vendedor"
                     >
 
                         <span>
@@ -335,11 +604,9 @@
                     </a>
 
 
-                    <!-- CLIENTES -->
-
                     <a
                         href="vendedor-clientes.html"
-                        class="atalho"
+                        class="atalho-vendedor"
                     >
 
                         <span>
@@ -357,11 +624,9 @@
                     </a>
 
 
-                    <!-- ESTOQUE -->
-
                     <a
                         href="vendedor-estoque.html"
-                        class="atalho"
+                        class="atalho-vendedor"
                     >
 
                         <span>
@@ -381,17 +646,18 @@
 
                 </div>
 
+
             </section>
 
 
             <!-- ==================================
-                 AVISO
+                 SEGURANÇA
             =================================== -->
 
             <section class="painel aviso-painel">
 
                 <div class="aviso-icone">
-                    ℹ️
+                    🔒
                 </div>
 
                 <div>
@@ -401,14 +667,24 @@
                     </strong>
 
                     <p>
-                        Os valores de custo, lucro e
-                        informações financeiras não ficam
-                        disponíveis nesta área.
+                        Valores de custo, lucro e informações
+                        financeiras da loja não ficam disponíveis
+                        nesta área.
                     </p>
 
                 </div>
 
             </section>
+
+
+            <!-- ==================================
+                 ERRO DASHBOARD
+            =================================== -->
+
+            <div
+                id="mensagemDashboard"
+                class="mensagem-dashboard"
+            ></div>
 
 
         </main>
@@ -417,23 +693,24 @@
     </div>
 
 
-    <!-- ==========================================
-         SUPABASE
-    =========================================== -->
+    <!-- SUPABASE -->
 
     <script
         src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
     ></script>
 
 
-    <!-- CONFIGURAÇÃO -->
-
     <script src="js/config.js"></script>
 
 
-    <!-- VENDEDOR -->
+    <!-- PROTEÇÃO E LOGOUT JÁ EXISTENTES -->
 
     <script src="js/vendedor.js"></script>
+
+
+    <!-- DADOS REAIS DO DASHBOARD -->
+
+    <script src="js/vendedor-dashboard.js"></script>
 
 
 </body>
