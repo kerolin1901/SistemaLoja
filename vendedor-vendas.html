@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Vendas - Vendedor - Sistema da Loja</title>
+
+    <link
+        rel="stylesheet"
+        href="vendedor.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="vendedor-vendas.css"
+    >
+
+</head>
+
+
+<body>
+
+
+    <div class="layout-vendedor">
+
+
+        <!-- ======================================
+             MENU LATERAL
+        ======================================= -->
+
+        <aside class="menu-lateral-vendedor">
+
+
+            <div class="logo-vendedor">
+
+                <div class="logo-icone">
+                    SL
+                </div>
+
+                <div>
+
+                    <strong>
+                        Sistema da Loja
+                    </strong>
+
+                    <span>
+                        Área do Vendedor
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="usuario-vendedor">
+
+                <div
+                    class="avatar-vendedor"
+                    id="avatarVendedor"
+                >
+                    V
+                </div>
+
+                <div class="dados-vendedor">
+
+                    <strong id="nomeVendedor">
+                        Vendedor
+                    </strong>
+
+                    <span>
+                        Vendedor
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <nav class="menu-vendedor">
+
+
+                <div class="titulo-menu">
+                    PRINCIPAL
+                </div>
+
+
+                <a
+                    href="vendedor.html"
+                    class="item-menu"
+                >
+
+                    <span>
+                        ▦
+                    </span>
+
+                    Dashboard
+
+                </a>
+
+
+                <div class="titulo-menu">
+                    VENDAS
+                </div>
+
+
+                <a
+                    href="vendedor-produtos.html"
+                    class="item-menu"
+                >
+
+                    <span>
+                        📦
+                    </span>
+
+                    Produtos
+
+                </a>
+
+
+                <a
+                    href="vendedor-vendas.html"
+                    class="item-menu ativo"
+                >
+
+                    <span>
+                        🛒
+                    </span>
+
+                    Vendas
+
+                </a>
+
+
+                <a
+                    href="vendedor-clientes.html"
+                    class="item-menu"
+                >
+
+                    <span>
+                        👤
+                    </span>
+
+                    Clientes
+
+                </a>
+
+
+                <a
+                    href="vendedor-estoque.html"
+                    class="item-menu"
+                >
+
+                    <span>
+                        📊
+                    </span>
+
+                    Estoque
+
+                </a>
+
+
+            </nav>
+
+
+            <div class="area-sair">
+
+                <button
+                    type="button"
+                    id="btnSair"
+                    class="botao-sair"
+                >
+
+                    <span>
+                        ⇥
+                    </span>
+
+                    Sair
+
+                </button>
+
+            </div>
+
+
+        </aside>
+
+
+        <!-- ======================================
+             CONTEÚDO
+        ======================================= -->
+
+        <main class="conteudo-vendedor">
+
+
+            <header class="cabecalho-vendedor">
+
+                <div>
+
+                    <h1>
+                        Nova Venda
+                    </h1>
+
+                    <p>
+                        Registre uma venda para o cliente.
+                    </p>
+
+                </div>
+
+
+                <div class="data-atual">
+
+                    <span>
+                        Hoje
+                    </span>
+
+                    <strong id="dataAtual">
+                        --
+                    </strong>
+
+                </div>
+
+            </header>
+
+
+            <!-- ==================================
+                 ÁREA DA VENDA
+            =================================== -->
+
+            <section class="painel-venda">
+
+
+                <div class="cabecalho-painel-venda">
+
+                    <div>
+
+                        <h2>
+                            Produtos da venda
+                        </h2>
+
+                        <p>
+                            Adicione os produtos vendidos.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ==================================
+                     ADICIONAR PRODUTO
+                =================================== -->
+
+                <div class="adicionar-produto">
+
+
+                    <div class="campo-venda campo-produto">
+
+                        <label for="produtoVenda">
+                            Produto
+                        </label>
+
+                        <select id="produtoVenda">
+
+                            <option value="">
+                                Selecione um produto
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="campo-venda campo-quantidade">
+
+                        <label for="quantidadeVenda">
+                            Quantidade
+                        </label>
+
+                        <input
+                            type="number"
+                            id="quantidadeVenda"
+                            min="1"
+                            step="1"
+                            value="1"
+                        >
+
+                    </div>
+
+
+                    <div class="campo-venda campo-preco">
+
+                        <label>
+                            Preço de venda
+                        </label>
+
+                        <div
+                            class="preco-produto-selecionado"
+                            id="precoProdutoSelecionado"
+                        >
+                            R$ 0,00
+                        </div>
+
+                    </div>
+
+
+                    <div class="campo-venda campo-botao">
+
+                        <button
+                            type="button"
+                            id="btnAdicionarProduto"
+                            class="botao-adicionar"
+                        >
+                            + Adicionar
+                        </button>
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- ==================================
+                     MENSAGEM
+                =================================== -->
+
+                <div
+                    id="mensagemVenda"
+                    class="mensagem-venda"
+                ></div>
+
+
+                <!-- ==================================
+                     CARRINHO
+                =================================== -->
+
+                <div class="tabela-venda-container">
+
+                    <table class="tabela-venda">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Produto
+                                </th>
+
+                                <th>
+                                    SKU
+                                </th>
+
+                                <th>
+                                    Quantidade
+                                </th>
+
+                                <th>
+                                    Preço unitário
+                                </th>
+
+                                <th>
+                                    Subtotal
+                                </th>
+
+                                <th>
+                                    Ação
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody id="listaItensVenda">
+
+                            <tr>
+
+                                <td
+                                    colspan="6"
+                                    class="carrinho-vazio"
+                                >
+
+                                    Nenhum produto adicionado.
+
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+
+                <!-- ==================================
+                     DADOS DA VENDA
+                =================================== -->
+
+                <div class="dados-final-venda">
+
+
+                    <div class="dados-cliente-venda">
+
+
+                        <div class="campo-venda">
+
+                            <label for="clienteVenda">
+                                Cliente
+                            </label>
+
+                            <select id="clienteVenda">
+
+                                <option value="">
+                                    Consumidor não identificado
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="campo-venda">
+
+                            <label for="formaPagamento">
+                                Forma de pagamento
+                            </label>
+
+                            <select id="formaPagamento">
+
+                                <option value="">
+                                    Selecione
+                                </option>
+
+                                <option value="Dinheiro">
+                                    Dinheiro
+                                </option>
+
+                                <option value="PIX">
+                                    PIX
+                                </option>
+
+                                <option value="Cartão de Débito">
+                                    Cartão de Débito
+                                </option>
+
+                                <option value="Cartão de Crédito">
+                                    Cartão de Crédito
+                                </option>
+
+                                <option value="Boleto">
+                                    Boleto
+                                </option>
+
+                                <option value="Outro">
+                                    Outro
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="campo-venda">
+
+                            <label for="observacoesVenda">
+                                Observações
+                            </label>
+
+                            <textarea
+                                id="observacoesVenda"
+                                rows="4"
+                                placeholder="Observações da venda..."
+                            ></textarea>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <!-- ==================================
+                         RESUMO
+                    =================================== -->
+
+                    <div class="resumo-venda">
+
+
+                        <div class="linha-resumo">
+
+                            <span>
+                                Subtotal
+                            </span>
+
+                            <strong id="subtotalVenda">
+                                R$ 0,00
+                            </strong>
+
+                        </div>
+
+
+                        <div class="linha-resumo linha-desconto">
+
+                            <label for="descontoVenda">
+                                Desconto
+                            </label>
+
+                            <div class="campo-desconto">
+
+                                <input
+                                    type="number"
+                                    id="descontoVenda"
+                                    min="0"
+                                    step="0.01"
+                                    value="0"
+                                >
+
+                                <span>
+                                    R$
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="linha-resumo linha-total">
+
+                            <span>
+                                Total
+                            </span>
+
+                            <strong id="totalVenda">
+                                R$ 0,00
+                            </strong>
+
+                        </div>
+
+
+                        <button
+                            type="button"
+                            id="btnFinalizarVenda"
+                            class="botao-finalizar"
+                        >
+
+                            Finalizar Venda
+
+                        </button>
+
+
+                    </div>
+
+
+                </div>
+
+
+            </section>
+
+
+            <!-- ==================================
+                 AVISO
+            =================================== -->
+
+            <section class="painel aviso-painel">
+
+                <div class="aviso-icone">
+                    ℹ️
+                </div>
+
+                <div>
+
+                    <strong>
+                        Segurança
+                    </strong>
+
+                    <p>
+                        O vendedor trabalha somente com preço
+                        de venda. O preço de custo e o lucro da
+                        loja não ficam disponíveis nesta tela.
+                    </p>
+
+                </div>
+
+            </section>
+
+
+        </main>
+
+
+    </div>
+
+
+    <!-- ==========================================
+         SUPABASE
+    =========================================== -->
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+    ></script>
+
+    <script src="js/config.js"></script>
+
+    <script src="js/vendedor-vendas.js"></script>
+
+
+</body>
+
+</html>

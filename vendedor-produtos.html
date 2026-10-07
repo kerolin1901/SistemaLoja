@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Produtos - Vendedor - Sistema da Loja</title>
+
+    <link
+        rel="stylesheet"
+        href="vendedor.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="vendedor-produtos.css"
+    >
+
+</head>
+
+
+<body>
+
+
+    <div class="layout-vendedor">
+
+
+        <!-- ======================================
+             MENU LATERAL
+        ======================================= -->
+
+        <aside class="menu-lateral-vendedor">
+
+
+            <!-- LOGO -->
+
+            <div class="logo-vendedor">
+
+                <div class="logo-icone">
+                    SL
+                </div>
+
+                <div>
+
+                    <strong>
+                        Sistema da Loja
+                    </strong>
+
+                    <span>
+                        Área do Vendedor
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- USUÁRIO -->
+
+            <div class="usuario-vendedor">
+
+                <div
+                    class="avatar-vendedor"
+                    id="avatarVendedor"
+                >
+                    V
+                </div>
+
+                <div class="dados-vendedor">
+
+                    <strong id="nomeVendedor">
+                        Vendedor
+                    </strong>
+
+                    <span>
+                        Vendedor
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- MENU -->
+
+            <nav class="menu-vendedor">
+
+
+                <div class="titulo-menu">
+                    PRINCIPAL
+                </div>
+
+
+                <a
+                    href="vendedor.html"
+                    class="item-menu"
+                >
+
+                    <span>
+                        ▦
+                    </span>
+
+                    Dashboard
+
+                </a>
+
+
+                <div class="titulo-menu">
+                    VENDAS
+                </div>
+
+
+                <a
+                    href="vendedor-produtos.html"
+                    class="item-menu ativo"
+                >
+
+                    <span>
+                        📦
+                    </span>
+
+                    Produtos
+
+                </a>
+
+
+                <a
+                    href="vendedor-vendas.html"
+                    class="item-menu"
+                >
+
+                    <span>
+                        🛒
+                    </span>
+
+                    Vendas
+
+                </a>
+
+
+                <a
+                    href="vendedor-clientes.html"
+                    class="item-menu"
+                >
+
+                    <span>
+                        👤
+                    </span>
+
+                    Clientes
+
+                </a>
+
+
+                <a
+                    href="vendedor-estoque.html"
+                    class="item-menu"
+                >
+
+                    <span>
+                        📊
+                    </span>
+
+                    Estoque
+
+                </a>
+
+
+            </nav>
+
+
+            <!-- SAIR -->
+
+            <div class="area-sair">
+
+                <button
+                    type="button"
+                    id="btnSair"
+                    class="botao-sair"
+                >
+
+                    <span>
+                        ⇥
+                    </span>
+
+                    Sair
+
+                </button>
+
+            </div>
+
+
+        </aside>
+
+
+        <!-- ======================================
+             CONTEÚDO
+        ======================================= -->
+
+        <main class="conteudo-vendedor">
+
+
+            <!-- CABEÇALHO -->
+
+            <header class="cabecalho-vendedor">
+
+                <div>
+
+                    <h1>
+                        Produtos
+                    </h1>
+
+                    <p>
+                        Consulte os produtos disponíveis para venda.
+                    </p>
+
+                </div>
+
+
+                <div class="data-atual">
+
+                    <span>
+                        Hoje
+                    </span>
+
+                    <strong id="dataAtual">
+                        --
+                    </strong>
+
+                </div>
+
+            </header>
+
+
+            <!-- ==================================
+                 PAINEL DE PRODUTOS
+            =================================== -->
+
+            <section class="painel-produtos-vendedor">
+
+
+                <!-- CABEÇALHO DO PAINEL -->
+
+                <div class="titulo-painel-produtos">
+
+                    <div>
+
+                        <h2>
+                            Produtos cadastrados
+                        </h2>
+
+                        <p>
+                            Consulte preço de venda e disponibilidade.
+                        </p>
+
+                    </div>
+
+
+                    <div
+                        class="contador-produtos"
+                        id="contadorProdutos"
+                    >
+                        0 produtos
+                    </div>
+
+                </div>
+
+
+                <!-- ==================================
+                     BUSCA
+                =================================== -->
+
+                <div class="barra-produtos">
+
+                    <div class="campo-busca">
+
+                        <label for="buscaProduto">
+                            Pesquisar produto
+                        </label>
+
+                        <input
+                            type="search"
+                            id="buscaProduto"
+                            placeholder="Digite nome ou SKU..."
+                            autocomplete="off"
+                        >
+
+                    </div>
+
+
+                    <div class="campo-filtro">
+
+                        <label for="filtroCategoria">
+                            Categoria
+                        </label>
+
+                        <select
+                            id="filtroCategoria"
+                        >
+
+                            <option value="">
+                                Todas as categorias
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="campo-filtro">
+
+                        <label for="filtroStatus">
+                            Status
+                        </label>
+
+                        <select
+                            id="filtroStatus"
+                        >
+
+                            <option value="">
+                                Todos
+                            </option>
+
+                            <option value="ativo">
+                                Ativos
+                            </option>
+
+                            <option value="inativo">
+                                Inativos
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ==================================
+                     MENSAGEM
+                =================================== -->
+
+                <div
+                    id="mensagemProdutos"
+                    class="mensagem-produtos"
+                ></div>
+
+
+                <!-- ==================================
+                     TABELA
+                =================================== -->
+
+                <div class="tabela-produtos-container">
+
+                    <table class="tabela-produtos">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Produto
+                                </th>
+
+                                <th>
+                                    SKU
+                                </th>
+
+                                <th>
+                                    Categoria
+                                </th>
+
+                                <th>
+                                    Preço de venda
+                                </th>
+
+                                <th>
+                                    Estoque
+                                </th>
+
+                                <th>
+                                    Status
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody
+                            id="listaProdutos"
+                        >
+
+                            <tr>
+
+                                <td
+                                    colspan="6"
+                                    class="carregando"
+                                >
+                                    Carregando produtos...
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+
+            </section>
+
+
+            <!-- ==================================
+                 AVISO DE SEGURANÇA
+            =================================== -->
+
+            <section class="painel aviso-painel">
+
+                <div class="aviso-icone">
+                    ℹ️
+                </div>
+
+                <div>
+
+                    <strong>
+                        Informações do vendedor
+                    </strong>
+
+                    <p>
+                        O preço de custo, lucro e informações
+                        financeiras da loja não ficam disponíveis
+                        nesta área.
+                    </p>
+
+                </div>
+
+            </section>
+
+
+        </main>
+
+
+    </div>
+
+
+    <!-- ==========================================
+         SUPABASE
+    =========================================== -->
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+    ></script>
+
+
+    <!-- CONFIGURAÇÃO -->
+
+    <script src="js/config.js"></script>
+
+
+    <!-- VENDEDOR PRODUTOS -->
+
+    <script src="js/vendedor-produtos.js"></script>
+
+
+</body>
+
+</html>

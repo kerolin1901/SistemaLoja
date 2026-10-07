@@ -1,7 +1,16 @@
 /* ==========================================
    SISTEMA DA LOJA
    ÁREA DO VENDEDOR
+   VENDEDOR.JS
 ========================================== */
+
+
+/* ==========================================
+   SUPABASE
+========================================== */
+
+const vendedorSupabase =
+    supabaseClient;
 
 
 /* ==========================================
@@ -13,20 +22,24 @@ const nomeVendedor =
         "nomeVendedor"
     );
 
+
 const avatarVendedor =
     document.getElementById(
         "avatarVendedor"
     );
+
 
 const tituloBoasVindas =
     document.getElementById(
         "tituloBoasVindas"
     );
 
+
 const dataAtual =
     document.getElementById(
         "dataAtual"
     );
+
 
 const btnSair =
     document.getElementById(
@@ -35,13 +48,20 @@ const btnSair =
 
 
 /* ==========================================
-   DATA
+   DATA ATUAL
 ========================================== */
 
 function mostrarDataAtual() {
 
+    if (!dataAtual) {
+
+        return;
+    }
+
+
     const agora =
         new Date();
+
 
     const dataFormatada =
         agora.toLocaleDateString(
@@ -54,6 +74,7 @@ function mostrarDataAtual() {
             }
         );
 
+
     dataAtual.textContent =
         dataFormatada
             .charAt(0)
@@ -63,169 +84,245 @@ function mostrarDataAtual() {
 
 
 /* ==========================================
-   PROTEGER PÁGINA
+   PROTEGER ÁREA DO VENDEDOR
 ========================================== */
 
 async function protegerVendedor() {
 
-    const {
-        data: {
-            session
-        },
-        error
-    } =
-        await supabaseClient
-            .auth
-            .getSession();
+    try {
+
+        /* ======================================
+           VERIFICAR SESSÃO SUPABASE
+        ====================================== */
+
+        const resultadoSessao =
+            await vendedorSupabase
+                .auth
+                .getSession();
 
 
-    if (
-        error ||
-        !session
-    ) {
-
-        window.location.href =
-            "index.html";
-
-        return false;
-    }
+        const session =
+            resultadoSessao
+                .data
+                .session;
 
 
-    const {
-        data: perfil,
-        error: erroPerfil
-    } =
-        await supabaseClient
-
-            .from("perfis")
-
-            .select(
-                "id, nome_completo, usuario, tipo, ativo"
-            )
-
-            .eq(
-                "id",
-                session.user.id
-            )
-
-            .maybeSingle();
-
-
-    if (
-        erroPerfil ||
-        !perfil
-    ) {
-
-        await supabaseClient
-            .auth
-            .signOut();
-
-        sessionStorage.removeItem(
-            "sistemaLojaPerfil"
-        );
-
-        window.location.href =
-            "index.html";
-
-        return false;
-    }
-
-
-    /* ======================================
-       NÃO PERMITIR ADMIN NESTA ÁREA
-    ======================================= */
-
-    if (
-        perfil.tipo !== "vendedor"
-    ) {
-
-        if (
-            perfil.tipo === "admin"
-        ) {
+        if (!session) {
 
             window.location.href =
-                "admin.html";
+                "index.html";
 
             return false;
         }
 
 
-        await supabaseClient
-            .auth
-            .signOut();
+        /* ======================================
+           BUSCAR PERFIL
+        ====================================== */
 
-        window.location.href =
-            "index.html";
+        const resultadoPerfil =
+            await vendedorSupabase
+                .from("perfis")
+                .select(
+                    "id, nome_completo, usuario, tipo, ativo"
+                )
+                .eq(
+                    "id",
+                    session.user.id
+                )
+                .maybeSingle();
 
-        return false;
+
+        if (
+            resultadoPerfil.error ||
+            !resultadoPerfil.data
+        ) {
+
+            console.error(
+                "Erro ao buscar perfil:",
+                resultadoPerfil.error
+            );
+
+
+            await vendedorSupabase
+                .auth
+                .signOut({
+                    scope: "local"
+                });
+
+
+            sessionStorage.removeItem(
+                "sistemaLojaPerfil"
+            );
+
+
+            window.location.href =
+                "index.html";
+
+
+            return false;
+        }
+
+
+        const perfil =
+            resultadoPerfil.data;
+
+
+        /* ======================================
+           NÃO É VENDEDOR
+        ====================================== */
+
+        if (
+            perfil.tipo !== "vendedor"
+        ) {
+
+
+            if (
+                perfil.tipo === "admin"
+            ) {
+
+                window.location.href =
+                    "admin.html";
+
+
+                return false;
+            }
+
+
+            await vendedorSupabase
+                .auth
+                .signOut({
+                    scope: "local"
+                });
+
+
+            sessionStorage.removeItem(
+                "sistemaLojaPerfil"
+            );
+
+
+            window.location.href =
+                "index.html";
+
+
+            return false;
+        }
+
+
+        /* ======================================
+           USUÁRIO DESATIVADO
+        ====================================== */
+
+        if (
+            perfil.ativo !== true
+        ) {
+
+            await vendedorSupabase
+                .auth
+                .signOut({
+                    scope: "local"
+                });
+
+
+            sessionStorage.removeItem(
+                "sistemaLojaPerfil"
+            );
+
+
+            alert(
+                "Seu usuário está desativado. Procure o administrador."
+            );
+
+
+            window.location.href =
+                "index.html";
+
+
+            return false;
+        }
+
+
+        /* ======================================
+           MOSTRAR NOME
+        ====================================== */
+
+        const nome =
+            perfil.nome_completo ||
+            perfil.usuario ||
+            "Vendedor";
+
+
+        if (nomeVendedor) {
+
+            nomeVendedor.textContent =
+                nome;
+        }
+
+
+        /* ======================================
+           AVATAR
+        ====================================== */
+
+        if (avatarVendedor) {
+
+            const inicial =
+                nome
+                    .trim()
+                    .charAt(0)
+                    .toUpperCase();
+
+
+            avatarVendedor.textContent =
+                inicial;
+        }
+
+
+        /* ======================================
+           BOAS-VINDAS
+        ====================================== */
+
+        if (tituloBoasVindas) {
+
+            tituloBoasVindas.textContent =
+                "Bem-vindo, " +
+                nome +
+                "!";
+        }
+
+
+        /* ======================================
+           SALVAR PERFIL
+        ====================================== */
+
+        sessionStorage.setItem(
+            "sistemaLojaPerfil",
+            JSON.stringify(perfil)
+        );
+
+
+        return true;
+
     }
 
+    catch (erro) {
 
-    /* ======================================
-       VERIFICAR ATIVO
-    ======================================= */
+        console.error(
+            "Erro ao proteger área do vendedor:",
+            erro
+        );
 
-    if (
-        perfil.ativo !== true
-    ) {
-
-        await supabaseClient
-            .auth
-            .signOut();
 
         sessionStorage.removeItem(
             "sistemaLojaPerfil"
         );
 
-        alert(
-            "Seu usuário está desativado. Procure o administrador."
-        );
 
         window.location.href =
             "index.html";
 
+
         return false;
     }
-
-
-    /* ======================================
-       MOSTRAR DADOS
-    ======================================= */
-
-    const nome =
-        perfil.nome_completo ||
-        perfil.usuario ||
-        "Vendedor";
-
-
-    nomeVendedor.textContent =
-        nome;
-
-
-    const inicial =
-        nome
-            .trim()
-            .charAt(0)
-            .toUpperCase();
-
-
-    avatarVendedor.textContent =
-        inicial;
-
-
-    tituloBoasVindas.textContent =
-        "Bem-vindo, " +
-        nome +
-        "!";
-
-
-    sessionStorage.setItem(
-        "sistemaLojaPerfil",
-        JSON.stringify(perfil)
-    );
-
-
-    return true;
 }
 
 
@@ -237,11 +334,15 @@ async function sair() {
 
     try {
 
-        await supabaseClient
+        await vendedorSupabase
             .auth
-            .signOut();
+            .signOut({
+                scope: "local"
+            });
 
-    } catch (erro) {
+    }
+
+    catch (erro) {
 
         console.error(
             "Erro ao sair:",
@@ -261,46 +362,44 @@ async function sair() {
 
 
 /* ==========================================
-   MENU FUTURO
+   BOTÃO SAIR
 ========================================== */
 
-function configurarMenu() {
+function configurarBotaoSair() {
 
-    document
-        .querySelectorAll(
-            "[data-futuro]"
-        )
-        .forEach(
-            item => {
-
-                item.addEventListener(
-                    "click",
-                    function (event) {
-
-                        event.preventDefault();
-
-
-                        alert(
-                            "A área de " +
-                            item.dataset.futuro +
-                            " será desenvolvida na próxima etapa."
-                        );
-
-                    }
-                );
-
-            }
+    const botao =
+        document.getElementById(
+            "btnSair"
         );
+
+
+    if (!botao) {
+
+        console.error(
+            "Botão Sair não encontrado."
+        );
+
+        return;
+    }
+
+
+    botao.addEventListener(
+        "click",
+        sair
+    );
 }
 
 
 /* ==========================================
-   INICIAR
+   INICIALIZAÇÃO
 ========================================== */
 
 async function iniciarVendedor() {
 
     mostrarDataAtual();
+
+
+    configurarBotaoSair();
 
 
     const autorizado =
@@ -311,20 +410,25 @@ async function iniciarVendedor() {
 
         return;
     }
-
-
-    configurarMenu();
-
-
-    btnSair.addEventListener(
-        "click",
-        sair
-    );
 }
 
 
 /* ==========================================
-   EXECUTAR
+   EXECUTAR QUANDO A PÁGINA ESTIVER PRONTA
 ========================================== */
 
-iniciarVendedor();
+if (
+    document.readyState === "loading"
+) {
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        iniciarVendedor
+    );
+
+}
+else {
+
+    iniciarVendedor();
+
+}

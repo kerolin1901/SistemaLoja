@@ -1,0 +1,474 @@
+/* ==========================================
+   SISTEMA DA LOJA
+   PRODUTOS DO VENDEDOR
+========================================== */
+
+
+/* ==========================================
+   PAINEL
+========================================== */
+
+.painel-produtos-vendedor {
+
+    background: #ffffff;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 14px;
+
+    padding: 24px;
+
+    box-shadow:
+        0 4px 14px rgba(0, 0, 0, 0.04);
+
+}
+
+
+/* ==========================================
+   TÍTULO
+========================================== */
+
+.titulo-painel-produtos {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    margin-bottom: 24px;
+
+}
+
+
+.titulo-painel-produtos h2 {
+
+    margin: 0 0 6px 0;
+
+    font-size: 21px;
+
+    color: #111827;
+
+}
+
+
+.titulo-painel-produtos p {
+
+    margin: 0;
+
+    color: #6b7280;
+
+    font-size: 14px;
+
+}
+
+
+/* ==========================================
+   CONTADOR
+========================================== */
+
+.contador-produtos {
+
+    background: #eff6ff;
+
+    color: #1d4ed8;
+
+    border: 1px solid #dbeafe;
+
+    padding: 9px 14px;
+
+    border-radius: 9px;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    white-space: nowrap;
+
+}
+
+
+/* ==========================================
+   BARRA DE BUSCA
+========================================== */
+
+.barra-produtos {
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(240px, 2fr)
+        minmax(180px, 1fr)
+        minmax(160px, 1fr);
+
+    gap: 16px;
+
+    margin-bottom: 20px;
+
+}
+
+
+.barra-produtos label {
+
+    display: block;
+
+    margin-bottom: 7px;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    color: #374151;
+
+}
+
+
+.barra-produtos input,
+.barra-produtos select {
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+    height: 43px;
+
+    padding: 0 13px;
+
+    border: 1px solid #d1d5db;
+
+    border-radius: 8px;
+
+    background: #ffffff;
+
+    color: #111827;
+
+    font-size: 14px;
+
+    outline: none;
+
+}
+
+
+.barra-produtos input:focus,
+.barra-produtos select:focus {
+
+    border-color: #2563eb;
+
+    box-shadow:
+        0 0 0 3px rgba(37, 99, 235, 0.10);
+
+}
+
+
+/* ==========================================
+   MENSAGEM
+========================================== */
+
+.mensagem-produtos {
+
+    min-height: 0;
+
+    margin-bottom: 12px;
+
+    font-size: 14px;
+
+}
+
+
+.mensagem-produtos.erro {
+
+    background: #fef2f2;
+
+    color: #b91c1c;
+
+    border: 1px solid #fecaca;
+
+    padding: 11px 14px;
+
+    border-radius: 8px;
+
+}
+
+
+.mensagem-produtos.sucesso {
+
+    background: #f0fdf4;
+
+    color: #15803d;
+
+    border: 1px solid #bbf7d0;
+
+    padding: 11px 14px;
+
+    border-radius: 8px;
+
+}
+
+
+/* ==========================================
+   TABELA
+========================================== */
+
+.tabela-produtos-container {
+
+    width: 100%;
+
+    overflow-x: auto;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 10px;
+
+}
+
+
+.tabela-produtos {
+
+    width: 100%;
+
+    min-width: 760px;
+
+    border-collapse: collapse;
+
+}
+
+
+.tabela-produtos thead {
+
+    background: #f9fafb;
+
+}
+
+
+.tabela-produtos th {
+
+    padding: 14px 15px;
+
+    text-align: left;
+
+    font-size: 12px;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.03em;
+
+    color: #6b7280;
+
+    border-bottom: 1px solid #e5e7eb;
+
+    white-space: nowrap;
+
+}
+
+
+.tabela-produtos td {
+
+    padding: 15px;
+
+    border-bottom: 1px solid #f0f0f0;
+
+    color: #374151;
+
+    font-size: 14px;
+
+    vertical-align: middle;
+
+}
+
+
+.tabela-produtos tbody tr:last-child td {
+
+    border-bottom: none;
+
+}
+
+
+.tabela-produtos tbody tr:hover {
+
+    background: #fafafa;
+
+}
+
+
+/* ==========================================
+   NOME DO PRODUTO
+========================================== */
+
+.nome-produto {
+
+    font-weight: 700;
+
+    color: #111827;
+
+}
+
+
+.sku-produto {
+
+    color: #6b7280;
+
+    font-family: monospace;
+
+    font-size: 13px;
+
+}
+
+
+/* ==========================================
+   PREÇO
+========================================== */
+
+.preco-venda {
+
+    font-weight: 800;
+
+    color: #111827;
+
+    white-space: nowrap;
+
+}
+
+
+/* ==========================================
+   ESTOQUE
+========================================== */
+
+.estoque-normal {
+
+    font-weight: 700;
+
+    color: #15803d;
+
+}
+
+
+.estoque-baixo {
+
+    font-weight: 800;
+
+    color: #b45309;
+
+}
+
+
+.estoque-esgotado {
+
+    font-weight: 800;
+
+    color: #b91c1c;
+
+}
+
+
+/* ==========================================
+   STATUS
+========================================== */
+
+.status-produto {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    padding: 5px 9px;
+
+    border-radius: 999px;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+}
+
+
+.status-ativo {
+
+    background: #dcfce7;
+
+    color: #166534;
+
+}
+
+
+.status-inativo {
+
+    background: #fee2e2;
+
+    color: #991b1b;
+
+}
+
+
+/* ==========================================
+   CATEGORIA
+========================================== */
+
+.categoria-produto {
+
+    color: #4b5563;
+
+}
+
+
+/* ==========================================
+   CARREGANDO / VAZIO
+========================================== */
+
+.carregando,
+.lista-vazia {
+
+    text-align: center !important;
+
+    padding: 35px !important;
+
+    color: #6b7280 !important;
+
+}
+
+
+.lista-vazia strong {
+
+    display: block;
+
+    margin-bottom: 6px;
+
+    color: #374151;
+
+}
+
+
+/* ==========================================
+   RESPONSIVO
+========================================== */
+
+@media (max-width: 900px) {
+
+    .barra-produtos {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .titulo-painel-produtos {
+
+        align-items: flex-start;
+
+        flex-direction: column;
+
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .painel-produtos-vendedor {
+
+        padding: 16px;
+
+    }
+
+}

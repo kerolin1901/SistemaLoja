@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Clientes - Vendedor - Sistema da Loja</title>
+
+    <link
+        rel="stylesheet"
+        href="vendedor.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="vendedor-clientes.css"
+    >
+
+</head>
+
+
+<body>
+
+
+    <div class="layout-vendedor">
+
+
+        <!-- ======================================
+             MENU LATERAL
+        ======================================= -->
+
+        <aside class="menu-lateral-vendedor">
+
+
+            <div class="logo-vendedor">
+
+                <div class="logo-icone">
+                    SL
+                </div>
+
+                <div>
+
+                    <strong>
+                        Sistema da Loja
+                    </strong>
+
+                    <span>
+                        Área do Vendedor
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="usuario-vendedor">
+
+                <div
+                    class="avatar-vendedor"
+                    id="avatarVendedor"
+                >
+                    V
+                </div>
+
+                <div class="dados-vendedor">
+
+                    <strong id="nomeVendedor">
+                        Vendedor
+                    </strong>
+
+                    <span>
+                        Vendedor
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <nav class="menu-vendedor">
+
+
+                <div class="titulo-menu">
+                    PRINCIPAL
+                </div>
+
+
+                <a
+                    href="vendedor.html"
+                    class="item-menu"
+                >
+
+                    <span>
+                        ▦
+                    </span>
+
+                    Dashboard
+
+                </a>
+
+
+                <div class="titulo-menu">
+                    VENDAS
+                </div>
+
+
+                <a
+                    href="vendedor-produtos.html"
+                    class="item-menu"
+                >
+
+                    <span>
+                        📦
+                    </span>
+
+                    Produtos
+
+                </a>
+
+
+                <a
+                    href="vendedor-vendas.html"
+                    class="item-menu"
+                >
+
+                    <span>
+                        🛒
+                    </span>
+
+                    Vendas
+
+                </a>
+
+
+                <a
+                    href="vendedor-clientes.html"
+                    class="item-menu ativo"
+                >
+
+                    <span>
+                        👤
+                    </span>
+
+                    Clientes
+
+                </a>
+
+
+                <a
+                    href="vendedor-estoque.html"
+                    class="item-menu"
+                >
+
+                    <span>
+                        📊
+                    </span>
+
+                    Estoque
+
+                </a>
+
+
+            </nav>
+
+
+            <div class="area-sair">
+
+                <button
+                    type="button"
+                    id="btnSair"
+                    class="botao-sair"
+                >
+
+                    <span>
+                        ⇥
+                    </span>
+
+                    Sair
+
+                </button>
+
+            </div>
+
+
+        </aside>
+
+
+        <!-- ======================================
+             CONTEÚDO
+        ======================================= -->
+
+        <main class="conteudo-vendedor">
+
+
+            <header class="cabecalho-vendedor">
+
+                <div>
+
+                    <h1>
+                        Clientes
+                    </h1>
+
+                    <p>
+                        Cadastre e consulte os clientes da loja.
+                    </p>
+
+                </div>
+
+
+                <div class="data-atual">
+
+                    <span>
+                        Hoje
+                    </span>
+
+                    <strong id="dataAtual">
+                        --
+                    </strong>
+
+                </div>
+
+            </header>
+
+
+            <!-- ==================================
+                 CADASTRO
+            =================================== -->
+
+            <section class="painel-clientes">
+
+
+                <div class="cabecalho-painel-clientes">
+
+                    <div>
+
+                        <h2 id="tituloFormulario">
+                            Novo cliente
+                        </h2>
+
+                        <p>
+                            Preencha os dados do cliente.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <form id="formCliente">
+
+
+                    <div class="grid-formulario">
+
+
+                        <div class="campo-cliente campo-nome">
+
+                            <label for="clienteNome">
+                                Nome *
+                            </label>
+
+                            <input
+                                type="text"
+                                id="clienteNome"
+                                maxlength="150"
+                                required
+                                placeholder="Nome completo"
+                            >
+
+                        </div>
+
+
+                        <div class="campo-cliente">
+
+                            <label for="clienteTelefone">
+                                Telefone
+                            </label>
+
+                            <input
+                                type="text"
+                                id="clienteTelefone"
+                                maxlength="30"
+                                placeholder="(00) 00000-0000"
+                            >
+
+                        </div>
+
+
+                        <div class="campo-cliente">
+
+                            <label for="clienteCPF">
+                                CPF
+                            </label>
+
+                            <input
+                                type="text"
+                                id="clienteCPF"
+                                maxlength="20"
+                                placeholder="000.000.000-00"
+                            >
+
+                        </div>
+
+
+                        <div class="campo-cliente">
+
+                            <label for="clienteEmail">
+                                E-mail
+                            </label>
+
+                            <input
+                                type="email"
+                                id="clienteEmail"
+                                maxlength="150"
+                                placeholder="cliente@email.com"
+                            >
+
+                        </div>
+
+
+                        <div class="campo-cliente campo-endereco">
+
+                            <label for="clienteEndereco">
+                                Endereço
+                            </label>
+
+                            <input
+                                type="text"
+                                id="clienteEndereco"
+                                maxlength="250"
+                                placeholder="Rua, número, bairro..."
+                            >
+
+                        </div>
+
+
+                        <div class="campo-cliente campo-observacoes">
+
+                            <label for="clienteObservacoes">
+                                Observações
+                            </label>
+
+                            <textarea
+                                id="clienteObservacoes"
+                                rows="3"
+                                maxlength="500"
+                                placeholder="Observações sobre o cliente..."
+                            ></textarea>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <div
+                        id="mensagemCliente"
+                        class="mensagem-cliente"
+                    ></div>
+
+
+                    <div class="acoes-formulario">
+
+
+                        <button
+                            type="submit"
+                            id="btnSalvarCliente"
+                            class="botao-salvar-cliente"
+                        >
+                            Salvar cliente
+                        </button>
+
+
+                        <button
+                            type="button"
+                            id="btnCancelarEdicao"
+                            class="botao-cancelar-cliente"
+                            hidden
+                        >
+                            Cancelar edição
+                        </button>
+
+
+                    </div>
+
+
+                </form>
+
+
+            </section>
+
+
+            <!-- ==================================
+                 LISTA
+            =================================== -->
+
+            <section class="painel-clientes">
+
+
+                <div class="cabecalho-lista-clientes">
+
+                    <div>
+
+                        <h2>
+                            Clientes cadastrados
+                        </h2>
+
+                        <p>
+                            Pesquise os clientes da loja.
+                        </p>
+
+                    </div>
+
+
+                    <div
+                        id="contadorClientes"
+                        class="contador-clientes"
+                    >
+                        0 clientes
+                    </div>
+
+                </div>
+
+
+                <div class="barra-clientes">
+
+                    <div>
+
+                        <label for="buscaCliente">
+                            Pesquisar
+                        </label>
+
+                        <input
+                            type="search"
+                            id="buscaCliente"
+                            placeholder="Nome, telefone ou CPF..."
+                            autocomplete="off"
+                        >
+
+                    </div>
+
+
+                    <div>
+
+                        <label for="filtroStatusCliente">
+                            Status
+                        </label>
+
+                        <select
+                            id="filtroStatusCliente"
+                        >
+
+                            <option value="">
+                                Todos
+                            </option>
+
+                            <option value="ativo">
+                                Ativos
+                            </option>
+
+                            <option value="inativo">
+                                Inativos
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <div class="tabela-clientes-container">
+
+                    <table class="tabela-clientes">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Nome
+                                </th>
+
+                                <th>
+                                    Telefone
+                                </th>
+
+                                <th>
+                                    CPF
+                                </th>
+
+                                <th>
+                                    E-mail
+                                </th>
+
+                                <th>
+                                    Status
+                                </th>
+
+                                <th>
+                                    Ação
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody id="listaClientes">
+
+                            <tr>
+
+                                <td
+                                    colspan="6"
+                                    class="carregando"
+                                >
+                                    Carregando clientes...
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+
+            </section>
+
+
+            <!-- ==================================
+                 AVISO
+            =================================== -->
+
+            <section class="painel aviso-painel">
+
+                <div class="aviso-icone">
+                    ℹ️
+                </div>
+
+                <div>
+
+                    <strong>
+                        Área do vendedor
+                    </strong>
+
+                    <p>
+                        O vendedor pode cadastrar e editar clientes,
+                        mas não possui acesso a informações financeiras
+                        da loja.
+                    </p>
+
+                </div>
+
+            </section>
+
+
+        </main>
+
+
+    </div>
+
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+    ></script>
+
+    <script src="js/config.js"></script>
+
+    <script src="js/vendedor-clientes.js"></script>
+
+
+</body>
+
+</html>

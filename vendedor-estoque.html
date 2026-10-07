@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Estoque - Vendedor - Sistema da Loja</title>
+
+    <link
+        rel="stylesheet"
+        href="vendedor.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="vendedor-estoque.css"
+    >
+
+</head>
+
+
+<body>
+
+
+    <div class="layout-vendedor">
+
+
+        <!-- ======================================
+             MENU LATERAL
+        ======================================= -->
+
+        <aside class="menu-lateral-vendedor">
+
+
+            <div class="logo-vendedor">
+
+                <div class="logo-icone">
+                    SL
+                </div>
+
+                <div>
+
+                    <strong>
+                        Sistema da Loja
+                    </strong>
+
+                    <span>
+                        Área do Vendedor
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="usuario-vendedor">
+
+                <div
+                    class="avatar-vendedor"
+                    id="avatarVendedor"
+                >
+                    V
+                </div>
+
+                <div class="dados-vendedor">
+
+                    <strong id="nomeVendedor">
+                        Vendedor
+                    </strong>
+
+                    <span>
+                        Vendedor
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <nav class="menu-vendedor">
+
+
+                <div class="titulo-menu">
+                    PRINCIPAL
+                </div>
+
+
+                <a
+                    href="vendedor.html"
+                    class="item-menu"
+                >
+
+                    <span>
+                        ▦
+                    </span>
+
+                    Dashboard
+
+                </a>
+
+
+                <div class="titulo-menu">
+                    VENDAS
+                </div>
+
+
+                <a
+                    href="vendedor-produtos.html"
+                    class="item-menu"
+                >
+
+                    <span>
+                        📦
+                    </span>
+
+                    Produtos
+
+                </a>
+
+
+                <a
+                    href="vendedor-vendas.html"
+                    class="item-menu"
+                >
+
+                    <span>
+                        🛒
+                    </span>
+
+                    Vendas
+
+                </a>
+
+
+                <a
+                    href="vendedor-clientes.html"
+                    class="item-menu"
+                >
+
+                    <span>
+                        👤
+                    </span>
+
+                    Clientes
+
+                </a>
+
+
+                <a
+                    href="vendedor-estoque.html"
+                    class="item-menu ativo"
+                >
+
+                    <span>
+                        📊
+                    </span>
+
+                    Estoque
+
+                </a>
+
+
+            </nav>
+
+
+            <div class="area-sair">
+
+                <button
+                    type="button"
+                    id="btnSair"
+                    class="botao-sair"
+                >
+
+                    <span>
+                        ⇥
+                    </span>
+
+                    Sair
+
+                </button>
+
+            </div>
+
+
+        </aside>
+
+
+        <!-- ======================================
+             CONTEÚDO
+        ======================================= -->
+
+        <main class="conteudo-vendedor">
+
+
+            <header class="cabecalho-vendedor">
+
+                <div>
+
+                    <h1>
+                        Estoque
+                    </h1>
+
+                    <p>
+                        Consulte a disponibilidade dos produtos.
+                    </p>
+
+                </div>
+
+
+                <div class="data-atual">
+
+                    <span>
+                        Hoje
+                    </span>
+
+                    <strong id="dataAtual">
+                        --
+                    </strong>
+
+                </div>
+
+            </header>
+
+
+            <!-- ==================================
+                 INDICADORES
+            =================================== -->
+
+            <section class="cards-estoque-vendedor">
+
+
+                <div class="card-estoque-vendedor">
+
+                    <span>
+                        Produtos
+                    </span>
+
+                    <strong id="totalProdutos">
+                        0
+                    </strong>
+
+                </div>
+
+
+                <div class="card-estoque-vendedor">
+
+                    <span>
+                        Itens em estoque
+                    </span>
+
+                    <strong id="totalItens">
+                        0
+                    </strong>
+
+                </div>
+
+
+                <div class="card-estoque-vendedor card-alerta">
+
+                    <span>
+                        Estoque baixo
+                    </span>
+
+                    <strong id="totalBaixo">
+                        0
+                    </strong>
+
+                </div>
+
+
+                <div class="card-estoque-vendedor card-perigo">
+
+                    <span>
+                        Esgotados
+                    </span>
+
+                    <strong id="totalEsgotados">
+                        0
+                    </strong>
+
+                </div>
+
+
+            </section>
+
+
+            <!-- ==================================
+                 PRODUTOS
+            =================================== -->
+
+            <section class="painel-estoque-vendedor">
+
+
+                <div class="cabecalho-estoque-vendedor">
+
+                    <div>
+
+                        <h2>
+                            Estoque dos produtos
+                        </h2>
+
+                        <p>
+                            Esta tela é somente para consulta.
+                        </p>
+
+                    </div>
+
+
+                    <div class="aviso-somente-consulta">
+
+                        🔒 Somente consulta
+
+                    </div>
+
+                </div>
+
+
+                <!-- ==================================
+                     FILTROS
+                =================================== -->
+
+                <div class="filtros-estoque-vendedor">
+
+
+                    <div>
+
+                        <label for="buscaEstoque">
+                            Pesquisar produto
+                        </label>
+
+                        <input
+                            type="search"
+                            id="buscaEstoque"
+                            placeholder="Nome ou SKU..."
+                            autocomplete="off"
+                        >
+
+                    </div>
+
+
+                    <div>
+
+                        <label for="filtroSituacao">
+                            Situação
+                        </label>
+
+                        <select
+                            id="filtroSituacao"
+                        >
+
+                            <option value="">
+                                Todas
+                            </option>
+
+                            <option value="normal">
+                                Normal
+                            </option>
+
+                            <option value="baixo">
+                                Estoque baixo
+                            </option>
+
+                            <option value="esgotado">
+                                Esgotado
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                </div>
+
+
+                <div
+                    id="mensagemEstoque"
+                    class="mensagem-estoque-vendedor"
+                ></div>
+
+
+                <!-- ==================================
+                     TABELA
+                =================================== -->
+
+                <div class="tabela-estoque-vendedor-container">
+
+                    <table class="tabela-estoque-vendedor">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Produto
+                                </th>
+
+                                <th>
+                                    SKU
+                                </th>
+
+                                <th>
+                                    Categoria
+                                </th>
+
+                                <th>
+                                    Estoque atual
+                                </th>
+
+                                <th>
+                                    Estoque mínimo
+                                </th>
+
+                                <th>
+                                    Situação
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody id="listaEstoque">
+
+                            <tr>
+
+                                <td
+                                    colspan="6"
+                                    class="carregando"
+                                >
+                                    Carregando estoque...
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+
+            </section>
+
+
+            <!-- ==================================
+                 AVISO
+            =================================== -->
+
+            <section class="painel aviso-painel">
+
+                <div class="aviso-icone">
+                    🔒
+                </div>
+
+                <div>
+
+                    <strong>
+                        Estoque protegido
+                    </strong>
+
+                    <p>
+                        O vendedor não pode alterar o estoque.
+                        Entradas, saídas e ajustes são realizados
+                        somente pelo administrador. O estoque é
+                        reduzido automaticamente quando uma venda
+                        é finalizada.
+                    </p>
+
+                </div>
+
+            </section>
+
+
+        </main>
+
+
+    </div>
+
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+    ></script>
+
+    <script src="js/config.js"></script>
+
+    <script src="js/vendedor-estoque.js"></script>
+
+
+</body>
+
+</html>

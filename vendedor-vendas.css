@@ -1,0 +1,657 @@
+/* ==========================================
+   SISTEMA DA LOJA
+   VENDAS DO VENDEDOR
+========================================== */
+
+
+/* ==========================================
+   PAINEL
+========================================== */
+
+.painel-venda {
+
+    background: #ffffff;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 14px;
+
+    padding: 24px;
+
+    box-shadow:
+        0 4px 14px rgba(0, 0, 0, 0.04);
+
+}
+
+
+.cabecalho-painel-venda h2 {
+
+    margin: 0 0 6px 0;
+
+    color: #111827;
+
+    font-size: 21px;
+
+}
+
+
+.cabecalho-painel-venda p {
+
+    margin: 0 0 24px 0;
+
+    color: #6b7280;
+
+    font-size: 14px;
+
+}
+
+
+/* ==========================================
+   CAMPOS
+========================================== */
+
+.campo-venda label {
+
+    display: block;
+
+    margin-bottom: 7px;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    color: #374151;
+
+}
+
+
+.campo-venda input,
+.campo-venda select,
+.campo-venda textarea {
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+    border: 1px solid #d1d5db;
+
+    border-radius: 8px;
+
+    background: #ffffff;
+
+    color: #111827;
+
+    font-size: 14px;
+
+    outline: none;
+
+}
+
+
+.campo-venda input,
+.campo-venda select {
+
+    height: 43px;
+
+    padding: 0 12px;
+
+}
+
+
+.campo-venda textarea {
+
+    padding: 12px;
+
+    resize: vertical;
+
+    min-height: 90px;
+
+}
+
+
+.campo-venda input:focus,
+.campo-venda select:focus,
+.campo-venda textarea:focus {
+
+    border-color: #2563eb;
+
+    box-shadow:
+        0 0 0 3px rgba(37, 99, 235, 0.10);
+
+}
+
+
+/* ==========================================
+   ADICIONAR PRODUTO
+========================================== */
+
+.adicionar-produto {
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(250px, 2fr)
+        130px
+        150px
+        145px;
+
+    gap: 14px;
+
+    align-items: end;
+
+    padding: 18px;
+
+    background: #f9fafb;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 10px;
+
+}
+
+
+.preco-produto-selecionado {
+
+    height: 43px;
+
+    box-sizing: border-box;
+
+    display: flex;
+
+    align-items: center;
+
+    padding: 0 12px;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 8px;
+
+    background: #ffffff;
+
+    color: #111827;
+
+    font-weight: 800;
+
+}
+
+
+.botao-adicionar {
+
+    width: 100%;
+
+    height: 43px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background: #2563eb;
+
+    color: #ffffff;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+}
+
+
+.botao-adicionar:hover {
+
+    background: #1d4ed8;
+
+}
+
+
+/* ==========================================
+   MENSAGEM
+========================================== */
+
+.mensagem-venda {
+
+    min-height: 0;
+
+    margin: 14px 0;
+
+    font-size: 14px;
+
+}
+
+
+.mensagem-venda.erro {
+
+    padding: 11px 14px;
+
+    border-radius: 8px;
+
+    background: #fef2f2;
+
+    border: 1px solid #fecaca;
+
+    color: #b91c1c;
+
+}
+
+
+.mensagem-venda.sucesso {
+
+    padding: 11px 14px;
+
+    border-radius: 8px;
+
+    background: #f0fdf4;
+
+    border: 1px solid #bbf7d0;
+
+    color: #15803d;
+
+}
+
+
+/* ==========================================
+   TABELA
+========================================== */
+
+.tabela-venda-container {
+
+    overflow-x: auto;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 10px;
+
+}
+
+
+.tabela-venda {
+
+    width: 100%;
+
+    min-width: 850px;
+
+    border-collapse: collapse;
+
+}
+
+
+.tabela-venda thead {
+
+    background: #f9fafb;
+
+}
+
+
+.tabela-venda th {
+
+    padding: 13px 14px;
+
+    text-align: left;
+
+    font-size: 12px;
+
+    text-transform: uppercase;
+
+    color: #6b7280;
+
+    border-bottom: 1px solid #e5e7eb;
+
+    white-space: nowrap;
+
+}
+
+
+.tabela-venda td {
+
+    padding: 14px;
+
+    border-bottom: 1px solid #f0f0f0;
+
+    color: #374151;
+
+    font-size: 14px;
+
+}
+
+
+.tabela-venda tbody tr:last-child td {
+
+    border-bottom: none;
+
+}
+
+
+.produto-item-nome {
+
+    font-weight: 700;
+
+    color: #111827;
+
+}
+
+
+.produto-item-sku {
+
+    color: #6b7280;
+
+    font-family: monospace;
+
+    font-size: 12px;
+
+}
+
+
+.preco-item {
+
+    font-weight: 700;
+
+    white-space: nowrap;
+
+}
+
+
+.subtotal-item {
+
+    font-weight: 800;
+
+    color: #111827;
+
+    white-space: nowrap;
+
+}
+
+
+.carrinho-vazio {
+
+    text-align: center;
+
+    padding: 35px !important;
+
+    color: #6b7280 !important;
+
+}
+
+
+/* ==========================================
+   BOTÃO REMOVER
+========================================== */
+
+.botao-remover-item {
+
+    border: 1px solid #fecaca;
+
+    background: #fef2f2;
+
+    color: #b91c1c;
+
+    border-radius: 7px;
+
+    padding: 7px 10px;
+
+    cursor: pointer;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+}
+
+
+.botao-remover-item:hover {
+
+    background: #fee2e2;
+
+}
+
+
+/* ==========================================
+   DADOS FINAIS
+========================================== */
+
+.dados-final-venda {
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(300px, 1fr)
+        minmax(300px, 420px);
+
+    gap: 30px;
+
+    margin-top: 24px;
+
+}
+
+
+.dados-cliente-venda {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 18px;
+
+}
+
+
+/* ==========================================
+   RESUMO
+========================================== */
+
+.resumo-venda {
+
+    padding: 20px;
+
+    background: #f9fafb;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 10px;
+
+}
+
+
+.linha-resumo {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding: 10px 0;
+
+    color: #4b5563;
+
+}
+
+
+.linha-resumo strong {
+
+    color: #111827;
+
+}
+
+
+.linha-desconto {
+
+    align-items: center;
+
+}
+
+
+.linha-desconto label {
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    color: #4b5563;
+
+}
+
+
+.campo-desconto {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+}
+
+
+.campo-desconto input {
+
+    width: 110px;
+
+    height: 38px;
+
+    box-sizing: border-box;
+
+    padding: 0 10px;
+
+    border: 1px solid #d1d5db;
+
+    border-radius: 7px;
+
+    background: #ffffff;
+
+    text-align: right;
+
+}
+
+
+.campo-desconto span {
+
+    color: #6b7280;
+
+    font-weight: 700;
+
+}
+
+
+.linha-total {
+
+    margin-top: 8px;
+
+    padding-top: 17px;
+
+    border-top: 1px solid #d1d5db;
+
+    font-size: 17px;
+
+}
+
+
+.linha-total strong {
+
+    font-size: 22px;
+
+}
+
+
+/* ==========================================
+   FINALIZAR
+========================================== */
+
+.botao-finalizar {
+
+    width: 100%;
+
+    height: 48px;
+
+    margin-top: 18px;
+
+    border: none;
+
+    border-radius: 9px;
+
+    background: #16a34a;
+
+    color: #ffffff;
+
+    font-size: 15px;
+
+    font-weight: 800;
+
+    cursor: pointer;
+
+}
+
+
+.botao-finalizar:hover {
+
+    background: #15803d;
+
+}
+
+
+.botao-finalizar:disabled {
+
+    opacity: 0.6;
+
+    cursor: not-allowed;
+
+}
+
+
+/* ==========================================
+   RESPONSIVO
+========================================== */
+
+@media (max-width: 1000px) {
+
+    .adicionar-produto {
+
+        grid-template-columns:
+            1fr 1fr;
+
+    }
+
+
+    .campo-produto {
+
+        grid-column: span 2;
+
+    }
+
+}
+
+
+@media (max-width: 800px) {
+
+    .dados-final-venda {
+
+        grid-template-columns: 1fr;
+
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .painel-venda {
+
+        padding: 16px;
+
+    }
+
+
+    .adicionar-produto {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .campo-produto {
+
+        grid-column: span 1;
+
+    }
+
+}

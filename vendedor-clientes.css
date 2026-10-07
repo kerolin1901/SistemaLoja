@@ -1,0 +1,644 @@
+/* ==========================================
+   SISTEMA DA LOJA
+   CLIENTES DO VENDEDOR
+========================================== */
+
+
+/* ==========================================
+   PAINEL
+========================================== */
+
+.painel-clientes {
+
+    background: #ffffff;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 14px;
+
+    padding: 24px;
+
+    margin-bottom: 20px;
+
+    box-shadow:
+        0 4px 14px rgba(0, 0, 0, 0.04);
+
+}
+
+
+.cabecalho-painel-clientes,
+.cabecalho-lista-clientes {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    margin-bottom: 22px;
+
+}
+
+
+.cabecalho-painel-clientes h2,
+.cabecalho-lista-clientes h2 {
+
+    margin: 0 0 6px 0;
+
+    font-size: 21px;
+
+    color: #111827;
+
+}
+
+
+.cabecalho-painel-clientes p,
+.cabecalho-lista-clientes p {
+
+    margin: 0;
+
+    color: #6b7280;
+
+    font-size: 14px;
+
+}
+
+
+/* ==========================================
+   FORMULÁRIO
+========================================== */
+
+.grid-formulario {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 17px;
+
+}
+
+
+.campo-cliente label {
+
+    display: block;
+
+    margin-bottom: 7px;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    color: #374151;
+
+}
+
+
+.campo-cliente input,
+.campo-cliente textarea {
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+    border: 1px solid #d1d5db;
+
+    border-radius: 8px;
+
+    background: #ffffff;
+
+    color: #111827;
+
+    font-size: 14px;
+
+    outline: none;
+
+}
+
+
+.campo-cliente input {
+
+    height: 43px;
+
+    padding: 0 12px;
+
+}
+
+
+.campo-cliente textarea {
+
+    min-height: 90px;
+
+    padding: 11px 12px;
+
+    resize: vertical;
+
+}
+
+
+.campo-cliente input:focus,
+.campo-cliente textarea:focus {
+
+    border-color: #2563eb;
+
+    box-shadow:
+        0 0 0 3px rgba(37, 99, 235, 0.10);
+
+}
+
+
+.campo-nome,
+.campo-endereco,
+.campo-observacoes {
+
+    grid-column: span 2;
+
+}
+
+
+/* ==========================================
+   MENSAGEM
+========================================== */
+
+.mensagem-cliente {
+
+    min-height: 0;
+
+    margin-top: 15px;
+
+    font-size: 14px;
+
+}
+
+
+.mensagem-cliente.erro {
+
+    padding: 11px 14px;
+
+    border-radius: 8px;
+
+    background: #fef2f2;
+
+    border: 1px solid #fecaca;
+
+    color: #b91c1c;
+
+}
+
+
+.mensagem-cliente.sucesso {
+
+    padding: 11px 14px;
+
+    border-radius: 8px;
+
+    background: #f0fdf4;
+
+    border: 1px solid #bbf7d0;
+
+    color: #15803d;
+
+}
+
+
+/* ==========================================
+   AÇÕES
+========================================== */
+
+.acoes-formulario {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-top: 18px;
+
+}
+
+
+.botao-salvar-cliente {
+
+    min-width: 145px;
+
+    height: 43px;
+
+    padding: 0 18px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background: #2563eb;
+
+    color: #ffffff;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+}
+
+
+.botao-salvar-cliente:hover {
+
+    background: #1d4ed8;
+
+}
+
+
+.botao-salvar-cliente:disabled {
+
+    opacity: 0.6;
+
+    cursor: not-allowed;
+
+}
+
+
+.botao-cancelar-cliente {
+
+    height: 43px;
+
+    padding: 0 18px;
+
+    border: 1px solid #d1d5db;
+
+    border-radius: 8px;
+
+    background: #ffffff;
+
+    color: #374151;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+}
+
+
+.botao-cancelar-cliente:hover {
+
+    background: #f9fafb;
+
+}
+
+
+/* ==========================================
+   CONTADOR
+========================================== */
+
+.contador-clientes {
+
+    padding: 9px 14px;
+
+    border-radius: 9px;
+
+    background: #eff6ff;
+
+    border: 1px solid #dbeafe;
+
+    color: #1d4ed8;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    white-space: nowrap;
+
+}
+
+
+/* ==========================================
+   BUSCA
+========================================== */
+
+.barra-clientes {
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(250px, 1fr)
+        180px;
+
+    gap: 16px;
+
+    margin-bottom: 20px;
+
+}
+
+
+.barra-clientes label {
+
+    display: block;
+
+    margin-bottom: 7px;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    color: #374151;
+
+}
+
+
+.barra-clientes input,
+.barra-clientes select {
+
+    width: 100%;
+
+    height: 43px;
+
+    box-sizing: border-box;
+
+    padding: 0 12px;
+
+    border: 1px solid #d1d5db;
+
+    border-radius: 8px;
+
+    background: #ffffff;
+
+    color: #111827;
+
+    outline: none;
+
+}
+
+
+.barra-clientes input:focus,
+.barra-clientes select:focus {
+
+    border-color: #2563eb;
+
+    box-shadow:
+        0 0 0 3px rgba(37, 99, 235, 0.10);
+
+}
+
+
+/* ==========================================
+   TABELA
+========================================== */
+
+.tabela-clientes-container {
+
+    width: 100%;
+
+    overflow-x: auto;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 10px;
+
+}
+
+
+.tabela-clientes {
+
+    width: 100%;
+
+    min-width: 850px;
+
+    border-collapse: collapse;
+
+}
+
+
+.tabela-clientes thead {
+
+    background: #f9fafb;
+
+}
+
+
+.tabela-clientes th {
+
+    padding: 14px 15px;
+
+    text-align: left;
+
+    font-size: 12px;
+
+    text-transform: uppercase;
+
+    color: #6b7280;
+
+    border-bottom: 1px solid #e5e7eb;
+
+    white-space: nowrap;
+
+}
+
+
+.tabela-clientes td {
+
+    padding: 14px 15px;
+
+    border-bottom: 1px solid #f0f0f0;
+
+    color: #374151;
+
+    font-size: 14px;
+
+    vertical-align: middle;
+
+}
+
+
+.tabela-clientes tbody tr:last-child td {
+
+    border-bottom: none;
+
+}
+
+
+.tabela-clientes tbody tr:hover {
+
+    background: #fafafa;
+
+}
+
+
+.nome-cliente {
+
+    font-weight: 700;
+
+    color: #111827;
+
+}
+
+
+.dado-cliente {
+
+    white-space: nowrap;
+
+}
+
+
+.status-cliente {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    padding: 5px 9px;
+
+    border-radius: 999px;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+}
+
+
+.status-ativo {
+
+    background: #dcfce7;
+
+    color: #166534;
+
+}
+
+
+.status-inativo {
+
+    background: #fee2e2;
+
+    color: #991b1b;
+
+}
+
+
+/* ==========================================
+   BOTÃO EDITAR
+========================================== */
+
+.botao-editar-cliente {
+
+    padding: 7px 11px;
+
+    border: 1px solid #bfdbfe;
+
+    border-radius: 7px;
+
+    background: #eff6ff;
+
+    color: #1d4ed8;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+}
+
+
+.botao-editar-cliente:hover {
+
+    background: #dbeafe;
+
+}
+
+
+/* ==========================================
+   CARREGANDO / VAZIO
+========================================== */
+
+.carregando,
+.lista-vazia {
+
+    text-align: center !important;
+
+    padding: 35px !important;
+
+    color: #6b7280 !important;
+
+}
+
+
+.lista-vazia strong {
+
+    display: block;
+
+    margin-bottom: 6px;
+
+    color: #374151;
+
+}
+
+
+/* ==========================================
+   RESPONSIVO
+========================================== */
+
+@media (max-width: 800px) {
+
+    .grid-formulario {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .campo-nome,
+    .campo-endereco,
+    .campo-observacoes {
+
+        grid-column: span 1;
+
+    }
+
+
+    .barra-clientes {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .cabecalho-painel-clientes,
+    .cabecalho-lista-clientes {
+
+        align-items: flex-start;
+
+        flex-direction: column;
+
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .painel-clientes {
+
+        padding: 16px;
+
+    }
+
+
+    .acoes-formulario {
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+    }
+
+
+    .botao-salvar-cliente,
+    .botao-cancelar-cliente {
+
+        width: 100%;
+
+    }
+
+}
