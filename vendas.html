@@ -1,8 +1,11 @@
 <!DOCTYPE html>
+
 <html lang="pt-BR">
 
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Sistema da Loja - Vendas</title>
@@ -10,11 +13,15 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="admin.css">
     <link rel="stylesheet" href="vendas.css">
+
 </head>
+
 
 <body>
 
+
     <div class="layout-admin">
+
 
         <!-- ==========================================
              MENU LATERAL
@@ -22,100 +29,170 @@
 
         <aside class="menu-lateral">
 
+
             <div class="logo-admin">
+
                 <strong>Sistema da Loja</strong>
+
                 <span>Administração</span>
+
             </div>
+
 
 
             <div class="usuario-logado">
 
+
                 <div class="avatar-admin">
+
                     A
+
                 </div>
+
 
                 <div>
+
                     <strong id="nomeAdministrador">
+
                         Administrador
+
                     </strong>
 
-                    <span>Administrador</span>
+
+                    <span>
+
+                        Administrador
+
+                    </span>
+
                 </div>
+
 
             </div>
 
 
+
             <nav class="menu">
+
 
                 <!-- PRINCIPAL -->
 
                 <div class="titulo-menu">
+
                     PRINCIPAL
+
                 </div>
 
+
                 <a href="admin.html" class="item-menu">
+
                     <span>🏠</span>
+
                     Dashboard
+
                 </a>
 
+
                 <a href="usuarios.html" class="item-menu">
+
                     <span>👥</span>
+
                     Usuários
+
                 </a>
+
 
 
                 <!-- ESTOQUE E VENDAS -->
 
                 <div class="titulo-menu">
+
                     ESTOQUE E VENDAS
+
                 </div>
 
+
                 <a href="produtos.html" class="item-menu">
+
                     <span>📦</span>
+
                     Produtos
+
                 </a>
+
 
                 <a href="categorias.html" class="item-menu">
+
                     <span>🏷️</span>
+
                     Categorias
+
                 </a>
+
 
                 <a href="estoque.html" class="item-menu">
+
                     <span>📊</span>
+
                     Estoque
+
                 </a>
+
 
                 <a href="vendas.html" class="item-menu ativo">
+
                     <span>🛒</span>
+
                     Vendas
+
                 </a>
 
-                <a href="#" class="item-menu" data-futuro="Clientes">
+
+                <!-- CLIENTES CORRIGIDO -->
+
+                <a href="clientes.html" class="item-menu">
+
                     <span>👤</span>
+
                     Clientes
+
                 </a>
+
 
 
                 <!-- FINANCEIRO -->
 
                 <div class="titulo-menu">
+
                     FINANCEIRO
+
                 </div>
 
+
                 <a href="#" class="item-menu" data-futuro="Financeiro">
+
                     <span>💰</span>
+
                     Financeiro
+
                 </a>
 
+
                 <a href="#" class="item-menu" data-futuro="Relatórios">
+
                     <span>📈</span>
+
                     Relatórios
+
                 </a>
+
 
             </nav>
 
 
+
             <div class="area-sair">
+
 
                 <button
                     type="button"
@@ -123,13 +200,17 @@
                     id="btnSair">
 
                     🚪
+
                     Sair
 
                 </button>
 
+
             </div>
 
+
         </aside>
+
 
 
         <!-- ==========================================
@@ -138,21 +219,30 @@
 
         <main class="conteudo-admin">
 
+
             <header class="cabecalho-admin">
+
 
                 <div>
 
                     <h1>
+
                         Vendas
+
                     </h1>
 
+
                     <p>
+
                         Registre vendas e acompanhe seus pedidos.
+
                     </p>
 
                 </div>
 
+
             </header>
+
 
 
             <!-- ==========================================
@@ -161,23 +251,37 @@
 
             <section class="painel-vendas">
 
+
                 <div class="titulo-painel-vendas">
 
+
                     <div>
+
                         <h2>
+
                             Nova venda
+
                         </h2>
 
+
                         <p>
+
                             Adicione os produtos da venda ao carrinho.
+
                         </p>
+
                     </div>
+
 
                     <div class="status-venda">
+
                         Nova venda
+
                     </div>
 
+
                 </div>
+
 
 
                 <!-- ==========================================
@@ -186,19 +290,27 @@
 
                 <div class="campo-venda campo-cliente">
 
+
                     <label for="clienteVenda">
+
                         Cliente
+
                     </label>
+
 
                     <select id="clienteVenda">
 
                         <option value="">
+
                             Consumidor não identificado
+
                         </option>
 
                     </select>
 
+
                 </div>
+
 
 
                 <!-- ==========================================
@@ -207,28 +319,43 @@
 
                 <div class="area-adicionar-produto">
 
+
                     <div class="campo-venda produto-campo">
 
+
                         <label for="produtoVenda">
+
                             Produto
+
                         </label>
+
 
                         <select id="produtoVenda">
 
+
                             <option value="">
+
                                 Selecione um produto
+
                             </option>
 
+
                         </select>
+
 
                     </div>
 
 
+
                     <div class="campo-venda quantidade-campo">
 
+
                         <label for="quantidadeVenda">
+
                             Quantidade
+
                         </label>
+
 
                         <input
                             type="number"
@@ -238,14 +365,20 @@
                             value="1"
                         >
 
+
                     </div>
+
 
 
                     <div class="campo-venda preco-campo">
 
+
                         <label for="precoVenda">
+
                             Preço unitário
+
                         </label>
+
 
                         <input
                             type="text"
@@ -254,10 +387,13 @@
                             readonly
                         >
 
+
                     </div>
 
 
+
                     <div class="botao-adicionar-area">
+
 
                         <button
                             type="button"
@@ -268,9 +404,12 @@
 
                         </button>
 
+
                     </div>
 
+
                 </div>
+
 
 
                 <!-- ==========================================
@@ -279,49 +418,73 @@
 
                 <div class="carrinho-venda">
 
+
                     <div class="cabecalho-carrinho">
+
 
                         <div>
 
                             <h3>
+
                                 Produtos da venda
+
                             </h3>
 
+
                             <span id="quantidadeItensCarrinho">
+
                                 0 itens
+
                             </span>
+
 
                         </div>
 
+
                     </div>
+
 
 
                     <div
                         id="carrinhoVazio"
                         class="carrinho-vazio">
 
+
                         <div class="icone-carrinho">
+
                             🛒
+
                         </div>
 
+
                         <strong>
+
                             Nenhum produto adicionado
+
                         </strong>
 
+
                         <span>
+
                             Selecione um produto acima para começar a venda.
+
                         </span>
 
+
                     </div>
+
 
 
                     <div
                         id="listaCarrinho"
                         class="lista-carrinho">
 
+
                     </div>
 
+
                 </div>
+
 
 
                 <!-- ==========================================
@@ -330,28 +493,43 @@
 
                 <div class="resumo-venda">
 
+
                     <div class="resumo-valores">
+
 
                         <div class="linha-resumo">
 
+
                             <span>
+
                                 Subtotal
+
                             </span>
 
+
                             <strong id="valorSubtotal">
+
                                 R$ 0,00
+
                             </strong>
+
 
                         </div>
 
 
+
                         <div class="linha-resumo linha-desconto">
 
+
                             <label for="descontoVenda">
+
                                 Desconto
+
                             </label>
 
+
                             <div class="campo-desconto">
+
 
                                 <input
                                     type="number"
@@ -361,30 +539,46 @@
                                     value="0"
                                 >
 
+
                                 <span>
+
                                     R$
+
                                 </span>
+
 
                             </div>
 
+
                         </div>
+
 
 
                         <div class="linha-resumo linha-total">
 
+
                             <span>
+
                                 Total da venda
+
                             </span>
 
+
                             <strong id="valorTotal">
+
                                 R$ 0,00
+
                             </strong>
+
 
                         </div>
 
+
                     </div>
 
+
                 </div>
+
 
 
                 <!-- ==========================================
@@ -393,52 +587,85 @@
 
                 <div class="dados-finalizacao">
 
+
                     <div class="campo-venda">
 
+
                         <label for="formaPagamento">
+
                             Forma de pagamento
+
                         </label>
+
 
                         <select id="formaPagamento">
 
+
                             <option value="">
+
                                 Selecione
+
                             </option>
+
 
                             <option value="dinheiro">
+
                                 Dinheiro
+
                             </option>
+
 
                             <option value="pix">
+
                                 PIX
+
                             </option>
+
 
                             <option value="cartao_credito">
+
                                 Cartão de crédito
+
                             </option>
+
 
                             <option value="cartao_debito">
+
                                 Cartão de débito
+
                             </option>
+
 
                             <option value="boleto">
+
                                 Boleto
+
                             </option>
+
 
                             <option value="outro">
+
                                 Outro
+
                             </option>
 
+
                         </select>
+
 
                     </div>
 
 
+
                     <div class="campo-venda campo-observacoes">
 
+
                         <label for="observacoesVenda">
+
                             Observações
+
                         </label>
+
 
                         <input
                             type="text"
@@ -447,9 +674,12 @@
                             placeholder="Observações da venda..."
                         >
 
+
                     </div>
 
+
                 </div>
+
 
 
                 <!-- ==========================================
@@ -459,7 +689,9 @@
                 <div
                     id="mensagemVenda"
                     class="mensagem-venda">
+
                 </div>
+
 
 
                 <!-- ==========================================
@@ -467,6 +699,7 @@
                 ========================================== -->
 
                 <div class="acoes-venda">
+
 
                     <button
                         type="button"
@@ -478,6 +711,7 @@
                     </button>
 
 
+
                     <button
                         type="button"
                         id="btnFinalizarVenda"
@@ -487,13 +721,18 @@
 
                     </button>
 
+
                 </div>
+
 
             </section>
 
+
         </main>
 
+
     </div>
+
 
 
     <!-- ==========================================
@@ -505,6 +744,7 @@
     <script src="js/config.js"></script>
 
     <script src="js/vendas.js"></script>
+
 
 </body>
 
