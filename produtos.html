@@ -24,19 +24,15 @@
 
 </head>
 
-
 <body>
 
-
     <div class="layout-admin">
-
 
         <!-- ======================================
              MENU LATERAL
         ======================================= -->
 
         <aside class="menu-lateral">
-
 
             <div class="logo-admin">
 
@@ -58,7 +54,6 @@
 
             </div>
 
-
             <div class="usuario-logado">
 
                 <div class="avatar-admin">
@@ -79,14 +74,11 @@
 
             </div>
 
-
             <nav class="menu">
-
 
                 <div class="titulo-menu">
                     PRINCIPAL
                 </div>
-
 
                 <a
                     href="admin.html"
@@ -103,7 +95,6 @@
 
                 </a>
 
-
                 <a
                     href="usuarios.html"
                     class="item-menu"
@@ -119,11 +110,9 @@
 
                 </a>
 
-
                 <div class="titulo-menu">
                     ESTOQUE E VENDAS
                 </div>
-
 
                 <a
                     href="produtos.html"
@@ -140,11 +129,9 @@
 
                 </a>
 
-
                 <a
-                    href="#"
+                    href="categorias.html"
                     class="item-menu"
-                    data-futuro="categorias"
                 >
 
                     <span class="icone-menu">
@@ -157,11 +144,9 @@
 
                 </a>
 
-
                 <a
-                    href="#"
+                    href="estoque.html"
                     class="item-menu"
-                    data-futuro="estoque"
                 >
 
                     <span class="icone-menu">
@@ -174,11 +159,9 @@
 
                 </a>
 
-
                 <a
-                    href="#"
+                    href="vendas.html"
                     class="item-menu"
-                    data-futuro="vendas"
                 >
 
                     <span class="icone-menu">
@@ -191,11 +174,9 @@
 
                 </a>
 
-
                 <a
-                    href="#"
+                    href="clientes.html"
                     class="item-menu"
-                    data-futuro="clientes"
                 >
 
                     <span class="icone-menu">
@@ -208,16 +189,13 @@
 
                 </a>
 
-
                 <div class="titulo-menu">
                     FINANCEIRO
                 </div>
 
-
                 <a
-                    href="#"
+                    href="financeiro.html"
                     class="item-menu"
-                    data-futuro="financeiro"
                 >
 
                     <span class="icone-menu">
@@ -230,11 +208,9 @@
 
                 </a>
 
-
                 <a
-                    href="#"
+                    href="relatorios.html"
                     class="item-menu"
-                    data-futuro="relatorios"
                 >
 
                     <span class="icone-menu">
@@ -247,9 +223,7 @@
 
                 </a>
 
-
             </nav>
-
 
             <div class="area-sair">
 
@@ -269,16 +243,13 @@
 
             </div>
 
-
         </aside>
-
 
         <!-- ======================================
              CONTEÚDO
         ======================================= -->
 
         <main class="conteudo-admin">
-
 
             <header class="cabecalho-admin">
 
@@ -294,7 +265,6 @@
 
                 </div>
 
-
                 <div class="data-atual">
 
                     <span>
@@ -309,19 +279,16 @@
 
             </header>
 
-
             <div
                 id="mensagemAdmin"
                 class="mensagem-admin"
             ></div>
-
 
             <!-- ==================================
                  FORMULÁRIO
             =================================== -->
 
             <section class="painel-produtos">
-
 
                 <div class="titulo-painel">
 
@@ -339,12 +306,9 @@
 
                 </div>
 
-
                 <form id="formProduto">
 
-
                     <div class="campos-produto">
-
 
                         <div class="campo-produto campo-grande">
 
@@ -361,7 +325,6 @@
 
                         </div>
 
-
                         <div class="campo-produto">
 
                             <label for="skuProduto">
@@ -375,7 +338,6 @@
                             >
 
                         </div>
-
 
                         <div class="campo-produto">
 
@@ -392,7 +354,6 @@
                             </select>
 
                         </div>
-
 
                         <div class="campo-produto">
 
@@ -411,7 +372,6 @@
 
                         </div>
 
-
                         <div class="campo-produto">
 
                             <label for="precoVenda">
@@ -428,7 +388,6 @@
                             >
 
                         </div>
-
 
                         <div class="campo-produto">
 
@@ -447,7 +406,6 @@
 
                         </div>
 
-
                         <div class="campo-produto">
 
                             <label for="estoqueMinimo">
@@ -464,7 +422,6 @@
                             >
 
                         </div>
-
 
                         <div class="campo-produto campo-status">
 
@@ -488,12 +445,9 @@
 
                         </div>
 
-
                     </div>
 
-
                     <div class="acoes-produto">
-
 
                         <button
                             type="submit"
@@ -503,7 +457,6 @@
                             Cadastrar produto
                         </button>
 
-
                         <button
                             type="button"
                             class="botao-secundario"
@@ -512,22 +465,17 @@
                             Cancelar
                         </button>
 
-
                     </div>
-
 
                 </form>
 
-
             </section>
-
 
             <!-- ==================================
                  LISTA
             =================================== -->
 
             <section class="painel-produtos">
-
 
                 <div class="titulo-painel titulo-lista">
 
@@ -543,7 +491,6 @@
 
                     </div>
 
-
                     <button
                         type="button"
                         class="botao-atualizar"
@@ -554,14 +501,12 @@
 
                 </div>
 
-
                 <div
                     id="carregando"
                     class="carregando"
                 >
                     Carregando produtos...
                 </div>
-
 
                 <div class="tabela-wrapper">
 
@@ -607,15 +552,12 @@
 
                         </thead>
 
-
                         <tbody id="listaProdutos">
-
                         </tbody>
 
                     </table>
 
                 </div>
-
 
                 <div
                     id="semProdutos"
@@ -624,15 +566,11 @@
                     Nenhum produto cadastrado.
                 </div>
 
-
             </section>
-
 
         </main>
 
-
     </div>
-
 
     <!-- ==========================================
          SUPABASE
@@ -642,11 +580,9 @@
         src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
     ></script>
 
-
     <script src="js/config.js"></script>
 
     <script src="js/produtos.js"></script>
-
 
 </body>
 

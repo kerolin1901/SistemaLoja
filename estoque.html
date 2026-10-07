@@ -2,13 +2,16 @@
 <html lang="pt-BR">
 
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Sistema da Loja - Estoque</title>
 
     <link rel="stylesheet" href="admin.css">
     <link rel="stylesheet" href="estoque.css">
+
 </head>
 
 <body>
@@ -17,7 +20,7 @@
 
         <!-- ==========================================
              MENU LATERAL
-        ========================================== -->
+        =========================================== -->
 
         <aside class="menu-lateral">
 
@@ -64,8 +67,11 @@
                     href="admin.html"
                     class="item-menu"
                 >
+
                     <span>🏠</span>
+
                     Dashboard
+
                 </a>
 
 
@@ -73,8 +79,11 @@
                     href="usuarios.html"
                     class="item-menu"
                 >
+
                     <span>👥</span>
+
                     Usuários
+
                 </a>
 
 
@@ -87,8 +96,11 @@
                     href="produtos.html"
                     class="item-menu"
                 >
+
                     <span>📦</span>
+
                     Produtos
+
                 </a>
 
 
@@ -96,8 +108,11 @@
                     href="categorias.html"
                     class="item-menu"
                 >
+
                     <span>🗂️</span>
+
                     Categorias
+
                 </a>
 
 
@@ -105,28 +120,47 @@
                     href="estoque.html"
                     class="item-menu ativo"
                 >
+
                     <span>📋</span>
+
                     Estoque
+
                 </a>
 
 
                 <a
-                    href="#"
+                    href="vendas.html"
                     class="item-menu"
-                    data-futuro="vendas"
                 >
+
                     <span>🛒</span>
+
                     Vendas
+
                 </a>
 
 
                 <a
-                    href="#"
+                    href="historico-vendas.html"
                     class="item-menu"
-                    data-futuro="clientes"
                 >
+
+                    <span>📜</span>
+
+                    Histórico de vendas
+
+                </a>
+
+
+                <a
+                    href="clientes.html"
+                    class="item-menu"
+                >
+
                     <span>👤</span>
+
                     Clientes
+
                 </a>
 
 
@@ -136,22 +170,26 @@
 
 
                 <a
-                    href="#"
+                    href="financeiro.html"
                     class="item-menu"
-                    data-futuro="financeiro"
                 >
+
                     <span>💰</span>
+
                     Financeiro
+
                 </a>
 
 
                 <a
-                    href="#"
+                    href="relatorios.html"
                     class="item-menu"
-                    data-futuro="relatorios"
                 >
+
                     <span>📊</span>
+
                     Relatórios
+
                 </a>
 
             </nav>
@@ -164,7 +202,9 @@
                     class="botao-sair"
                     id="btnSair"
                 >
+
                     🚪 Sair
+
                 </button>
 
             </div>
@@ -174,7 +214,7 @@
 
         <!-- ==========================================
              CONTEÚDO
-        ========================================== -->
+        =========================================== -->
 
         <main class="conteudo-admin">
 
@@ -197,9 +237,10 @@
 
             <!-- ==========================================
                  CARDS
-            ========================================== -->
+            =========================================== -->
 
             <section class="cards-estoque">
+
 
                 <div class="card-estoque">
 
@@ -263,12 +304,13 @@
 
                 </div>
 
+
             </section>
 
 
             <!-- ==========================================
                  MOVIMENTAÇÃO
-            ========================================== -->
+            =========================================== -->
 
             <section class="painel-estoque">
 
@@ -292,6 +334,7 @@
                 <form id="formMovimentacao">
 
                     <div class="campos-estoque">
+
 
                         <div class="campo-estoque">
 
@@ -373,6 +416,7 @@
 
                         </div>
 
+
                     </div>
 
 
@@ -382,7 +426,9 @@
                             type="submit"
                             class="botao-principal"
                         >
+
                             Registrar movimentação
+
                         </button>
 
 
@@ -391,7 +437,9 @@
                             class="botao-secundario"
                             id="btnCancelarMovimentacao"
                         >
+
                             Cancelar
+
                         </button>
 
                     </div>
@@ -402,6 +450,7 @@
                         class="mensagem-estoque"
                     ></div>
 
+
                 </form>
 
             </section>
@@ -409,7 +458,7 @@
 
             <!-- ==========================================
                  ESTOQUE ATUAL
-            ========================================== -->
+            =========================================== -->
 
             <section class="painel-estoque">
 
@@ -433,7 +482,9 @@
                         class="botao-secundario"
                         id="btnAtualizarEstoque"
                     >
+
                         🔄 Atualizar
+
                     </button>
 
                 </div>
@@ -443,7 +494,9 @@
                     id="carregandoEstoque"
                     class="carregando"
                 >
+
                     Carregando estoque...
+
                 </div>
 
 
@@ -452,7 +505,9 @@
                     class="sem-dados"
                     style="display: none;"
                 >
+
                     Nenhum produto cadastrado.
+
                 </div>
 
 
@@ -504,7 +559,7 @@
 
             <!-- ==========================================
                  HISTÓRICO
-            ========================================== -->
+            =========================================== -->
 
             <section class="painel-estoque">
 
@@ -529,7 +584,9 @@
                     id="carregandoMovimentacoes"
                     class="carregando"
                 >
+
                     Carregando movimentações...
+
                 </div>
 
 
@@ -538,7 +595,9 @@
                     class="sem-dados"
                     style="display: none;"
                 >
+
                     Nenhuma movimentação registrada.
+
                 </div>
 
 
@@ -591,6 +650,7 @@
 
             </section>
 
+
         </main>
 
     </div>
@@ -598,7 +658,7 @@
 
     <!-- ==========================================
          SCRIPTS
-    ========================================== -->
+    =========================================== -->
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 

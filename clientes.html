@@ -2,7 +2,9 @@
 <html lang="pt-BR">
 
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Sistema da Loja - Clientes</title>
@@ -10,151 +12,279 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="admin.css">
     <link rel="stylesheet" href="clientes.css">
+
 </head>
+
 
 <body>
 
 <div class="layout-admin">
 
+
     <!-- ==========================================
          MENU LATERAL
-    ========================================== -->
+    =========================================== -->
 
     <aside class="menu-lateral">
 
+
         <div class="logo-admin">
+
             <strong>Sistema da Loja</strong>
-            <span>Administração</span>
+
+            <span>
+                Administração
+            </span>
+
         </div>
+
 
 
         <div class="usuario-logado">
 
+
             <div class="avatar-admin">
+
                 A
+
             </div>
+
 
             <div>
+
                 <strong id="nomeAdministrador">
+
                     Administrador
+
                 </strong>
 
+
                 <span>
+
                     Administrador
+
                 </span>
+
             </div>
+
 
         </div>
 
 
+
         <nav class="menu">
 
+
             <div class="titulo-menu">
+
                 PRINCIPAL
+
             </div>
 
-            <a href="admin.html" class="item-menu">
+
+            <a
+                href="admin.html"
+                class="item-menu"
+            >
+
                 <span>▣</span>
+
                 Dashboard
+
             </a>
 
-            <a href="usuarios.html" class="item-menu">
+
+            <a
+                href="usuarios.html"
+                class="item-menu"
+            >
+
                 <span>👥</span>
+
                 Usuários
+
             </a>
 
 
+
             <div class="titulo-menu">
+
                 ESTOQUE E VENDAS
+
             </div>
 
-            <a href="produtos.html" class="item-menu">
+
+            <a
+                href="produtos.html"
+                class="item-menu"
+            >
+
                 <span>📦</span>
+
                 Produtos
+
             </a>
 
-            <a href="categorias.html" class="item-menu">
+
+            <a
+                href="categorias.html"
+                class="item-menu"
+            >
+
                 <span>▤</span>
+
                 Categorias
+
             </a>
 
-            <a href="estoque.html" class="item-menu">
+
+            <a
+                href="estoque.html"
+                class="item-menu"
+            >
+
                 <span>📊</span>
+
                 Estoque
+
             </a>
 
-            <a href="vendas.html" class="item-menu">
+
+            <a
+                href="vendas.html"
+                class="item-menu"
+            >
+
                 <span>🛒</span>
+
                 Vendas
+
             </a>
 
-            <a href="clientes.html" class="item-menu ativo">
-                <span>👤</span>
-                Clientes
+
+            <a
+                href="historico-vendas.html"
+                class="item-menu"
+            >
+
+                <span>📜</span>
+
+                Histórico de vendas
+
             </a>
+
+
+            <a
+                href="clientes.html"
+                class="item-menu ativo"
+            >
+
+                <span>👤</span>
+
+                Clientes
+
+            </a>
+
 
 
             <div class="titulo-menu">
+
                 FINANCEIRO
+
             </div>
 
-            <a href="#" class="item-menu" data-futuro="Financeiro">
+
+            <a
+                href="financeiro.html"
+                class="item-menu"
+            >
+
                 <span>💰</span>
+
                 Financeiro
+
             </a>
 
-            <a href="#" class="item-menu" data-futuro="Relatórios">
+
+            <a
+                href="relatorios.html"
+                class="item-menu"
+            >
+
                 <span>📈</span>
+
                 Relatórios
+
             </a>
+
 
         </nav>
 
 
+
         <div class="area-sair">
+
 
             <button
                 type="button"
                 class="botao-sair"
                 id="btnSair"
             >
+
                 🚪 Sair
+
             </button>
 
+
         </div>
+
 
     </aside>
 
 
+
     <!-- ==========================================
          CONTEÚDO
-    ========================================== -->
+    =========================================== -->
 
     <main class="conteudo-admin">
 
+
         <header class="cabecalho-admin">
+
 
             <div>
 
                 <h1>
+
                     Clientes
+
                 </h1>
 
+
                 <p>
+
                     Cadastro e gerenciamento de clientes
+
                 </p>
 
+
             </div>
+
 
             <button
                 type="button"
                 class="botao-principal"
                 id="btnNovoCliente"
             >
+
                 + Novo cliente
+
             </button>
 
+
         </header>
+
 
 
         <!-- ======================================
@@ -168,6 +298,7 @@
         ></div>
 
 
+
         <!-- ======================================
              FORMULÁRIO
         ======================================= -->
@@ -177,33 +308,48 @@
             id="painelFormulario"
         >
 
+
             <div class="titulo-painel">
+
 
                 <div>
 
                     <h2 id="tituloFormulario">
+
                         Novo cliente
+
                     </h2>
 
+
                     <p>
+
                         Preencha os dados do cliente
+
                     </p>
 
+
                 </div>
+
 
             </div>
 
 
+
             <form id="formCliente">
+
 
                 <div class="grid-formulario">
 
 
                     <div class="campo-formulario campo-grande">
 
+
                         <label for="nomeCliente">
+
                             Nome *
+
                         </label>
+
 
                         <input
                             type="text"
@@ -213,14 +359,20 @@
                             required
                         >
 
+
                     </div>
+
 
 
                     <div class="campo-formulario">
 
+
                         <label for="telefoneCliente">
+
                             Telefone
+
                         </label>
+
 
                         <input
                             type="text"
@@ -229,14 +381,20 @@
                             maxlength="30"
                         >
 
+
                     </div>
+
 
 
                     <div class="campo-formulario">
 
+
                         <label for="cpfCliente">
+
                             CPF
+
                         </label>
+
 
                         <input
                             type="text"
@@ -245,14 +403,20 @@
                             maxlength="20"
                         >
 
+
                     </div>
+
 
 
                     <div class="campo-formulario campo-grande">
 
+
                         <label for="emailCliente">
+
                             E-mail
+
                         </label>
+
 
                         <input
                             type="email"
@@ -261,14 +425,20 @@
                             maxlength="150"
                         >
 
+
                     </div>
+
 
 
                     <div class="campo-formulario campo-grande">
 
+
                         <label for="enderecoCliente">
+
                             Endereço
+
                         </label>
+
 
                         <input
                             type="text"
@@ -277,14 +447,20 @@
                             maxlength="250"
                         >
 
+
                     </div>
+
 
 
                     <div class="campo-formulario campo-completo">
 
+
                         <label for="observacoesCliente">
+
                             Observações
+
                         </label>
+
 
                         <textarea
                             id="observacoesCliente"
@@ -293,35 +469,47 @@
                             placeholder="Observações sobre o cliente..."
                         ></textarea>
 
+
                     </div>
 
 
                 </div>
 
 
+
                 <div class="acoes-formulario">
+
 
                     <button
                         type="button"
                         class="botao-secundario"
                         id="btnCancelarCliente"
                     >
+
                         Cancelar
+
                     </button>
+
 
                     <button
                         type="submit"
                         class="botao-principal"
                         id="btnSalvarCliente"
                     >
+
                         Salvar cliente
+
                     </button>
+
 
                 </div>
 
+
             </form>
 
+
         </section>
+
 
 
         <!-- ======================================
@@ -330,37 +518,53 @@
 
         <section class="painel painel-lista-clientes">
 
+
             <div class="titulo-painel">
+
 
                 <div>
 
                     <h2>
+
                         Clientes cadastrados
+
                     </h2>
 
+
                     <p>
+
                         Clientes registrados no sistema
+
                     </p>
 
+
                 </div>
+
 
                 <button
                     type="button"
                     class="botao-secundario"
                     id="btnAtualizarClientes"
                 >
+
                     ↻ Atualizar
+
                 </button>
 
+
             </div>
+
 
 
             <div
                 id="carregandoClientes"
                 class="estado-lista"
             >
+
                 Carregando clientes...
+
             </div>
+
 
 
             <div
@@ -368,8 +572,11 @@
                 class="estado-lista"
                 style="display: none;"
             >
+
                 Nenhum cliente cadastrado.
+
             </div>
+
 
 
             <div
@@ -378,63 +585,92 @@
                 style="display: none;"
             >
 
+
                 <table class="tabela-clientes">
+
 
                     <thead>
 
                         <tr>
 
                             <th>
+
                                 Cliente
+
                             </th>
 
+
                             <th>
+
                                 Telefone
+
                             </th>
 
+
                             <th>
+
                                 CPF
+
                             </th>
 
+
                             <th>
+
                                 E-mail
+
                             </th>
 
+
                             <th>
+
                                 Status
+
                             </th>
 
+
                             <th>
+
                                 Ações
+
                             </th>
+
 
                         </tr>
 
                     </thead>
 
+
                     <tbody id="listaClientes">
+
                     </tbody>
+
 
                 </table>
 
+
             </div>
+
 
         </section>
 
+
     </main>
+
 
 </div>
 
 
+
 <!-- ==========================================
      SUPABASE
-========================================== -->
+=========================================== -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script src="js/config.js"></script>
 
 <script src="js/clientes.js"></script>
+
 
 </body>
 

@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="pt-BR">
 
 <head>
@@ -25,7 +24,7 @@
 
         <!-- ==========================================
              MENU LATERAL
-        ========================================== -->
+        =========================================== -->
 
         <aside class="menu-lateral">
 
@@ -34,10 +33,11 @@
 
                 <strong>Sistema da Loja</strong>
 
-                <span>Administração</span>
+                <span>
+                    Administração
+                </span>
 
             </div>
-
 
 
             <div class="usuario-logado">
@@ -84,7 +84,10 @@
                 </div>
 
 
-                <a href="admin.html" class="item-menu">
+                <a
+                    href="admin.html"
+                    class="item-menu"
+                >
 
                     <span>🏠</span>
 
@@ -93,7 +96,10 @@
                 </a>
 
 
-                <a href="usuarios.html" class="item-menu">
+                <a
+                    href="usuarios.html"
+                    class="item-menu"
+                >
 
                     <span>👥</span>
 
@@ -112,7 +118,10 @@
                 </div>
 
 
-                <a href="produtos.html" class="item-menu">
+                <a
+                    href="produtos.html"
+                    class="item-menu"
+                >
 
                     <span>📦</span>
 
@@ -121,7 +130,10 @@
                 </a>
 
 
-                <a href="categorias.html" class="item-menu">
+                <a
+                    href="categorias.html"
+                    class="item-menu"
+                >
 
                     <span>🏷️</span>
 
@@ -130,7 +142,10 @@
                 </a>
 
 
-                <a href="estoque.html" class="item-menu">
+                <a
+                    href="estoque.html"
+                    class="item-menu"
+                >
 
                     <span>📊</span>
 
@@ -139,7 +154,10 @@
                 </a>
 
 
-                <a href="vendas.html" class="item-menu ativo">
+                <a
+                    href="vendas.html"
+                    class="item-menu ativo"
+                >
 
                     <span>🛒</span>
 
@@ -148,9 +166,22 @@
                 </a>
 
 
-                <!-- CLIENTES CORRIGIDO -->
+                <a
+                    href="historico-vendas.html"
+                    class="item-menu"
+                >
 
-                <a href="clientes.html" class="item-menu">
+                    <span>📜</span>
+
+                    Histórico de vendas
+
+                </a>
+
+
+                <a
+                    href="clientes.html"
+                    class="item-menu"
+                >
 
                     <span>👤</span>
 
@@ -169,7 +200,10 @@
                 </div>
 
 
-                <a href="#" class="item-menu" data-futuro="Financeiro">
+                <a
+                    href="financeiro.html"
+                    class="item-menu"
+                >
 
                     <span>💰</span>
 
@@ -178,7 +212,10 @@
                 </a>
 
 
-                <a href="#" class="item-menu" data-futuro="Relatórios">
+                <a
+                    href="relatorios.html"
+                    class="item-menu"
+                >
 
                     <span>📈</span>
 
@@ -197,7 +234,8 @@
                 <button
                     type="button"
                     class="botao-sair"
-                    id="btnSair">
+                    id="btnSair"
+                >
 
                     🚪
 
@@ -215,7 +253,7 @@
 
         <!-- ==========================================
              CONTEÚDO
-        ========================================== -->
+        =========================================== -->
 
         <main class="conteudo-admin">
 
@@ -224,6 +262,7 @@
 
 
                 <div>
+
 
                     <h1>
 
@@ -238,6 +277,7 @@
 
                     </p>
 
+
                 </div>
 
 
@@ -247,7 +287,7 @@
 
             <!-- ==========================================
                  NOVA VENDA
-            ========================================== -->
+            =========================================== -->
 
             <section class="painel-vendas">
 
@@ -256,6 +296,7 @@
 
 
                     <div>
+
 
                         <h2>
 
@@ -269,6 +310,7 @@
                             Adicione os produtos da venda ao carrinho.
 
                         </p>
+
 
                     </div>
 
@@ -286,7 +328,7 @@
 
                 <!-- ==========================================
                      CLIENTE
-                ========================================== -->
+                =========================================== -->
 
                 <div class="campo-venda campo-cliente">
 
@@ -315,7 +357,7 @@
 
                 <!-- ==========================================
                      PRODUTO
-                ========================================== -->
+                =========================================== -->
 
                 <div class="area-adicionar-produto">
 
@@ -398,7 +440,8 @@
                         <button
                             type="button"
                             id="btnAdicionarProduto"
-                            class="btn-adicionar">
+                            class="btn-adicionar"
+                        >
 
                             + Adicionar
 
@@ -414,7 +457,7 @@
 
                 <!-- ==========================================
                      CARRINHO
-                ========================================== -->
+                =========================================== -->
 
                 <div class="carrinho-venda">
 
@@ -423,6 +466,7 @@
 
 
                         <div>
+
 
                             <h3>
 
@@ -447,7 +491,8 @@
 
                     <div
                         id="carrinhoVazio"
-                        class="carrinho-vazio">
+                        class="carrinho-vazio"
+                    >
 
 
                         <div class="icone-carrinho">
@@ -477,7 +522,8 @@
 
                     <div
                         id="listaCarrinho"
-                        class="lista-carrinho">
+                        class="lista-carrinho"
+                    >
 
 
                     </div>
@@ -489,7 +535,7 @@
 
                 <!-- ==========================================
                      RESUMO
-                ========================================== -->
+                =========================================== -->
 
                 <div class="resumo-venda">
 
@@ -583,7 +629,7 @@
 
                 <!-- ==========================================
                      PAGAMENTO
-                ========================================== -->
+                =========================================== -->
 
                 <div class="dados-finalizacao">
 
@@ -684,11 +730,12 @@
 
                 <!-- ==========================================
                      MENSAGEM
-                ========================================== -->
+                =========================================== -->
 
                 <div
                     id="mensagemVenda"
-                    class="mensagem-venda">
+                    class="mensagem-venda"
+                >
 
                 </div>
 
@@ -696,7 +743,7 @@
 
                 <!-- ==========================================
                      BOTÕES
-                ========================================== -->
+                =========================================== -->
 
                 <div class="acoes-venda">
 
@@ -704,7 +751,8 @@
                     <button
                         type="button"
                         id="btnCancelarVenda"
-                        class="btn-cancelar-venda">
+                        class="btn-cancelar-venda"
+                    >
 
                         Cancelar
 
@@ -715,7 +763,8 @@
                     <button
                         type="button"
                         id="btnFinalizarVenda"
-                        class="btn-finalizar-venda">
+                        class="btn-finalizar-venda"
+                    >
 
                         ✓ Finalizar venda
 
@@ -737,7 +786,7 @@
 
     <!-- ==========================================
          SUPABASE
-    ========================================== -->
+    =========================================== -->
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 

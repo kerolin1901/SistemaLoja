@@ -58,30 +58,43 @@
 
         <div class="usuario-logado">
 
+
             <div class="avatar-admin">
+
                 A
+
             </div>
+
 
             <div>
 
                 <strong id="nomeAdministrador">
+
                     Administrador
+
                 </strong>
 
+
                 <span>
+
                     Administrador
+
                 </span>
 
             </div>
 
+
         </div>
+
 
 
         <nav class="menu">
 
 
             <div class="titulo-menu">
+
                 PRINCIPAL
+
             </div>
 
 
@@ -89,8 +102,11 @@
                 href="admin.html"
                 class="item-menu"
             >
+
                 📊
+
                 <span>Dashboard</span>
+
             </a>
 
 
@@ -98,13 +114,19 @@
                 href="usuarios.html"
                 class="item-menu"
             >
+
                 👥
+
                 <span>Usuários</span>
+
             </a>
 
 
+
             <div class="titulo-menu">
+
                 ESTOQUE E VENDAS
+
             </div>
 
 
@@ -112,8 +134,11 @@
                 href="produtos.html"
                 class="item-menu"
             >
+
                 📦
+
                 <span>Produtos</span>
+
             </a>
 
 
@@ -121,8 +146,11 @@
                 href="categorias.html"
                 class="item-menu"
             >
+
                 🗂️
+
                 <span>Categorias</span>
+
             </a>
 
 
@@ -130,8 +158,11 @@
                 href="estoque.html"
                 class="item-menu"
             >
+
                 📋
+
                 <span>Estoque</span>
+
             </a>
 
 
@@ -139,8 +170,11 @@
                 href="vendas.html"
                 class="item-menu"
             >
+
                 🛒
+
                 <span>Vendas</span>
+
             </a>
 
 
@@ -148,8 +182,11 @@
                 href="historico-vendas.html"
                 class="item-menu"
             >
+
                 🧾
+
                 <span>Histórico de vendas</span>
+
             </a>
 
 
@@ -157,13 +194,19 @@
                 href="clientes.html"
                 class="item-menu"
             >
+
                 👤
+
                 <span>Clientes</span>
+
             </a>
 
 
+
             <div class="titulo-menu">
+
                 FINANCEIRO
+
             </div>
 
 
@@ -171,34 +214,45 @@
                 href="financeiro.html"
                 class="item-menu ativo"
             >
+
                 💰
+
                 <span>Financeiro</span>
+
             </a>
 
 
             <a
-                href="#"
+                href="relatorios.html"
                 class="item-menu"
-                data-futuro="Relatórios"
             >
+
                 📈
+
                 <span>Relatórios</span>
+
             </a>
 
 
         </nav>
 
 
+
         <div class="area-sair">
+
 
             <button
                 type="button"
                 class="botao-sair"
                 id="btnSair"
             >
+
                 🚪
+
                 Sair
+
             </button>
+
 
         </div>
 
@@ -216,17 +270,25 @@
 
         <header class="cabecalho-admin">
 
+
             <div>
 
                 <h1>
+
                     Financeiro
+
                 </h1>
 
+
                 <p>
+
                     Controle das entradas, saídas e saldo da loja.
+
                 </p>
 
+
             </div>
+
 
         </header>
 
@@ -241,21 +303,32 @@
 
             <div class="card-financeiro entrada">
 
+
                 <div class="icone-financeiro">
+
                     💰
+
                 </div>
+
 
                 <div>
 
                     <span>
+
                         Total de entradas
+
                     </span>
 
+
                     <strong id="totalEntradas">
+
                         R$ 0,00
+
                     </strong>
 
+
                 </div>
+
 
             </div>
 
@@ -263,21 +336,32 @@
 
             <div class="card-financeiro saida">
 
+
                 <div class="icone-financeiro">
+
                     💸
+
                 </div>
+
 
                 <div>
 
                     <span>
+
                         Total de saídas
+
                     </span>
 
+
                     <strong id="totalSaidas">
+
                         R$ 0,00
+
                     </strong>
 
+
                 </div>
+
 
             </div>
 
@@ -285,21 +369,32 @@
 
             <div class="card-financeiro saldo">
 
+
                 <div class="icone-financeiro">
+
                     📊
+
                 </div>
+
 
                 <div>
 
                     <span>
+
                         Saldo
+
                     </span>
 
+
                     <strong id="saldoFinanceiro">
+
                         R$ 0,00
+
                     </strong>
 
+
                 </div>
+
 
             </div>
 
@@ -328,17 +423,25 @@
 
             <div class="titulo-painel-financeiro">
 
+
                 <div>
 
                     <h2>
+
                         📊 Fluxo de caixa
+
                     </h2>
 
+
                     <p>
+
                         Consulte o movimento financeiro de qualquer período.
+
                     </p>
 
+
                 </div>
+
 
             </div>
 
@@ -350,8 +453,11 @@
                 <div class="campo-fluxo">
 
                     <label for="dataInicialFluxo">
+
                         Data inicial
+
                     </label>
+
 
                     <input
                         type="date"
@@ -365,8 +471,11 @@
                 <div class="campo-fluxo">
 
                     <label for="dataFinalFluxo">
+
                         Data final
+
                     </label>
+
 
                     <input
                         type="date"
@@ -379,13 +488,17 @@
 
                 <div class="campo-fluxo botao-campo-fluxo">
 
+
                     <button
                         type="button"
                         class="botao-consultar-fluxo"
                         id="btnConsultarFluxo"
                     >
+
                         🔎 Consultar período
+
                     </button>
+
 
                 </div>
 
@@ -402,11 +515,16 @@
                 <div class="card-resumo-fluxo entrada-fluxo">
 
                     <span>
+
                         Entradas no período
+
                     </span>
 
+
                     <strong id="entradasPeriodo">
+
                         R$ 0,00
+
                     </strong>
 
                 </div>
@@ -416,11 +534,16 @@
                 <div class="card-resumo-fluxo saida-fluxo">
 
                     <span>
+
                         Saídas no período
+
                     </span>
 
+
                     <strong id="saidasPeriodo">
+
                         R$ 0,00
+
                     </strong>
 
                 </div>
@@ -430,11 +553,16 @@
                 <div class="card-resumo-fluxo caixa-fluxo">
 
                     <span>
+
                         Caixa do período
+
                     </span>
 
+
                     <strong id="caixaPeriodo">
+
                         R$ 0,00
+
                     </strong>
 
                 </div>
@@ -450,7 +578,9 @@
                 class="periodo-selecionado"
                 id="periodoSelecionado"
             >
+
                 Selecione um período para consultar.
+
             </div>
 
 
@@ -459,17 +589,25 @@
 
             <div class="subtitulo-fluxo">
 
+
                 <div>
 
                     <h3>
+
                         Fluxo diário
+
                     </h3>
 
+
                     <p>
+
                         Movimento financeiro separado por dia.
+
                     </p>
 
+
                 </div>
+
 
             </div>
 
@@ -480,7 +618,9 @@
                 class="estado-fluxo"
                 style="display:none;"
             >
+
                 Calculando fluxo de caixa...
+
             </div>
 
 
@@ -490,7 +630,9 @@
                 class="estado-fluxo"
                 style="display:none;"
             >
+
                 Nenhum movimento financeiro encontrado no período.
+
             </div>
 
 
@@ -501,27 +643,41 @@
                 style="display:none;"
             >
 
+
                 <table class="tabela-fluxo">
+
 
                     <thead>
 
                         <tr>
 
                             <th>
+
                                 Data
+
                             </th>
 
+
                             <th>
+
                                 Entradas
+
                             </th>
 
+
                             <th>
+
                                 Saídas
+
                             </th>
 
+
                             <th>
+
                                 Caixa do dia
+
                             </th>
+
 
                         </tr>
 
@@ -538,28 +694,44 @@
                         <tr>
 
                             <td>
+
                                 <strong>
+
                                     TOTAL
+
                                 </strong>
+
                             </td>
+
 
                             <td id="totalFluxoEntradas">
+
                                 R$ 0,00
+
                             </td>
+
 
                             <td id="totalFluxoSaidas">
+
                                 R$ 0,00
+
                             </td>
 
+
                             <td id="totalFluxoCaixa">
+
                                 R$ 0,00
+
                             </td>
+
 
                         </tr>
 
                     </tfoot>
 
+
                 </table>
+
 
             </div>
 
@@ -577,17 +749,25 @@
 
             <div class="titulo-painel-financeiro">
 
+
                 <div>
 
                     <h2>
+
                         Novo lançamento
+
                     </h2>
 
+
                     <p>
+
                         Registre uma entrada ou saída financeira.
+
                     </p>
 
+
                 </div>
+
 
             </div>
 
@@ -601,9 +781,13 @@
 
                     <div class="campo-financeiro">
 
+
                         <label for="tipoFinanceiro">
+
                             Tipo
+
                         </label>
+
 
                         <select
                             id="tipoFinanceiro"
@@ -611,14 +795,21 @@
                         >
 
                             <option value="entrada">
+
                                 Entrada
+
                             </option>
+
 
                             <option value="saida">
+
                                 Saída
+
                             </option>
 
+
                         </select>
+
 
                     </div>
 
@@ -626,9 +817,13 @@
 
                     <div class="campo-financeiro">
 
+
                         <label for="categoriaFinanceiro">
+
                             Categoria
+
                         </label>
+
 
                         <select
                             id="categoriaFinanceiro"
@@ -636,46 +831,77 @@
                         >
 
                             <option value="">
+
                                 Selecione
+
                             </option>
+
 
                             <option value="Venda">
+
                                 Venda
+
                             </option>
+
 
                             <option value="Compra de mercadoria">
+
                                 Compra de mercadoria
+
                             </option>
+
 
                             <option value="Despesa">
+
                                 Despesa
+
                             </option>
+
 
                             <option value="Fornecedor">
+
                                 Fornecedor
+
                             </option>
+
 
                             <option value="Frete">
+
                                 Frete
+
                             </option>
+
 
                             <option value="Salário">
+
                                 Salário
+
                             </option>
+
 
                             <option value="Aluguel">
+
                                 Aluguel
+
                             </option>
+
 
                             <option value="Impostos">
+
                                 Impostos
+
                             </option>
+
 
                             <option value="Outros">
+
                                 Outros
+
                             </option>
 
+
                         </select>
+
 
                     </div>
 
@@ -683,9 +909,13 @@
 
                     <div class="campo-financeiro campo-largo">
 
+
                         <label for="descricaoFinanceiro">
+
                             Descrição
+
                         </label>
+
 
                         <input
                             type="text"
@@ -695,15 +925,20 @@
                             required
                         >
 
+
                     </div>
 
 
 
                     <div class="campo-financeiro">
 
+
                         <label for="valorFinanceiro">
+
                             Valor
+
                         </label>
+
 
                         <input
                             type="number"
@@ -714,21 +949,27 @@
                             required
                         >
 
+
                     </div>
 
 
 
                     <div class="campo-financeiro">
 
+
                         <label for="dataFinanceiro">
+
                             Data
+
                         </label>
+
 
                         <input
                             type="date"
                             id="dataFinanceiro"
                             required
                         >
+
 
                     </div>
 
@@ -739,21 +980,28 @@
 
                 <div class="acoes-financeiro">
 
+
                     <button
                         type="button"
                         class="botao-secundario-financeiro"
                         id="btnCancelarFinanceiro"
                     >
+
                         Cancelar
+
                     </button>
+
 
                     <button
                         type="submit"
                         class="botao-principal-financeiro"
                         id="btnSalvarFinanceiro"
                     >
+
                         Salvar lançamento
+
                     </button>
+
 
                 </div>
 
@@ -774,15 +1022,22 @@
 
             <div class="titulo-painel-financeiro">
 
+
                 <div>
 
                     <h2>
+
                         Histórico financeiro
+
                     </h2>
 
+
                     <p>
+
                         Todos os lançamentos registrados.
+
                     </p>
+
 
                 </div>
 
@@ -792,8 +1047,11 @@
                     class="botao-atualizar-financeiro"
                     id="btnAtualizarFinanceiro"
                 >
+
                     🔄 Atualizar
+
                 </button>
+
 
             </div>
 
@@ -803,7 +1061,9 @@
                 id="carregandoFinanceiro"
                 class="estado-financeiro"
             >
+
                 Carregando lançamentos...
+
             </div>
 
 
@@ -813,7 +1073,9 @@
                 class="estado-financeiro"
                 style="display:none;"
             >
+
                 Nenhum lançamento financeiro encontrado.
+
             </div>
 
 
@@ -824,35 +1086,55 @@
                 style="display:none;"
             >
 
+
                 <table class="tabela-financeiro">
+
 
                     <thead>
 
                         <tr>
 
                             <th>
+
                                 Data
+
                             </th>
 
+
                             <th>
+
                                 Tipo
+
                             </th>
 
+
                             <th>
+
                                 Categoria
+
                             </th>
 
+
                             <th>
+
                                 Descrição
+
                             </th>
 
+
                             <th>
+
                                 Valor
+
                             </th>
 
+
                             <th>
+
                                 Ações
+
                             </th>
+
 
                         </tr>
 
@@ -863,7 +1145,9 @@
 
                     </tbody>
 
+
                 </table>
+
 
             </div>
 
@@ -877,12 +1161,14 @@
 </div>
 
 
+
 <script
     src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
 ></script>
 
 
 <script src="js/config.js"></script>
+
 
 <script src="js/financeiro.js"></script>
 
