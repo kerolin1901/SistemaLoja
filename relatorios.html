@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Sistema da Loja - Relatórios
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="admin.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="relatorios.css"
+    >
+
+</head>
+
+<body>
+
+
+<div class="layout-admin">
+
+
+    <!-- ==========================================
+         MENU LATERAL
+    =========================================== -->
+
+    <aside class="menu-lateral">
+
+
+        <div class="logo-admin">
+
+            <strong>
+                Sistema da Loja
+            </strong>
+
+            <span>
+                Administração
+            </span>
+
+        </div>
+
+
+        <div class="usuario-logado">
+
+            <div class="avatar-admin">
+                A
+            </div>
+
+            <div>
+
+                <strong id="nomeAdministrador">
+                    Administrador
+                </strong>
+
+                <span>
+                    ADMIN
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <nav class="menu">
+
+
+            <div class="titulo-menu">
+                PRINCIPAL
+            </div>
+
+
+            <a
+                href="admin.html"
+                class="item-menu"
+            >
+                <span>🏠</span>
+                Dashboard
+            </a>
+
+
+            <a
+                href="usuarios.html"
+                class="item-menu"
+            >
+                <span>👥</span>
+                Usuários
+            </a>
+
+
+            <div class="titulo-menu">
+                ESTOQUE E VENDAS
+            </div>
+
+
+            <a
+                href="produtos.html"
+                class="item-menu"
+            >
+                <span>📦</span>
+                Produtos
+            </a>
+
+
+            <a
+                href="categorias.html"
+                class="item-menu"
+            >
+                <span>🏷️</span>
+                Categorias
+            </a>
+
+
+            <a
+                href="estoque.html"
+                class="item-menu"
+            >
+                <span>📋</span>
+                Estoque
+            </a>
+
+
+            <a
+                href="vendas.html"
+                class="item-menu"
+            >
+                <span>🛒</span>
+                Vendas
+            </a>
+
+
+            <a
+                href="historico-vendas.html"
+                class="item-menu"
+            >
+                <span>📜</span>
+                Histórico de vendas
+            </a>
+
+
+            <a
+                href="clientes.html"
+                class="item-menu"
+            >
+                <span>👤</span>
+                Clientes
+            </a>
+
+
+            <div class="titulo-menu">
+                FINANCEIRO
+            </div>
+
+
+            <a
+                href="financeiro.html"
+                class="item-menu"
+            >
+                <span>💰</span>
+                Financeiro
+            </a>
+
+
+            <a
+                href="relatorios.html"
+                class="item-menu ativo"
+            >
+                <span>📊</span>
+                Relatórios
+            </a>
+
+
+        </nav>
+
+
+        <div class="area-sair">
+
+            <button
+                type="button"
+                class="botao-sair"
+                id="btnSair"
+            >
+                🚪 Sair
+            </button>
+
+        </div>
+
+
+    </aside>
+
+
+
+    <!-- ==========================================
+         CONTEÚDO
+    =========================================== -->
+
+    <main class="conteudo-admin">
+
+
+        <header class="cabecalho-admin">
+
+            <div>
+
+                <h1>
+                    Relatórios
+                </h1>
+
+                <p>
+                    Análise das vendas e resultados da loja.
+                </p>
+
+            </div>
+
+        </header>
+
+
+
+        <!-- ==========================================
+             FILTRO
+        =========================================== -->
+
+        <section class="painel-relatorios filtro-relatorios">
+
+            <div class="titulo-painel">
+
+                <div>
+
+                    <h2>
+                        📅 Período do relatório
+                    </h2>
+
+                    <p>
+                        Selecione o período que deseja analisar.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="filtros-relatorio">
+
+
+                <div class="campo-relatorio">
+
+                    <label for="dataInicialRelatorio">
+                        Data inicial
+                    </label>
+
+                    <input
+                        type="date"
+                        id="dataInicialRelatorio"
+                    >
+
+                </div>
+
+
+                <div class="campo-relatorio">
+
+                    <label for="dataFinalRelatorio">
+                        Data final
+                    </label>
+
+                    <input
+                        type="date"
+                        id="dataFinalRelatorio"
+                    >
+
+                </div>
+
+
+                <button
+                    type="button"
+                    id="btnGerarRelatorio"
+                    class="botao-principal"
+                >
+                    📊 Gerar relatório
+                </button>
+
+
+            </div>
+
+
+            <div
+                id="mensagemRelatorio"
+                class="mensagem-relatorio"
+            ></div>
+
+
+        </section>
+
+
+
+        <!-- ==========================================
+             INDICADORES
+        =========================================== -->
+
+        <section class="cards-relatorios">
+
+
+            <div class="card-relatorio card-vendas">
+
+                <div class="icone-card">
+                    🧾
+                </div>
+
+                <div>
+
+                    <span>
+                        Vendas realizadas
+                    </span>
+
+                    <strong id="totalVendas">
+                        0
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="card-relatorio card-faturamento">
+
+                <div class="icone-card">
+                    💰
+                </div>
+
+                <div>
+
+                    <span>
+                        Faturamento
+                    </span>
+
+                    <strong id="faturamento">
+                        R$ 0,00
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="card-relatorio card-ticket">
+
+                <div class="icone-card">
+                    🎯
+                </div>
+
+                <div>
+
+                    <span>
+                        Ticket médio
+                    </span>
+
+                    <strong id="ticketMedio">
+                        R$ 0,00
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="card-relatorio card-desconto">
+
+                <div class="icone-card">
+                    🏷️
+                </div>
+
+                <div>
+
+                    <span>
+                        Descontos
+                    </span>
+
+                    <strong id="totalDescontos">
+                        R$ 0,00
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="card-relatorio card-custo">
+
+                <div class="icone-card">
+                    📦
+                </div>
+
+                <div>
+
+                    <span>
+                        Custo dos produtos
+                    </span>
+
+                    <strong id="custoProdutos">
+                        R$ 0,00
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="card-relatorio card-lucro">
+
+                <div class="icone-card">
+                    📈
+                </div>
+
+                <div>
+
+                    <span>
+                        Lucro bruto
+                    </span>
+
+                    <strong id="lucroBruto">
+                        R$ 0,00
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- ==========================================
+             RESUMO DO PERÍODO
+        =========================================== -->
+
+        <section class="painel-relatorios resumo-periodo">
+
+            <div class="titulo-painel">
+
+                <div>
+
+                    <h2>
+                        📊 Resumo do período
+                    </h2>
+
+                    <p id="periodoRelatorio">
+                        Nenhum período selecionado.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="resumo-grid">
+
+
+                <div class="resumo-item">
+
+                    <span>
+                        Faturamento
+                    </span>
+
+                    <strong id="resumoFaturamento">
+                        R$ 0,00
+                    </strong>
+
+                </div>
+
+
+                <div class="resumo-item">
+
+                    <span>
+                        Custo
+                    </span>
+
+                    <strong id="resumoCusto">
+                        R$ 0,00
+                    </strong>
+
+                </div>
+
+
+                <div class="resumo-item destaque">
+
+                    <span>
+                        Lucro bruto
+                    </span>
+
+                    <strong id="resumoLucro">
+                        R$ 0,00
+                    </strong>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ==========================================
+             DUAS COLUNAS
+        =========================================== -->
+
+        <section class="relatorios-duas-colunas">
+
+
+            <!-- ======================================
+                 PRODUTOS MAIS VENDIDOS
+            ======================================= -->
+
+            <div class="painel-relatorios">
+
+                <div class="titulo-painel">
+
+                    <div>
+
+                        <h2>
+                            🏆 Produtos mais vendidos
+                        </h2>
+
+                        <p>
+                            Produtos com maior quantidade vendida.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    id="carregandoProdutos"
+                    class="estado-relatorio"
+                >
+                    Carregando...
+                </div>
+
+
+                <div
+                    id="semProdutosVendidos"
+                    class="estado-relatorio"
+                    style="display:none;"
+                >
+                    Nenhum produto vendido no período.
+                </div>
+
+
+                <div
+                    id="containerTabelaProdutos"
+                    class="tabela-relatorio-container"
+                    style="display:none;"
+                >
+
+                    <table class="tabela-relatorio">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Produto
+                                </th>
+
+                                <th>
+                                    Qtd.
+                                </th>
+
+                                <th>
+                                    Faturamento
+                                </th>
+
+                                <th>
+                                    Lucro
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="listaProdutosVendidos">
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ======================================
+                 FORMAS DE PAGAMENTO
+            ======================================= -->
+
+            <div class="painel-relatorios">
+
+                <div class="titulo-painel">
+
+                    <div>
+
+                        <h2>
+                            💳 Formas de pagamento
+                        </h2>
+
+                        <p>
+                            Distribuição das vendas por pagamento.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    id="carregandoPagamentos"
+                    class="estado-relatorio"
+                >
+                    Carregando...
+                </div>
+
+
+                <div
+                    id="semPagamentos"
+                    class="estado-relatorio"
+                    style="display:none;"
+                >
+                    Nenhuma venda no período.
+                </div>
+
+
+                <div
+                    id="listaPagamentos"
+                    class="lista-pagamentos"
+                    style="display:none;"
+                ></div>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- ==========================================
+             VENDAS POR DIA
+        =========================================== -->
+
+        <section class="painel-relatorios painel-vendas-dia">
+
+            <div class="titulo-painel">
+
+                <div>
+
+                    <h2>
+                        📅 Vendas por dia
+                    </h2>
+
+                    <p>
+                        Faturamento e quantidade de vendas por dia.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="carregandoVendasDia"
+                class="estado-relatorio"
+            >
+                Carregando...
+            </div>
+
+
+            <div
+                id="semVendasDia"
+                class="estado-relatorio"
+                style="display:none;"
+            >
+                Nenhuma venda no período.
+            </div>
+
+
+            <div
+                id="containerTabelaVendasDia"
+                class="tabela-relatorio-container"
+                style="display:none;"
+            >
+
+                <table class="tabela-relatorio">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Data
+                            </th>
+
+                            <th>
+                                Vendas
+                            </th>
+
+                            <th>
+                                Faturamento
+                            </th>
+
+                            <th>
+                                Descontos
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="listaVendasDia">
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+        </section>
+
+
+    </main>
+
+</div>
+
+
+
+<!-- ==========================================
+     SUPABASE
+=========================================== -->
+
+<script
+    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+></script>
+
+
+<script src="js/config.js"></script>
+
+<script src="js/relatorios.js"></script>
+
+
+</body>
+
+</html>

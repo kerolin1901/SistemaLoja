@@ -1,0 +1,427 @@
+/* ==========================================
+   SISTEMA DA LOJA
+   RELATÓRIOS
+========================================== */
+
+
+.painel-relatorios {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 18px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+
+.titulo-painel {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 18px;
+}
+
+
+.titulo-painel h2 {
+    margin: 0 0 5px;
+    font-size: 18px;
+}
+
+
+.titulo-painel p {
+    margin: 0;
+    color: #777;
+    font-size: 13px;
+}
+
+
+/* ==========================================
+   FILTROS
+========================================== */
+
+.filtros-relatorio {
+    display: flex;
+    align-items: end;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+
+.campo-relatorio {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 190px;
+}
+
+
+.campo-relatorio label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #444;
+}
+
+
+.campo-relatorio input {
+    height: 40px;
+    padding: 0 12px;
+    border: 1px solid #d7dce2;
+    border-radius: 7px;
+    outline: none;
+    background: #fff;
+}
+
+
+.campo-relatorio input:focus {
+    border-color: #2563eb;
+}
+
+
+.botao-principal {
+    height: 40px;
+    border: 0;
+    border-radius: 7px;
+    padding: 0 18px;
+    background: #2563eb;
+    color: #ffffff;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+
+.botao-principal:hover {
+    opacity: 0.92;
+}
+
+
+.mensagem-relatorio {
+    margin-top: 15px;
+    font-size: 13px;
+}
+
+
+.mensagem-relatorio.erro {
+    color: #dc2626;
+}
+
+
+.mensagem-relatorio.sucesso {
+    color: #15803d;
+}
+
+
+/* ==========================================
+   CARDS
+========================================== */
+
+.cards-relatorios {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    margin-bottom: 18px;
+}
+
+
+.card-relatorio {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-width: 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    border-left: 4px solid #2563eb;
+}
+
+
+.card-faturamento {
+    border-left-color: #16a34a;
+}
+
+
+.card-ticket {
+    border-left-color: #7c3aed;
+}
+
+
+.card-desconto {
+    border-left-color: #f59e0b;
+}
+
+
+.card-custo {
+    border-left-color: #ef4444;
+}
+
+
+.card-lucro {
+    border-left-color: #0891b2;
+}
+
+
+.icone-card {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f1f5f9;
+    font-size: 21px;
+    flex-shrink: 0;
+}
+
+
+.card-relatorio span {
+    display: block;
+    font-size: 12px;
+    color: #777;
+    margin-bottom: 5px;
+}
+
+
+.card-relatorio strong {
+    display: block;
+    font-size: 20px;
+    color: #1f2937;
+}
+
+
+/* ==========================================
+   RESUMO
+========================================== */
+
+.resumo-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 15px;
+}
+
+
+.resumo-item {
+    background: #f8fafc;
+    border-radius: 10px;
+    padding: 16px;
+}
+
+
+.resumo-item span {
+    display: block;
+    color: #777;
+    font-size: 13px;
+    margin-bottom: 7px;
+}
+
+
+.resumo-item strong {
+    font-size: 20px;
+}
+
+
+.resumo-item.destaque {
+    border-left: 4px solid #16a34a;
+}
+
+
+/* ==========================================
+   DUAS COLUNAS
+========================================== */
+
+.relatorios-duas-colunas {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+    gap: 18px;
+}
+
+
+.relatorios-duas-colunas .painel-relatorios {
+    min-width: 0;
+}
+
+
+/* ==========================================
+   TABELAS
+========================================== */
+
+.tabela-relatorio-container {
+    width: 100%;
+    overflow-x: auto;
+}
+
+
+.tabela-relatorio {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 520px;
+}
+
+
+.tabela-relatorio th {
+    text-align: left;
+    font-size: 12px;
+    color: #6b7280;
+    background: #f8fafc;
+    padding: 11px 10px;
+    border-bottom: 1px solid #e5e7eb;
+    white-space: nowrap;
+}
+
+
+.tabela-relatorio td {
+    padding: 12px 10px;
+    border-bottom: 1px solid #edf0f3;
+    font-size: 13px;
+    color: #374151;
+}
+
+
+.tabela-relatorio tbody tr:hover {
+    background: #fafafa;
+}
+
+
+.valor-positivo {
+    color: #15803d;
+    font-weight: 600;
+}
+
+
+.valor-negativo {
+    color: #dc2626;
+    font-weight: 600;
+}
+
+
+/* ==========================================
+   ESTADOS
+========================================== */
+
+.estado-relatorio {
+    text-align: center;
+    padding: 30px 15px;
+    color: #777;
+    font-size: 13px;
+}
+
+
+/* ==========================================
+   PAGAMENTOS
+========================================== */
+
+.lista-pagamentos {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+
+.item-pagamento {
+    border: 1px solid #e5e7eb;
+    border-radius: 9px;
+    padding: 13px;
+}
+
+
+.topo-pagamento {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+
+.nome-pagamento {
+    font-weight: 600;
+    color: #374151;
+}
+
+
+.valor-pagamento {
+    font-weight: 700;
+    color: #1f2937;
+}
+
+
+.info-pagamento {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    color: #777;
+    font-size: 12px;
+}
+
+
+.barra-pagamento {
+    width: 100%;
+    height: 7px;
+    border-radius: 20px;
+    background: #e5e7eb;
+    overflow: hidden;
+    margin-top: 9px;
+}
+
+
+.barra-pagamento span {
+    display: block;
+    height: 100%;
+    border-radius: 20px;
+    background: #2563eb;
+}
+
+
+/* ==========================================
+   VENDAS POR DIA
+========================================== */
+
+.painel-vendas-dia {
+    margin-bottom: 30px;
+}
+
+
+/* ==========================================
+   RESPONSIVO
+========================================== */
+
+@media (max-width: 1100px) {
+
+    .cards-relatorios {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .relatorios-duas-colunas {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+@media (max-width: 700px) {
+
+    .cards-relatorios {
+        grid-template-columns: 1fr;
+    }
+
+    .resumo-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .filtros-relatorio {
+        align-items: stretch;
+    }
+
+    .campo-relatorio {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .botao-principal {
+        width: 100%;
+    }
+
+    .painel-relatorios {
+        padding: 15px;
+    }
+
+}

@@ -1,18 +1,34 @@
 <!DOCTYPE html>
+
 <html lang="pt-BR">
 
+
+
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
 
     <title>Sistema da Loja - Administração</title>
 
+
+
     <link rel="stylesheet" href="admin.css">
+
 </head>
+
+
 
 <body>
 
+
+
     <div class="layout-admin">
+
+
 
         <!-- ==========================================
              MENU LATERAL
@@ -20,414 +36,812 @@
 
         <aside class="menu-lateral">
 
+
+
             <div class="logo-admin">
+
                 <h1>Sistema da Loja</h1>
+
                 <span>Administração</span>
+
             </div>
+
+
+
 
 
             <div class="usuario-logado">
 
+
+
                 <div class="avatar-admin">
+
                     A
+
                 </div>
+
+
 
                 <div>
+
                     <strong id="nomeAdministrador">
+
                         Administrador
+
                     </strong>
 
+
+
                     <small>
+
                         Administrador
+
                     </small>
+
                 </div>
 
+
+
             </div>
+
+
+
 
 
             <nav class="menu">
 
+
+
                 <!-- PRINCIPAL -->
 
+
+
                 <div class="titulo-menu">
+
                     PRINCIPAL
+
                 </div>
 
-                <a
-                    href="admin.html"
-                    class="item-menu ativo"
-                >
-                    <span>🏠</span>
-                    Dashboard
-                </a>
+
 
                 <a
-                    href="usuarios.html"
-                    class="item-menu"
+
+                    href="admin.html"
+
+                    class="item-menu ativo"
+
                 >
-                    <span>👥</span>
-                    Usuários
+
+                    <span>🏠</span>
+
+                    Dashboard
+
                 </a>
+
+
+
+                <a
+
+                    href="usuarios.html"
+
+                    class="item-menu"
+
+                >
+
+                    <span>👥</span>
+
+                    Usuários
+
+                </a>
+
+
+
 
 
                 <!-- ESTOQUE E VENDAS -->
 
+
+
                 <div class="titulo-menu">
+
                     ESTOQUE E VENDAS
+
                 </div>
 
+
+
                 <a
+
                     href="produtos.html"
+
                     class="item-menu"
+
                 >
+
                     <span>📦</span>
+
                     Produtos
+
                 </a>
 
+
+
                 <a
+
                     href="categorias.html"
+
                     class="item-menu"
+
                 >
+
                     <span>🗂️</span>
+
                     Categorias
+
                 </a>
 
+
+
                 <a
+
                     href="estoque.html"
+
                     class="item-menu"
+
                 >
+
                     <span>📋</span>
+
                     Estoque
+
                 </a>
 
+
+
                 <a
+
                     href="#"
+
                     class="item-menu"
+
                     data-futuro="vendas"
+
                 >
+
                     <span>🛒</span>
+
                     Vendas
+
                 </a>
 
+
+
                 <a
+
                     href="#"
+
                     class="item-menu"
+
                     data-futuro="clientes"
+
                 >
+
                     <span>👤</span>
+
                     Clientes
+
                 </a>
+
+
+
 
 
                 <!-- FINANCEIRO -->
 
+
+
                 <div class="titulo-menu">
+
                     FINANCEIRO
+
                 </div>
 
-                <a
-                    href="#"
-                    class="item-menu"
-                    data-futuro="financeiro"
-                >
-                    <span>💰</span>
-                    Financeiro
-                </a>
+
 
                 <a
+
                     href="#"
+
                     class="item-menu"
-                    data-futuro="relatorios"
+
+                    data-futuro="financeiro"
+
                 >
-                    <span>📊</span>
-                    Relatórios
+
+                    <span>💰</span>
+
+                    Financeiro
+
                 </a>
+
+
+
+                <a
+
+                    href="relatorios.html"
+
+                    class="item-menu"
+
+                >
+
+                    <span>📊</span>
+
+                    Relatórios
+
+                </a>
+
+
 
             </nav>
 
 
+
+
+
             <div class="area-sair">
 
+
+
                 <button
+
                     type="button"
+
                     class="botao-sair"
+
                     id="btnSair"
+
                 >
+
                     🚪 Sair
+
                 </button>
+
+
 
             </div>
 
+
+
         </aside>
+
+
+
 
 
         <!-- ==========================================
              CONTEÚDO PRINCIPAL
         ========================================== -->
 
+
+
         <main class="conteudo-admin">
+
+
 
             <header class="cabecalho-admin">
 
+
+
                 <div>
 
+
+
                     <h2>
+
                         Dashboard
+
                     </h2>
 
+
+
                     <p id="dataAtual">
+
                         Administração do sistema
+
                     </p>
+
+
 
                 </div>
 
+
+
             </header>
+
+
+
 
 
             <!-- ==========================================
                  CARDS
             ========================================== -->
 
+
+
             <section class="cards-dashboard">
 
+
+
                 <div class="card-dashboard">
 
+
+
                     <div class="icone-card">
+
                         👥
+
                     </div>
 
+
+
                     <div>
+
                         <span>
+
                             Usuários
+
                         </span>
 
+
+
                         <strong>
+
                             Gerenciar
+
                         </strong>
+
                     </div>
+
+
 
                 </div>
 
 
+
+
+
                 <div class="card-dashboard">
 
+
+
                     <div class="icone-card">
+
                         📦
+
                     </div>
 
+
+
                     <div>
+
                         <span>
+
                             Produtos
+
                         </span>
 
+
+
                         <strong>
+
                             Gerenciar
+
                         </strong>
+
                     </div>
+
+
 
                 </div>
 
 
+
+
+
                 <div class="card-dashboard">
 
+
+
                     <div class="icone-card">
+
                         📋
+
                     </div>
+
+
 
                     <div>
+
                         <span>
+
                             Estoque
+
                         </span>
 
+
+
                         <strong>
+
                             Controlar
+
                         </strong>
+
                     </div>
 
+
+
                 </div>
+
+
+
 
 
                 <div class="card-dashboard">
 
+
+
                     <div class="icone-card">
+
                         💰
+
                     </div>
+
+
 
                     <div>
+
                         <span>
+
                             Financeiro
+
                         </span>
 
+
+
                         <strong>
+
                             Em breve
+
                         </strong>
+
                     </div>
 
+
+
                 </div>
+
+
 
             </section>
+
+
+
 
 
             <!-- ==========================================
                  BOAS-VINDAS
             ========================================== -->
 
+
+
             <section class="painel-boas-vindas">
 
+
+
                 <h2>
+
                     Bem-vindo ao Sistema da Loja!
+
                 </h2>
 
+
+
                 <p>
+
                     Utilize o menu lateral para administrar
+
                     usuários, produtos, categorias e estoque.
+
                 </p>
 
+
+
             </section>
+
+
+
 
 
             <!-- ==========================================
                  ACESSO RÁPIDO
             ========================================== -->
 
+
+
             <section class="painel">
+
+
 
                 <div class="cabecalho-painel">
 
+
+
                     <div>
 
+
+
                         <h2>
+
                             Acesso rápido
+
                         </h2>
 
+
+
                         <p>
+
                             Principais áreas do sistema
+
                         </p>
+
+
 
                     </div>
 
+
+
                 </div>
+
+
+
 
 
                 <div class="atalhos">
 
+
+
                     <a
+
                         href="usuarios.html"
+
                         class="atalho"
+
                     >
 
+
+
                         <span>
+
                             👥
+
                         </span>
 
+
+
                         <strong>
+
                             Usuários
+
                         </strong>
 
+
+
                         <small>
+
                             Gerenciar usuários
+
                         </small>
+
+
 
                     </a>
 
 
+
+
+
                     <a
+
                         href="produtos.html"
+
                         class="atalho"
+
                     >
 
+
+
                         <span>
+
                             📦
+
                         </span>
 
+
+
                         <strong>
+
                             Produtos
+
                         </strong>
 
+
+
                         <small>
+
                             Cadastrar produtos
+
                         </small>
+
+
 
                     </a>
 
 
+
+
+
                     <a
+
                         href="categorias.html"
+
                         class="atalho"
+
                     >
 
+
+
                         <span>
+
                             🗂️
+
                         </span>
 
+
+
                         <strong>
+
                             Categorias
+
                         </strong>
 
+
+
                         <small>
+
                             Organizar produtos
+
                         </small>
 
+
+
                     </a>
+
+
+
 
 
                     <a
+
                         href="estoque.html"
+
                         class="atalho"
+
                     >
 
+
+
                         <span>
+
                             📋
+
                         </span>
 
+
+
                         <strong>
+
                             Estoque
+
                         </strong>
 
+
+
                         <small>
+
                             Controlar estoque
+
                         </small>
 
+
+
                     </a>
+
+
 
                 </div>
 
+
+
             </section>
+
+
+
 
 
             <!-- ==========================================
                  AVISO
             ========================================== -->
 
+
+
             <section class="aviso-painel">
 
+
+
                 <strong>
+
                     Atenção
+
                 </strong>
 
+
+
                 <p>
+
                     As áreas de vendas, clientes, financeiro
+
                     e relatórios serão adicionadas nas próximas
+
                     etapas do sistema.
+
                 </p>
+
+
 
             </section>
 
+
+
         </main>
 
+
+
     </div>
+
+
+
 
 
     <!-- ==========================================
          SUPABASE
     ========================================== -->
 
+
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
 
     <script src="js/config.js"></script>
 
+
+
     <script src="js/admin.js"></script>
 
+
+
 </body>
+
+
 
 </html>

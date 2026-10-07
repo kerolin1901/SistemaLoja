@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Sistema da Loja - Categorias</title>
+
+    <link
+        rel="stylesheet"
+        href="admin.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="categorias.css"
+    >
+
+</head>
+
+
+<body>
+
+
+<div class="layout-admin">
+
+
+    <!-- ==========================================
+         MENU LATERAL
+    =========================================== -->
+
+    <aside class="menu-lateral">
+
+
+        <div class="logo-admin">
+
+            <h1>
+                Sistema da Loja
+            </h1>
+
+            <span>
+                Administração
+            </span>
+
+        </div>
+
+
+        <div class="usuario-logado">
+
+            <div class="avatar-admin">
+                A
+            </div>
+
+            <div>
+
+                <strong id="nomeAdministrador">
+                    Administrador
+                </strong>
+
+                <small>
+                    Administrador
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <nav class="menu">
+
+
+            <div class="titulo-menu">
+                PRINCIPAL
+            </div>
+
+
+            <a
+                href="admin.html"
+                class="item-menu"
+            >
+
+                <span>🏠</span>
+
+                Dashboard
+
+            </a>
+
+
+            <a
+                href="usuarios.html"
+                class="item-menu"
+            >
+
+                <span>👥</span>
+
+                Usuários
+
+            </a>
+
+
+            <div class="titulo-menu">
+                ESTOQUE E VENDAS
+            </div>
+
+
+            <a
+                href="produtos.html"
+                class="item-menu"
+            >
+
+                <span>📦</span>
+
+                Produtos
+
+            </a>
+
+
+            <a
+                href="categorias.html"
+                class="item-menu ativo"
+            >
+
+                <span>🗂️</span>
+
+                Categorias
+
+            </a>
+
+
+            <a
+                href="estoque.html"
+                class="item-menu"
+            >
+
+                <span>📋</span>
+
+                Estoque
+
+            </a>
+
+
+            <a
+                href="vendas.html"
+                class="item-menu"
+            >
+
+                <span>🛒</span>
+
+                Vendas
+
+            </a>
+
+
+            <a
+                href="historico-vendas.html"
+                class="item-menu"
+            >
+
+                <span>📜</span>
+
+                Histórico de vendas
+
+            </a>
+
+
+            <a
+                href="clientes.html"
+                class="item-menu"
+            >
+
+                <span>👤</span>
+
+                Clientes
+
+            </a>
+
+
+            <div class="titulo-menu">
+                FINANCEIRO
+            </div>
+
+
+            <a
+                href="financeiro.html"
+                class="item-menu"
+            >
+
+                <span>💰</span>
+
+                Financeiro
+
+            </a>
+
+
+            <a
+                href="relatorios.html"
+                class="item-menu"
+            >
+
+                <span>📊</span>
+
+                Relatórios
+
+            </a>
+
+
+        </nav>
+
+
+        <div class="area-sair">
+
+            <button
+                type="button"
+                class="botao-sair"
+                id="btnSair"
+            >
+
+                🚪 Sair
+
+            </button>
+
+        </div>
+
+
+    </aside>
+
+
+
+    <!-- ==========================================
+         CONTEÚDO PRINCIPAL
+    =========================================== -->
+
+    <main class="conteudo-admin">
+
+
+        <header class="cabecalho-admin">
+
+            <div>
+
+                <h2>
+                    Categorias
+                </h2>
+
+                <p>
+                    Cadastre e organize as categorias dos produtos.
+                </p>
+
+            </div>
+
+        </header>
+
+
+
+        <!-- ==========================================
+             MENSAGEM
+        =========================================== -->
+
+        <div
+            id="mensagemCategoria"
+            class="mensagem-categoria"
+        ></div>
+
+
+
+        <!-- ==========================================
+             FORMULÁRIO
+        =========================================== -->
+
+        <section class="painel-categorias">
+
+
+            <div class="cabecalho-categorias">
+
+                <div>
+
+                    <h2>
+                        Nova categoria
+                    </h2>
+
+                    <p>
+                        Cadastre uma categoria para utilizar nos produtos.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <form id="formCategoria">
+
+
+                <div class="campo-categoria">
+
+                    <label for="nomeCategoria">
+                        Nome da categoria
+                    </label>
+
+                    <input
+                        type="text"
+                        id="nomeCategoria"
+                        placeholder="Ex.: Iscas Superfície"
+                        maxlength="100"
+                        autocomplete="off"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="acoes-categoria">
+
+                    <button
+                        type="button"
+                        id="btnCancelar"
+                        class="botao-secundario"
+                        style="display:none;"
+                    >
+                        Cancelar
+                    </button>
+
+
+                    <button
+                        type="submit"
+                        id="btnSalvar"
+                        class="botao-principal"
+                    >
+                        Salvar categoria
+                    </button>
+
+                </div>
+
+
+            </form>
+
+        </section>
+
+
+
+        <!-- ==========================================
+             RESUMO
+        =========================================== -->
+
+        <section class="cards-categorias">
+
+
+            <div class="card-categoria">
+
+                <div class="icone-categoria">
+                    🗂️
+                </div>
+
+                <div>
+
+                    <span>
+                        Total de categorias
+                    </span>
+
+                    <strong id="totalCategorias">
+                        0
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="card-categoria">
+
+                <div class="icone-categoria">
+                    ✅
+                </div>
+
+                <div>
+
+                    <span>
+                        Categorias ativas
+                    </span>
+
+                    <strong id="categoriasAtivas">
+                        0
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="card-categoria">
+
+                <div class="icone-categoria">
+                    ⛔
+                </div>
+
+                <div>
+
+                    <span>
+                        Categorias inativas
+                    </span>
+
+                    <strong id="categoriasInativas">
+                        0
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- ==========================================
+             LISTA
+        =========================================== -->
+
+        <section class="painel-categorias">
+
+
+            <div class="cabecalho-lista-categorias">
+
+                <div>
+
+                    <h2>
+                        Categorias cadastradas
+                    </h2>
+
+                    <p>
+                        Gerencie as categorias utilizadas pelos produtos.
+                    </p>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    id="btnAtualizar"
+                    class="botao-atualizar"
+                >
+                    🔄 Atualizar
+                </button>
+
+            </div>
+
+
+
+            <div
+                id="carregandoCategorias"
+                class="estado-categorias"
+            >
+                Carregando categorias...
+            </div>
+
+
+            <div
+                id="semCategorias"
+                class="estado-categorias"
+                style="display:none;"
+            >
+                Nenhuma categoria cadastrada.
+            </div>
+
+
+            <div
+                id="containerTabelaCategorias"
+                class="tabela-categorias-container"
+                style="display:none;"
+            >
+
+                <table class="tabela-categorias">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Categoria
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Criada em
+                            </th>
+
+                            <th>
+                                Ações
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="listaCategorias">
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+        </section>
+
+
+    </main>
+
+
+</div>
+
+
+
+<!-- ==========================================
+     SUPABASE
+=========================================== -->
+
+<script
+    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+></script>
+
+
+<script src="js/config.js"></script>
+
+
+<script src="js/categorias.js"></script>
+
+
+</body>
+
+</html>
