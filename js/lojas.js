@@ -1,166 +1,93 @@
-/* ==========================================
+/* =========================================================
    SISTEMA DA LOJA
-   GERENCIAMENTO DE LOJAS
    ADMINISTRADOR GERAL
-   LOJAS.JS
-========================================== */
+   GERENCIAMENTO DE LOJAS
+   JS COMPLETO
+========================================================= */
 
 
-/* ==========================================
-   ELEMENTOS DA PÁGINA
-========================================== */
+/* =========================================================
+   ELEMENTOS
+========================================================= */
 
-const formLoja =
-    document.getElementById("formLoja");
+const formLoja = document.getElementById("formLoja");
+const nomeLoja = document.getElementById("nomeLoja");
 
-const nomeLoja =
-    document.getElementById("nomeLoja");
+const tituloFormulario =
+    document.getElementById("tituloFormulario");
+
+const descricaoFormulario =
+    document.getElementById("descricaoFormulario");
 
 const btnCadastrar =
     document.getElementById("btnCadastrar");
 
 const btnCancelarEdicao =
-    document.getElementById(
-        "btnCancelarEdicao"
-    );
-
-const tituloFormulario =
-    document.getElementById(
-        "tituloFormulario"
-    );
-
-const descricaoFormulario =
-    document.getElementById(
-        "descricaoFormulario"
-    );
+    document.getElementById("btnCancelarEdicao");
 
 const mensagem =
     document.getElementById("mensagem");
 
-const carregando =
-    document.getElementById("carregando");
+const listaLojas =
+    document.getElementById("listaLojas");
+
+const carregandoLojas =
+    document.getElementById("carregandoLojas");
 
 const semLojas =
     document.getElementById("semLojas");
 
-const listaLojas =
-    document.getElementById("listaLojas");
 
-const btnAtualizar =
-    document.getElementById("btnAtualizar");
+/* =========================================================
+   VARIÁVEIS
+========================================================= */
 
-const btnSair =
-    document.getElementById("btnSair");
-
-const nomeAdministrador =
-    document.getElementById(
-        "nomeAdministrador"
-    );
-
-const avatarAdministrador =
-    document.querySelector(
-        ".avatar-admin"
-    );
+let lojaEmEdicao = null;
 
 
-/* ==========================================
-   CONTROLE DE EDIÇÃO
-========================================== */
+/* =========================================================
+   MENSAGEM
+========================================================= */
 
-let lojaEditandoId = null;
-
-
-/* ==========================================
-   MENSAGENS
-========================================== */
-
-function mostrarMensagem(
-    texto,
-    tipo = "sucesso"
-) {
+function mostrarMensagem(texto, tipo = "sucesso") {
 
     if (!mensagem) {
         return;
     }
 
+    mensagem.textContent = texto;
 
-    mensagem.textContent =
-        texto;
+    mensagem.className = "";
 
+    mensagem.classList.add("mensagem");
 
-    mensagem.className =
-        "mensagem " + tipo;
-}
-
-
-function limparMensagem() {
-
-    if (!mensagem) {
-        return;
+    if (tipo === "erro") {
+        mensagem.classList.add("erro");
     }
 
-
-    mensagem.textContent =
-        "";
-
-
-    mensagem.className =
-        "mensagem";
-}
-
-
-/* ==========================================
-   ESCAPAR HTML
-========================================== */
-
-function escaparHTML(texto) {
-
-    const div =
-        document.createElement("div");
-
-
-    div.textContent =
-        texto ?? "";
-
-
-    return div.innerHTML;
-}
-
-
-/* ==========================================
-   FORMATAR DATA
-========================================== */
-
-function formatarData(data) {
-
-    if (!data) {
-        return "-";
+    if (tipo === "sucesso") {
+        mensagem.classList.add("sucesso");
     }
 
-
-    const dataObj =
-        new Date(data);
-
-
-    if (
-        Number.isNaN(
-            dataObj.getTime()
-        )
-    ) {
-
-        return "-";
+    if (tipo === "aviso") {
+        mensagem.classList.add("aviso");
     }
 
+    mensagem.style.display = "block";
 
-    return dataObj.toLocaleDateString(
-        "pt-BR"
-    );
+    setTimeout(() => {
+
+        if (mensagem) {
+            mensagem.style.display = "none";
+        }
+
+    }, 5000);
 }
 
 
-/* ==========================================
-   VERIFICAR LOGIN
-========================================== */
+/* =========================================================
+   PROTEGER PÁGINA
+========================================================= */
 
 async function protegerPagina() {
 
@@ -169,138 +96,61 @@ async function protegerPagina() {
         const {
             data: {
                 session
-            },
-            error: erroSessao
-        } =
-            await supabaseClient
-                .auth
-                .getSession();
+            }
+        } = await supabaseClient.auth.getSession();
 
 
-        if (
-            erroSessao ||
-            !session
-        ) {
+        if (!session) {
 
-            window.location.href =
-                "index.html";
+            window.location.href = "index.html";
 
             return false;
         }
 
-
-        /* ======================================
-           BUSCAR PERFIL
-        ======================================= */
 
         const {
             data: perfil,
             error
-        } =
-            await supabaseClient
-                .from("perfis")
-                .select(
-                    "id, nome_completo, usuario, tipo, ativo"
-                )
-                .eq(
-                    "id",
-                    session.user.id
-                )
-                .maybeSingle();
+        } = await supabaseClient
+            .from("perfis")
+            .select(`
+                id,
+                nome_completo,
+                usuario,
+                tipo,
+                ativo
+            `)
+            .eq("id", session.user.id)
+            .maybeSingle();
 
 
-        if (
-            error ||
-            !perfil
-        ) {
+        if (error) {
 
             console.error(
-                "Erro ao buscar perfil:",
+                "Erro ao verificar perfil:",
                 error
             );
 
-
-            await supabaseClient
-                .auth
-                .signOut();
-
-
-            window.location.href =
-                "index.html";
-
+            window.location.href = "index.html";
 
             return false;
         }
 
-
-        /* ======================================
-           SOMENTE ADMINISTRADOR GERAL
-        ======================================= */
 
         if (
-            perfil.tipo !==
-                "admin_geral" ||
-
-            perfil.usuario !==
-                "admingeral" ||
-
-            perfil.ativo !== true
+            !perfil ||
+            perfil.ativo !== true ||
+            perfil.usuario !== "admingeral" ||
+            perfil.tipo !== "admin_geral"
         ) {
 
-            alert(
-                "Acesso permitido somente ao Administrador Geral."
-            );
-
-
-            window.location.href =
-                "index.html";
-
+            window.location.href = "index.html";
 
             return false;
         }
-
-
-        /* ======================================
-           MOSTRAR NOME
-        ======================================= */
-
-        if (nomeAdministrador) {
-
-            nomeAdministrador.textContent =
-                perfil.nome_completo ||
-                "Administrador Geral";
-        }
-
-
-        if (avatarAdministrador) {
-
-            const inicial =
-                (
-                    perfil.nome_completo ||
-                    "A"
-                )
-                    .trim()
-                    .charAt(0)
-                    .toUpperCase();
-
-
-            avatarAdministrador.textContent =
-                inicial;
-        }
-
-
-        /* ======================================
-           SALVAR PERFIL
-        ======================================= */
-
-        sessionStorage.setItem(
-            "sistemaLojaPerfil",
-            JSON.stringify(perfil)
-        );
 
 
         return true;
-
 
     } catch (erro) {
 
@@ -309,1038 +159,392 @@ async function protegerPagina() {
             erro
         );
 
-
-        window.location.href =
-            "index.html";
-
+        window.location.href = "index.html";
 
         return false;
     }
 }
 
 
-/* ==========================================
+/* =========================================================
+   FORMATAR DATA
+========================================================= */
+
+function formatarData(data) {
+
+    if (!data) {
+        return "-";
+    }
+
+    const dataObj = new Date(data);
+
+    if (Number.isNaN(dataObj.getTime())) {
+        return "-";
+    }
+
+    return dataObj.toLocaleDateString(
+        "pt-BR"
+    );
+}
+
+
+/* =========================================================
+   ESCAPAR HTML
+========================================================= */
+
+function escaparHTML(valor) {
+
+    if (valor === null || valor === undefined) {
+        return "";
+    }
+
+    return String(valor)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+
+/* =========================================================
    CARREGAR LOJAS
-========================================== */
+========================================================= */
 
 async function carregarLojas() {
 
-    if (!listaLojas) {
-        return;
+    if (carregandoLojas) {
+        carregandoLojas.style.display = "block";
     }
-
-
-    if (carregando) {
-
-        carregando.style.display =
-            "block";
-    }
-
 
     if (semLojas) {
-
-        semLojas.style.display =
-            "none";
+        semLojas.style.display = "none";
     }
 
-
-    listaLojas.innerHTML =
-        "";
+    if (listaLojas) {
+        listaLojas.innerHTML = "";
+    }
 
 
     try {
 
-        /* ======================================
+        /* =================================================
            BUSCAR LOJAS
-        ======================================= */
+        ================================================= */
 
         const {
             data: lojas,
-            error
-        } =
-            await supabaseClient
-                .from("lojas")
-                .select(
-                    "id, nome, ativo, criado_em"
-                )
-                .order(
-                    "nome",
-                    {
-                        ascending: true
-                    }
-                );
+            error: erroLojas
+        } = await supabaseClient
+            .from("lojas")
+            .select(`
+                id,
+                nome,
+                ativo,
+                criado_em
+            `)
+            .order("nome", {
+                ascending: true
+            });
 
 
-        if (error) {
-
-            console.error(
-                "Erro ao carregar lojas:",
-                error
-            );
-
-
-            mostrarMensagem(
-                "Não foi possível carregar as lojas.",
-                "erro"
-            );
-
-
-            return;
+        if (erroLojas) {
+            throw erroLojas;
         }
 
 
-        if (carregando) {
-
-            carregando.style.display =
-                "none";
-        }
-
-
-        if (
-            !lojas ||
-            lojas.length === 0
-        ) {
-
-            if (semLojas) {
-
-                semLojas.style.display =
-                    "block";
-            }
-
-
-            return;
-        }
-
-
-        /* ======================================
+        /* =================================================
            BUSCAR ADMINISTRADORES
-        ======================================= */
+        ================================================= */
 
         const {
             data: administradores,
             error: erroAdministradores
-        } =
-            await supabaseClient
-                .from("perfis")
-                .select(
-                    "id, tipo, loja_id"
-                )
-                .eq(
-                    "tipo",
-                    "admin"
-                );
+        } = await supabaseClient
+            .from("perfis")
+            .select(`
+                id,
+                loja_id,
+                nome_completo,
+                usuario,
+                ativo
+            `)
+            .eq("tipo", "admin");
 
 
         if (erroAdministradores) {
-
-            console.warn(
-                "Não foi possível carregar os administradores:",
-                erroAdministradores
-            );
+            throw erroAdministradores;
         }
 
 
-        const listaAdministradores =
-            administradores || [];
+        /* =================================================
+           CONTAGEM DE ADMINISTRADORES POR LOJA
+        ================================================= */
+
+        const quantidadeAdministradores = {};
 
 
-        /* ======================================
-           CRIAR LINHAS
-        ======================================= */
+        (administradores || []).forEach(admin => {
 
-        lojas.forEach(
-            function (loja) {
-
-                const tr =
-                    document.createElement(
-                        "tr"
-                    );
-
-
-                const ativo =
-                    loja.ativo === true;
-
-
-                const statusTexto =
-                    ativo
-                        ? "Ativa"
-                        : "Inativa";
-
-
-                const classeStatus =
-                    ativo
-                        ? "status-ativa"
-                        : "status-inativa";
-
-
-                const textoBotaoStatus =
-                    ativo
-                        ? "🔴 Desativar"
-                        : "🟢 Ativar";
-
-
-                const classeBotaoStatus =
-                    ativo
-                        ? "botao-desativar"
-                        : "botao-ativar";
-
-
-                const quantidadeAdministradores =
-                    listaAdministradores.filter(
-                        function (administrador) {
-
-                            return (
-                                administrador.loja_id ===
-                                loja.id
-                            );
-
-                        }
-                    ).length;
-
-
-                tr.innerHTML = `
-
-                    <td>
-
-                        <strong
-                            class="nome-loja"
-                        >
-                            ${escaparHTML(
-                                loja.nome
-                            )}
-                        </strong>
-
-                    </td>
-
-
-                    <td>
-
-                        <span
-                            class="quantidade-administradores"
-                        >
-                            👥 ${quantidadeAdministradores}
-                        </span>
-
-                    </td>
-
-
-                    <td>
-
-                        <span
-                            class="status-loja ${classeStatus}"
-                        >
-                            ${statusTexto}
-                        </span>
-
-                    </td>
-
-
-                    <td>
-
-                        ${formatarData(
-                            loja.criado_em
-                        )}
-
-                    </td>
-
-
-                    <td>
-
-                        <div
-                            class="acoes-loja"
-                        >
-
-                            <button
-                                type="button"
-                                class="botao-loja botao-editar-loja"
-                                data-id="${loja.id}"
-                                data-acao="editar"
-                            >
-                                ✏️ Editar
-                            </button>
-
-
-                            <button
-                                type="button"
-                                class="botao-loja ${classeBotaoStatus}"
-                                data-id="${loja.id}"
-                                data-acao="status"
-                                data-ativo="${ativo}"
-                            >
-                                ${textoBotaoStatus}
-                            </button>
-
-
-                            <button
-                                type="button"
-                                class="botao-loja botao-excluir-loja"
-                                data-id="${loja.id}"
-                                data-acao="excluir"
-                            >
-                                🗑️ Excluir
-                            </button>
-
-                        </div>
-
-                    </td>
-
-                `;
-
-
-                listaLojas.appendChild(
-                    tr
-                );
-
+            if (!admin.loja_id) {
+                return;
             }
-        );
+
+            if (!quantidadeAdministradores[admin.loja_id]) {
+                quantidadeAdministradores[admin.loja_id] = 0;
+            }
+
+            quantidadeAdministradores[admin.loja_id]++;
+        });
 
 
-    } catch (erro) {
+        /* =================================================
+           FINALIZAR CARREGAMENTO
+        ================================================= */
 
-        console.error(
-            "Erro inesperado ao carregar lojas:",
-            erro
-        );
-
-
-        if (carregando) {
-
-            carregando.style.display =
-                "none";
+        if (carregandoLojas) {
+            carregandoLojas.style.display = "none";
         }
 
 
-        mostrarMensagem(
-            "Ocorreu um erro ao carregar as lojas.",
-            "erro"
-        );
-    }
-}
+        if (!lojas || lojas.length === 0) {
 
-
-/* ==========================================
-   INICIAR EDIÇÃO
-========================================== */
-
-async function iniciarEdicaoLoja(id) {
-
-    try {
-
-        const {
-            data: loja,
-            error
-        } =
-            await supabaseClient
-                .from("lojas")
-                .select(
-                    "id, nome"
-                )
-                .eq(
-                    "id",
-                    id
-                )
-                .maybeSingle();
-
-
-        if (
-            error ||
-            !loja
-        ) {
-
-            console.error(
-                "Erro ao localizar loja:",
-                error
-            );
-
-
-            mostrarMensagem(
-                "Não foi possível localizar a loja.",
-                "erro"
-            );
-
+            if (semLojas) {
+                semLojas.style.display = "block";
+            }
 
             return;
         }
 
 
-        lojaEditandoId =
-            loja.id;
+        /* =================================================
+           MONTAR TABELA
+        ================================================= */
+
+        lojas.forEach(loja => {
+
+            const quantidade =
+                quantidadeAdministradores[loja.id] || 0;
 
 
-        nomeLoja.value =
-            loja.nome || "";
+            const tr =
+                document.createElement("tr");
 
 
-        if (tituloFormulario) {
+            tr.innerHTML = `
 
-            tituloFormulario.textContent =
-                "Editar loja";
-        }
+                <td>
+                    ${escaparHTML(loja.nome)}
+                </td>
+
+                <td>
+                    <span class="quantidade-administradores">
+                        ${quantidade}
+                    </span>
+                </td>
+
+                <td>
+
+                    ${
+                        loja.ativo
+                            ? `
+                                <span class="status ativo">
+                                    Ativa
+                                </span>
+                              `
+                            : `
+                                <span class="status inativo">
+                                    Inativa
+                                </span>
+                              `
+                    }
+
+                </td>
+
+                <td>
+                    ${formatarData(loja.criado_em)}
+                </td>
+
+                <td>
+
+                    <div class="acoes-loja">
+
+                        <button
+                            type="button"
+                            class="btn-acao btn-editar"
+                            onclick="editarLoja(
+                                '${loja.id}',
+                                '${escaparHTML(loja.nome).replace(/'/g, "\\'")}'
+                            )"
+                        >
+                            ✏️ Editar
+                        </button>
 
 
-        if (descricaoFormulario) {
+                        ${
+                            loja.ativo
+                                ? `
+                                    <button
+                                        type="button"
+                                        class="btn-acao btn-desativar"
+                                        onclick="alternarStatusLoja(
+                                            '${loja.id}',
+                                            '${escaparHTML(loja.nome).replace(/'/g, "\\'")}',
+                                            true
+                                        )"
+                                    >
+                                        🔴 Desativar
+                                    </button>
+                                  `
+                                : `
+                                    <button
+                                        type="button"
+                                        class="btn-acao btn-ativar"
+                                        onclick="alternarStatusLoja(
+                                            '${loja.id}',
+                                            '${escaparHTML(loja.nome).replace(/'/g, "\\'")}',
+                                            false
+                                        )"
+                                    >
+                                        🟢 Ativar
+                                    </button>
+                                  `
+                        }
 
-            descricaoFormulario.textContent =
-                "Altere o nome da loja e salve a alteração.";
-        }
+
+                        <button
+                            type="button"
+                            class="btn-acao btn-excluir"
+                            onclick="excluirLoja(
+                                '${loja.id}',
+                                '${escaparHTML(loja.nome).replace(/'/g, "\\'")}'
+                            )"
+                        >
+                            🗑️ Excluir
+                        </button>
+
+                    </div>
+
+                </td>
+            `;
 
 
-        if (btnCadastrar) {
-
-            btnCadastrar.textContent =
-                "Salvar Alteração";
-        }
-
-
-        if (btnCancelarEdicao) {
-
-            btnCancelarEdicao.style.display =
-                "inline-block";
-        }
-
-
-        nomeLoja.focus();
-
-
-        nomeLoja.select();
-
-
-        window.scrollTo(
-            {
-                top: 0,
-                behavior: "smooth"
+            if (listaLojas) {
+                listaLojas.appendChild(tr);
             }
-        );
+
+        });
 
 
     } catch (erro) {
 
         console.error(
-            "Erro ao iniciar edição:",
+            "Erro ao carregar lojas:",
             erro
         );
 
 
+        if (carregandoLojas) {
+            carregandoLojas.style.display = "none";
+        }
+
+
         mostrarMensagem(
-            "Ocorreu um erro ao editar a loja.",
+            "Não foi possível carregar as lojas.",
             "erro"
         );
     }
 }
 
 
-/* ==========================================
+/* =========================================================
+   EDITAR LOJA
+========================================================= */
+
+function editarLoja(id, nome) {
+
+    lojaEmEdicao = id;
+
+
+    if (nomeLoja) {
+        nomeLoja.value = nome;
+        nomeLoja.focus();
+    }
+
+
+    if (tituloFormulario) {
+        tituloFormulario.textContent =
+            "Editar loja";
+    }
+
+
+    if (descricaoFormulario) {
+        descricaoFormulario.textContent =
+            "Altere o nome da loja.";
+    }
+
+
+    if (btnCadastrar) {
+        btnCadastrar.textContent =
+            "Salvar alterações";
+    }
+
+
+    if (btnCancelarEdicao) {
+        btnCancelarEdicao.style.display =
+            "inline-block";
+    }
+
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
+
+
+/* =========================================================
    CANCELAR EDIÇÃO
-========================================== */
+========================================================= */
 
-function cancelarEdicaoLoja() {
+function cancelarEdicao() {
 
-    lojaEditandoId =
-        null;
+    lojaEmEdicao = null;
 
 
     if (formLoja) {
-
         formLoja.reset();
     }
 
 
     if (tituloFormulario) {
-
         tituloFormulario.textContent =
             "Cadastrar nova loja";
     }
 
 
     if (descricaoFormulario) {
-
         descricaoFormulario.textContent =
             "Informe o nome da nova loja.";
     }
 
 
     if (btnCadastrar) {
-
         btnCadastrar.textContent =
             "Cadastrar Loja";
     }
 
 
     if (btnCancelarEdicao) {
-
         btnCancelarEdicao.style.display =
             "none";
     }
-
-
-    limparMensagem();
-
-
-    if (nomeLoja) {
-
-        nomeLoja.focus();
-    }
 }
 
 
-/* ==========================================
-   SALVAR ALTERAÇÃO
-========================================== */
-
-async function salvarEdicaoLoja(
-    id,
-    nome
-) {
-
-    const {
-        error
-    } =
-        await supabaseClient
-            .from("lojas")
-            .update(
-                {
-                    nome: nome
-                }
-            )
-            .eq(
-                "id",
-                id
-            );
-
-
-    if (error) {
-
-        console.error(
-            "Erro ao editar loja:",
-            error
-        );
-
-
-        if (
-            error.code ===
-            "23505"
-        ) {
-
-            mostrarMensagem(
-                "Já existe uma loja com esse nome.",
-                "erro"
-            );
-
-        } else {
-
-            mostrarMensagem(
-                "Não foi possível editar a loja.",
-                "erro"
-            );
-
-        }
-
-
-        return false;
-    }
-
-
-    mostrarMensagem(
-        "Loja alterada com sucesso!",
-        "sucesso"
-    );
-
-
-    cancelarEdicaoLoja();
-
-
-    await carregarLojas();
-
-
-    return true;
-}
-
-
-/* ==========================================
-   ALTERAR STATUS
-========================================== */
-
-async function alterarStatusLoja(
-    id,
-    novoStatus
-) {
-
-    const mensagemConfirmacao =
-        novoStatus
-            ? "Deseja ativar esta loja?"
-            : "Deseja desativar esta loja?";
-
-
-    if (
-        !confirm(
-            mensagemConfirmacao
-        )
-    ) {
-
-        return;
-    }
-
-
-    try {
-
-        const {
-            error
-        } =
-            await supabaseClient
-                .from("lojas")
-                .update(
-                    {
-                        ativo:
-                            novoStatus
-                    }
-                )
-                .eq(
-                    "id",
-                    id
-                );
-
-
-        if (error) {
-
-            console.error(
-                "Erro ao alterar status:",
-                error
-            );
-
-
-            mostrarMensagem(
-                "Não foi possível alterar o status da loja.",
-                "erro"
-            );
-
-
-            return;
-        }
-
-
-        mostrarMensagem(
-            novoStatus
-                ? "Loja ativada com sucesso!"
-                : "Loja desativada com sucesso!",
-            "sucesso"
-        );
-
-
-        await carregarLojas();
-
-
-    } catch (erro) {
-
-        console.error(
-            "Erro:",
-            erro
-        );
-
-
-        mostrarMensagem(
-            "Ocorreu um erro ao alterar o status.",
-            "erro"
-        );
-    }
-}
-
-
-/* ==========================================
-   VERIFICAR SE A LOJA POSSUI DADOS
-========================================== */
-
-async function verificarDadosDaLoja(
-    lojaId
-) {
-
-    const tabelas = [
-
-        {
-            nome: "produtos",
-            titulo: "produtos"
-        },
-
-        {
-            nome: "clientes",
-            titulo: "clientes"
-        },
-
-        {
-            nome: "vendas",
-            titulo: "vendas"
-        },
-
-        {
-            nome: "financeiro",
-            titulo: "movimentações financeiras"
-        },
-
-        {
-            nome: "categorias",
-            titulo: "categorias"
-        },
-
-        {
-            nome: "perfis",
-            titulo: "usuários"
-        }
-
-    ];
-
-
-    for (
-        const tabela of tabelas
-    ) {
-
-        try {
-
-            const {
-                count,
-                error
-            } =
-                await supabaseClient
-                    .from(
-                        tabela.nome
-                    )
-                    .select(
-                        "id",
-                        {
-                            count: "exact",
-                            head: true
-                        }
-                    )
-                    .eq(
-                        "loja_id",
-                        lojaId
-                    );
-
-
-            if (error) {
-
-                console.warn(
-                    "Não foi possível verificar " +
-                    tabela.nome,
-                    error
-                );
-
-
-                continue;
-            }
-
-
-            if (
-                Number(count) > 0
-            ) {
-
-                return {
-
-                    possuiDados: true,
-
-                    tabela:
-                        tabela.titulo,
-
-                    quantidade:
-                        Number(count)
-
-                };
-
-            }
-
-        } catch (erro) {
-
-            console.warn(
-                "Erro ao verificar tabela:",
-                tabela.nome,
-                erro
-            );
-
-        }
-
-    }
-
-
-    return {
-
-        possuiDados: false
-
-    };
-
-}
-
-
-/* ==========================================
-   EXCLUIR LOJA
-========================================== */
-
-async function excluirLoja(
-    id
-) {
-
-    try {
-
-        /* ======================================
-           LOCALIZAR LOJA
-        ======================================= */
-
-        const {
-            data: loja,
-            error: erroBusca
-        } =
-            await supabaseClient
-                .from("lojas")
-                .select(
-                    "id, nome"
-                )
-                .eq(
-                    "id",
-                    id
-                )
-                .maybeSingle();
-
-
-        if (
-            erroBusca ||
-            !loja
-        ) {
-
-            console.error(
-                "Erro ao localizar loja:",
-                erroBusca
-            );
-
-
-            mostrarMensagem(
-                "Não foi possível localizar a loja.",
-                "erro"
-            );
-
-
-            return;
-        }
-
-
-        /* ======================================
-           CONFIRMAÇÃO
-        ======================================= */
-
-        const confirmar =
-            confirm(
-                `ATENÇÃO!\n\n` +
-                `Deseja realmente excluir a loja "${loja.nome}"?\n\n` +
-                `Essa ação não poderá ser desfeita.`
-            );
-
-
-        if (!confirmar) {
-
-            return;
-        }
-
-
-        /* ======================================
-           VERIFICAR DADOS
-        ======================================= */
-
-        const verificacao =
-            await verificarDadosDaLoja(
-                id
-            );
-
-
-        if (
-            verificacao.possuiDados
-        ) {
-
-            alert(
-                `Não é possível excluir a loja "${loja.nome}".\n\n` +
-                `Ela possui ${verificacao.quantidade} registro(s) em ${verificacao.tabela}.\n\n` +
-                `Recomendação: desative a loja em vez de excluí-la.`
-            );
-
-
-            return;
-        }
-
-
-        /* ======================================
-           EXCLUIR
-        ======================================= */
-
-        const {
-            error
-        } =
-            await supabaseClient
-                .from("lojas")
-                .delete()
-                .eq(
-                    "id",
-                    id
-                );
-
-
-        if (error) {
-
-            console.error(
-                "Erro ao excluir loja:",
-                error
-            );
-
-
-            if (
-                error.code ===
-                "23503"
-            ) {
-
-                mostrarMensagem(
-                    "Esta loja possui dados relacionados e não pode ser excluída. Desative a loja.",
-                    "erro"
-                );
-
-
-                return;
-            }
-
-
-            mostrarMensagem(
-                "Não foi possível excluir a loja.",
-                "erro"
-            );
-
-
-            return;
-        }
-
-
-        mostrarMensagem(
-            "Loja excluída com sucesso!",
-            "sucesso"
-        );
-
-
-        await carregarLojas();
-
-
-    } catch (erro) {
-
-        console.error(
-            "Erro inesperado ao excluir loja:",
-            erro
-        );
-
-
-        mostrarMensagem(
-            "Ocorreu um erro ao excluir a loja.",
-            "erro"
-        );
-    }
-}
-
-
-/* ==========================================
-   BOTÕES DA TABELA
-========================================== */
-
-if (listaLojas) {
-
-    listaLojas.addEventListener(
-        "click",
-        async function (evento) {
-
-            const botao =
-                evento.target.closest(
-                    "button"
-                );
-
-
-            if (!botao) {
-
-                return;
-            }
-
-
-            const id =
-                botao.dataset.id;
-
-
-            const acao =
-                botao.dataset.acao;
-
-
-            if (
-                !id ||
-                !acao
-            ) {
-
-                return;
-            }
-
-
-            /* ==================================
-               EDITAR
-            =================================== */
-
-            if (
-                acao ===
-                "editar"
-            ) {
-
-                await iniciarEdicaoLoja(
-                    id
-                );
-
-
-                return;
-            }
-
-
-            /* ==================================
-               ATIVAR / DESATIVAR
-            =================================== */
-
-            if (
-                acao ===
-                "status"
-            ) {
-
-                const ativoAtual =
-                    botao.dataset.ativo ===
-                    "true";
-
-
-                await alterarStatusLoja(
-                    id,
-                    !ativoAtual
-                );
-
-
-                return;
-            }
-
-
-            /* ==================================
-               EXCLUIR
-            =================================== */
-
-            if (
-                acao ===
-                "excluir"
-            ) {
-
-                await excluirLoja(
-                    id
-                );
-
-            }
-
-        }
-    );
-
-}
-
-
-/* ==========================================
-   CADASTRAR / EDITAR LOJA
-========================================== */
+/* =========================================================
+   SALVAR / CADASTRAR LOJA
+========================================================= */
 
 if (formLoja) {
 
@@ -1351,140 +555,107 @@ if (formLoja) {
             evento.preventDefault();
 
 
-            limparMensagem();
-
-
             const nome =
-                nomeLoja.value
-                    .trim();
+                nomeLoja
+                    ? nomeLoja.value.trim()
+                    : "";
 
 
             if (!nome) {
 
                 mostrarMensagem(
-                    "Digite o nome da loja.",
+                    "Informe o nome da loja.",
                     "erro"
                 );
-
-
-                nomeLoja.focus();
-
 
                 return;
             }
 
 
-            if (
-                nome.length < 2
-            ) {
-
-                mostrarMensagem(
-                    "O nome da loja é muito curto.",
-                    "erro"
-                );
-
-
-                nomeLoja.focus();
-
-
-                return;
-            }
-
-
-            btnCadastrar.disabled =
-                true;
-
-
-            if (lojaEditandoId) {
-
-                btnCadastrar.textContent =
-                    "Salvando...";
-
-            } else {
-
-                btnCadastrar.textContent =
-                    "Cadastrando...";
-
+            if (btnCadastrar) {
+                btnCadastrar.disabled = true;
             }
 
 
             try {
 
-                /* ==================================
+                /* =========================================
                    EDITAR
-                =================================== */
+                ========================================= */
 
-                if (lojaEditandoId) {
+                if (lojaEmEdicao) {
 
-                    await salvarEdicaoLoja(
-                        lojaEditandoId,
-                        nome
+                    const {
+                        error
+                    } = await supabaseClient
+                        .from("lojas")
+                        .update({
+                            nome: nome
+                        })
+                        .eq("id", lojaEmEdicao);
+
+
+                    if (error) {
+                        throw error;
+                    }
+
+
+                    mostrarMensagem(
+                        "Loja atualizada com sucesso.",
+                        "sucesso"
                     );
 
+
+                    cancelarEdicao();
+
+                    await carregarLojas();
 
                     return;
                 }
 
 
-                /* ==================================
+                /* =========================================
                    CADASTRAR
-                =================================== */
+                ========================================= */
+
+                const {
+                    data: {
+                        user
+                    }
+                } = await supabaseClient.auth.getUser();
+
+
+                if (!user) {
+
+                    throw new Error(
+                        "Sessão do administrador não encontrada."
+                    );
+                }
+
 
                 const {
                     error
-                } =
-                    await supabaseClient
-                        .from("lojas")
-                        .insert(
-                            {
-                                nome:
-                                    nome,
-
-                                ativo:
-                                    true
-                            }
-                        );
+                } = await supabaseClient
+                    .from("lojas")
+                    .insert({
+                        nome: nome
+                    });
 
 
                 if (error) {
-
-                    console.error(
-                        "Erro ao cadastrar loja:",
-                        error
-                    );
-
-
-                    if (
-                        error.code ===
-                        "23505"
-                    ) {
-
-                        mostrarMensagem(
-                            "Já existe uma loja com esse nome.",
-                            "erro"
-                        );
-
-                    } else {
-
-                        mostrarMensagem(
-                            "Não foi possível cadastrar a loja.",
-                            "erro"
-                        );
-
-                    }
-
-
-                    return;
+                    throw error;
                 }
 
 
                 mostrarMensagem(
-                    "Loja cadastrada com sucesso!",
+                    "Loja cadastrada com sucesso.",
                     "sucesso"
                 );
 
 
-                formLoja.reset();
+                if (formLoja) {
+                    formLoja.reset();
+                }
 
 
                 await carregarLojas();
@@ -1493,109 +664,302 @@ if (formLoja) {
             } catch (erro) {
 
                 console.error(
-                    "Erro inesperado:",
+                    "Erro ao salvar loja:",
                     erro
                 );
 
 
+                let mensagemErro =
+                    "Não foi possível salvar a loja.";
+
+
+                if (erro?.message) {
+                    mensagemErro =
+                        erro.message;
+                }
+
+
                 mostrarMensagem(
-                    "Ocorreu um erro ao cadastrar a loja.",
+                    mensagemErro,
                     "erro"
                 );
 
 
             } finally {
 
-                btnCadastrar.disabled =
-                    false;
-
-
-                if (lojaEditandoId) {
-
-                    btnCadastrar.textContent =
-                        "Salvar Alteração";
-
-                } else {
-
-                    btnCadastrar.textContent =
-                        "Cadastrar Loja";
-
+                if (btnCadastrar) {
+                    btnCadastrar.disabled = false;
                 }
 
             }
 
         }
     );
-
 }
 
 
-/* ==========================================
+/* =========================================================
    BOTÃO CANCELAR EDIÇÃO
-========================================== */
+========================================================= */
 
 if (btnCancelarEdicao) {
 
     btnCancelarEdicao.addEventListener(
         "click",
-        function () {
-
-            cancelarEdicaoLoja();
-
-        }
+        cancelarEdicao
     );
-
 }
 
 
-/* ==========================================
-   BOTÃO ATUALIZAR
-========================================== */
+/* =========================================================
+   ATIVAR / DESATIVAR LOJA
+========================================================= */
 
-if (btnAtualizar) {
+async function alternarStatusLoja(
+    id,
+    nome,
+    ativoAtual
+) {
 
-    btnAtualizar.addEventListener(
+    const acao =
+        ativoAtual
+            ? "desativar"
+            : "ativar";
+
+
+    const confirmar = confirm(
+        `Deseja realmente ${acao} a loja "${nome}"?`
+    );
+
+
+    if (!confirmar) {
+        return;
+    }
+
+
+    try {
+
+        const {
+            error
+        } = await supabaseClient
+            .from("lojas")
+            .update({
+                ativo: !ativoAtual
+            })
+            .eq("id", id);
+
+
+        if (error) {
+            throw error;
+        }
+
+
+        mostrarMensagem(
+            ativoAtual
+                ? "Loja desativada com sucesso."
+                : "Loja ativada com sucesso.",
+            "sucesso"
+        );
+
+
+        await carregarLojas();
+
+
+    } catch (erro) {
+
+        console.error(
+            "Erro ao alterar status da loja:",
+            erro
+        );
+
+
+        mostrarMensagem(
+            erro?.message ||
+            "Não foi possível alterar o status da loja.",
+            "erro"
+        );
+    }
+}
+
+
+/* =========================================================
+   EXCLUIR LOJA COMPLETAMENTE
+========================================================= */
+
+async function excluirLoja(id, nome) {
+
+    /* =====================================================
+       PRIMEIRA CONFIRMAÇÃO
+    ===================================================== */
+
+    const primeiraConfirmacao = confirm(
+        `ATENÇÃO!\n\n` +
+        `Você está prestes a excluir definitivamente ` +
+        `a loja "${nome}".\n\n` +
+        `Todos os dados vinculados a esta loja serão excluídos, ` +
+        `incluindo:\n\n` +
+        `• produtos\n` +
+        `• clientes\n` +
+        `• vendas\n` +
+        `• itens das vendas\n` +
+        `• estoque\n` +
+        `• financeiro\n` +
+        `• categorias\n` +
+        `• usuários e administradores\n\n` +
+        `Essa operação não poderá ser desfeita.\n\n` +
+        `Deseja continuar?`
+    );
+
+
+    if (!primeiraConfirmacao) {
+        return;
+    }
+
+
+    /* =====================================================
+       SEGUNDA CONFIRMAÇÃO
+    ===================================================== */
+
+    const segundaConfirmacao = confirm(
+        `CONFIRMAÇÃO FINAL\n\n` +
+        `Você está prestes a excluir definitivamente ` +
+        `a loja "${nome}".\n\n` +
+        `TODOS os dados dessa loja serão apagados.\n\n` +
+        `Essa ação NÃO poderá ser desfeita.\n\n` +
+        `Tem certeza absoluta que deseja excluir?`
+    );
+
+
+    if (!segundaConfirmacao) {
+        return;
+    }
+
+
+    try {
+
+        mostrarMensagem(
+            "Excluindo a loja e todos os dados relacionados...",
+            "aviso"
+        );
+
+
+        /* =================================================
+           CHAMAR FUNÇÃO SEGURA DO SUPABASE
+        ================================================= */
+
+        const {
+            data,
+            error
+        } = await supabaseClient.rpc(
+            "excluir_loja",
+            {
+                p_loja_id: id
+            }
+        );
+
+
+        if (error) {
+            throw error;
+        }
+
+
+        console.log(
+            "Resultado da exclusão:",
+            data
+        );
+
+
+        mostrarMensagem(
+            "Loja excluída completamente com sucesso.",
+            "sucesso"
+        );
+
+
+        /* =================================================
+           SE ESTAVA EDITANDO ESSA LOJA
+        ================================================= */
+
+        if (lojaEmEdicao === id) {
+            cancelarEdicao();
+        }
+
+
+        /* =================================================
+           ATUALIZAR LISTA
+        ================================================= */
+
+        await carregarLojas();
+
+
+    } catch (erro) {
+
+        console.error(
+            "Erro ao excluir loja:",
+            erro
+        );
+
+
+        let mensagemErro =
+            "Não foi possível excluir a loja.";
+
+
+        if (erro?.message) {
+            mensagemErro =
+                erro.message;
+        }
+
+
+        mostrarMensagem(
+            mensagemErro,
+            "erro"
+        );
+    }
+}
+
+
+/* =========================================================
+   ATUALIZAR
+========================================================= */
+
+const botoesAtualizar =
+    document.querySelectorAll(
+        "[id='btnAtualizar'], .btn-atualizar"
+    );
+
+
+botoesAtualizar.forEach(botao => {
+
+    botao.addEventListener(
         "click",
         async function () {
-
-            limparMensagem();
-
 
             await carregarLojas();
 
         }
     );
 
-}
+});
 
 
-/* ==========================================
-   BOTÃO SAIR
-========================================== */
+/* =========================================================
+   SAIR
+========================================================= */
 
-if (btnSair) {
+const botoesSair =
+    document.querySelectorAll(
+        "[id='btnSair'], .btn-sair"
+    );
 
-    btnSair.addEventListener(
+
+botoesSair.forEach(botao => {
+
+    botao.addEventListener(
         "click",
         async function () {
 
-            btnSair.disabled =
-                true;
-
-
-            btnSair.textContent =
-                "Saindo...";
-
-
             try {
 
-                await supabaseClient
-                    .auth
-                    .signOut(
-                        {
-                            scope: "local"
-                        }
-                    );
+                await supabaseClient.auth.signOut();
 
             } catch (erro) {
 
@@ -1607,23 +971,18 @@ if (btnSair) {
             }
 
 
-            sessionStorage.removeItem(
-                "sistemaLojaPerfil"
-            );
-
-
             window.location.href =
                 "index.html";
 
         }
     );
 
-}
+});
 
 
-/* ==========================================
+/* =========================================================
    INICIAR PÁGINA
-========================================== */
+========================================================= */
 
 (async function iniciar() {
 
@@ -1632,7 +991,6 @@ if (btnSair) {
 
 
     if (!autorizado) {
-
         return;
     }
 
