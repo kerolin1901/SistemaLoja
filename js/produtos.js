@@ -1,164 +1,138 @@
-/* ==========================================
+/* =========================================================
    SISTEMA DA LOJA
    GERENCIAMENTO DE PRODUTOS
-========================================== */
+========================================================= */
 
 
-/* ==========================================
+/* =========================================================
+   SUPABASE
+========================================================= */
+
+const produtosSupabase = supabaseClient;
+
+
+/* =========================================================
    ELEMENTOS
-========================================== */
+========================================================= */
 
 const formProduto =
-    document.getElementById(
-        "formProduto"
-    );
-
-const tituloFormulario =
-    document.getElementById(
-        "tituloFormulario"
-    );
+    document.getElementById("formProduto");
 
 const nomeProduto =
-    document.getElementById(
-        "nomeProduto"
-    );
+    document.getElementById("nomeProduto");
 
 const skuProduto =
-    document.getElementById(
-        "skuProduto"
-    );
+    document.getElementById("skuProduto");
+
+const fornecedorProduto =
+    document.getElementById("fornecedorProduto");
 
 const categoriaProduto =
-    document.getElementById(
-        "categoriaProduto"
-    );
+    document.getElementById("categoriaProduto");
 
 const precoCusto =
-    document.getElementById(
-        "precoCusto"
-    );
+    document.getElementById("precoCusto");
 
 const precoVenda =
-    document.getElementById(
-        "precoVenda"
-    );
+    document.getElementById("precoVenda");
 
 const estoque =
-    document.getElementById(
-        "estoque"
-    );
+    document.getElementById("estoque");
 
 const estoqueMinimo =
-    document.getElementById(
-        "estoqueMinimo"
-    );
+    document.getElementById("estoqueMinimo");
 
 const produtoAtivo =
-    document.getElementById(
-        "produtoAtivo"
-    );
+    document.getElementById("produtoAtivo");
+
+const tituloFormulario =
+    document.getElementById("tituloFormulario");
 
 const btnSalvar =
-    document.getElementById(
-        "btnSalvar"
-    );
+    document.getElementById("btnSalvar");
 
 const btnCancelar =
-    document.getElementById(
-        "btnCancelar"
-    );
+    document.getElementById("btnCancelar");
 
 const btnAtualizar =
-    document.getElementById(
-        "btnAtualizar"
-    );
+    document.getElementById("btnAtualizar");
 
 const listaProdutos =
-    document.getElementById(
-        "listaProdutos"
-    );
+    document.getElementById("listaProdutos");
 
 const carregando =
-    document.getElementById(
-        "carregando"
-    );
+    document.getElementById("carregando");
 
 const semProdutos =
-    document.getElementById(
-        "semProdutos"
-    );
+    document.getElementById("semProdutos");
 
 const mensagemAdmin =
-    document.getElementById(
-        "mensagemAdmin"
-    );
-
-const nomeAdministrador =
-    document.getElementById(
-        "nomeAdministrador"
-    );
-
-const avatarAdministrador =
-    document.querySelector(
-        ".avatar-admin"
-    );
+    document.getElementById("mensagemAdmin");
 
 const dataAtual =
-    document.getElementById(
-        "dataAtual"
-    );
+    document.getElementById("dataAtual");
 
-const btnSair =
-    document.getElementById(
-        "btnSair"
-    );
+const nomeAdministrador =
+    document.getElementById("nomeAdministrador");
 
 
-/* ==========================================
+/* =========================================================
    ESTADO
-========================================== */
+========================================================= */
 
-let produtoEditandoId =
-    null;
+let perfilAtual = null;
+
+let produtoEditandoId = null;
+
+let categorias = [];
+
+let produtos = [];
 
 
-/* ==========================================
-   MENSAGEM
-========================================== */
+/* =========================================================
+   MENSAGENS
+========================================================= */
 
 function mostrarMensagem(
     texto,
-    tipo = "sucesso"
+    tipo = "erro"
 ) {
 
-    mensagemAdmin.textContent =
-        texto;
+    if (!mensagemAdmin) {
+        return;
+    }
 
-    mensagemAdmin.style.display =
-        "block";
+    mensagemAdmin.textContent = texto;
 
     mensagemAdmin.className =
-        "mensagem-admin " +
-        tipo;
+        "mensagem " + tipo;
 
-
-    setTimeout(
-        () => {
-
-            mensagemAdmin.style.display =
-                "none";
-
-        },
-        5000
-    );
 }
 
 
-/* ==========================================
-   DATA
-========================================== */
+function limparMensagem() {
+
+    if (!mensagemAdmin) {
+        return;
+    }
+
+    mensagemAdmin.textContent = "";
+
+    mensagemAdmin.className =
+        "mensagem";
+
+}
+
+
+/* =========================================================
+   DATA ATUAL
+========================================================= */
 
 function mostrarDataAtual() {
+
+    if (!dataAtual) {
+        return;
+    }
 
     const agora =
         new Date();
@@ -179,25 +153,23 @@ function mostrarDataAtual() {
             .charAt(0)
             .toUpperCase() +
         dataFormatada.slice(1);
+
 }
 
 
-/* ==========================================
+/* =========================================================
    PROTEGER PÁGINA
-========================================== */
+========================================================= */
 
 async function protegerPagina() {
 
     const {
-
         data: {
             session
         },
-
         error: erroSessao
-
     } =
-        await supabaseClient
+        await produtosSupabase
             .auth
             .getSession();
 
@@ -211,125 +183,138 @@ async function protegerPagina() {
             "index.html";
 
         return false;
+
     }
 
 
     const {
-
-        data: perfil,
-
-        error
-
+        data: usuario,
+        error: erroUsuario
     } =
-        await supabaseClient
+        await produtosSupabase
+            .auth
+            .getUser();
 
+
+    if (
+        erroUsuario ||
+        !usuario?.user
+    ) {
+
+        window.location.href =
+            "index.html";
+
+        return false;
+
+    }
+
+
+    const {
+        data: perfil,
+        error
+    } =
+        await produtosSupabase
             .from("perfis")
-
-            .select(
-                "id, nome_completo, usuario, tipo, ativo"
-            )
-
+            .select(`
+                id,
+                nome_completo,
+                usuario,
+                tipo,
+                ativo,
+                loja_id
+            `)
             .eq(
                 "id",
-                session.user.id
+                usuario.user.id
             )
+            .single();
 
-            .maybeSingle();
 
+    if (error) {
 
-    if (
-        error ||
-        !perfil
-    ) {
+        console.error(
+            "Erro ao carregar perfil:",
+            error
+        );
 
-        await supabaseClient
-            .auth
-            .signOut();
-
-        window.location.href =
-            "index.html";
+        mostrarMensagem(
+            "Não foi possível verificar seu perfil.",
+            "erro"
+        );
 
         return false;
+
     }
 
 
     if (
+        !perfil ||
         perfil.tipo !== "admin" ||
-        perfil.ativo !== true
+        perfil.ativo !== true ||
+        !perfil.loja_id
     ) {
 
-        await supabaseClient
-            .auth
-            .signOut();
+        alert(
+            "Acesso permitido somente para administradores ativos."
+        );
 
         window.location.href =
             "index.html";
 
         return false;
+
     }
 
 
-    const nome =
-        perfil.nome_completo ||
-        "Administrador";
+    perfilAtual =
+        perfil;
 
 
-    nomeAdministrador.textContent =
-        nome;
+    if (nomeAdministrador) {
 
+        nomeAdministrador.textContent =
+            perfil.nome_completo ||
+            perfil.usuario ||
+            "Administrador";
 
-    avatarAdministrador.textContent =
-        nome
-            .trim()
-            .charAt(0)
-            .toUpperCase();
-
-
-    sessionStorage.setItem(
-        "sistemaLojaPerfil",
-        JSON.stringify(perfil)
-    );
+    }
 
 
     return true;
+
 }
 
 
-/* ==========================================
+/* =========================================================
    CARREGAR CATEGORIAS
-========================================== */
+========================================================= */
 
 async function carregarCategorias() {
 
-    categoriaProduto.innerHTML = `
-
-        <option value="">
-            Sem categoria
-        </option>
-
-    `;
+    if (!perfilAtual?.loja_id) {
+        return;
+    }
 
 
     const {
-
         data,
-
         error
-
     } =
-        await supabaseClient
-
+        await produtosSupabase
             .from("categorias")
-
-            .select(
-                "id, nome"
+            .select(`
+                id,
+                nome,
+                ativo
+            `)
+            .eq(
+                "loja_id",
+                perfilAtual.loja_id
             )
-
             .eq(
                 "ativo",
                 true
             )
-
             .order(
                 "nome",
                 {
@@ -345,35 +330,57 @@ async function carregarCategorias() {
             error
         );
 
+        mostrarMensagem(
+            "Não foi possível carregar as categorias.",
+            "erro"
+        );
+
+        return;
+
+    }
+
+
+    categorias =
+        data || [];
+
+
+    preencherCategorias();
+
+}
+
+
+/* =========================================================
+   PREENCHER CATEGORIAS
+========================================================= */
+
+function preencherCategorias() {
+
+    if (!categoriaProduto) {
         return;
     }
 
 
-    if (
-        !data ||
-        data.length === 0
-    ) {
+    categoriaProduto.innerHTML =
+        `
+        <option value="">
+            Sem categoria
+        </option>
+        `;
 
-        return;
-    }
 
-
-    data.forEach(
-        categoria => {
+    categorias.forEach(
+        function (categoria) {
 
             const option =
                 document.createElement(
                     "option"
                 );
 
-
             option.value =
                 categoria.id;
 
-
             option.textContent =
                 categoria.nome;
-
 
             categoriaProduto.appendChild(
                 option
@@ -381,260 +388,795 @@ async function carregarCategorias() {
 
         }
     );
+
 }
 
 
-/* ==========================================
-   CADASTRAR / EDITAR
-========================================== */
+/* =========================================================
+   CARREGAR PRODUTOS
+========================================================= */
 
-async function salvarProduto(
-    event
-) {
+async function carregarProdutos() {
 
-    event.preventDefault();
+    if (!perfilAtual?.loja_id) {
+        return;
+    }
+
+
+    if (carregando) {
+
+        carregando.style.display =
+            "block";
+
+    }
+
+
+    if (semProdutos) {
+
+        semProdutos.style.display =
+            "none";
+
+    }
+
+
+    const {
+        data,
+        error
+    } =
+        await produtosSupabase
+            .from("produtos")
+            .select(`
+                id,
+                nome,
+                sku,
+                fornecedor,
+                categoria_id,
+                preco_custo,
+                preco_venda,
+                estoque,
+                estoque_minimo,
+                ativo,
+                criado_em,
+                atualizado_em,
+                categorias (
+                    nome
+                )
+            `)
+            .eq(
+                "loja_id",
+                perfilAtual.loja_id
+            )
+            .order(
+                "nome",
+                {
+                    ascending: true
+                }
+            );
+
+
+    if (carregando) {
+
+        carregando.style.display =
+            "none";
+
+    }
+
+
+    if (error) {
+
+        console.error(
+            "Erro ao carregar produtos:",
+            error
+        );
+
+        mostrarMensagem(
+            "Não foi possível carregar os produtos.",
+            "erro"
+        );
+
+        return;
+
+    }
+
+
+    produtos =
+        data || [];
+
+
+    renderizarProdutos();
+
+}
+
+
+/* =========================================================
+   FORMATAR MOEDA
+========================================================= */
+
+function formatarMoeda(valor) {
+
+    return (
+        Number(valor) || 0
+    ).toLocaleString(
+        "pt-BR",
+        {
+            style: "currency",
+            currency: "BRL"
+        }
+    );
+
+}
+
+
+/* =========================================================
+   ESCAPAR HTML
+========================================================= */
+
+function escaparHTML(texto) {
+
+    const div =
+        document.createElement(
+            "div"
+        );
+
+    div.textContent =
+        texto ?? "";
+
+    return div.innerHTML;
+
+}
+
+
+/* =========================================================
+   RENDERIZAR PRODUTOS
+========================================================= */
+
+function renderizarProdutos() {
+
+    if (!listaProdutos) {
+        return;
+    }
+
+
+    listaProdutos.innerHTML =
+        "";
+
+
+    if (
+        !produtos ||
+        produtos.length === 0
+    ) {
+
+        if (semProdutos) {
+
+            semProdutos.style.display =
+                "block";
+
+        }
+
+        return;
+
+    }
+
+
+    if (semProdutos) {
+
+        semProdutos.style.display =
+            "none";
+
+    }
+
+
+    produtos.forEach(
+        function (produto) {
+
+            const tr =
+                document.createElement(
+                    "tr"
+                );
+
+
+            const nome =
+                escaparHTML(
+                    produto.nome ||
+                    "Sem nome"
+                );
+
+
+            const sku =
+                escaparHTML(
+                    produto.sku ||
+                    "-"
+                );
+
+
+            const fornecedor =
+                escaparHTML(
+                    produto.fornecedor ||
+                    "-"
+                );
+
+
+            const categoria =
+                escaparHTML(
+                    produto.categorias?.nome ||
+                    "Sem categoria"
+                );
+
+
+            const custo =
+                formatarMoeda(
+                    produto.preco_custo
+                );
+
+
+            const venda =
+                formatarMoeda(
+                    produto.preco_venda
+                );
+
+
+            const estoqueAtual =
+                Number(
+                    produto.estoque
+                ) || 0;
+
+
+            const ativo =
+                produto.ativo === true;
+
+
+            tr.innerHTML = `
+                <td>
+                    ${nome}
+                </td>
+
+                <td>
+                    ${sku}
+                </td>
+
+                <td>
+                    ${fornecedor}
+                </td>
+
+                <td>
+                    ${categoria}
+                </td>
+
+                <td>
+                    ${custo}
+                </td>
+
+                <td>
+                    ${venda}
+                </td>
+
+                <td>
+                    ${estoqueAtual}
+                </td>
+
+                <td>
+                    <span
+                        class="status-produto ${
+                            ativo
+                                ? "ativo"
+                                : "inativo"
+                        }"
+                    >
+                        ${
+                            ativo
+                                ? "Ativo"
+                                : "Inativo"
+                        }
+                    </span>
+                </td>
+
+                <td>
+
+                    <div
+                        class="acoes-produto"
+                    >
+
+                        <button
+                            type="button"
+                            class="btn-acao btn-editar"
+                            onclick="editarProduto('${produto.id}')"
+                        >
+                            Editar
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="btn-acao btn-status"
+                            onclick="alternarStatusProduto(
+                                '${produto.id}',
+                                ${ativo}
+                            )"
+                        >
+                            ${
+                                ativo
+                                    ? "Desativar"
+                                    : "Ativar"
+                            }
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="btn-acao btn-excluir"
+                            onclick="excluirProduto('${produto.id}')"
+                        >
+                            Excluir
+                        </button>
+
+                    </div>
+
+                </td>
+            `;
+
+
+            listaProdutos.appendChild(
+                tr
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   LIMPAR FORMULÁRIO
+========================================================= */
+
+function limparFormulario() {
+
+    if (formProduto) {
+        formProduto.reset();
+    }
+
+
+    produtoEditandoId =
+        null;
+
+
+    if (produtoAtivo) {
+
+        produtoAtivo.checked =
+            true;
+
+    }
+
+
+    if (categoriaProduto) {
+
+        categoriaProduto.value =
+            "";
+
+    }
+
+
+    if (tituloFormulario) {
+
+        tituloFormulario.textContent =
+            "Cadastrar produto";
+
+    }
+
+
+    if (btnSalvar) {
+
+        btnSalvar.textContent =
+            "Cadastrar produto";
+
+    }
+
+}
+
+
+/* =========================================================
+   EDITAR PRODUTO
+========================================================= */
+
+function editarProduto(id) {
+
+    const produto =
+        produtos.find(
+            function (item) {
+
+                return (
+                    String(item.id) ===
+                    String(id)
+                );
+
+            }
+        );
+
+
+    if (!produto) {
+
+        alert(
+            "Produto não encontrado."
+        );
+
+        return;
+
+    }
+
+
+    produtoEditandoId =
+        produto.id;
+
+
+    if (tituloFormulario) {
+
+        tituloFormulario.textContent =
+            "Editar produto";
+
+    }
+
+
+    if (btnSalvar) {
+
+        btnSalvar.textContent =
+            "Salvar alterações";
+
+    }
+
+
+    nomeProduto.value =
+        produto.nome || "";
+
+
+    skuProduto.value =
+        produto.sku || "";
+
+
+    fornecedorProduto.value =
+        produto.fornecedor || "";
+
+
+    categoriaProduto.value =
+        produto.categoria_id || "";
+
+
+    precoCusto.value =
+        produto.preco_custo ?? "";
+
+
+    precoVenda.value =
+        produto.preco_venda ?? "";
+
+
+    estoque.value =
+        produto.estoque ?? 0;
+
+
+    estoqueMinimo.value =
+        produto.estoque_minimo ?? 0;
+
+
+    produtoAtivo.checked =
+        produto.ativo === true;
+
+
+    limparMensagem();
+
+
+    window.scrollTo(
+        {
+            top: 0,
+            behavior: "smooth"
+        }
+    );
+
+}
+
+
+/* =========================================================
+   SALVAR PRODUTO
+========================================================= */
+
+async function salvarProduto(event) {
+
+    if (event) {
+
+        event.preventDefault();
+
+    }
+
+
+    limparMensagem();
+
+
+    if (!perfilAtual?.loja_id) {
+
+        mostrarMensagem(
+            "Loja do administrador não encontrada.",
+            "erro"
+        );
+
+        return;
+
+    }
 
 
     const nome =
-        nomeProduto.value.trim();
+        nomeProduto.value
+            .trim();
 
 
     const sku =
-        skuProduto.value.trim();
+        skuProduto.value
+            .trim();
 
 
-    const custo =
+    const fornecedor =
+        fornecedorProduto.value
+            .trim();
+
+
+    const categoriaId =
+        categoriaProduto.value ||
+        null;
+
+
+    const precoCustoValor =
         Number(
             precoCusto.value
         );
 
 
-    const venda =
+    const precoVendaValor =
         Number(
             precoVenda.value
         );
 
 
-    const quantidadeEstoque =
+    const estoqueValor =
         Number(
             estoque.value
         );
 
 
-    const quantidadeMinima =
+    const estoqueMinimoValor =
         Number(
             estoqueMinimo.value
         );
-
-
-    const categoria =
-        categoriaProduto.value;
 
 
     const ativo =
         produtoAtivo.checked;
 
 
-    /* ======================================
-       VALIDAÇÕES
-    ======================================= */
-
-    if (
-        nome.length < 2
-    ) {
+    if (!nome) {
 
         mostrarMensagem(
-            "Informe o nome do produto.",
+            "Digite o nome do produto.",
             "erro"
         );
 
         nomeProduto.focus();
 
         return;
+
     }
 
 
     if (
-        !Number.isFinite(custo) ||
-        custo < 0
+        !Number.isFinite(
+            precoCustoValor
+        ) ||
+        precoCustoValor < 0
     ) {
 
         mostrarMensagem(
-            "Informe um preço de custo válido.",
+            "Digite um preço de custo válido.",
             "erro"
         );
 
         precoCusto.focus();
 
         return;
+
     }
 
 
     if (
-        !Number.isFinite(venda) ||
-        venda < 0
+        !Number.isFinite(
+            precoVendaValor
+        ) ||
+        precoVendaValor < 0
     ) {
 
         mostrarMensagem(
-            "Informe um preço de venda válido.",
+            "Digite um preço de venda válido.",
             "erro"
         );
 
         precoVenda.focus();
 
         return;
+
     }
 
 
     if (
         !Number.isFinite(
-            quantidadeEstoque
+            estoqueValor
         ) ||
-        quantidadeEstoque < 0
+        estoqueValor < 0
     ) {
 
         mostrarMensagem(
-            "Informe um estoque válido.",
+            "Digite um estoque válido.",
             "erro"
         );
 
         estoque.focus();
 
         return;
+
     }
 
 
     if (
         !Number.isFinite(
-            quantidadeMinima
+            estoqueMinimoValor
         ) ||
-        quantidadeMinima < 0
+        estoqueMinimoValor < 0
     ) {
 
         mostrarMensagem(
-            "Informe um estoque mínimo válido.",
+            "Digite um estoque mínimo válido.",
             "erro"
         );
 
         estoqueMinimo.focus();
 
         return;
+
     }
 
 
-    /* ======================================
-       BOTÃO
-    ======================================= */
+    const dadosProduto = {
 
-    btnSalvar.disabled =
-        true;
+        nome:
+            nome,
+
+        sku:
+            sku || null,
+
+        fornecedor:
+            fornecedor || null,
+
+        categoria_id:
+            categoriaId,
+
+        preco_custo:
+            precoCustoValor,
+
+        preco_venda:
+            precoVendaValor,
+
+        estoque:
+            estoqueValor,
+
+        estoque_minimo:
+            estoqueMinimoValor,
+
+        ativo:
+            ativo
+
+    };
 
 
-    btnSalvar.textContent =
-        produtoEditandoId
-            ? "Salvando..."
-            : "Cadastrando...";
+    if (btnSalvar) {
+
+        btnSalvar.disabled =
+            true;
+
+    }
 
 
     try {
 
-        const dadosProduto = {
+        /* =================================================
+           CADASTRAR
+        ================================================= */
 
-            nome:
-                nome,
+        if (!produtoEditandoId) {
 
-            sku:
-                sku || null,
-
-            categoria_id:
-                categoria
-                    ? Number(categoria)
-                    : null,
-
-            preco_custo:
-                custo,
-
-            preco_venda:
-                venda,
-
-            estoque:
-                quantidadeEstoque,
-
-            estoque_minimo:
-                quantidadeMinima,
-
-            ativo:
-                ativo
-
-        };
+            dadosProduto.loja_id =
+                perfilAtual.loja_id;
 
 
-        let resposta;
-
-
-        /* ==================================
-           EDITAR
-        =================================== */
-
-        if (
-            produtoEditandoId
-        ) {
-
-            resposta =
-                await supabaseClient
-
+            const {
+                error
+            } =
+                await produtosSupabase
                     .from("produtos")
-
-                    .update(
-                        dadosProduto
-                    )
-
-                    .eq(
-                        "id",
-                        produtoEditandoId
-                    );
-
-
-        } else {
-
-
-            /* ==============================
-               NOVO
-            =============================== */
-
-            resposta =
-                await supabaseClient
-
-                    .from("produtos")
-
                     .insert(
                         dadosProduto
                     );
 
+
+            if (error) {
+
+                console.error(
+                    "Erro ao cadastrar produto:",
+                    error
+                );
+
+                mostrarMensagem(
+                    "Não foi possível cadastrar o produto: " +
+                    error.message,
+                    "erro"
+                );
+
+                return;
+
+            }
+
+
+            mostrarMensagem(
+                "Produto cadastrado com sucesso!",
+                "sucesso"
+            );
+
         }
 
+        /* =================================================
+           EDITAR
+        ================================================= */
 
-        if (
-            resposta.error
-        ) {
+        else {
 
-            throw resposta.error;
+            const {
+                error
+            } =
+                await produtosSupabase
+                    .from("produtos")
+                    .update(
+                        dadosProduto
+                    )
+                    .eq(
+                        "id",
+                        produtoEditandoId
+                    )
+                    .eq(
+                        "loja_id",
+                        perfilAtual.loja_id
+                    );
+
+
+            if (error) {
+
+                console.error(
+                    "Erro ao atualizar produto:",
+                    error
+                );
+
+                mostrarMensagem(
+                    "Não foi possível atualizar o produto: " +
+                    error.message,
+                    "erro"
+                );
+
+                return;
+
+            }
+
+
+            mostrarMensagem(
+                "Produto atualizado com sucesso!",
+                "sucesso"
+            );
+
         }
-
-
-        mostrarMensagem(
-
-            produtoEditandoId
-                ? "Produto atualizado com sucesso."
-                : "Produto cadastrado com sucesso.",
-
-            "sucesso"
-
-        );
 
 
         limparFormulario();
-
 
         await carregarProdutos();
 
@@ -646,456 +1188,39 @@ async function salvarProduto(
             erro
         );
 
-
-        let mensagem =
-            erro.message ||
-            "Não foi possível salvar o produto.";
-
-
-        if (
-            erro.code === "23505"
-        ) {
-
-            mensagem =
-                "Este SKU já está cadastrado.";
-
-        }
-
-
         mostrarMensagem(
-            mensagem,
+            "Ocorreu um erro ao salvar o produto.",
             "erro"
         );
-
 
     } finally {
 
-        btnSalvar.disabled =
-            false;
+        if (btnSalvar) {
 
+            btnSalvar.disabled =
+                false;
 
-        btnSalvar.textContent =
-            produtoEditandoId
-                ? "Salvar alterações"
-                : "Cadastrar produto";
+        }
+
     }
+
 }
 
 
-/* ==========================================
-   CARREGAR PRODUTOS
-========================================== */
-
-async function carregarProdutos() {
-
-    carregando.style.display =
-        "block";
-
-
-    listaProdutos.innerHTML =
-        "";
-
-
-    semProdutos.style.display =
-        "none";
-
-
-    try {
-
-        const {
-
-            data,
-
-            error
-
-        } =
-            await supabaseClient
-
-                .from("produtos")
-
-                .select(`
-
-                    id,
-                    nome,
-                    sku,
-                    categoria_id,
-                    preco_custo,
-                    preco_venda,
-                    estoque,
-                    estoque_minimo,
-                    ativo,
-                    criado_em,
-                    categorias (
-                        nome
-                    )
-
-                `)
-
-                .order(
-                    "criado_em",
-                    {
-                        ascending: false
-                    }
-                );
-
-
-        if (error) {
-
-            throw error;
-        }
-
-
-        carregando.style.display =
-            "none";
-
-
-        if (
-            !data ||
-            data.length === 0
-        ) {
-
-            semProdutos.style.display =
-                "block";
-
-            return;
-        }
-
-
-        data.forEach(
-            criarLinhaProduto
-        );
-
-
-    } catch (erro) {
-
-        carregando.style.display =
-            "none";
-
-
-        console.error(
-            "Erro ao carregar produtos:",
-            erro
-        );
-
-
-        mostrarMensagem(
-            "Não foi possível carregar os produtos: " +
-            (
-                erro.message ||
-                "erro desconhecido"
-            ),
-            "erro"
-        );
-    }
-}
-
-
-/* ==========================================
-   CRIAR LINHA
-========================================== */
-
-function criarLinhaProduto(
-    produto
-) {
-
-    const tr =
-        document.createElement(
-            "tr"
-        );
-
-
-    const nome =
-        produto.nome ||
-        "-";
-
-
-    const sku =
-        produto.sku ||
-        "-";
-
-
-    const categoria =
-        produto.categorias?.nome ||
-        "Sem categoria";
-
-
-    const ativo =
-        produto.ativo === true;
-
-
-    const statusTexto =
-        ativo
-            ? "Ativo"
-            : "Inativo";
-
-
-    const classeStatus =
-        ativo
-            ? "ativo"
-            : "inativo";
-
-
-    const textoBotao =
-        ativo
-            ? "Desativar"
-            : "Ativar";
-
-
-    const custo =
-        formatarMoeda(
-            produto.preco_custo
-        );
-
-
-    const venda =
-        formatarMoeda(
-            produto.preco_venda
-        );
-
-
-    const estoqueFormatado =
-        formatarNumero(
-            produto.estoque
-        );
-
-
-    tr.innerHTML = `
-
-        <td>
-            <strong>
-                ${escaparHtml(nome)}
-            </strong>
-        </td>
-
-        <td>
-            ${escaparHtml(sku)}
-        </td>
-
-        <td>
-            ${escaparHtml(categoria)}
-        </td>
-
-        <td>
-            ${custo}
-        </td>
-
-        <td>
-            ${venda}
-        </td>
-
-        <td>
-            ${estoqueFormatado}
-        </td>
-
-        <td>
-
-            <span class="status ${classeStatus}">
-                ${statusTexto}
-            </span>
-
-        </td>
-
-        <td>
-
-            <div class="acoes-tabela">
-
-                <button
-                    type="button"
-                    class="botao-acao botao-editar"
-                    data-editar="${produto.id}"
-                >
-                    Editar
-                </button>
-
-                <button
-                    type="button"
-                    class="botao-acao botao-status-produto"
-                    data-status="${produto.id}"
-                    data-ativo="${ativo}"
-                >
-                    ${textoBotao}
-                </button>
-
-            </div>
-
-        </td>
-
-    `;
-
-
-    listaProdutos.appendChild(
-        tr
-    );
-
-
-    const botaoEditar =
-        tr.querySelector(
-            "[data-editar]"
-        );
-
-
-    botaoEditar.addEventListener(
-        "click",
-        () => {
-
-            editarProduto(
-                produto
-            );
-
-        }
-    );
-
-
-    const botaoStatus =
-        tr.querySelector(
-            "[data-status]"
-        );
-
-
-    botaoStatus.addEventListener(
-        "click",
-        () => {
-
-            alterarStatusProduto(
-                produto.id,
-                !ativo
-            );
-
-        }
-    );
-}
-
-
-/* ==========================================
-   EDITAR PRODUTO
-========================================== */
-
-function editarProduto(
-    produto
-) {
-
-    produtoEditandoId =
-        produto.id;
-
-
-    tituloFormulario.textContent =
-        "Editar produto";
-
-
-    btnSalvar.textContent =
-        "Salvar alterações";
-
-
-    btnCancelar.style.display =
-        "inline-block";
-
-
-    nomeProduto.value =
-        produto.nome ||
-        "";
-
-
-    skuProduto.value =
-        produto.sku ||
-        "";
-
-
-    categoriaProduto.value =
-        produto.categoria_id
-            ? String(
-                produto.categoria_id
-            )
-            : "";
-
-
-    precoCusto.value =
-        produto.preco_custo ??
-        "";
-
-
-    precoVenda.value =
-        produto.preco_venda ??
-        "";
-
-
-    estoque.value =
-        produto.estoque ??
-        0;
-
-
-    estoqueMinimo.value =
-        produto.estoque_minimo ??
-        0;
-
-
-    produtoAtivo.checked =
-        produto.ativo === true;
-
-
-    window.scrollTo(
-        {
-            top: 0,
-            behavior: "smooth"
-        }
-    );
-
-
-    nomeProduto.focus();
-}
-
-
-/* ==========================================
-   LIMPAR FORMULÁRIO
-========================================== */
-
-function limparFormulario() {
-
-    produtoEditandoId =
-        null;
-
-
-    formProduto.reset();
-
-
-    categoriaProduto.value =
-        "";
-
-
-    produtoAtivo.checked =
-        true;
-
-
-    estoque.value =
-        0;
-
-
-    estoqueMinimo.value =
-        0;
-
-
-    tituloFormulario.textContent =
-        "Cadastrar produto";
-
-
-    btnSalvar.textContent =
-        "Cadastrar produto";
-
-
-    btnCancelar.style.display =
-        "none";
-}
-
-
-/* ==========================================
-   ALTERAR STATUS
-========================================== */
-
-async function alterarStatusProduto(
+/* =========================================================
+   ALTERNAR STATUS
+========================================================= */
+
+async function alternarStatusProduto(
     id,
-    novoStatus
+    ativoAtual
 ) {
 
-    const confirmacao =
+    const novoStatus =
+        !ativoAtual;
+
+
+    const mensagemConfirmacao =
         novoStatus
             ? "Deseja ativar este produto?"
             : "Deseja desativar este produto?";
@@ -1103,11 +1228,12 @@ async function alterarStatusProduto(
 
     if (
         !confirm(
-            confirmacao
+            mensagemConfirmacao
         )
     ) {
 
         return;
+
     }
 
 
@@ -1116,37 +1242,47 @@ async function alterarStatusProduto(
         const {
             error
         } =
-            await supabaseClient
-
+            await produtosSupabase
                 .from("produtos")
-
-                .update({
-
-                    ativo:
-                        novoStatus
-
-                })
-
+                .update(
+                    {
+                        ativo:
+                            novoStatus
+                    }
+                )
                 .eq(
                     "id",
                     id
+                )
+                .eq(
+                    "loja_id",
+                    perfilAtual.loja_id
                 );
 
 
         if (error) {
 
-            throw error;
+            console.error(
+                "Erro ao alterar status:",
+                error
+            );
+
+            mostrarMensagem(
+                "Não foi possível alterar o status do produto: " +
+                error.message,
+                "erro"
+            );
+
+            return;
+
         }
 
 
         mostrarMensagem(
-
             novoStatus
-                ? "Produto ativado com sucesso."
-                : "Produto desativado com sucesso.",
-
+                ? "Produto ativado com sucesso!"
+                : "Produto desativado com sucesso!",
             "sucesso"
-
         );
 
 
@@ -1160,243 +1296,269 @@ async function alterarStatusProduto(
             erro
         );
 
-
         mostrarMensagem(
-            "Não foi possível alterar o status: " +
-            (
-                erro.message ||
-                "erro desconhecido"
-            ),
+            "Ocorreu um erro ao alterar o status.",
             "erro"
         );
-    }
-}
 
-
-/* ==========================================
-   FORMATAÇÃO
-========================================== */
-
-function formatarMoeda(
-    valor
-) {
-
-    const numero =
-        Number(valor);
-
-
-    if (
-        !Number.isFinite(numero)
-    ) {
-
-        return "R$ 0,00";
     }
 
-
-    return numero.toLocaleString(
-        "pt-BR",
-        {
-            style: "currency",
-            currency: "BRL"
-        }
-    );
 }
 
 
-function formatarNumero(
-    valor
-) {
+/* =========================================================
+   EXCLUIR PRODUTO
+========================================================= */
 
-    const numero =
-        Number(valor);
+async function excluirProduto(id) {
 
+    const produto =
+        produtos.find(
+            function (item) {
 
-    if (
-        !Number.isFinite(numero)
-    ) {
-
-        return "0";
-    }
-
-
-    return numero.toLocaleString(
-        "pt-BR",
-        {
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 3
-        }
-    );
-}
-
-
-/* ==========================================
-   SEGURANÇA HTML
-========================================== */
-
-function escaparHtml(
-    valor
-) {
-
-    return String(valor)
-
-        .replaceAll(
-            "&",
-            "&amp;"
-        )
-
-        .replaceAll(
-            "<",
-            "&lt;"
-        )
-
-        .replaceAll(
-            ">",
-            "&gt;"
-        )
-
-        .replaceAll(
-            '"',
-            "&quot;"
-        )
-
-        .replaceAll(
-            "'",
-            "&#039;"
-        );
-}
-
-
-/* ==========================================
-   MENU
-========================================== */
-
-function configurarMenu() {
-
-    document
-        .querySelectorAll(
-            "[data-futuro]"
-        )
-        .forEach(
-            item => {
-
-                item.addEventListener(
-                    "click",
-                    function (event) {
-
-                        event.preventDefault();
-
-
-                        alert(
-                            "A área de " +
-                            item.dataset.futuro +
-                            " será desenvolvida nesta etapa."
-                        );
-
-                    }
+                return (
+                    String(item.id) ===
+                    String(id)
                 );
 
             }
         );
-}
 
 
-/* ==========================================
-   SAIR
-========================================== */
+    const nome =
+        produto?.nome ||
+        "este produto";
 
-async function sair() {
+
+    /* =====================================================
+       PRIMEIRA CONFIRMAÇÃO
+    ===================================================== */
+
+    const confirmar =
+        confirm(
+            `Deseja excluir o produto "${nome}"?`
+        );
+
+
+    if (!confirmar) {
+
+        return;
+
+    }
+
+
+    /* =====================================================
+       SEGUNDA CONFIRMAÇÃO
+    ===================================================== */
+
+    const confirmarNovamente =
+        confirm(
+            `Confirme novamente:\n\nExcluir definitivamente "${nome}"?`
+        );
+
+
+    if (!confirmarNovamente) {
+
+        return;
+
+    }
+
 
     try {
 
-        await supabaseClient
-            .auth
-            .signOut();
+        /* =================================================
+           IMPORTANTE:
+           AQUI É RPC DO BANCO.
+
+           NÃO É EDGE FUNCTION.
+           
+           NÃO USAR:
+           /functions/v1/excluir_produto
+        ================================================= */
+
+        const {
+            data,
+            error
+        } =
+            await produtosSupabase
+                .rpc(
+                    "excluir_produto",
+                    {
+                        p_produto_id:
+                            id
+                    }
+                );
+
+
+        console.log(
+            "Resposta da exclusão:",
+            data
+        );
+
+
+        if (error) {
+
+            console.error(
+                "Erro RPC ao excluir produto:",
+                error
+            );
+
+
+            let mensagemErro =
+                error.message ||
+                "Não foi possível excluir o produto.";
+
+
+            if (
+                mensagemErro
+                    .toLowerCase()
+                    .includes(
+                        "já possui vendas"
+                    )
+            ) {
+
+                mensagemErro =
+                    "Este produto já possui vendas registradas e não pode ser excluído. Desative o produto em vez de excluí-lo.";
+
+            }
+
+
+            mostrarMensagem(
+                mensagemErro,
+                "erro"
+            );
+
+            return;
+
+        }
+
+
+        mostrarMensagem(
+            "Produto excluído com sucesso!",
+            "sucesso"
+        );
+
+
+        await carregarProdutos();
+
 
     } catch (erro) {
 
         console.error(
-            "Erro ao sair:",
+            "Erro ao excluir produto:",
             erro
         );
+
+        mostrarMensagem(
+            "Ocorreu um erro ao excluir o produto: " +
+            (
+                erro?.message ||
+                "erro desconhecido."
+            ),
+            "erro"
+        );
+
     }
 
-
-    sessionStorage.removeItem(
-        "sistemaLojaPerfil"
-    );
-
-
-    window.location.href =
-        "index.html";
 }
 
 
-/* ==========================================
-   INICIAR
-========================================== */
+/* =========================================================
+   CANCELAR
+========================================================= */
 
-async function iniciarProdutos() {
+function cancelarEdicao() {
 
-    mostrarDataAtual();
+    limparFormulario();
 
+    limparMensagem();
 
-    const autorizado =
-        await protegerPagina();
-
-
-    if (!autorizado) {
-
-        return;
-    }
+}
 
 
-    configurarMenu();
+/* =========================================================
+   EVENTOS
+========================================================= */
 
-
-    btnSair.addEventListener(
-        "click",
-        sair
-    );
-
+if (formProduto) {
 
     formProduto.addEventListener(
         "submit",
         salvarProduto
     );
 
+}
+
+
+if (btnCancelar) {
 
     btnCancelar.addEventListener(
         "click",
-        limparFormulario
+        cancelarEdicao
     );
 
+}
+
+
+if (btnAtualizar) {
 
     btnAtualizar.addEventListener(
         "click",
-        carregarProdutos
+        async function () {
+
+            limparMensagem();
+
+            await carregarCategorias();
+
+            await carregarProdutos();
+
+        }
     );
 
+}
 
-    try {
 
-        await carregarCategorias();
+/* =========================================================
+   SAIR
+========================================================= */
 
-    } catch (erro) {
+async function sairProdutos() {
 
-        console.error(
-            "Erro ao iniciar categorias:",
-            erro
-        );
+    await produtosSupabase
+        .auth
+        .signOut();
+
+    window.location.href =
+        "index.html";
+
+}
+
+
+/* =========================================================
+   INICIAR
+========================================================= */
+
+async function iniciarProdutos() {
+
+    mostrarDataAtual();
+
+
+    const acesso =
+        await protegerPagina();
+
+
+    if (!acesso) {
+
+        return;
 
     }
 
 
+    await carregarCategorias();
+
     await carregarProdutos();
+
 }
 
-
-/* ==========================================
-   EXECUTAR
-========================================== */
 
 iniciarProdutos();

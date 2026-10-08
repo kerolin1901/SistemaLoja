@@ -42,8 +42,11 @@
             <div class="logo-admin">
 
                 <h1>
+
                     Sistema<br>
+
                     da Loja
+
                 </h1>
 
             </div>
@@ -116,11 +119,16 @@
                 </a>
 
 
-                <!-- LOJAS -->
+                <!-- ==================================
+                     LOJAS
+                     SOMENTE ADMINISTRADOR GERAL
+                =================================== -->
 
                 <a
                     href="lojas.html"
                     class="item-menu"
+                    id="menuLojas"
+                    style="display: none;"
                 >
 
                     <span>🏪</span>
@@ -305,7 +313,6 @@
                     style="text-decoration: none; color: inherit;"
                 >
 
-
                     <div class="icone-card">
 
                         👥
@@ -314,7 +321,6 @@
 
 
                     <div>
-
 
                         <span>
 
@@ -329,9 +335,7 @@
 
                         </strong>
 
-
                     </div>
-
 
                 </a>
 
@@ -344,7 +348,6 @@
                     style="text-decoration: none; color: inherit;"
                 >
 
-
                     <div class="icone-card">
 
                         📦
@@ -353,7 +356,6 @@
 
 
                     <div>
-
 
                         <span>
 
@@ -368,9 +370,7 @@
 
                         </strong>
 
-
                     </div>
-
 
                 </a>
 
@@ -383,7 +383,6 @@
                     style="text-decoration: none; color: inherit;"
                 >
 
-
                     <div class="icone-card">
 
                         📋
@@ -392,7 +391,6 @@
 
 
                     <div>
-
 
                         <span>
 
@@ -407,9 +405,7 @@
 
                         </strong>
 
-
                     </div>
-
 
                 </a>
 
@@ -422,7 +418,6 @@
                     style="text-decoration: none; color: inherit;"
                 >
 
-
                     <div class="icone-card">
 
                         💰
@@ -431,7 +426,6 @@
 
 
                     <div>
-
 
                         <span>
 
@@ -446,9 +440,7 @@
 
                         </strong>
 
-
                     </div>
-
 
                 </a>
 
@@ -525,7 +517,6 @@
                         class="atalho"
                     >
 
-
                         <span>
 
                             👥
@@ -546,7 +537,6 @@
 
                         </small>
 
-
                     </a>
 
 
@@ -556,7 +546,6 @@
                         href="produtos.html"
                         class="atalho"
                     >
-
 
                         <span>
 
@@ -578,7 +567,6 @@
 
                         </small>
 
-
                     </a>
 
 
@@ -588,7 +576,6 @@
                         href="categorias.html"
                         class="atalho"
                     >
-
 
                         <span>
 
@@ -610,7 +597,6 @@
 
                         </small>
 
-
                     </a>
 
 
@@ -620,7 +606,6 @@
                         href="estoque.html"
                         class="atalho"
                     >
-
 
                         <span>
 
@@ -641,7 +626,6 @@
                             Controlar estoque
 
                         </small>
-
 
                     </a>
 
@@ -683,11 +667,140 @@
     </div>
 
 
-    <!-- JAVASCRIPT -->
+    <!-- ==========================================
+         JAVASCRIPT
+    =========================================== -->
 
     <script src="js/login.js"></script>
 
     <script src="js/admin.js"></script>
+
+
+    <!-- ==========================================
+         CONTROLE DO MENU LOJAS
+         SOMENTE ADMINISTRADOR GERAL
+    =========================================== -->
+
+    <script>
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            async function () {
+
+                const menuLojas =
+                    document.getElementById(
+                        "menuLojas"
+                    );
+
+
+                if (!menuLojas) {
+
+                    return;
+
+                }
+
+
+                try {
+
+                    const {
+                        data: {
+                            user
+                        },
+                        error: erroUsuario
+                    } =
+                        await supabaseClient
+                            .auth
+                            .getUser();
+
+
+                    if (
+                        erroUsuario ||
+                        !user
+                    ) {
+
+                        menuLojas.style.display =
+                            "none";
+
+                        return;
+
+                    }
+
+
+                    const {
+                        data: perfil,
+                        error
+                    } =
+                        await supabaseClient
+                            .from("perfis")
+                            .select(
+                                "usuario, tipo, ativo"
+                            )
+                            .eq(
+                                "id",
+                                user.id
+                            )
+                            .maybeSingle();
+
+
+                    if (error) {
+
+                        console.error(
+                            "Erro ao verificar perfil:",
+                            error
+                        );
+
+                        menuLojas.style.display =
+                            "none";
+
+                        return;
+
+                    }
+
+
+                    /*
+                       MOSTRAR LOJAS SOMENTE
+                       PARA O ADMINISTRADOR GERAL
+                    */
+
+                    const ehAdministradorGeral =
+                        perfil &&
+                        perfil.usuario ===
+                            "admingeral" &&
+                        perfil.tipo ===
+                            "admin_geral" &&
+                        perfil.ativo === true;
+
+
+                    if (
+                        ehAdministradorGeral
+                    ) {
+
+                        menuLojas.style.display =
+                            "flex";
+
+                    } else {
+
+                        menuLojas.style.display =
+                            "none";
+
+                    }
+
+                } catch (erro) {
+
+                    console.error(
+                        "Erro ao verificar acesso às lojas:",
+                        erro
+                    );
+
+                    menuLojas.style.display =
+                        "none";
+
+                }
+
+            }
+        );
+
+    </script>
 
 
 </body>

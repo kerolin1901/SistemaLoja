@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="pt-BR">
 
 <head>
@@ -12,6 +13,7 @@
 
     <title>Produtos - Sistema da Loja</title>
 
+
     <link
         rel="stylesheet"
         href="admin.css"
@@ -24,15 +26,19 @@
 
 </head>
 
+
 <body>
 
+
     <div class="layout-admin">
+
 
         <!-- ======================================
              MENU LATERAL
         ======================================= -->
 
         <aside class="menu-lateral">
+
 
             <div class="logo-admin">
 
@@ -54,6 +60,7 @@
 
             </div>
 
+
             <div class="usuario-logado">
 
                 <div class="avatar-admin">
@@ -74,11 +81,14 @@
 
             </div>
 
+
             <nav class="menu">
+
 
                 <div class="titulo-menu">
                     PRINCIPAL
                 </div>
+
 
                 <a
                     href="admin.html"
@@ -95,6 +105,7 @@
 
                 </a>
 
+
                 <a
                     href="usuarios.html"
                     class="item-menu"
@@ -110,9 +121,11 @@
 
                 </a>
 
+
                 <div class="titulo-menu">
                     ESTOQUE E VENDAS
                 </div>
+
 
                 <a
                     href="produtos.html"
@@ -129,6 +142,7 @@
 
                 </a>
 
+
                 <a
                     href="categorias.html"
                     class="item-menu"
@@ -143,6 +157,7 @@
                     </span>
 
                 </a>
+
 
                 <a
                     href="estoque.html"
@@ -159,6 +174,7 @@
 
                 </a>
 
+
                 <a
                     href="vendas.html"
                     class="item-menu"
@@ -173,6 +189,7 @@
                     </span>
 
                 </a>
+
 
                 <a
                     href="clientes.html"
@@ -189,9 +206,11 @@
 
                 </a>
 
+
                 <div class="titulo-menu">
                     FINANCEIRO
                 </div>
+
 
                 <a
                     href="financeiro.html"
@@ -208,6 +227,7 @@
 
                 </a>
 
+
                 <a
                     href="relatorios.html"
                     class="item-menu"
@@ -223,7 +243,9 @@
 
                 </a>
 
+
             </nav>
+
 
             <div class="area-sair">
 
@@ -243,7 +265,9 @@
 
             </div>
 
+
         </aside>
+
 
         <!-- ======================================
              CONTEÚDO
@@ -251,7 +275,9 @@
 
         <main class="conteudo-admin">
 
+
             <header class="cabecalho-admin">
+
 
                 <div>
 
@@ -265,6 +291,7 @@
 
                 </div>
 
+
                 <div class="data-atual">
 
                     <span>
@@ -277,12 +304,15 @@
 
                 </div>
 
+
             </header>
+
 
             <div
                 id="mensagemAdmin"
                 class="mensagem-admin"
             ></div>
+
 
             <!-- ==================================
                  FORMULÁRIO
@@ -290,7 +320,9 @@
 
             <section class="painel-produtos">
 
+
                 <div class="titulo-painel">
+
 
                     <div>
 
@@ -304,11 +336,17 @@
 
                     </div>
 
+
                 </div>
+
 
                 <form id="formProduto">
 
+
                     <div class="campos-produto">
+
+
+                        <!-- NOME -->
 
                         <div class="campo-produto campo-grande">
 
@@ -325,6 +363,9 @@
 
                         </div>
 
+
+                        <!-- SKU -->
+
                         <div class="campo-produto">
 
                             <label for="skuProduto">
@@ -338,6 +379,26 @@
                             >
 
                         </div>
+
+
+                        <!-- FORNECEDOR -->
+
+                        <div class="campo-produto">
+
+                            <label for="fornecedorProduto">
+                                Fornecedor
+                            </label>
+
+                            <input
+                                type="text"
+                                id="fornecedorProduto"
+                                placeholder="Ex.: Distribuidora ABC"
+                            >
+
+                        </div>
+
+
+                        <!-- CATEGORIA -->
 
                         <div class="campo-produto">
 
@@ -354,6 +415,9 @@
                             </select>
 
                         </div>
+
+
+                        <!-- PREÇO DE CUSTO -->
 
                         <div class="campo-produto">
 
@@ -372,6 +436,9 @@
 
                         </div>
 
+
+                        <!-- PREÇO DE VENDA -->
+
                         <div class="campo-produto">
 
                             <label for="precoVenda">
@@ -388,6 +455,9 @@
                             >
 
                         </div>
+
+
+                        <!-- ESTOQUE -->
 
                         <div class="campo-produto">
 
@@ -406,6 +476,9 @@
 
                         </div>
 
+
+                        <!-- ESTOQUE MÍNIMO -->
+
                         <div class="campo-produto">
 
                             <label for="estoqueMinimo">
@@ -423,13 +496,18 @@
 
                         </div>
 
+
+                        <!-- STATUS -->
+
                         <div class="campo-produto campo-status">
 
                             <label>
                                 Status
                             </label>
 
+
                             <label class="checkbox-status">
+
 
                                 <input
                                     type="checkbox"
@@ -437,17 +515,23 @@
                                     checked
                                 >
 
+
                                 <span>
                                     Produto ativo
                                 </span>
 
+
                             </label>
+
 
                         </div>
 
+
                     </div>
 
+
                     <div class="acoes-produto">
+
 
                         <button
                             type="submit"
@@ -457,6 +541,7 @@
                             Cadastrar produto
                         </button>
 
+
                         <button
                             type="button"
                             class="botao-secundario"
@@ -465,11 +550,15 @@
                             Cancelar
                         </button>
 
+
                     </div>
+
 
                 </form>
 
+
             </section>
+
 
             <!-- ==================================
                  LISTA
@@ -477,7 +566,9 @@
 
             <section class="painel-produtos">
 
+
                 <div class="titulo-painel titulo-lista">
+
 
                     <div>
 
@@ -491,6 +582,7 @@
 
                     </div>
 
+
                     <button
                         type="button"
                         class="botao-atualizar"
@@ -499,7 +591,9 @@
                         🔄 Atualizar
                     </button>
 
+
                 </div>
+
 
                 <div
                     id="carregando"
@@ -508,56 +602,79 @@
                     Carregando produtos...
                 </div>
 
+
                 <div class="tabela-wrapper">
+
 
                     <table class="tabela-produtos">
 
+
                         <thead>
 
+
                             <tr>
+
 
                                 <th>
                                     Produto
                                 </th>
 
+
                                 <th>
                                     SKU
                                 </th>
+
+
+                                <th>
+                                    Fornecedor
+                                </th>
+
 
                                 <th>
                                     Categoria
                                 </th>
 
+
                                 <th>
                                     Custo
                                 </th>
+
 
                                 <th>
                                     Venda
                                 </th>
 
+
                                 <th>
                                     Estoque
                                 </th>
+
 
                                 <th>
                                     Status
                                 </th>
 
+
                                 <th>
                                     Ações
                                 </th>
 
+
                             </tr>
 
+
                         </thead>
+
 
                         <tbody id="listaProdutos">
                         </tbody>
 
+
                     </table>
 
+
                 </div>
+
 
                 <div
                     id="semProdutos"
@@ -566,11 +683,15 @@
                     Nenhum produto cadastrado.
                 </div>
 
+
             </section>
+
 
         </main>
 
+
     </div>
+
 
     <!-- ==========================================
          SUPABASE
@@ -580,10 +701,14 @@
         src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
     ></script>
 
+
     <script src="js/config.js"></script>
+
 
     <script src="js/produtos.js"></script>
 
+
 </body>
+
 
 </html>
