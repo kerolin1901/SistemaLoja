@@ -18,12 +18,10 @@
         href="style.css"
     >
 
-
     <link
         rel="stylesheet"
         href="admin.css"
     >
-
 
     <link
         rel="stylesheet"
@@ -36,7 +34,6 @@
         /* ==========================================
            PADRONIZAÇÃO VISUAL
         =========================================== */
-
 
         .logo-admin {
 
@@ -268,6 +265,174 @@
 
         }
 
+
+        /* ==========================================
+           CAMPOS NOVOS
+        =========================================== */
+
+        .formulario-loja {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(
+                    3,
+                    minmax(
+                        0,
+                        1fr
+                    )
+                );
+
+            gap: 20px;
+
+            align-items: end;
+
+        }
+
+
+        .formulario-loja
+        .acoes-formulario {
+
+            grid-column: 1 / -1;
+
+        }
+
+
+        .campo-formulario
+        input[type="text"],
+        .campo-formulario
+        input[type="date"] {
+
+            width: 100%;
+
+            box-sizing: border-box;
+
+        }
+
+
+        /* ==========================================
+           STATUS DA LICENÇA
+        =========================================== */
+
+        .status-licenca {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding: 5px 9px;
+
+            border-radius: 999px;
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+            white-space: nowrap;
+
+        }
+
+
+        .status-licenca.ativa {
+
+            background: #dcfce7;
+
+            color: #166534;
+
+        }
+
+
+        .status-licenca.atencao {
+
+            background: #fef3c7;
+
+            color: #92400e;
+
+        }
+
+
+        .status-licenca.urgente {
+
+            background: #fee2e2;
+
+            color: #b91c1c;
+
+        }
+
+
+        .status-licenca.vencida {
+
+            background: #fecaca;
+
+            color: #991b1b;
+
+        }
+
+
+        .status-licenca.sem-vencimento {
+
+            background: #e2e8f0;
+
+            color: #475569;
+
+        }
+
+
+        /* ==========================================
+           TABELA
+        =========================================== */
+
+        .tabela-container {
+
+            overflow-x: auto;
+
+            width: 100%;
+
+        }
+
+
+        .tabela-lojas {
+
+            min-width: 1050px;
+
+        }
+
+
+        .tabela-lojas th,
+        .tabela-lojas td {
+
+            vertical-align: middle;
+
+        }
+
+
+        /* ==========================================
+           RESPONSIVO
+        =========================================== */
+
+        @media (
+            max-width: 900px
+        ) {
+
+            .formulario-loja {
+
+                grid-template-columns:
+                    1fr;
+
+            }
+
+
+            .formulario-loja
+            .acoes-formulario {
+
+                grid-column: auto;
+
+            }
+
+        }
+
     </style>
 
 </head>
@@ -290,17 +455,17 @@
 
             <div class="logo-admin">
 
-
                 <div class="logo-icone-admin">
                     SL
                 </div>
 
 
                 <h1>
+
                     Sistema<br>
                     da Loja
-                </h1>
 
+                </h1>
 
             </div>
 
@@ -309,15 +474,12 @@
 
             <div class="usuario-admin">
 
-
                 <div class="icone-usuario-admin">
-
 
                     <svg
                         viewBox="0 0 24 24"
                         aria-hidden="true"
                     >
-
 
                         <circle
                             cx="12"
@@ -328,7 +490,6 @@
                             stroke-width="2"
                         />
 
-
                         <path
                             d="M5 20c.8-4 3.1-6 7-6s6.2 2 7 6"
                             fill="none"
@@ -337,15 +498,12 @@
                             stroke-linecap="round"
                         />
 
-
                     </svg>
-
 
                 </div>
 
 
                 <div>
-
 
                     <div
                         id="nomeUsuario"
@@ -359,16 +517,12 @@
                         Administrador Geral
                     </div>
 
-
                 </div>
-
 
             </div>
 
 
-            <!-- ==========================================
-                 MENU
-            =========================================== -->
+            <!-- MENU -->
 
             <nav class="menu-admin">
 
@@ -385,16 +539,13 @@
                     class="menu-item"
                 >
 
-
                     <span class="icone-menu-admin">
-
 
                         <svg
                             viewBox="0 0 24 24"
                             aria-hidden="true"
                         >
 
-
                             <rect
                                 x="4"
                                 y="4"
@@ -405,7 +556,6 @@
                                 stroke="currentColor"
                                 stroke-width="2"
                             />
-
 
                             <rect
                                 x="14"
@@ -418,7 +568,6 @@
                                 stroke-width="2"
                             />
 
-
                             <rect
                                 x="4"
                                 y="14"
@@ -430,7 +579,6 @@
                                 stroke-width="2"
                             />
 
-
                             <rect
                                 x="14"
                                 y="14"
@@ -441,10 +589,8 @@
                                 stroke="currentColor"
                                 stroke-width="2"
                             />
-
 
                         </svg>
-
 
                     </span>
 
@@ -452,7 +598,6 @@
                     <span>
                         Dashboard Geral
                     </span>
-
 
                 </a>
 
@@ -469,15 +614,12 @@
                     class="menu-item ativo"
                 >
 
-
                     <span class="icone-menu-admin">
-
 
                         <svg
                             viewBox="0 0 24 24"
                             aria-hidden="true"
                         >
-
 
                             <path
                                 d="M4 10h16"
@@ -487,7 +629,6 @@
                                 stroke-linecap="round"
                             />
 
-
                             <path
                                 d="M5 10v9h14v-9"
                                 fill="none"
@@ -495,7 +636,6 @@
                                 stroke-width="2"
                                 stroke-linejoin="round"
                             />
-
 
                             <path
                                 d="M3 10 5 4h14l2 6"
@@ -505,7 +645,6 @@
                                 stroke-linejoin="round"
                             />
 
-
                             <path
                                 d="M9 19v-5h6v5"
                                 fill="none"
@@ -514,9 +653,7 @@
                                 stroke-linejoin="round"
                             />
 
-
                         </svg>
-
 
                     </span>
 
@@ -524,7 +661,6 @@
                     <span>
                         Lojas
                     </span>
-
 
                 </a>
 
@@ -536,15 +672,12 @@
                     class="menu-item"
                 >
 
-
                     <span class="icone-menu-admin">
-
 
                         <svg
                             viewBox="0 0 24 24"
                             aria-hidden="true"
                         >
-
 
                             <circle
                                 cx="9"
@@ -555,7 +688,6 @@
                                 stroke-width="2"
                             />
 
-
                             <path
                                 d="M3.5 20c.7-3.5 2.5-5 5.5-5s4.8 1.5 5.5 5"
                                 fill="none"
@@ -563,7 +695,6 @@
                                 stroke-width="2"
                                 stroke-linecap="round"
                             />
-
 
                             <circle
                                 cx="17"
@@ -574,7 +705,6 @@
                                 stroke-width="2"
                             />
 
-
                             <path
                                 d="M14.5 20c.4-2.6 1.3-4 3.5-4s3.1 1.4 3.5 4"
                                 fill="none"
@@ -583,9 +713,7 @@
                                 stroke-linecap="round"
                             />
 
-
                         </svg>
-
 
                     </span>
 
@@ -594,19 +722,14 @@
                         Administradores
                     </span>
 
-
                 </a>
-
 
             </nav>
 
 
-            <!-- ==========================================
-                 SAIR
-            =========================================== -->
+            <!-- SAIR -->
 
             <div class="menu-rodape">
-
 
                 <button
                     type="button"
@@ -614,15 +737,12 @@
                     class="btn-sair"
                 >
 
-
                     <span class="icone-sair-admin">
-
 
                         <svg
                             viewBox="0 0 24 24"
                             aria-hidden="true"
                         >
-
 
                             <path
                                 d="M10 5H5v14h5"
@@ -633,7 +753,6 @@
                                 stroke-linejoin="round"
                             />
 
-
                             <path
                                 d="M14 8l4 4-4 4"
                                 fill="none"
@@ -643,7 +762,6 @@
                                 stroke-linejoin="round"
                             />
 
-
                             <path
                                 d="M9 12h9"
                                 fill="none"
@@ -652,9 +770,7 @@
                                 stroke-linecap="round"
                             />
 
-
                         </svg>
-
 
                     </span>
 
@@ -663,9 +779,7 @@
                         Sair
                     </span>
 
-
                 </button>
-
 
             </div>
 
@@ -684,22 +798,17 @@
 
             <header class="cabecalho-admin">
 
-
                 <div>
-
 
                     <h2>
                         Lojas
                     </h2>
 
-
                     <p>
                         Cadastro e gerenciamento das lojas
                     </p>
 
-
                 </div>
-
 
             </header>
 
@@ -723,22 +832,17 @@
 
                 <div class="titulo-painel">
 
-
                     <div>
-
 
                         <h3 id="tituloFormulario">
                             Cadastrar nova loja
                         </h3>
 
-
                         <p id="descricaoFormulario">
-                            Informe o nome da nova loja.
+                            Informe o nome, CNPJ e vencimento da nova loja.
                         </p>
 
-
                     </div>
-
 
                 </div>
 
@@ -749,13 +853,13 @@
                 >
 
 
-                    <div class="campo-formulario">
+                    <!-- NOME -->
 
+                    <div class="campo-formulario">
 
                         <label for="nomeLoja">
                             Nome da loja
                         </label>
-
 
                         <input
                             type="text"
@@ -764,14 +868,55 @@
                             placeholder="Digite o nome da loja"
                             autocomplete="off"
                             maxlength="100"
+                            required
                         >
-
 
                     </div>
 
 
-                    <div class="acoes-formulario">
+                    <!-- CNPJ -->
 
+                    <div class="campo-formulario">
+
+                        <label for="cnpjLoja">
+                            CNPJ
+                        </label>
+
+                        <input
+                            type="text"
+                            id="cnpjLoja"
+                            name="cnpjLoja"
+                            placeholder="00.000.000/0000-00"
+                            autocomplete="off"
+                            maxlength="18"
+                            inputmode="numeric"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- VENCIMENTO -->
+
+                    <div class="campo-formulario">
+
+                        <label for="dataVencimentoLoja">
+                            Vencimento da licença
+                        </label>
+
+                        <input
+                            type="date"
+                            id="dataVencimentoLoja"
+                            name="dataVencimentoLoja"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- BOTÕES -->
+
+                    <div class="acoes-formulario">
 
                         <button
                             type="submit"
@@ -791,12 +936,10 @@
                             Cancelar
                         </button>
 
-
                     </div>
 
 
                 </form>
-
 
             </section>
 
@@ -810,19 +953,15 @@
 
                 <div class="titulo-painel">
 
-
                     <div>
-
 
                         <h3>
                             Lojas cadastradas
                         </h3>
 
-
                         <p>
                             Lojas disponíveis no sistema.
                         </p>
-
 
                     </div>
 
@@ -833,15 +972,12 @@
                         class="botao-secundario"
                     >
 
-
                         <span class="icone-atualizar">
-
 
                             <svg
                                 viewBox="0 0 24 24"
                                 aria-hidden="true"
                             >
-
 
                                 <path
                                     d="M20 11a8 8 0 0 0-14.8-4L3 10"
@@ -852,7 +988,6 @@
                                     stroke-linejoin="round"
                                 />
 
-
                                 <path
                                     d="M3 5v5h5"
                                     fill="none"
@@ -861,7 +996,6 @@
                                     stroke-linecap="round"
                                     stroke-linejoin="round"
                                 />
-
 
                                 <path
                                     d="M4 13a8 8 0 0 0 14.8 4L21 14"
@@ -872,7 +1006,6 @@
                                     stroke-linejoin="round"
                                 />
 
-
                                 <path
                                     d="M21 19v-5h-5"
                                     fill="none"
@@ -882,9 +1015,7 @@
                                     stroke-linejoin="round"
                                 />
 
-
                             </svg>
-
 
                         </span>
 
@@ -893,9 +1024,7 @@
                             Atualizar
                         </span>
 
-
                     </button>
-
 
                 </div>
 
@@ -919,55 +1048,52 @@
 
                 <div class="tabela-container">
 
-
                     <table class="tabela-lojas">
-
 
                         <thead>
 
-
                             <tr>
-
 
                                 <th>
                                     Loja
                                 </th>
 
+                                <th>
+                                    CNPJ
+                                </th>
 
                                 <th>
                                     Administradores
                                 </th>
 
+                                <th>
+                                    Licença
+                                </th>
 
                                 <th>
                                     Status
                                 </th>
 
-
                                 <th>
                                     Criada em
                                 </th>
-
 
                                 <th>
                                     Ação
                                 </th>
 
-
                             </tr>
-
 
                         </thead>
 
 
-                        <tbody id="listaLojas">
-
+                        <tbody
+                            id="listaLojas"
+                        >
 
                         </tbody>
 
-
                     </table>
-
 
                 </div>
 
@@ -992,17 +1118,23 @@
 
     <!-- CONFIGURAÇÃO -->
 
-    <script src="js/config.js"></script>
+    <script
+        src="js/config.js"
+    ></script>
 
 
     <!-- LOGIN / SESSÃO -->
 
-    <script src="js/login.js"></script>
+    <script
+        src="js/login.js"
+    ></script>
 
 
     <!-- LOJAS -->
 
-    <script src="js/lojas.js"></script>
+    <script
+        src="js/lojas.js"
+    ></script>
 
 
 </body>

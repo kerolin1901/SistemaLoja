@@ -50,7 +50,6 @@ function mostrarMensagem(
 
     campoMensagem.className =
         "mensagem " + tipo;
-
 }
 
 
@@ -69,7 +68,6 @@ function limparMensagem() {
 
     campoMensagem.className =
         "mensagem";
-
 }
 
 
@@ -119,6 +117,177 @@ function obterEmailLogin(usuario) {
         usuarioNormalizado +
         "@login.sistemaloja.local"
     );
+
+}
+
+
+/* ==========================================
+   VERIFICAR LICENÇA DA LOJA
+========================================== */
+
+async function verificarLicencaLoja(
+    lojaId
+) {
+
+    if (!lojaId) {
+
+        return {
+            permitida: false,
+            mensagem:
+                "Seu usuário não está vinculado a uma loja."
+        };
+
+    }
+
+
+    try {
+
+        const {
+            data: loja,
+            error
+        } = await supabaseClient
+
+            .from("lojas")
+
+            .select(`
+                id,
+                nome,
+                data_vencimento
+            `)
+
+            .eq(
+                "id",
+                lojaId
+            )
+
+            .maybeSingle();
+
+
+        /* ==========================================
+           ERRO AO BUSCAR LOJA
+        ========================================== */
+
+        if (error) {
+
+            console.error(
+                "Erro ao verificar licença da loja:",
+                error
+            );
+
+            return {
+                permitida: false,
+                mensagem:
+                    "Não foi possível verificar a licença da loja."
+            };
+
+        }
+
+
+        /* ==========================================
+           LOJA NÃO ENCONTRADA
+        ========================================== */
+
+        if (!loja) {
+
+            return {
+                permitida: false,
+                mensagem:
+                    "A loja vinculada ao seu usuário não foi encontrada."
+            };
+
+        }
+
+
+        /* ==========================================
+           DATA DE VENCIMENTO OBRIGATÓRIA
+        ========================================== */
+
+        if (
+            !loja.data_vencimento
+        ) {
+
+            return {
+                permitida: false,
+                mensagem:
+                    "A licença desta loja não possui uma data de vencimento cadastrada. Entre em contato com o Administrador Geral."
+            };
+
+        }
+
+
+        /* ==========================================
+           DATA DE HOJE
+        ========================================== */
+
+        const agora =
+            new Date();
+
+        const ano =
+            agora.getFullYear();
+
+        const mes =
+            String(
+                agora.getMonth() + 1
+            ).padStart(
+                2,
+                "0"
+            );
+
+        const dia =
+            String(
+                agora.getDate()
+            ).padStart(
+                2,
+                "0"
+            );
+
+
+        const hoje =
+            `${ano}-${mes}-${dia}`;
+
+
+        /* ==========================================
+           LICENÇA VENCIDA
+        ========================================== */
+
+        if (
+            loja.data_vencimento <
+            hoje
+        ) {
+
+            return {
+                permitida: false,
+                mensagem:
+                    `A licença da loja "${loja.nome}" está vencida. Entre em contato com o Administrador Geral para renovar o acesso.`
+            };
+
+        }
+
+
+        /* ==========================================
+           LICENÇA VÁLIDA
+        ========================================== */
+
+        return {
+            permitida: true,
+            mensagem: ""
+        };
+
+
+    } catch (erro) {
+
+        console.error(
+            "Erro inesperado ao verificar licença:",
+            erro
+        );
+
+        return {
+            permitida: false,
+            mensagem:
+                "Não foi possível verificar a licença da loja."
+        };
+
+    }
 
 }
 
@@ -240,6 +409,7 @@ async function entrar() {
                 "Usuário ou senha incorretos."
             );
 
+
             return;
 
         }
@@ -257,6 +427,7 @@ async function entrar() {
             mostrarMensagem(
                 "Não foi possível iniciar a sessão."
             );
+
 
             return;
 
@@ -310,6 +481,7 @@ async function entrar() {
                 "Não foi possível carregar seu perfil."
             );
 
+
             return;
 
         }
@@ -329,6 +501,7 @@ async function entrar() {
             mostrarMensagem(
                 "Seu usuário ainda não possui um perfil."
             );
+
 
             return;
 
@@ -352,7 +525,53 @@ async function entrar() {
                 "Seu usuário está desativado."
             );
 
+
             return;
+
+        }
+
+
+        /* ==========================================
+           VERIFICAR LICENÇA DA LOJA
+           
+           IMPORTANTE:
+           O ADMINISTRADOR GERAL NÃO PERTENCE
+           A UMA LOJA E NÃO DEVE SER BLOQUEADO
+           PELA LICENÇA.
+        ========================================== */
+
+        if (
+            perfil.tipo !== "admin_geral"
+        ) {
+
+            const resultadoLicenca =
+                await verificarLicencaLoja(
+                    perfil.loja_id
+                );
+
+
+            /* ==========================================
+               LICENÇA NÃO PERMITIDA
+            ========================================== */
+
+            if (
+                !resultadoLicenca.permitida
+            ) {
+
+                await supabaseClient
+                    .auth
+                    .signOut();
+
+
+                mostrarMensagem(
+                    resultadoLicenca.mensagem,
+                    "erro"
+                );
+
+
+                return;
+
+            }
 
         }
 
@@ -378,6 +597,7 @@ async function entrar() {
             window.location.href =
                 "admin-geral.html";
 
+
             return;
 
         }
@@ -394,6 +614,7 @@ async function entrar() {
             window.location.href =
                 "admin.html";
 
+
             return;
 
         }
@@ -409,6 +630,7 @@ async function entrar() {
 
             window.location.href =
                 "vendedor.html";
+
 
             return;
 
@@ -431,6 +653,10 @@ async function entrar() {
 
     } catch (erro) {
 
+
+        /* ==========================================
+           ERRO INESPERADO
+        ========================================== */
 
         console.error(
             "Erro inesperado no login:",
