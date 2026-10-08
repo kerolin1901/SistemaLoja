@@ -1,6 +1,7 @@
 /* ==========================================
    SISTEMA DA LOJA
    ADMINISTRADORES
+   ADMINISTRADOR GERAL
 ========================================== */
 
 
@@ -23,29 +24,19 @@ const mensagem =
     document.getElementById("mensagem");
 
 const formAdministrador =
-    document.getElementById(
-        "formAdministrador"
-    );
+    document.getElementById("formAdministrador");
 
 const nomeAdministrador =
-    document.getElementById(
-        "nomeAdministrador"
-    );
+    document.getElementById("nomeAdministrador");
 
 const usuarioAdministrador =
-    document.getElementById(
-        "usuarioAdministrador"
-    );
+    document.getElementById("usuarioAdministrador");
 
 const senhaAdministrador =
-    document.getElementById(
-        "senhaAdministrador"
-    );
+    document.getElementById("senhaAdministrador");
 
 const lojaAdministrador =
-    document.getElementById(
-        "lojaAdministrador"
-    );
+    document.getElementById("lojaAdministrador");
 
 const btnCadastrarAdministrador =
     document.getElementById(
@@ -112,12 +103,15 @@ function mostrarMensagem(
     tipo = "erro"
 ) {
 
+    if (!mensagem) {
+        return;
+    }
+
     mensagem.textContent =
         texto;
 
     mensagem.className =
         "mensagem " + tipo;
-
 }
 
 
@@ -150,7 +144,6 @@ function escaparHTML(valor) {
             /'/g,
             "&#039;"
         );
-
 }
 
 
@@ -222,7 +215,6 @@ async function obterPerfilAtual() {
 
 
     return perfil;
-
 }
 
 
@@ -239,11 +231,8 @@ async function protegerAdministradorGeral() {
 
 
         const autorizado =
-
             perfil.ativo === true
-
             &&
-
             (
                 perfil.tipo ===
                     "admin_geral"
@@ -255,15 +244,12 @@ async function protegerAdministradorGeral() {
             );
 
 
-        if (
-            !autorizado
-        ) {
+        if (!autorizado) {
 
             window.location.href =
                 "index.html";
 
             return false;
-
         }
 
 
@@ -282,16 +268,17 @@ async function protegerAdministradorGeral() {
     } catch (erro) {
 
         console.error(
+            "Erro ao proteger página:",
             erro
         );
+
 
         window.location.href =
             "index.html";
 
+
         return false;
-
     }
-
 }
 
 
@@ -301,12 +288,15 @@ async function protegerAdministradorGeral() {
 
 async function carregarLojas() {
 
-    lojaAdministrador.innerHTML = `
+    if (!lojaAdministrador) {
+        return;
+    }
 
+
+    lojaAdministrador.innerHTML = `
         <option value="">
             Carregando lojas...
         </option>
-
     `;
 
 
@@ -338,30 +328,28 @@ async function carregarLojas() {
             error
         );
 
-        lojaAdministrador.innerHTML = `
 
+        lojaAdministrador.innerHTML = `
             <option value="">
                 Erro ao carregar lojas
             </option>
-
         `;
+
 
         mostrarMensagem(
             "Não foi possível carregar as lojas.",
             "erro"
         );
 
-        return;
 
+        return;
     }
 
 
     lojaAdministrador.innerHTML = `
-
         <option value="">
             Selecione a loja
         </option>
-
     `;
 
 
@@ -402,7 +390,6 @@ async function carregarLojas() {
         );
 
     }
-
 }
 
 
@@ -412,21 +399,39 @@ async function carregarLojas() {
 
 async function carregarAdministradores() {
 
-    carregando.style.display =
-        "block";
+    if (carregando) {
 
-    semAdministradores.style.display =
-        "none";
+        carregando.style.display =
+            "block";
+    }
 
-    containerTabela.style.display =
-        "none";
 
-    listaAdministradores.innerHTML =
-        "";
+    if (semAdministradores) {
+
+        semAdministradores.style.display =
+            "none";
+    }
+
+
+    if (containerTabela) {
+
+        containerTabela.style.display =
+            "none";
+    }
+
+
+    if (listaAdministradores) {
+
+        listaAdministradores.innerHTML =
+            "";
+    }
 
 
     try {
 
+        /* ======================================
+           BUSCAR ADMINISTRADORES
+        ====================================== */
 
         const {
             data: perfis,
@@ -461,16 +466,20 @@ async function carregarAdministradores() {
                 error
             );
 
+
             throw new Error(
                 "Não foi possível carregar os administradores."
             );
-
         }
 
 
         const administradores =
             perfis || [];
 
+
+        /* ======================================
+           BUSCAR LOJAS
+        ====================================== */
 
         const {
             data: lojas,
@@ -494,9 +503,12 @@ async function carregarAdministradores() {
             throw new Error(
                 "Não foi possível carregar as lojas."
             );
-
         }
 
+
+        /* ======================================
+           MAPA DAS LOJAS
+        ====================================== */
 
         const mapaLojas =
             new Map();
@@ -515,6 +527,10 @@ async function carregarAdministradores() {
             );
 
 
+        /* ======================================
+           CONTADORES
+        ====================================== */
+
         const total =
             administradores.length;
 
@@ -530,30 +546,54 @@ async function carregarAdministradores() {
             total - ativos;
 
 
-        totalAdministradores.textContent =
-            total;
+        if (totalAdministradores) {
 
-        administradoresAtivos.textContent =
-            ativos;
-
-        administradoresInativos.textContent =
-            inativos;
-
-
-        if (
-            total === 0
-        ) {
-
-            carregando.style.display =
-                "none";
-
-            semAdministradores.style.display =
-                "block";
-
-            return;
-
+            totalAdministradores.textContent =
+                total;
         }
 
+
+        if (administradoresAtivos) {
+
+            administradoresAtivos.textContent =
+                ativos;
+        }
+
+
+        if (administradoresInativos) {
+
+            administradoresInativos.textContent =
+                inativos;
+        }
+
+
+        /* ======================================
+           NENHUM ADMINISTRADOR
+        ====================================== */
+
+        if (total === 0) {
+
+            if (carregando) {
+
+                carregando.style.display =
+                    "none";
+            }
+
+
+            if (semAdministradores) {
+
+                semAdministradores.style.display =
+                    "block";
+            }
+
+
+            return;
+        }
+
+
+        /* ======================================
+           MONTAR TABELA
+        ====================================== */
 
         administradores.forEach(
             administrador => {
@@ -572,17 +612,41 @@ async function carregarAdministradores() {
                         : null;
 
 
-                const textoBotao =
+                /* ==================================
+                   STATUS
+                ================================== */
+
+                const textoStatus =
+                    administrador.ativo
+                        ? "Ativo"
+                        : "Inativo";
+
+
+                const classeStatus =
+                    administrador.ativo
+                        ? "status-ativo"
+                        : "status-inativo";
+
+
+                /* ==================================
+                   BOTÃO ATIVAR / INATIVAR
+                ================================== */
+
+                const textoBotaoStatus =
                     administrador.ativo
                         ? "🔴 Inativar"
                         : "🟢 Ativar";
 
 
-                const classeBotao =
+                const acaoStatus =
                     administrador.ativo
-                        ? "btn-inativar-administrador"
-                        : "btn-ativar-administrador";
+                        ? "false"
+                        : "true";
 
+
+                /* ==================================
+                   LINHA
+                ================================== */
 
                 linha.innerHTML = `
 
@@ -596,6 +660,7 @@ async function carregarAdministradores() {
 
                     </td>
 
+
                     <td>
 
                         ${escaparHTML(
@@ -603,6 +668,7 @@ async function carregarAdministradores() {
                         )}
 
                     </td>
+
 
                     <td>
 
@@ -612,198 +678,219 @@ async function carregarAdministradores() {
                                 ?
 
                                 `
-                                    <span class="nome-loja">
-                                        ${escaparHTML(
-                                            nomeLoja
-                                        )}
-                                    </span>
+                                <span class="nome-loja">
+                                    ${escaparHTML(
+                                        nomeLoja
+                                    )}
+                                </span>
                                 `
 
                                 :
 
                                 `
-                                    <span class="sem-loja">
-                                        Sem loja
-                                    </span>
+                                <span class="sem-loja">
+                                    Sem loja
+                                </span>
                                 `
                         }
 
                     </td>
+
 
                     <td>
 
                         <span
                             class="
                                 status-administrador
-                                ${
-                                    administrador.ativo
-                                        ? "status-ativo"
-                                        : "status-inativo"
-                                }
+                                ${classeStatus}
                             "
                         >
 
-                            ${
-                                administrador.ativo
-                                    ? "Ativo"
-                                    : "Inativo"
-                            }
+                            ${textoStatus}
 
                         </span>
 
                     </td>
 
+
                     <td>
-
-                        <span class="tipo-administrador">
-                            Administrador
-                        </span>
-
+                        Administrador
                     </td>
 
+
                     <td>
 
-                        <button
-                            type="button"
-                            class="btn-status-administrador ${classeBotao}"
-                            onclick="alternarAdministrador('${administrador.id}', '${escaparHTML(administrador.nome_completo)}', ${administrador.ativo})"
+                        <div
+                            class="acoes-administrador"
+                            style="
+                                display:flex;
+                                gap:6px;
+                                flex-wrap:wrap;
+                                align-items:center;
+                            "
                         >
-                            ${textoBotao}
-                        </button>
+
+                            <button
+                                type="button"
+                                class="btn-acao btn-status-administrador"
+                                onclick="alternarAdministrador(
+                                    '${administrador.id}',
+                                    '${escaparHTML(
+                                        administrador.nome_completo
+                                    ).replace(
+                                        /'/g,
+                                        "\\'"
+                                    )}',
+                                    ${acaoStatus}
+                                )"
+                            >
+                                ${textoBotaoStatus}
+                            </button>
+
+
+                            <button
+                                type="button"
+                                class="btn-acao btn-excluir-administrador"
+                                onclick="excluirAdministrador(
+                                    '${administrador.id}',
+                                    '${escaparHTML(
+                                        administrador.nome_completo
+                                    ).replace(
+                                        /'/g,
+                                        "\\'"
+                                    )}',
+                                    '${escaparHTML(
+                                        administrador.usuario
+                                    ).replace(
+                                        /'/g,
+                                        "\\'"
+                                    )}'
+                                )"
+                            >
+                                🗑️ Excluir
+                            </button>
+
+                        </div>
 
                     </td>
 
                 `;
 
 
-                listaAdministradores.appendChild(
-                    linha
-                );
+                if (listaAdministradores) {
+
+                    listaAdministradores.appendChild(
+                        linha
+                    );
+                }
 
             }
         );
 
 
-        carregando.style.display =
-            "none";
+        if (carregando) {
 
-        containerTabela.style.display =
-            "block";
+            carregando.style.display =
+                "none";
+        }
+
+
+        if (containerTabela) {
+
+            containerTabela.style.display =
+                "block";
+        }
 
 
     } catch (erro) {
 
         console.error(
+            "Erro ao carregar administradores:",
             erro
         );
 
-        carregando.style.display =
-            "none";
+
+        if (carregando) {
+
+            carregando.style.display =
+                "none";
+        }
+
 
         mostrarMensagem(
             erro.message ||
             "Erro ao carregar administradores.",
             "erro"
         );
-
     }
-
 }
 
 
 /* ==========================================
-   ATIVAR / INATIVAR ADMINISTRADOR
+   ALTERAR STATUS DO ADMINISTRADOR
 ========================================== */
 
 async function alternarAdministrador(
     id,
     nome,
-    ativoAtual
+    ativar
 ) {
 
     const acao =
-        ativoAtual
-            ? "inativar"
-            : "ativar";
+        ativar
+            ? "ativar"
+            : "inativar";
 
 
-    const confirmado =
+    const confirmar =
         confirm(
-
-            ativoAtual
-
-                ?
-
-                `Tem certeza que deseja INATIVAR o administrador "${nome}"?\n\nEle não poderá mais entrar no sistema enquanto estiver inativo.`
-
-                :
-
-                `Deseja ATIVAR novamente o administrador "${nome}"?`
-
+            `Deseja realmente ${acao} o administrador "${nome}"?`
         );
 
 
-    if (!confirmado) {
-
+    if (!confirmar) {
         return;
-
     }
 
 
-    mostrarMensagem(
-        "Alterando status do administrador...",
-        "sucesso"
-    );
-
-
     try {
+
+        mostrarMensagem(
+            ativar
+                ? "Ativando administrador..."
+                : "Inativando administrador...",
+            "aviso"
+        );
 
 
         const {
             data,
             error
         } =
-            await supabaseClient
-                .rpc(
-                    "alternar_status_administrador",
-                    {
-                        p_administrador_id:
-                            id
-                    }
-                );
+            await supabaseClient.rpc(
+                "alternar_status_administrador",
+                {
+                    p_administrador_id:
+                        id
+                }
+            );
 
 
         if (error) {
-
-            console.error(
-                "Erro ao alterar status:",
-                error
-            );
-
-            throw new Error(
-                error.message ||
-                "Não foi possível alterar o status."
-            );
-
+            throw error;
         }
 
 
-        if (
-            !data ||
-            data.sucesso !== true
-        ) {
-
-            throw new Error(
-                data?.mensagem ||
-                "Não foi possível alterar o status."
-            );
-
-        }
+        console.log(
+            "Resultado alteração:",
+            data
+        );
 
 
         mostrarMensagem(
-            data.mensagem ||
-            "Status alterado com sucesso.",
+            ativar
+                ? "Administrador ativado com sucesso."
+                : "Administrador inativado com sucesso.",
             "sucesso"
         );
 
@@ -818,14 +905,132 @@ async function alternarAdministrador(
             erro
         );
 
+
         mostrarMensagem(
             erro.message ||
-            "Erro ao alterar o administrador.",
+            "Não foi possível alterar o administrador.",
             "erro"
         );
+    }
+}
 
+
+/* ==========================================
+   EXCLUIR ADMINISTRADOR
+========================================== */
+
+async function excluirAdministrador(
+    id,
+    nome,
+    usuario
+) {
+
+    /* ======================================
+       PRIMEIRA CONFIRMAÇÃO
+    ====================================== */
+
+    const primeiraConfirmacao =
+        confirm(
+            `ATENÇÃO!\n\n` +
+            `Você está prestes a excluir definitivamente ` +
+            `o administrador "${nome}".\n\n` +
+            `Usuário: ${usuario}\n\n` +
+            `O acesso desse administrador ao sistema ` +
+            `será removido permanentemente.\n\n` +
+            `A loja, produtos, categorias, clientes, ` +
+            `vendas, estoque e financeiro NÃO serão excluídos.\n\n` +
+            `Deseja continuar?`
+        );
+
+
+    if (!primeiraConfirmacao) {
+        return;
     }
 
+
+    /* ======================================
+       SEGUNDA CONFIRMAÇÃO
+    ====================================== */
+
+    const segundaConfirmacao =
+        confirm(
+            `CONFIRMAÇÃO FINAL\n\n` +
+            `Excluir definitivamente o administrador:\n\n` +
+            `${nome}\n` +
+            `Usuário: ${usuario}\n\n` +
+            `O usuário não poderá mais entrar no sistema.\n\n` +
+            `Tem certeza absoluta que deseja excluir?`
+        );
+
+
+    if (!segundaConfirmacao) {
+        return;
+    }
+
+
+    try {
+
+        mostrarMensagem(
+            "Excluindo administrador...",
+            "aviso"
+        );
+
+
+        /* ==================================
+           CHAMAR FUNÇÃO SEGURA
+        ================================== */
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient.rpc(
+                "excluir_administrador",
+                {
+                    p_administrador_id:
+                        id
+                }
+            );
+
+
+        if (error) {
+            throw error;
+        }
+
+
+        console.log(
+            "Resultado da exclusão:",
+            data
+        );
+
+
+        mostrarMensagem(
+            "Administrador excluído completamente com sucesso.",
+            "sucesso"
+        );
+
+
+        /* ==================================
+           ATUALIZAR LISTA
+        ================================== */
+
+        await carregarAdministradores();
+
+
+    } catch (erro) {
+
+        console.error(
+            "Erro ao excluir administrador:",
+            erro
+        );
+
+
+        mostrarMensagem(
+            erro.message ||
+            "Não foi possível excluir o administrador.",
+            "erro"
+        );
+    }
 }
 
 
@@ -858,6 +1063,10 @@ async function cadastrarAdministrador(
         lojaAdministrador.value;
 
 
+    /* ======================================
+       VALIDAR NOME
+    ====================================== */
+
     if (!nome) {
 
         mostrarMensagem(
@@ -865,12 +1074,16 @@ async function cadastrarAdministrador(
             "erro"
         );
 
+
         nomeAdministrador.focus();
 
         return;
-
     }
 
+
+    /* ======================================
+       VALIDAR USUÁRIO
+    ====================================== */
 
     if (!usuario) {
 
@@ -879,40 +1092,46 @@ async function cadastrarAdministrador(
             "erro"
         );
 
+
         usuarioAdministrador.focus();
 
         return;
-
     }
 
 
-    if (
-        senha.length < 6
-    ) {
+    /* ======================================
+       VALIDAR SENHA
+    ====================================== */
+
+    if (senha.length < 6) {
 
         mostrarMensagem(
             "A senha deve ter pelo menos 6 caracteres.",
             "erro"
         );
 
+
         senhaAdministrador.focus();
 
         return;
-
     }
 
+
+    /* ======================================
+       VALIDAR LOJA
+    ====================================== */
 
     if (!lojaId) {
 
         mostrarMensagem(
-            "Selecione a loja.",
+            "Selecione uma loja.",
             "erro"
         );
+
 
         lojaAdministrador.focus();
 
         return;
-
     }
 
 
@@ -926,6 +1145,9 @@ async function cadastrarAdministrador(
 
     try {
 
+        /* ==================================
+           PEGAR SESSÃO
+        ================================== */
 
         const {
             data: sessaoData
@@ -946,9 +1168,12 @@ async function cadastrarAdministrador(
             throw new Error(
                 "Sua sessão expirou. Faça login novamente."
             );
-
         }
 
+
+        /* ==================================
+           CHAMAR EDGE FUNCTION
+        ================================== */
 
         const resposta =
             await fetch(
@@ -956,13 +1181,11 @@ async function cadastrarAdministrador(
                 `${SUPABASE_URL}/functions/v1/${FUNCAO_CRIAR_ADMINISTRADOR}`,
 
                 {
-
                     method:
                         "POST",
 
                     headers:
                         {
-
                             "Authorization":
                                 "Bearer " +
                                 accessToken,
@@ -972,14 +1195,11 @@ async function cadastrarAdministrador(
 
                             "Content-Type":
                                 "application/json"
-
                         },
 
                     body:
                         JSON.stringify(
-
                             {
-
                                 nome_completo:
                                     nome,
 
@@ -991,13 +1211,9 @@ async function cadastrarAdministrador(
 
                                 loja_id:
                                     lojaId
-
                             }
-
                         )
-
                 }
-
             );
 
 
@@ -1011,13 +1227,9 @@ async function cadastrarAdministrador(
         ) {
 
             throw new Error(
-
                 resultado.mensagem ||
-
                 "Não foi possível criar o administrador."
-
             );
-
         }
 
 
@@ -1042,6 +1254,7 @@ async function cadastrarAdministrador(
             erro
         );
 
+
         mostrarMensagem(
             erro.message ||
             "Erro ao criar administrador.",
@@ -1054,11 +1267,10 @@ async function cadastrarAdministrador(
         btnCadastrarAdministrador.disabled =
             false;
 
+
         btnCadastrarAdministrador.textContent =
             "👤 Cadastrar Administrador";
-
     }
-
 }
 
 
@@ -1068,14 +1280,20 @@ async function cadastrarAdministrador(
 
 function limparFormulario() {
 
-    formAdministrador.reset();
+    if (formAdministrador) {
 
-    mensagem.textContent =
-        "";
+        formAdministrador.reset();
+    }
 
-    mensagem.className =
-        "mensagem";
 
+    if (mensagem) {
+
+        mensagem.textContent =
+            "";
+
+        mensagem.className =
+            "mensagem";
+    }
 }
 
 
@@ -1094,15 +1312,14 @@ async function sair() {
     } catch (erro) {
 
         console.error(
+            "Erro ao sair:",
             erro
         );
-
     }
 
 
     window.location.href =
         "index.html";
-
 }
 
 
@@ -1110,33 +1327,25 @@ async function sair() {
    EVENTOS
 ========================================== */
 
-if (
-    formAdministrador
-) {
+if (formAdministrador) {
 
     formAdministrador.addEventListener(
         "submit",
         cadastrarAdministrador
     );
-
 }
 
 
-if (
-    btnCancelarAdministrador
-) {
+if (btnCancelarAdministrador) {
 
     btnCancelarAdministrador.addEventListener(
         "click",
         limparFormulario
     );
-
 }
 
 
-if (
-    btnAtualizar
-) {
+if (btnAtualizar) {
 
     btnAtualizar.addEventListener(
         "click",
@@ -1148,19 +1357,15 @@ if (
 
         }
     );
-
 }
 
 
-if (
-    btnSair
-) {
+if (btnSair) {
 
     btnSair.addEventListener(
         "click",
         sair
     );
-
 }
 
 
@@ -1175,16 +1380,13 @@ async function iniciarAdministradores() {
 
 
     if (!autorizado) {
-
         return;
-
     }
 
 
     await carregarLojas();
 
     await carregarAdministradores();
-
 }
 
 
