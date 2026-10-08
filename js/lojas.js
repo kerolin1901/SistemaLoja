@@ -1,63 +1,85 @@
-/* =========================================================
+/*
    SISTEMA DA LOJA
+
    ADMINISTRADOR GERAL
+
    GERENCIAMENTO DE LOJAS
+
    JS COMPLETO
-========================================================= */
+*/
 
 
-/* =========================================================
+/*
    ELEMENTOS
-========================================================= */
+*/
 
 const formLoja =
     document.getElementById("formLoja");
 
+
 const nomeLoja =
     document.getElementById("nomeLoja");
+
 
 const cnpjLoja =
     document.getElementById("cnpjLoja");
 
+
 const dataVencimentoLoja =
     document.getElementById("dataVencimentoLoja");
+
 
 const tituloFormulario =
     document.getElementById("tituloFormulario");
 
+
 const descricaoFormulario =
     document.getElementById("descricaoFormulario");
+
 
 const btnCadastrar =
     document.getElementById("btnCadastrar");
 
+
 const btnCancelarEdicao =
     document.getElementById("btnCancelarEdicao");
+
 
 const mensagem =
     document.getElementById("mensagem");
 
+
 const listaLojas =
     document.getElementById("listaLojas");
+
+
+const pesquisaLojas =
+    document.getElementById("pesquisaLojas");
+
+
+const semResultadoBusca =
+    document.getElementById("semResultadoBusca");
+
 
 const carregandoLojas =
     document.getElementById("carregandoLojas") ||
     document.getElementById("carregando");
 
+
 const semLojas =
     document.getElementById("semLojas");
 
 
-/* =========================================================
+/*
    VARIÁVEIS
-========================================================= */
+*/
 
 let lojaEmEdicao = null;
 
 
-/* =========================================================
+/*
    MENSAGEM
-========================================================= */
+*/
 
 function mostrarMensagem(
     texto,
@@ -68,39 +90,52 @@ function mostrarMensagem(
         return;
     }
 
+
     mensagem.textContent = texto;
+
 
     mensagem.className = "";
 
+
     mensagem.classList.add("mensagem");
 
+
     if (tipo === "erro") {
+
         mensagem.classList.add("erro");
     }
 
+
     if (tipo === "sucesso") {
+
         mensagem.classList.add("sucesso");
     }
 
+
     if (tipo === "aviso") {
+
         mensagem.classList.add("aviso");
     }
 
+
     mensagem.style.display = "block";
+
 
     setTimeout(() => {
 
         if (mensagem) {
+
             mensagem.style.display = "none";
         }
 
     }, 5000);
+
 }
 
 
-/* =========================================================
+/*
    PROTEGER PÁGINA
-========================================================= */
+*/
 
 async function protegerPagina() {
 
@@ -118,6 +153,7 @@ async function protegerPagina() {
             window.location.href =
                 "index.html";
 
+
             return false;
         }
 
@@ -126,7 +162,9 @@ async function protegerPagina() {
             data: perfil,
             error
         } = await supabaseClient
+
             .from("perfis")
+
             .select(`
                 id,
                 nome_completo,
@@ -134,10 +172,12 @@ async function protegerPagina() {
                 tipo,
                 ativo
             `)
+
             .eq(
                 "id",
                 session.user.id
             )
+
             .maybeSingle();
 
 
@@ -148,8 +188,10 @@ async function protegerPagina() {
                 error
             );
 
+
             window.location.href =
                 "index.html";
+
 
             return false;
         }
@@ -165,6 +207,7 @@ async function protegerPagina() {
             window.location.href =
                 "index.html";
 
+
             return false;
         }
 
@@ -179,17 +222,20 @@ async function protegerPagina() {
             erro
         );
 
+
         window.location.href =
             "index.html";
 
+
         return false;
     }
+
 }
 
 
-/* =========================================================
+/*
    FORMATAR DATA
-========================================================= */
+*/
 
 function formatarData(data) {
 
@@ -197,7 +243,9 @@ function formatarData(data) {
         return "-";
     }
 
+
     let dataObj;
+
 
     if (
         typeof data === "string" &&
@@ -227,12 +275,13 @@ function formatarData(data) {
     return dataObj.toLocaleDateString(
         "pt-BR"
     );
+
 }
 
 
-/* =========================================================
+/*
    FORMATAR CNPJ
-========================================================= */
+*/
 
 function formatarCNPJ(valor) {
 
@@ -279,24 +328,26 @@ function formatarCNPJ(valor) {
         /^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/,
         "$1.$2.$3/$4-$5"
     );
+
 }
 
 
-/* =========================================================
+/*
    SOMENTE NÚMEROS DO CNPJ
-========================================================= */
+*/
 
 function somenteNumerosCNPJ(valor) {
 
     return String(valor || "")
         .replace(/\D/g, "")
         .slice(0, 14);
+
 }
 
 
-/* =========================================================
+/*
    STATUS DA LICENÇA
-========================================================= */
+*/
 
 function obterStatusLicenca(
     dataVencimento
@@ -313,6 +364,7 @@ function obterStatusLicenca(
 
     const hoje =
         new Date();
+
 
     hoje.setHours(
         0,
@@ -402,12 +454,13 @@ function obterStatusLicenca(
         classe: "ativa",
         texto: "Licença ativa"
     };
+
 }
 
 
-/* =========================================================
+/*
    ESCAPAR HTML
-========================================================= */
+*/
 
 function escaparHTML(valor) {
 
@@ -446,12 +499,13 @@ function escaparHTML(valor) {
             /'/g,
             "&#039;"
         );
+
 }
 
 
-/* =========================================================
+/*
    CARREGAR LOJAS
-========================================================= */
+*/
 
 async function carregarLojas() {
 
@@ -478,9 +532,10 @@ async function carregarLojas() {
 
     try {
 
-        /* =================================================
+
+        /*
            BUSCAR LOJAS
-        ================================================= */
+        */
 
         const {
             data: lojas,
@@ -512,9 +567,9 @@ async function carregarLojas() {
         }
 
 
-        /* =================================================
+        /*
            BUSCAR ADMINISTRADORES
-        ================================================= */
+        */
 
         const {
             data: administradores,
@@ -543,9 +598,9 @@ async function carregarLojas() {
         }
 
 
-        /* =================================================
+        /*
            CONTAGEM DE ADMINISTRADORES
-        ================================================= */
+        */
 
         const quantidadeAdministradores =
             {};
@@ -556,6 +611,7 @@ async function carregarLojas() {
         ).forEach(admin => {
 
             if (!admin.loja_id) {
+
                 return;
             }
 
@@ -579,9 +635,9 @@ async function carregarLojas() {
         });
 
 
-        /* =================================================
+        /*
            FINALIZAR CARREGAMENTO
-        ================================================= */
+        */
 
         if (carregandoLojas) {
 
@@ -601,13 +657,14 @@ async function carregarLojas() {
                     "block";
             }
 
+
             return;
         }
 
 
-        /* =================================================
+        /*
            MONTAR TABELA
-        ================================================= */
+        */
 
         lojas.forEach(loja => {
 
@@ -676,11 +733,13 @@ async function carregarLojas() {
                 </td>
 
                 <td>
+
                     <span
                         class="quantidade-administradores"
                     >
                         ${quantidade}
                     </span>
+
                 </td>
 
                 <td>
@@ -694,6 +753,7 @@ async function carregarLojas() {
                     ${
                         loja.data_vencimento
                             ? `
+
                                 <small
                                     style="
                                         display:block;
@@ -703,6 +763,7 @@ async function carregarLojas() {
                                 >
                                     ${dataVencimentoFormatada}
                                 </small>
+
                             `
                             : ""
                     }
@@ -713,28 +774,36 @@ async function carregarLojas() {
 
                     ${
                         loja.ativo
+
                             ? `
+
                                 <span
                                     class="status ativo"
                                 >
                                     Ativa
                                 </span>
+
                             `
+
                             : `
+
                                 <span
                                     class="status inativo"
                                 >
                                     Inativa
                                 </span>
+
                             `
                     }
 
                 </td>
 
                 <td>
+
                     ${formatarData(
                         loja.criado_em
                     )}
+
                 </td>
 
                 <td>
@@ -770,7 +839,9 @@ async function carregarLojas() {
 
                         ${
                             loja.ativo
+
                                 ? `
+
                                     <button
                                         type="button"
                                         class="btn-acao btn-desativar"
@@ -787,8 +858,11 @@ async function carregarLojas() {
                                     >
                                         🔴 Desativar
                                     </button>
+
                                 `
+
                                 : `
+
                                     <button
                                         type="button"
                                         class="btn-acao btn-ativar"
@@ -805,6 +879,7 @@ async function carregarLojas() {
                                     >
                                         🟢 Ativar
                                     </button>
+
                                 `
                         }
 
@@ -825,6 +900,7 @@ async function carregarLojas() {
                             🗑️ Excluir
                         </button>
 
+
                     </div>
 
                 </td>
@@ -840,6 +916,9 @@ async function carregarLojas() {
             }
 
         });
+
+
+        filtrarLojas();
 
 
     } catch (erro) {
@@ -861,20 +940,146 @@ async function carregarLojas() {
             "Não foi possível carregar as lojas.",
             "erro"
         );
+
     }
+
 }
 
 
-/* =========================================================
+/*
+   PESQUISAR LOJAS
+*/
+
+function filtrarLojas() {
+
+    if (!listaLojas) {
+        return;
+    }
+
+
+    const termo =
+        pesquisaLojas
+            ? pesquisaLojas.value
+                .trim()
+                .toLowerCase()
+            : "";
+
+
+    const linhas =
+        listaLojas.querySelectorAll("tr");
+
+
+    let quantidadeVisivel = 0;
+
+
+    linhas.forEach(linha => {
+
+        const nome =
+            (
+                linha.children[0]?.textContent ||
+                ""
+            ).toLowerCase();
+
+
+        const cnpj =
+            (
+                linha.children[1]?.textContent ||
+                ""
+            ).toLowerCase();
+
+
+        const textoBusca =
+            `${nome} ${cnpj}`;
+
+
+        const numerosTermo =
+            termo.replace(
+                /\D/g,
+                ""
+            );
+
+
+        const numerosCnpj =
+            cnpj.replace(
+                /\D/g,
+                ""
+            );
+
+
+        const encontrou =
+
+            termo === "" ||
+
+            textoBusca.includes(
+                termo
+            ) ||
+
+            (
+                numerosTermo.length > 0 &&
+                numerosCnpj.includes(
+                    numerosTermo
+                )
+            );
+
+
+        linha.style.display =
+            encontrou
+                ? ""
+                : "none";
+
+
+        if (encontrou) {
+
+            quantidadeVisivel++;
+        }
+
+    });
+
+
+    if (semResultadoBusca) {
+
+        semResultadoBusca.style.display =
+
+            termo !== "" &&
+
+            linhas.length > 0 &&
+
+            quantidadeVisivel === 0
+
+                ? "block"
+
+                : "none";
+    }
+
+}
+
+
+if (pesquisaLojas) {
+
+    pesquisaLojas.addEventListener(
+        "input",
+        filtrarLojas
+    );
+
+}
+
+
+/*
    EDITAR LOJA
-========================================================= */
+*/
 
 function editarLoja(
+
     id,
+
     nome,
+
     cnpj = "",
+
     dataVencimento = ""
+
 ) {
+
 
     lojaEmEdicao =
         id;
@@ -938,12 +1143,13 @@ function editarLoja(
         behavior: "smooth"
 
     });
+
 }
 
 
-/* =========================================================
+/*
    CANCELAR EDIÇÃO
-========================================================= */
+*/
 
 function cancelarEdicao() {
 
@@ -983,29 +1189,35 @@ function cancelarEdicao() {
         btnCancelarEdicao.style.display =
             "none";
     }
+
 }
 
 
-/* =========================================================
+/*
    FORMATAR CNPJ AO DIGITAR
-========================================================= */
+*/
 
 if (cnpjLoja) {
 
     cnpjLoja.addEventListener(
+
         "input",
+
         function () {
 
             const cursor =
                 cnpjLoja.selectionStart;
 
+
             const valorAntes =
                 cnpjLoja.value;
+
 
             cnpjLoja.value =
                 formatarCNPJ(
                     valorAntes
                 );
+
 
             if (
                 cursor !== null
@@ -1014,31 +1226,38 @@ if (cnpjLoja) {
                 cnpjLoja.selectionStart =
                     cnpjLoja.value.length;
 
+
                 cnpjLoja.selectionEnd =
                     cnpjLoja.value.length;
             }
 
         }
+
     );
+
 }
 
 
-/* =========================================================
+/*
    BOTÃO CANCELAR EDIÇÃO
-========================================================= */
+*/
 
 if (btnCancelarEdicao) {
 
     btnCancelarEdicao.addEventListener(
+
         "click",
+
         cancelarEdicao
+
     );
+
 }
 
 
-/* =========================================================
+/*
    SALVAR / CADASTRAR LOJA
-========================================================= */
+*/
 
 if (formLoja) {
 
@@ -1078,6 +1297,7 @@ if (formLoja) {
                     "erro"
                 );
 
+
                 return;
             }
 
@@ -1089,6 +1309,7 @@ if (formLoja) {
                     "erro"
                 );
 
+
                 return;
             }
 
@@ -1099,6 +1320,7 @@ if (formLoja) {
                     "Informe a data de vencimento da licença.",
                     "erro"
                 );
+
 
                 return;
             }
@@ -1113,9 +1335,10 @@ if (formLoja) {
 
             try {
 
-                /* =========================================
+
+                /*
                    EDITAR
-                ========================================= */
+                */
 
                 if (lojaEmEdicao) {
 
@@ -1164,17 +1387,20 @@ if (formLoja) {
                 }
 
 
-                /* =========================================
+                /*
                    CADASTRAR
-                ========================================= */
+                */
 
                 const {
                     data: {
                         user
                     }
                 } =
+
                     await supabaseClient
+
                         .auth
+
                         .getUser();
 
 
@@ -1263,17 +1489,22 @@ if (formLoja) {
         }
 
     );
+
 }
 
 
-/* =========================================================
+/*
    ATIVAR / DESATIVAR LOJA
-========================================================= */
+*/
 
 async function alternarStatusLoja(
+
     id,
+
     nome,
+
     ativoAtual
+
 ) {
 
     const acao =
@@ -1346,29 +1577,32 @@ async function alternarStatusLoja(
         mostrarMensagem(
 
             erro?.message ||
+
             "Não foi possível alterar o status da loja.",
 
             "erro"
 
         );
+
     }
+
 }
 
 
-/* =========================================================
-   EXCLUIR LOJA COMPLETAMENTE
-========================================================= */
+/*
+   EXCLUIR LOJA
+*/
 
 async function excluirLoja(
+
     id,
+
     nome
+
 ) {
 
-    /* =====================================================
-       PRIMEIRA CONFIRMAÇÃO
-    ===================================================== */
-
     const primeiraConfirmacao =
+
         confirm(
 
             `ATENÇÃO!\n\n` +
@@ -1379,7 +1613,7 @@ async function excluirLoja(
 
             `Todos os dados vinculados a esta loja serão excluídos, ` +
 
-            `incluindo:\n\n` +
+            `incluindo:\n` +
 
             `• produtos\n` +
 
@@ -1410,11 +1644,8 @@ async function excluirLoja(
     }
 
 
-    /* =====================================================
-       SEGUNDA CONFIRMAÇÃO
-    ===================================================== */
-
     const segundaConfirmacao =
+
         confirm(
 
             `CONFIRMAÇÃO FINAL\n\n` +
@@ -1446,22 +1677,17 @@ async function excluirLoja(
         );
 
 
-        /* =================================================
-           CHAMAR FUNÇÃO SEGURA DO SUPABASE
-        ================================================= */
-
         const {
             data,
             error
-        } = await supabaseClient.rpc(
+        } = await supabaseClient
 
-            "excluir_loja",
-
-            {
-                p_loja_id: id
-            }
-
-        );
+            .rpc(
+                "excluir_loja",
+                {
+                    p_loja_id: id
+                }
+            );
 
 
         if (error) {
@@ -1482,9 +1708,7 @@ async function excluirLoja(
         );
 
 
-        if (
-            lojaEmEdicao === id
-        ) {
+        if (lojaEmEdicao === id) {
 
             cancelarEdicao();
         }
@@ -1516,13 +1740,15 @@ async function excluirLoja(
             mensagemErro,
             "erro"
         );
+
     }
+
 }
 
 
-/* =========================================================
-   ATUALIZAR
-========================================================= */
+/*
+   BOTÃO ATUALIZAR
+*/
 
 const botoesAtualizar =
     document.querySelectorAll(
@@ -1530,25 +1756,26 @@ const botoesAtualizar =
     );
 
 
-botoesAtualizar.forEach(
-    botao => {
+botoesAtualizar.forEach(botao => {
 
-        botao.addEventListener(
-            "click",
-            async function () {
+    botao.addEventListener(
 
-                await carregarLojas();
+        "click",
 
-            }
-        );
+        async function () {
 
-    }
-);
+            await carregarLojas();
+
+        }
+
+    );
+
+});
 
 
-/* =========================================================
-   SAIR
-========================================================= */
+/*
+   BOTÃO SAIR
+*/
 
 const botoesSair =
     document.querySelectorAll(
@@ -1556,45 +1783,42 @@ const botoesSair =
     );
 
 
-botoesSair.forEach(
-    botao => {
+botoesSair.forEach(botao => {
 
-        botao.addEventListener(
+    botao.addEventListener(
 
-            "click",
+        "click",
 
-            async function () {
+        async function () {
 
-                try {
+            try {
 
-                    await supabaseClient
-                        .auth
-                        .signOut();
+                await supabaseClient
+                    .auth
+                    .signOut();
 
-                } catch (erro) {
+            } catch (erro) {
 
-                    console.error(
-                        "Erro ao sair:",
-                        erro
-                    );
-
-                }
-
-
-                window.location.href =
-                    "index.html";
-
+                console.error(
+                    "Erro ao sair:",
+                    erro
+                );
             }
 
-        );
 
-    }
-);
+            window.location.href =
+                "index.html";
+
+        }
+
+    );
+
+});
 
 
-/* =========================================================
-   INICIAR PÁGINA
-========================================================= */
+/*
+   INICIAR
+*/
 
 (async function iniciar() {
 

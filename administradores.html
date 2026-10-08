@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="pt-BR">
 
 <head>
@@ -12,31 +13,26 @@
 
     <title>Sistema da Loja - Administradores</title>
 
-
     <link
         rel="stylesheet"
         href="style.css"
     >
-
 
     <link
         rel="stylesheet"
         href="admin.css"
     >
 
-
     <link
         rel="stylesheet"
         href="administradores.css"
     >
-
 
     <style>
 
         /* ==========================================
            PADRONIZAÇÃO VISUAL
         =========================================== */
-
 
         .logo-admin {
 
@@ -47,6 +43,7 @@
             gap: 12px;
 
         }
+
 
 
         .logo-admin .logo-icone-admin {
@@ -90,6 +87,7 @@
         }
 
 
+
         .logo-admin h1 {
 
             margin: 0;
@@ -97,6 +95,7 @@
             line-height: 1.05;
 
         }
+
 
 
         /* ==========================================
@@ -112,6 +111,7 @@
             gap: 12px;
 
         }
+
 
 
         .icone-usuario-admin {
@@ -142,6 +142,7 @@
         }
 
 
+
         .icone-usuario-admin svg {
 
             width: 21px;
@@ -151,6 +152,7 @@
             display: block;
 
         }
+
 
 
         /* ==========================================
@@ -166,6 +168,7 @@
             gap: 11px;
 
         }
+
 
 
         .icone-menu-admin {
@@ -185,6 +188,7 @@
         }
 
 
+
         .icone-menu-admin svg {
 
             width: 18px;
@@ -194,6 +198,7 @@
             display: block;
 
         }
+
 
 
         /* ==========================================
@@ -213,6 +218,7 @@
         }
 
 
+
         .icone-sair-admin {
 
             width: 19px;
@@ -228,6 +234,7 @@
         }
 
 
+
         .icone-sair-admin svg {
 
             width: 18px;
@@ -237,6 +244,7 @@
             display: block;
 
         }
+
 
 
         /* ==========================================
@@ -256,6 +264,7 @@
         }
 
 
+
         .icone-administrador svg {
 
             width: 22px;
@@ -265,6 +274,7 @@
             display: block;
 
         }
+
 
 
         /* ==========================================
@@ -286,6 +296,7 @@
         }
 
 
+
         .icone-atualizar svg {
 
             width: 16px;
@@ -295,6 +306,7 @@
             display: block;
 
         }
+
 
 
         /* ==========================================
@@ -318,6 +330,7 @@
         }
 
 
+
         .icone-botao svg {
 
             width: 16px;
@@ -328,15 +341,126 @@
 
         }
 
+
+
+        /* ==========================================
+           PESQUISA DE ADMINISTRADORES
+        =========================================== */
+
+        .campo-pesquisa-administradores {
+
+            position: relative;
+
+            min-width: 280px;
+
+            margin-bottom: 20px;
+
+        }
+
+
+
+        .campo-pesquisa-administradores input {
+
+            width: 100%;
+
+            min-height: 40px;
+
+            padding: 9px 12px 9px 38px;
+
+            border: 1px solid #d1d5db;
+
+            border-radius: 8px;
+
+            background: #ffffff;
+
+            color: #111827;
+
+            font-size: 14px;
+
+            outline: none;
+
+            box-sizing: border-box;
+
+            transition:
+                border-color 0.2s,
+                box-shadow 0.2s;
+
+        }
+
+
+
+        .campo-pesquisa-administradores input:focus {
+
+            border-color: #2563eb;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(37, 99, 235, 0.10);
+
+        }
+
+
+
+        .icone-pesquisa-administradores {
+
+            position: absolute;
+
+            left: 12px;
+
+            top: 50%;
+
+            transform: translateY(-50%);
+
+            width: 17px;
+
+            height: 17px;
+
+            color: #64748b;
+
+            pointer-events: none;
+
+        }
+
+
+
+        .icone-pesquisa-administradores svg {
+
+            width: 17px;
+
+            height: 17px;
+
+            display: block;
+
+        }
+
+
+
+        #semResultadoBuscaAdministradores {
+
+            display: none;
+
+            padding: 18px;
+
+            text-align: center;
+
+            color: #64748b;
+
+            font-size: 14px;
+
+        }
+
     </style>
 
 </head>
 
 
+
 <body>
 
 
+
     <div class="layout-admin">
+
 
 
         <!-- ==========================================
@@ -346,14 +470,17 @@
         <aside class="menu-lateral">
 
 
+
             <!-- LOGO -->
 
             <div class="logo-admin">
 
 
+
                 <div class="logo-icone-admin">
                     SL
                 </div>
+
 
 
                 <h1>
@@ -362,7 +489,9 @@
                 </h1>
 
 
+
             </div>
+
 
 
             <!-- USUÁRIO -->
@@ -370,13 +499,16 @@
             <div class="usuario-admin">
 
 
+
                 <div class="icone-usuario-admin">
+
 
 
                     <svg
                         viewBox="0 0 24 24"
                         aria-hidden="true"
                     >
+
 
 
                         <circle
@@ -389,6 +521,7 @@
                         />
 
 
+
                         <path
                             d="M5 20c.8-4 3.1-6 7-6s6.2 2 7 6"
                             fill="none"
@@ -398,13 +531,17 @@
                         />
 
 
+
                     </svg>
+
 
 
                 </div>
 
 
+
                 <div>
+
 
 
                     <div
@@ -415,15 +552,19 @@
                     </div>
 
 
+
                     <div class="tipo-usuario">
                         Administrador Geral
                     </div>
 
 
+
                 </div>
 
 
+
             </div>
+
 
 
             <!-- ==========================================
@@ -433,9 +574,11 @@
             <nav class="menu-admin">
 
 
+
                 <div class="menu-titulo">
                     PRINCIPAL
                 </div>
+
 
 
                 <!-- DASHBOARD -->
@@ -446,7 +589,9 @@
                 >
 
 
+
                     <span class="icone-menu-admin">
+
 
 
                         <svg
@@ -455,6 +600,7 @@
                         >
 
 
+
                             <rect
                                 x="4"
                                 y="4"
@@ -465,6 +611,7 @@
                                 stroke="currentColor"
                                 stroke-width="2"
                             />
+
 
 
                             <rect
@@ -479,6 +626,7 @@
                             />
 
 
+
                             <rect
                                 x="4"
                                 y="14"
@@ -491,6 +639,7 @@
                             />
 
 
+
                             <rect
                                 x="14"
                                 y="14"
@@ -501,12 +650,15 @@
                                 stroke="currentColor"
                                 stroke-width="2"
                             />
+
 
 
                         </svg>
 
 
+
                     </span>
+
 
 
                     <span>
@@ -514,12 +666,15 @@
                     </span>
 
 
+
                 </a>
+
 
 
                 <div class="menu-titulo">
                     ADMINISTRAÇÃO
                 </div>
+
 
 
                 <!-- LOJAS -->
@@ -530,13 +685,16 @@
                 >
 
 
+
                     <span class="icone-menu-admin">
+
 
 
                         <svg
                             viewBox="0 0 24 24"
                             aria-hidden="true"
                         >
+
 
 
                             <path
@@ -548,6 +706,7 @@
                             />
 
 
+
                             <path
                                 d="M5 10v9h14v-9"
                                 fill="none"
@@ -555,6 +714,7 @@
                                 stroke-width="2"
                                 stroke-linejoin="round"
                             />
+
 
 
                             <path
@@ -566,6 +726,7 @@
                             />
 
 
+
                             <path
                                 d="M9 19v-5h6v5"
                                 fill="none"
@@ -575,10 +736,13 @@
                             />
 
 
+
                         </svg>
 
 
+
                     </span>
+
 
 
                     <span>
@@ -586,7 +750,9 @@
                     </span>
 
 
+
                 </a>
+
 
 
                 <!-- ADMINISTRADORES -->
@@ -597,13 +763,16 @@
                 >
 
 
+
                     <span class="icone-menu-admin">
+
 
 
                         <svg
                             viewBox="0 0 24 24"
                             aria-hidden="true"
                         >
+
 
 
                             <circle
@@ -616,6 +785,7 @@
                             />
 
 
+
                             <path
                                 d="M3.5 20c.7-3.5 2.5-5 5.5-5s4.8 1.5 5.5 5"
                                 fill="none"
@@ -623,6 +793,7 @@
                                 stroke-width="2"
                                 stroke-linecap="round"
                             />
+
 
 
                             <circle
@@ -635,6 +806,7 @@
                             />
 
 
+
                             <path
                                 d="M14.5 20c.4-2.6 1.3-4 3.5-4s3.1 1.4 3.5 4"
                                 fill="none"
@@ -644,10 +816,13 @@
                             />
 
 
+
                         </svg>
 
 
+
                     </span>
+
 
 
                     <span>
@@ -655,10 +830,13 @@
                     </span>
 
 
+
                 </a>
 
 
+
             </nav>
+
 
 
             <!-- ==========================================
@@ -668,6 +846,7 @@
             <div class="menu-rodape">
 
 
+
                 <button
                     type="button"
                     id="btnSair"
@@ -675,13 +854,16 @@
                 >
 
 
+
                     <span class="icone-sair-admin">
+
 
 
                         <svg
                             viewBox="0 0 24 24"
                             aria-hidden="true"
                         >
+
 
 
                             <path
@@ -694,6 +876,7 @@
                             />
 
 
+
                             <path
                                 d="M14 8l4 4-4 4"
                                 fill="none"
@@ -702,6 +885,7 @@
                                 stroke-linecap="round"
                                 stroke-linejoin="round"
                             />
+
 
 
                             <path
@@ -713,10 +897,13 @@
                             />
 
 
+
                         </svg>
 
 
+
                     </span>
+
 
 
                     <span>
@@ -724,13 +911,17 @@
                     </span>
 
 
+
                 </button>
+
 
 
             </div>
 
 
+
         </aside>
+
 
 
         <!-- ==========================================
@@ -740,12 +931,15 @@
         <main class="conteudo-admin">
 
 
+
             <!-- CABEÇALHO -->
 
             <header class="cabecalho-admin">
 
 
+
                 <div>
+
 
 
                     <h2>
@@ -753,15 +947,19 @@
                     </h2>
 
 
+
                     <p>
                         Administradores responsáveis pelas lojas
                     </p>
 
 
+
                 </div>
 
 
+
             </header>
+
 
 
             <!-- ======================================
@@ -774,6 +972,7 @@
             ></div>
 
 
+
             <!-- ======================================
                  RESUMO
             ======================================= -->
@@ -781,18 +980,22 @@
             <section class="cards-administradores">
 
 
+
                 <!-- TOTAL -->
 
                 <div class="card-administrador">
 
 
+
                     <div class="icone-administrador">
+
 
 
                         <svg
                             viewBox="0 0 24 24"
                             aria-hidden="true"
                         >
+
 
 
                             <circle
@@ -805,6 +1008,7 @@
                             />
 
 
+
                             <path
                                 d="M3.5 20c.7-3.5 2.5-5 5.5-5s4.8 1.5 5.5 5"
                                 fill="none"
@@ -812,6 +1016,7 @@
                                 stroke-width="2"
                                 stroke-linecap="round"
                             />
+
 
 
                             <circle
@@ -824,13 +1029,17 @@
                             />
 
 
+
                         </svg>
+
 
 
                     </div>
 
 
+
                     <div>
+
 
 
                         <span>
@@ -838,15 +1047,19 @@
                         </span>
 
 
+
                         <strong id="totalAdministradores">
                             0
                         </strong>
 
 
+
                     </div>
 
 
+
                 </div>
+
 
 
                 <!-- ATIVOS -->
@@ -854,13 +1067,16 @@
                 <div class="card-administrador">
 
 
+
                     <div class="icone-administrador">
+
 
 
                         <svg
                             viewBox="0 0 24 24"
                             aria-hidden="true"
                         >
+
 
 
                             <circle
@@ -871,6 +1087,7 @@
                                 stroke="currentColor"
                                 stroke-width="2"
                             />
+
 
 
                             <path
@@ -883,13 +1100,17 @@
                             />
 
 
+
                         </svg>
+
 
 
                     </div>
 
 
+
                     <div>
+
 
 
                         <span>
@@ -897,15 +1118,19 @@
                         </span>
 
 
+
                         <strong id="administradoresAtivos">
                             0
                         </strong>
 
 
+
                     </div>
 
 
+
                 </div>
+
 
 
                 <!-- INATIVOS -->
@@ -913,13 +1138,16 @@
                 <div class="card-administrador">
 
 
+
                     <div class="icone-administrador">
+
 
 
                         <svg
                             viewBox="0 0 24 24"
                             aria-hidden="true"
                         >
+
 
 
                             <circle
@@ -932,6 +1160,7 @@
                             />
 
 
+
                             <path
                                 d="M9 9l6 6M15 9l-6 6"
                                 fill="none"
@@ -941,13 +1170,17 @@
                             />
 
 
+
                         </svg>
+
 
 
                     </div>
 
 
+
                     <div>
+
 
 
                         <span>
@@ -955,18 +1188,23 @@
                         </span>
 
 
+
                         <strong id="administradoresInativos">
                             0
                         </strong>
 
 
+
                     </div>
+
 
 
                 </div>
 
 
+
             </section>
+
 
 
             <!-- ======================================
@@ -976,10 +1214,13 @@
             <section class="painel">
 
 
+
                 <div class="titulo-painel">
 
 
+
                     <div>
+
 
 
                         <h3>
@@ -987,15 +1228,19 @@
                         </h3>
 
 
+
                         <p>
                             Crie um administrador e vincule-o a uma loja.
                         </p>
 
 
+
                     </div>
 
 
+
                 </div>
+
 
 
                 <form
@@ -1004,15 +1249,19 @@
                 >
 
 
+
                     <div class="form-grid-administrador">
+
 
 
                         <div class="campo-administrador">
 
 
+
                             <label for="nomeAdministrador">
                                 Nome completo
                             </label>
+
 
 
                             <input
@@ -1025,15 +1274,19 @@
                             >
 
 
+
                         </div>
+
 
 
                         <div class="campo-administrador">
 
 
+
                             <label for="usuarioAdministrador">
                                 Nome de usuário
                             </label>
+
 
 
                             <input
@@ -1046,15 +1299,19 @@
                             >
 
 
+
                         </div>
+
 
 
                         <div class="campo-administrador">
 
 
+
                             <label for="senhaAdministrador">
                                 Senha
                             </label>
+
 
 
                             <input
@@ -1067,15 +1324,19 @@
                             >
 
 
+
                         </div>
+
 
 
                         <div class="campo-administrador">
 
 
+
                             <label for="lojaAdministrador">
                                 Loja
                             </label>
+
 
 
                             <select
@@ -1084,21 +1345,27 @@
                             >
 
 
+
                                 <option value="">
                                     Selecione a loja
                                 </option>
 
 
+
                             </select>
+
 
 
                         </div>
 
 
+
                     </div>
 
 
+
                     <div class="acoes-administrador">
+
 
 
                         <button
@@ -1108,13 +1375,16 @@
                         >
 
 
+
                             <span class="icone-botao">
+
 
 
                                 <svg
                                     viewBox="0 0 24 24"
                                     aria-hidden="true"
                                 >
+
 
 
                                     <circle
@@ -1127,6 +1397,7 @@
                                     />
 
 
+
                                     <path
                                         d="M3.5 20c.7-3.5 2.5-5 5.5-5s4.8 1.5 5.5 5"
                                         fill="none"
@@ -1134,6 +1405,7 @@
                                         stroke-width="2"
                                         stroke-linecap="round"
                                     />
+
 
 
                                     <path
@@ -1145,10 +1417,13 @@
                                     />
 
 
+
                                 </svg>
 
 
+
                             </span>
+
 
 
                             <span>
@@ -1156,7 +1431,9 @@
                             </span>
 
 
+
                         </button>
+
 
 
                         <button
@@ -1168,13 +1445,17 @@
                         </button>
 
 
+
                     </div>
+
 
 
                 </form>
 
 
+
             </section>
+
 
 
             <!-- ======================================
@@ -1184,10 +1465,13 @@
             <section class="painel">
 
 
+
                 <div class="titulo-painel">
 
 
+
                     <div>
+
 
 
                         <h3>
@@ -1195,12 +1479,15 @@
                         </h3>
 
 
+
                         <p>
                             Veja qual administrador pertence a cada loja.
                         </p>
 
 
+
                     </div>
+
 
 
                     <button
@@ -1210,13 +1497,16 @@
                     >
 
 
+
                         <span class="icone-atualizar">
+
 
 
                             <svg
                                 viewBox="0 0 24 24"
                                 aria-hidden="true"
                             >
+
 
 
                                 <path
@@ -1229,6 +1519,7 @@
                                 />
 
 
+
                                 <path
                                     d="M3 5v5h5"
                                     fill="none"
@@ -1237,6 +1528,7 @@
                                     stroke-linecap="round"
                                     stroke-linejoin="round"
                                 />
+
 
 
                                 <path
@@ -1249,6 +1541,7 @@
                                 />
 
 
+
                                 <path
                                     d="M21 19v-5h-5"
                                     fill="none"
@@ -1259,10 +1552,13 @@
                                 />
 
 
+
                             </svg>
 
 
+
                         </span>
+
 
 
                         <span>
@@ -1270,10 +1566,85 @@
                         </span>
 
 
+
                     </button>
 
 
+
                 </div>
+
+
+
+                <!-- ======================================
+                     PESQUISA
+                ======================================= -->
+
+                <div class="campo-pesquisa-administradores">
+
+
+
+                    <span
+                        class="icone-pesquisa-administradores"
+                        aria-hidden="true"
+                    >
+
+
+
+                        <svg viewBox="0 0 24 24">
+
+
+
+                            <circle
+                                cx="11"
+                                cy="11"
+                                r="6.5"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            />
+
+
+
+                            <path
+                                d="M16 16l5 5"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                            />
+
+
+
+                        </svg>
+
+
+
+                    </span>
+
+
+
+                    <input
+                        type="search"
+                        id="pesquisaAdministradores"
+                        placeholder="Pesquisar administrador ou loja..."
+                        autocomplete="off"
+                        aria-label="Pesquisar administrador ou loja"
+                    >
+
+
+
+                </div>
+
+
+
+                <div
+                    id="semResultadoBuscaAdministradores"
+                    class="sem-registros"
+                    style="display: none;"
+                >
+                    Nenhum administrador encontrado para a pesquisa.
+                </div>
+
 
 
                 <div
@@ -1282,6 +1653,7 @@
                 >
                     Carregando administradores...
                 </div>
+
 
 
                 <div
@@ -1293,6 +1665,7 @@
                 </div>
 
 
+
                 <div
                     id="containerTabela"
                     class="tabela-container"
@@ -1300,13 +1673,17 @@
                 >
 
 
+
                     <table class="tabela-administradores">
+
 
 
                         <thead>
 
 
+
                             <tr>
+
 
 
                                 <th>
@@ -1314,9 +1691,11 @@
                                 </th>
 
 
+
                                 <th>
                                     Usuário
                                 </th>
+
 
 
                                 <th>
@@ -1324,9 +1703,11 @@
                                 </th>
 
 
+
                                 <th>
                                     Status
                                 </th>
+
 
 
                                 <th>
@@ -1334,31 +1715,41 @@
                                 </th>
 
 
+
                             </tr>
+
 
 
                         </thead>
 
 
+
                         <tbody id="listaAdministradores">
+
 
 
                         </tbody>
 
 
+
                     </table>
+
 
 
                 </div>
 
 
+
             </section>
+
 
 
         </main>
 
 
+
     </div>
+
 
 
     <!-- ==========================================
@@ -1370,15 +1761,21 @@
     ></script>
 
 
+
     <script src="js/config.js"></script>
+
 
 
     <script src="js/login.js"></script>
 
 
+
     <script src="js/administradores.js"></script>
 
 
+
 </body>
+
+
 
 </html>
