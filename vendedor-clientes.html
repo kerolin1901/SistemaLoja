@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="pt-BR">
 
 <head>
@@ -10,17 +11,129 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Clientes - Vendedor - Sistema da Loja</title>
+    <title>
+        Clientes - Vendedor - Sistema da Loja
+    </title>
+
 
     <link
         rel="stylesheet"
         href="vendedor.css"
     >
 
+
     <link
         rel="stylesheet"
         href="vendedor-clientes.css"
     >
+
+
+    <style>
+
+        /* ======================================
+           LOGO / LOJA
+        ====================================== */
+
+        .logo-vendedor {
+
+            display: flex !important;
+
+            align-items: center;
+
+            gap: 12px;
+
+            flex-shrink: 0;
+
+        }
+
+
+        .logo-vendedor .logo-icone {
+
+            flex-shrink: 0;
+
+        }
+
+
+        .logo-vendedor strong {
+
+            display: block;
+
+            overflow: hidden;
+
+            text-overflow: ellipsis;
+
+            white-space: nowrap;
+
+        }
+
+
+        .logo-vendedor span {
+
+            display: block;
+
+        }
+
+
+        /* ======================================
+           ÍCONES DO MENU
+        ====================================== */
+
+        .icone-menu {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            width: 20px;
+
+            height: 20px;
+
+            flex-shrink: 0;
+
+        }
+
+
+        .icone-menu svg {
+
+            width: 18px;
+
+            height: 18px;
+
+            display: block;
+
+        }
+
+
+        /* ======================================
+           ÍCONE DO AVISO
+        ====================================== */
+
+        .aviso-icone {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            flex-shrink: 0;
+
+        }
+
+
+        .aviso-icone svg {
+
+            width: 22px;
+
+            height: 22px;
+
+            display: block;
+
+        }
+
+    </style>
 
 </head>
 
@@ -38,17 +151,22 @@
         <aside class="menu-lateral-vendedor">
 
 
+            <!-- LOGO / LOJA -->
+
             <div class="logo-vendedor">
+
 
                 <div class="logo-icone">
                     SL
                 </div>
 
+
                 <div>
 
-                    <strong>
-                        Sistema da Loja
+                    <strong id="nomeLojaVendedor">
+                        Carregando...
                     </strong>
+
 
                     <span>
                         Área do Vendedor
@@ -56,10 +174,14 @@
 
                 </div>
 
+
             </div>
 
 
+            <!-- USUÁRIO -->
+
             <div class="usuario-vendedor">
+
 
                 <div
                     class="avatar-vendedor"
@@ -68,20 +190,29 @@
                     V
                 </div>
 
+
                 <div class="dados-vendedor">
+
 
                     <strong id="nomeVendedor">
                         Vendedor
                     </strong>
 
+
                     <span>
                         Vendedor
                     </span>
 
+
                 </div>
+
 
             </div>
 
+
+            <!-- ==================================
+                 MENU
+            =================================== -->
 
             <nav class="menu-vendedor">
 
@@ -91,16 +222,52 @@
                 </div>
 
 
+                <!-- DASHBOARD -->
+
                 <a
                     href="vendedor.html"
                     class="item-menu"
                 >
 
-                    <span>
-                        ▦
+                    <span class="icone-menu">
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                        >
+
+                            <path
+                                d="M3 10.5 12 3l9 7.5"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+
+                            <path
+                                d="M5 9.5V21h14V9.5"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linejoin="round"
+                            />
+
+                            <path
+                                d="M9 21v-6h6v6"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linejoin="round"
+                            />
+
+                        </svg>
+
                     </span>
 
-                    Dashboard
+                    <span>
+                        Dashboard
+                    </span>
 
                 </a>
 
@@ -110,58 +277,235 @@
                 </div>
 
 
+                <!-- PRODUTOS -->
+
                 <a
                     href="vendedor-produtos.html"
                     class="item-menu"
                 >
 
-                    <span>
-                        📦
+                    <span class="icone-menu">
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                        >
+
+                            <path
+                                d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Z"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linejoin="round"
+                            />
+
+                            <path
+                                d="m4 7.5 8 4.5 8-4.5"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linejoin="round"
+                            />
+
+                            <path
+                                d="M12 12v9"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                            />
+
+                        </svg>
+
                     </span>
 
-                    Produtos
+                    <span>
+                        Produtos
+                    </span>
 
                 </a>
 
+
+                <!-- VENDAS -->
 
                 <a
                     href="vendedor-vendas.html"
                     class="item-menu"
                 >
 
-                    <span>
-                        🛒
+                    <span class="icone-menu">
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                        >
+
+                            <circle
+                                cx="9"
+                                cy="20"
+                                r="1.5"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            />
+
+                            <circle
+                                cx="18"
+                                cy="20"
+                                r="1.5"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            />
+
+                            <path
+                                d="M3 4h2l2.2 11.5h10.9L21 7H6"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+
+                        </svg>
+
                     </span>
 
-                    Vendas
+                    <span>
+                        Vendas
+                    </span>
 
                 </a>
 
+
+                <!-- CLIENTES -->
 
                 <a
                     href="vendedor-clientes.html"
                     class="item-menu ativo"
                 >
 
-                    <span>
-                        👤
+                    <span class="icone-menu">
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                        >
+
+                            <circle
+                                cx="9"
+                                cy="8"
+                                r="3"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            />
+
+                            <path
+                                d="M3.5 20c.7-3.4 2.5-5 5.5-5s4.8 1.6 5.5 5"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                            />
+
+                            <path
+                                d="M16 11c2.2.2 3.7 1.6 4.5 4"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                            />
+
+                            <path
+                                d="M16 5.5a3 3 0 0 1 0 5.8"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                            />
+
+                        </svg>
+
                     </span>
 
-                    Clientes
+                    <span>
+                        Clientes
+                    </span>
 
                 </a>
 
+
+                <!-- ESTOQUE -->
 
                 <a
                     href="vendedor-estoque.html"
                     class="item-menu"
                 >
 
-                    <span>
-                        📊
+                    <span class="icone-menu">
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                        >
+
+                            <path
+                                d="M4 19V5"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                            />
+
+                            <path
+                                d="M4 19h16"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                            />
+
+                            <rect
+                                x="7"
+                                y="12"
+                                width="3"
+                                height="5"
+                                rx="1"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            />
+
+                            <rect
+                                x="12"
+                                y="9"
+                                width="3"
+                                height="8"
+                                rx="1"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            />
+
+                            <rect
+                                x="17"
+                                y="6"
+                                width="3"
+                                height="11"
+                                rx="1"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            />
+
+                        </svg>
+
                     </span>
 
-                    Estoque
+                    <span>
+                        Estoque
+                    </span>
 
                 </a>
 
@@ -169,7 +513,10 @@
             </nav>
 
 
+            <!-- SAIR -->
+
             <div class="area-sair">
+
 
                 <button
                     type="button"
@@ -177,13 +524,49 @@
                     class="botao-sair"
                 >
 
-                    <span>
-                        ⇥
+                    <span class="icone-menu">
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                        >
+
+                            <path
+                                d="M10 5H5v14h5"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+
+                            <path
+                                d="M14 8l4 4-4 4"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+
+                            <path
+                                d="M9 12h9"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                            />
+
+                        </svg>
+
                     </span>
 
-                    Sair
+                    <span>
+                        Sair
+                    </span>
 
                 </button>
+
 
             </div>
 
@@ -198,13 +581,17 @@
         <main class="conteudo-vendedor">
 
 
+            <!-- CABEÇALHO -->
+
             <header class="cabecalho-vendedor">
+
 
                 <div>
 
                     <h1>
                         Clientes
                     </h1>
+
 
                     <p>
                         Cadastre e consulte os clientes da loja.
@@ -215,15 +602,19 @@
 
                 <div class="data-atual">
 
+
                     <span>
                         Hoje
                     </span>
+
 
                     <strong id="dataAtual">
                         --
                     </strong>
 
+
                 </div>
+
 
             </header>
 
@@ -237,17 +628,22 @@
 
                 <div class="cabecalho-painel-clientes">
 
+
                     <div>
+
 
                         <h2 id="tituloFormulario">
                             Novo cliente
                         </h2>
 
+
                         <p>
                             Preencha os dados do cliente.
                         </p>
 
+
                     </div>
+
 
                 </div>
 
@@ -260,9 +656,11 @@
 
                         <div class="campo-cliente campo-nome">
 
+
                             <label for="clienteNome">
                                 Nome *
                             </label>
+
 
                             <input
                                 type="text"
@@ -272,14 +670,17 @@
                                 placeholder="Nome completo"
                             >
 
+
                         </div>
 
 
                         <div class="campo-cliente">
 
+
                             <label for="clienteTelefone">
                                 Telefone
                             </label>
+
 
                             <input
                                 type="text"
@@ -288,14 +689,17 @@
                                 placeholder="(00) 00000-0000"
                             >
 
+
                         </div>
 
 
                         <div class="campo-cliente">
 
+
                             <label for="clienteCPF">
                                 CPF
                             </label>
+
 
                             <input
                                 type="text"
@@ -304,14 +708,17 @@
                                 placeholder="000.000.000-00"
                             >
 
+
                         </div>
 
 
                         <div class="campo-cliente">
 
+
                             <label for="clienteEmail">
                                 E-mail
                             </label>
+
 
                             <input
                                 type="email"
@@ -320,14 +727,17 @@
                                 placeholder="cliente@email.com"
                             >
 
+
                         </div>
 
 
                         <div class="campo-cliente campo-endereco">
 
+
                             <label for="clienteEndereco">
                                 Endereço
                             </label>
+
 
                             <input
                                 type="text"
@@ -336,14 +746,17 @@
                                 placeholder="Rua, número, bairro..."
                             >
 
+
                         </div>
 
 
                         <div class="campo-cliente campo-observacoes">
 
+
                             <label for="clienteObservacoes">
                                 Observações
                             </label>
+
 
                             <textarea
                                 id="clienteObservacoes"
@@ -351,6 +764,7 @@
                                 maxlength="500"
                                 placeholder="Observações sobre o cliente..."
                             ></textarea>
+
 
                         </div>
 
@@ -404,15 +818,19 @@
 
                 <div class="cabecalho-lista-clientes">
 
+
                     <div>
+
 
                         <h2>
                             Clientes cadastrados
                         </h2>
 
+
                         <p>
                             Pesquise os clientes da loja.
                         </p>
+
 
                     </div>
 
@@ -424,16 +842,20 @@
                         0 clientes
                     </div>
 
+
                 </div>
 
 
                 <div class="barra-clientes">
 
+
                     <div>
+
 
                         <label for="buscaCliente">
                             Pesquisar
                         </label>
+
 
                         <input
                             type="search"
@@ -442,78 +864,100 @@
                             autocomplete="off"
                         >
 
+
                     </div>
 
 
                     <div>
 
+
                         <label for="filtroStatusCliente">
                             Status
                         </label>
+
 
                         <select
                             id="filtroStatusCliente"
                         >
 
+
                             <option value="">
                                 Todos
                             </option>
+
 
                             <option value="ativo">
                                 Ativos
                             </option>
 
+
                             <option value="inativo">
                                 Inativos
                             </option>
 
+
                         </select>
 
+
                     </div>
+
 
                 </div>
 
 
                 <div class="tabela-clientes-container">
 
+
                     <table class="tabela-clientes">
+
 
                         <thead>
 
+
                             <tr>
+
 
                                 <th>
                                     Nome
                                 </th>
 
+
                                 <th>
                                     Telefone
                                 </th>
+
 
                                 <th>
                                     CPF
                                 </th>
 
+
                                 <th>
                                     E-mail
                                 </th>
+
 
                                 <th>
                                     Status
                                 </th>
 
+
                                 <th>
                                     Ação
                                 </th>
 
+
                             </tr>
+
 
                         </thead>
 
 
                         <tbody id="listaClientes">
 
+
                             <tr>
+
 
                                 <td
                                     colspan="6"
@@ -522,11 +966,15 @@
                                     Carregando clientes...
                                 </td>
 
+
                             </tr>
+
 
                         </tbody>
 
+
                     </table>
+
 
                 </div>
 
@@ -540,15 +988,56 @@
 
             <section class="painel aviso-painel">
 
+
                 <div class="aviso-icone">
-                    ℹ️
+
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                    >
+
+
+                        <circle
+                            cx="12"
+                            cy="12"
+                            r="9"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                        />
+
+
+                        <path
+                            d="M12 10v6"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                        />
+
+
+                        <circle
+                            cx="12"
+                            cy="7"
+                            r="1"
+                            fill="currentColor"
+                        />
+
+
+                    </svg>
+
+
                 </div>
 
+
                 <div>
+
 
                     <strong>
                         Área do vendedor
                     </strong>
+
 
                     <p>
                         O vendedor pode cadastrar e editar clientes,
@@ -556,7 +1045,9 @@
                         da loja.
                     </p>
 
+
                 </div>
+
 
             </section>
 
@@ -567,11 +1058,165 @@
     </div>
 
 
+    <!-- ==========================================
+         SUPABASE
+    =========================================== -->
+
     <script
         src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
     ></script>
 
+
     <script src="js/config.js"></script>
+
+
+    <!-- ==========================================
+         NOME DA LOJA DO VENDEDOR
+    =========================================== -->
+
+    <script>
+
+        async function carregarNomeLojaVendedor() {
+
+            const elemento =
+                document.getElementById(
+                    "nomeLojaVendedor"
+                );
+
+
+            if (!elemento) {
+
+                return;
+
+            }
+
+
+            try {
+
+                const resultadoSessao =
+                    await supabaseClient
+                        .auth
+                        .getSession();
+
+
+                const session =
+                    resultadoSessao
+                        .data
+                        .session;
+
+
+                if (!session) {
+
+                    elemento.textContent =
+                        "Sistema da Loja";
+
+                    return;
+
+                }
+
+
+                const resultadoPerfil =
+                    await supabaseClient
+                        .from("perfis")
+                        .select("loja_id")
+                        .eq(
+                            "id",
+                            session.user.id
+                        )
+                        .maybeSingle();
+
+
+                if (
+                    resultadoPerfil.error ||
+                    !resultadoPerfil.data ||
+                    !resultadoPerfil.data.loja_id
+                ) {
+
+                    console.error(
+                        "Erro ao buscar loja:",
+                        resultadoPerfil.error
+                    );
+
+                    elemento.textContent =
+                        "Sistema da Loja";
+
+                    return;
+
+                }
+
+
+                const resultadoLoja =
+                    await supabaseClient
+                        .from("lojas")
+                        .select("nome")
+                        .eq(
+                            "id",
+                            resultadoPerfil.data.loja_id
+                        )
+                        .maybeSingle();
+
+
+                if (
+                    resultadoLoja.error ||
+                    !resultadoLoja.data
+                ) {
+
+                    console.error(
+                        "Erro ao buscar nome da loja:",
+                        resultadoLoja.error
+                    );
+
+                    elemento.textContent =
+                        "Sistema da Loja";
+
+                    return;
+
+                }
+
+
+                elemento.textContent =
+                    resultadoLoja.data.nome ||
+                    "Sistema da Loja";
+
+            }
+
+            catch (erro) {
+
+                console.error(
+                    "Erro ao carregar nome da loja:",
+                    erro
+                );
+
+                elemento.textContent =
+                    "Sistema da Loja";
+
+            }
+
+        }
+
+
+        if (
+            document.readyState === "loading"
+        ) {
+
+            document.addEventListener(
+                "DOMContentLoaded",
+                carregarNomeLojaVendedor
+            );
+
+        }
+        else {
+
+            carregarNomeLojaVendedor();
+
+        }
+
+    </script>
+
+
+    <!-- ==========================================
+         LÓGICA DOS CLIENTES
+    =========================================== -->
 
     <script src="js/vendedor-clientes.js"></script>
 

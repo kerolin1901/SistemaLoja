@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="pt-BR">
 
 <head>
@@ -12,7 +11,6 @@
     >
 
     <title>Produtos - Sistema da Loja</title>
-
 
     <link
         rel="stylesheet"
@@ -33,12 +31,14 @@
     <div class="layout-admin">
 
 
-        <!-- ======================================
+        <!-- ==========================================
              MENU LATERAL
-        ======================================= -->
+        =========================================== -->
 
         <aside class="menu-lateral">
 
+
+            <!-- LOGO -->
 
             <div class="logo-admin">
 
@@ -61,6 +61,8 @@
             </div>
 
 
+            <!-- USUÁRIO LOGADO -->
+
             <div class="usuario-logado">
 
                 <div class="avatar-admin">
@@ -82,13 +84,21 @@
             </div>
 
 
+            <!-- MENU -->
+
             <nav class="menu">
 
+
+                <!-- ======================================
+                     PRINCIPAL
+                ======================================= -->
 
                 <div class="titulo-menu">
                     PRINCIPAL
                 </div>
 
+
+                <!-- DASHBOARD -->
 
                 <a
                     href="admin.html"
@@ -96,7 +106,39 @@
                 >
 
                     <span class="icone-menu">
-                        ▦
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                        >
+
+                            <path
+                                d="M3 10.5 12 3l9 7.5"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+
+                            <path
+                                d="M5 9.5V21h14V9.5"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linejoin="round"
+                            />
+
+                            <path
+                                d="M9 21v-6h6v6"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linejoin="round"
+                            />
+
+                        </svg>
+
                     </span>
 
                     <span>
@@ -106,13 +148,55 @@
                 </a>
 
 
+                <!-- USUÁRIOS -->
+
                 <a
                     href="usuarios.html"
                     class="item-menu"
                 >
 
                     <span class="icone-menu">
-                        👥
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                        >
+
+                            <circle
+                                cx="9"
+                                cy="8"
+                                r="3"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            />
+
+                            <path
+                                d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                            />
+
+                            <path
+                                d="M16 5.5a3 3 0 0 1 0 5.8"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                            />
+
+                            <path
+                                d="M17 14.5c2.3.7 4 2.8 4 5.5"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                            />
+
+                        </svg>
+
                     </span>
 
                     <span>
@@ -122,10 +206,75 @@
                 </a>
 
 
+                <!-- LOJAS - SOMENTE ADMIN GERAL -->
+
+                <a
+                    href="lojas.html"
+                    class="item-menu"
+                    id="menuLojas"
+                    style="display: none;"
+                >
+
+                    <span class="icone-menu">
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                        >
+
+                            <path
+                                d="M4 10h16"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                            />
+
+                            <path
+                                d="M5 10v10h14V10"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linejoin="round"
+                            />
+
+                            <path
+                                d="M3 10 5 4h14l2 6"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linejoin="round"
+                            />
+
+                            <path
+                                d="M9 20v-5h6v5"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linejoin="round"
+                            />
+
+                        </svg>
+
+                    </span>
+
+                    <span>
+                        Lojas
+                    </span>
+
+                </a>
+
+
+                <!-- ======================================
+                     ESTOQUE E VENDAS
+                ======================================= -->
+
                 <div class="titulo-menu">
                     ESTOQUE E VENDAS
                 </div>
 
+
+                <!-- PRODUTOS -->
 
                 <a
                     href="produtos.html"
@@ -133,7 +282,37 @@
                 >
 
                     <span class="icone-menu">
-                        📦
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                        >
+
+                            <path
+                                d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Z"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linejoin="round"
+                            />
+
+                            <path
+                                d="m4 7.5 8 4.5 8-4.5"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linejoin="round"
+                            />
+
+                            <path
+                                d="M12 12v9"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            />
+
+                        </svg>
+
                     </span>
 
                     <span>
@@ -143,13 +322,54 @@
                 </a>
 
 
+                <!-- CATEGORIAS -->
+
                 <a
                     href="categorias.html"
                     class="item-menu"
                 >
 
                     <span class="icone-menu">
-                        🗂️
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                        >
+
+                            <path
+                                d="M4 5h6v6H4z"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linejoin="round"
+                            />
+
+                            <path
+                                d="M14 5h6v6h-6z"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linejoin="round"
+                            />
+
+                            <path
+                                d="M4 13h6v6H4z"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linejoin="round"
+                            />
+
+                            <path
+                                d="M14 13h6v6h-6z"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linejoin="round"
+                            />
+
+                        </svg>
+
                     </span>
 
                     <span>
@@ -159,13 +379,54 @@
                 </a>
 
 
+                <!-- ESTOQUE -->
+
                 <a
                     href="estoque.html"
                     class="item-menu"
                 >
 
                     <span class="icone-menu">
-                        📊
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                        >
+
+                            <path
+                                d="M4 4h16v16H4z"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linejoin="round"
+                            />
+
+                            <path
+                                d="M8 8h8"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                            />
+
+                            <path
+                                d="M8 12h8"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                            />
+
+                            <path
+                                d="M8 16h5"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                            />
+
+                        </svg>
+
                     </span>
 
                     <span>
@@ -175,13 +436,45 @@
                 </a>
 
 
+                <!-- VENDAS -->
+
                 <a
                     href="vendas.html"
                     class="item-menu"
                 >
 
                     <span class="icone-menu">
-                        🛒
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                        >
+
+                            <path
+                                d="M3 4h2l2.2 11.2a2 2 0 0 0 2 1.6h7.6a2 2 0 0 0 2-1.6L21 8H6"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+
+                            <circle
+                                cx="10"
+                                cy="20"
+                                r="1"
+                                fill="currentColor"
+                            />
+
+                            <circle
+                                cx="18"
+                                cy="20"
+                                r="1"
+                                fill="currentColor"
+                            />
+
+                        </svg>
+
                     </span>
 
                     <span>
@@ -191,13 +484,96 @@
                 </a>
 
 
+                <!-- HISTÓRICO DE VENDAS -->
+
+                <a
+                    href="historico-vendas.html"
+                    class="item-menu"
+                >
+
+                    <span class="icone-menu">
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                        >
+
+                            <path
+                                d="M4 5h16v14H4z"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linejoin="round"
+                            />
+
+                            <path
+                                d="M8 9h8"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                            />
+
+                            <path
+                                d="M8 13h6"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                            />
+
+                            <path
+                                d="M8 17h4"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                            />
+
+                        </svg>
+
+                    </span>
+
+                    <span>
+                        Histórico de vendas
+                    </span>
+
+                </a>
+
+
+                <!-- CLIENTES -->
+
                 <a
                     href="clientes.html"
                     class="item-menu"
                 >
 
                     <span class="icone-menu">
-                        👤
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                        >
+
+                            <circle
+                                cx="12"
+                                cy="8"
+                                r="3"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            />
+
+                            <path
+                                d="M5 20c0-3.9 3.1-7 7-7s7 3.1 7 7"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                            />
+
+                        </svg>
+
                     </span>
 
                     <span>
@@ -207,10 +583,16 @@
                 </a>
 
 
+                <!-- ======================================
+                     FINANCEIRO
+                ======================================= -->
+
                 <div class="titulo-menu">
                     FINANCEIRO
                 </div>
 
+
+                <!-- FINANCEIRO -->
 
                 <a
                     href="financeiro.html"
@@ -218,7 +600,39 @@
                 >
 
                     <span class="icone-menu">
-                        💰
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                        >
+
+                            <circle
+                                cx="12"
+                                cy="12"
+                                r="8"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            />
+
+                            <path
+                                d="M12 7v10"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                            />
+
+                            <path
+                                d="M15 9.5c-.7-.8-1.7-1.2-3-1.2-1.6 0-2.7.8-2.7 2 0 3 5.7 1.1 5.7 4 0 1.3-1.2 2.2-3 2.2-1.4 0-2.6-.5-3.3-1.4"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.7"
+                                stroke-linecap="round"
+                            />
+
+                        </svg>
+
                     </span>
 
                     <span>
@@ -228,13 +642,47 @@
                 </a>
 
 
+                <!-- RELATÓRIOS -->
+
                 <a
                     href="relatorios.html"
                     class="item-menu"
                 >
 
                     <span class="icone-menu">
-                        📈
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                        >
+
+                            <path
+                                d="M4 19V5"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                            />
+
+                            <path
+                                d="M4 19h16"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                            />
+
+                            <path
+                                d="m7 15 3-3 3 2 5-6"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+
+                        </svg>
+
                     </span>
 
                     <span>
@@ -247,6 +695,8 @@
             </nav>
 
 
+            <!-- SAIR -->
+
             <div class="area-sair">
 
                 <button
@@ -255,11 +705,46 @@
                     class="botao-sair"
                 >
 
-                    <span>
-                        ⇥
+                    <span class="icone-menu">
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                        >
+
+                            <path
+                                d="M10 5H5v14h5"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+
+                            <path
+                                d="M13 8l4 4-4 4"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+
+                            <path
+                                d="M9 12h8"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                            />
+
+                        </svg>
+
                     </span>
 
-                    Sair
+                    <span>
+                        Sair
+                    </span>
 
                 </button>
 
@@ -269,15 +754,16 @@
         </aside>
 
 
-        <!-- ======================================
-             CONTEÚDO
-        ======================================= -->
+        <!-- ==========================================
+             CONTEÚDO PRINCIPAL
+        =========================================== -->
 
         <main class="conteudo-admin">
 
 
-            <header class="cabecalho-admin">
+            <!-- CABEÇALHO -->
 
+            <header class="cabecalho-admin">
 
                 <div>
 
@@ -304,9 +790,10 @@
 
                 </div>
 
-
             </header>
 
+
+            <!-- MENSAGEM -->
 
             <div
                 id="mensagemAdmin"
@@ -314,15 +801,14 @@
             ></div>
 
 
-            <!-- ==================================
+            <!-- ======================================
                  FORMULÁRIO
-            =================================== -->
+            ======================================= -->
 
             <section class="painel-produtos">
 
 
                 <div class="titulo-painel">
-
 
                     <div>
 
@@ -335,7 +821,6 @@
                         </p>
 
                     </div>
-
 
                 </div>
 
@@ -505,9 +990,7 @@
                                 Status
                             </label>
 
-
                             <label class="checkbox-status">
-
 
                                 <input
                                     type="checkbox"
@@ -515,20 +998,19 @@
                                     checked
                                 >
 
-
                                 <span>
                                     Produto ativo
                                 </span>
 
-
                             </label>
-
 
                         </div>
 
 
                     </div>
 
+
+                    <!-- AÇÕES -->
 
                     <div class="acoes-produto">
 
@@ -560,9 +1042,9 @@
             </section>
 
 
-            <!-- ==================================
+            <!-- ======================================
                  LISTA
-            =================================== -->
+            ======================================= -->
 
             <section class="painel-produtos">
 
@@ -588,12 +1070,61 @@
                         class="botao-atualizar"
                         id="btnAtualizar"
                     >
-                        🔄 Atualizar
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                            width="14"
+                            height="14"
+                        >
+
+                            <path
+                                d="M20 11a8 8 0 0 0-14.8-4L3 10"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+
+                            <path
+                                d="M3 5v5h5"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+
+                            <path
+                                d="M4 13a8 8 0 0 0 14.8 4L21 14"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+
+                            <path
+                                d="M21 19v-5h-5"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+
+                        </svg>
+
+                        Atualizar
+
                     </button>
 
 
                 </div>
 
+
+                <!-- CARREGANDO -->
 
                 <div
                     id="carregando"
@@ -603,6 +1134,8 @@
                 </div>
 
 
+                <!-- TABELA -->
+
                 <div class="tabela-wrapper">
 
 
@@ -611,57 +1144,45 @@
 
                         <thead>
 
-
                             <tr>
-
 
                                 <th>
                                     Produto
                                 </th>
 
-
                                 <th>
                                     SKU
                                 </th>
-
 
                                 <th>
                                     Fornecedor
                                 </th>
 
-
                                 <th>
                                     Categoria
                                 </th>
-
 
                                 <th>
                                     Custo
                                 </th>
 
-
                                 <th>
                                     Venda
                                 </th>
-
 
                                 <th>
                                     Estoque
                                 </th>
 
-
                                 <th>
                                     Status
                                 </th>
-
 
                                 <th>
                                     Ações
                                 </th>
 
-
                             </tr>
-
 
                         </thead>
 
@@ -675,6 +1196,8 @@
 
                 </div>
 
+
+                <!-- SEM PRODUTOS -->
 
                 <div
                     id="semProdutos"
@@ -697,18 +1220,150 @@
          SUPABASE
     =========================================== -->
 
-    <script
-        src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
-    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+
+    <!-- CONFIGURAÇÃO -->
 
     <script src="js/config.js"></script>
 
 
+    <!-- ==========================================
+         LAYOUT PADRÃO
+         NOME DA LOJA + USUÁRIO
+    =========================================== -->
+
+    <script src="js/layout.js"></script>
+
+
+    <!-- LÓGICA DOS PRODUTOS -->
+
     <script src="js/produtos.js"></script>
 
 
-</body>
+    <!-- ==========================================
+         MENU LOJAS
+         SOMENTE ADMINISTRADOR GERAL
+    =========================================== -->
 
+    <script>
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            async function () {
+
+                const menuLojas =
+                    document.getElementById(
+                        "menuLojas"
+                    );
+
+
+                if (!menuLojas) {
+
+                    return;
+
+                }
+
+
+                try {
+
+                    const {
+                        data: {
+                            user
+                        },
+                        error: erroUsuario
+                    } =
+                        await supabaseClient
+                            .auth
+                            .getUser();
+
+
+                    if (
+                        erroUsuario ||
+                        !user
+                    ) {
+
+                        menuLojas.style.display =
+                            "none";
+
+                        return;
+
+                    }
+
+
+                    const {
+                        data: perfil,
+                        error
+                    } =
+                        await supabaseClient
+                            .from("perfis")
+                            .select(
+                                "usuario, tipo, ativo"
+                            )
+                            .eq(
+                                "id",
+                                user.id
+                            )
+                            .maybeSingle();
+
+
+                    if (error) {
+
+                        console.error(
+                            "Erro ao verificar perfil:",
+                            error
+                        );
+
+                        menuLojas.style.display =
+                            "none";
+
+                        return;
+
+                    }
+
+
+                    const ehAdministradorGeral =
+                        perfil &&
+                        perfil.usuario ===
+                            "admingeral" &&
+                        perfil.tipo ===
+                            "admin_geral" &&
+                        perfil.ativo === true;
+
+
+                    if (
+                        ehAdministradorGeral
+                    ) {
+
+                        menuLojas.style.display =
+                            "flex";
+
+                    } else {
+
+                        menuLojas.style.display =
+                            "none";
+
+                    }
+
+
+                } catch (erro) {
+
+                    console.error(
+                        "Erro ao verificar acesso às lojas:",
+                        erro
+                    );
+
+                    menuLojas.style.display =
+                        "none";
+
+                }
+
+            }
+        );
+
+    </script>
+
+
+</body>
 
 </html>

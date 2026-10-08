@@ -1,6 +1,7 @@
 /* ==========================================
    SISTEMA DA LOJA
    DASHBOARD DO VENDEDOR
+   PADRÃO VISUAL DO SISTEMA
 ========================================== */
 
 
@@ -9,7 +10,6 @@
 ========================================== */
 
 .painel-boas-vindas-vendedor {
-
     display: flex;
 
     align-items: center;
@@ -20,7 +20,8 @@
 
     background: #ffffff;
 
-    border: 1px solid #e5e7eb;
+    border:
+        1px solid #e5e7eb;
 
     border-radius: 14px;
 
@@ -29,13 +30,14 @@
     margin-bottom: 20px;
 
     box-shadow:
-        0 4px 14px rgba(0, 0, 0, 0.04);
-
+        0
+        4px
+        14px
+        rgba(0, 0, 0, 0.04);
 }
 
 
 .etiqueta-vendedor {
-
     display: inline-block;
 
     margin-bottom: 8px;
@@ -47,37 +49,37 @@
     font-weight: 800;
 
     letter-spacing: 0.05em;
-
 }
 
 
 .painel-boas-vindas-vendedor h2 {
-
-    margin: 0 0 8px 0;
+    margin:
+        0
+        0
+        8px;
 
     color: #111827;
 
     font-size: 24px;
-
 }
 
 
 .painel-boas-vindas-vendedor p {
-
     margin: 0;
 
     color: #6b7280;
 
     font-size: 14px;
 
+    line-height: 1.6;
 }
 
 
 .icone-dashboard-vendedor {
-
     width: 65px;
-
     height: 65px;
+
+    flex-shrink: 0;
 
     display: flex;
 
@@ -89,8 +91,13 @@
 
     background: #eff6ff;
 
-    font-size: 30px;
+    color: #2563eb;
+}
 
+
+.icone-dashboard-vendedor svg {
+    width: 32px;
+    height: 32px;
 }
 
 
@@ -99,38 +106,33 @@
 ========================================== */
 
 .secao-dashboard-vendedor {
-
     margin-bottom: 20px;
-
 }
 
 
 .titulo-secao-dashboard {
-
     margin-bottom: 13px;
-
 }
 
 
 .titulo-secao-dashboard h2 {
-
-    margin: 0 0 5px 0;
+    margin:
+        0
+        0
+        5px;
 
     color: #111827;
 
     font-size: 19px;
-
 }
 
 
 .titulo-secao-dashboard p {
-
     margin: 0;
 
     color: #6b7280;
 
     font-size: 13px;
-
 }
 
 
@@ -139,35 +141,36 @@
 ========================================== */
 
 .cards-dashboard-vendedor {
-
     display: grid;
 
     grid-template-columns:
         repeat(4, minmax(0, 1fr));
 
     gap: 15px;
-
 }
 
 
 .card-dashboard-vendedor {
+    min-width: 0;
 
     background: #ffffff;
 
-    border: 1px solid #e5e7eb;
+    border:
+        1px solid #e5e7eb;
 
     border-radius: 12px;
 
     padding: 19px;
 
     box-shadow:
-        0 4px 14px rgba(0, 0, 0, 0.04);
-
+        0
+        4px
+        14px
+        rgba(0, 0, 0, 0.04);
 }
 
 
 .card-dashboard-vendedor span {
-
     display: block;
 
     margin-bottom: 10px;
@@ -177,12 +180,10 @@
     font-size: 13px;
 
     font-weight: 700;
-
 }
 
 
 .card-dashboard-vendedor strong {
-
     display: block;
 
     margin-bottom: 5px;
@@ -190,16 +191,13 @@
     color: #111827;
 
     font-size: 25px;
-
 }
 
 
 .card-dashboard-vendedor small {
-
     color: #9ca3af;
 
     font-size: 12px;
-
 }
 
 
@@ -208,19 +206,16 @@
 ========================================== */
 
 .cards-alerta-vendedor {
-
     display: grid;
 
     grid-template-columns:
         repeat(2, minmax(0, 1fr));
 
     gap: 15px;
-
 }
 
 
 .card-alerta-vendedor {
-
     display: flex;
 
     align-items: center;
@@ -231,30 +226,38 @@
 
     background: #ffffff;
 
-    border: 1px solid #e5e7eb;
+    border:
+        1px solid #e5e7eb;
 
     border-radius: 12px;
 
     text-decoration: none;
 
     box-shadow:
-        0 4px 14px rgba(0, 0, 0, 0.04);
+        0
+        4px
+        14px
+        rgba(0, 0, 0, 0.04);
 
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
 }
 
 
 .card-alerta-vendedor:hover {
-
     background: #fafafa;
 
+    border-color: #d1d5db;
 }
 
 
 .icone-alerta {
-
     width: 45px;
-
     height: 45px;
+
+    flex-shrink: 0;
 
     display: flex;
 
@@ -266,13 +269,17 @@
 
     background: #fef3c7;
 
-    font-size: 21px;
+    color: #b45309;
+}
 
+
+.icone-alerta svg {
+    width: 23px;
+    height: 23px;
 }
 
 
 .card-alerta-vendedor strong {
-
     display: block;
 
     margin-bottom: 3px;
@@ -280,12 +287,10 @@
     color: #b45309;
 
     font-size: 23px;
-
 }
 
 
 .card-alerta-vendedor span {
-
     display: block;
 
     color: #6b7280;
@@ -293,21 +298,18 @@
     font-size: 13px;
 
     font-weight: 600;
-
 }
 
 
 .card-alerta-vermelho .icone-alerta {
-
     background: #fee2e2;
 
+    color: #b91c1c;
 }
 
 
 .card-alerta-vermelho strong {
-
     color: #b91c1c;
-
 }
 
 
@@ -316,14 +318,11 @@
 ========================================== */
 
 .painel-ultimas-vendas {
-
     margin-bottom: 20px;
-
 }
 
 
 .titulo-ultimas-vendas {
-
     display: flex;
 
     align-items: center;
@@ -333,41 +332,40 @@
     gap: 20px;
 
     margin-bottom: 18px;
-
 }
 
 
 .titulo-ultimas-vendas h2 {
-
-    margin: 0 0 5px 0;
+    margin:
+        0
+        0
+        5px;
 
     color: #111827;
 
     font-size: 19px;
-
 }
 
 
 .titulo-ultimas-vendas p {
-
     margin: 0;
 
     color: #6b7280;
 
     font-size: 13px;
-
 }
 
 
 .link-ver-vendas {
-
     display: inline-flex;
 
     align-items: center;
 
     justify-content: center;
 
-    padding: 9px 13px;
+    padding:
+        9px
+        13px;
 
     border-radius: 8px;
 
@@ -381,13 +379,13 @@
 
     text-decoration: none;
 
+    transition:
+        background 0.2s ease;
 }
 
 
 .link-ver-vendas:hover {
-
     background: #dbeafe;
-
 }
 
 
@@ -396,39 +394,35 @@
 ========================================== */
 
 .tabela-dashboard-container {
-
     width: 100%;
 
     overflow-x: auto;
 
-    border: 1px solid #e5e7eb;
+    border:
+        1px solid #e5e7eb;
 
     border-radius: 10px;
-
 }
 
 
 .tabela-dashboard-vendedor {
-
     width: 100%;
 
     min-width: 720px;
 
     border-collapse: collapse;
-
 }
 
 
 .tabela-dashboard-vendedor thead {
-
     background: #f9fafb;
-
 }
 
 
 .tabela-dashboard-vendedor th {
-
-    padding: 13px 15px;
+    padding:
+        13px
+        15px;
 
     text-align: left;
 
@@ -438,78 +432,67 @@
 
     text-transform: uppercase;
 
-    border-bottom: 1px solid #e5e7eb;
+    border-bottom:
+        1px solid #e5e7eb;
 
     white-space: nowrap;
-
 }
 
 
 .tabela-dashboard-vendedor td {
-
-    padding: 14px 15px;
+    padding:
+        14px
+        15px;
 
     color: #374151;
 
     font-size: 13px;
 
-    border-bottom: 1px solid #f0f0f0;
-
+    border-bottom:
+        1px solid #f0f0f0;
 }
 
 
 .tabela-dashboard-vendedor tbody tr:last-child td {
-
     border-bottom: none;
-
 }
 
 
 .tabela-dashboard-vendedor tbody tr:hover {
-
     background: #fafafa;
-
 }
 
 
 .venda-numero {
-
     font-weight: 800;
 
     color: #111827;
-
 }
 
 
 .venda-total {
-
     font-weight: 800;
 
     color: #111827;
 
     white-space: nowrap;
-
 }
 
 
 .venda-data {
-
     color: #6b7280;
 
     white-space: nowrap;
-
 }
 
 
 .dashboard-carregando,
 .dashboard-vazio {
-
     padding: 30px !important;
 
     text-align: center !important;
 
     color: #6b7280 !important;
-
 }
 
 
@@ -518,26 +501,21 @@
 ========================================== */
 
 .painel-acessos-vendedor {
-
     margin-bottom: 20px;
-
 }
 
 
 .atalhos-vendedor {
-
     display: grid;
 
     grid-template-columns:
         repeat(4, minmax(0, 1fr));
 
     gap: 14px;
-
 }
 
 
 .atalho-vendedor {
-
     display: flex;
 
     flex-direction: column;
@@ -546,7 +524,8 @@
 
     padding: 17px;
 
-    border: 1px solid #e5e7eb;
+    border:
+        1px solid #e5e7eb;
 
     border-radius: 10px;
 
@@ -554,42 +533,63 @@
 
     text-decoration: none;
 
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
 
 .atalho-vendedor:hover {
-
     background: #f9fafb;
 
     border-color: #d1d5db;
 
+    box-shadow:
+        0
+        3px
+        10px
+        rgba(0, 0, 0, 0.04);
 }
 
 
-.atalho-vendedor span {
+.icone-atalho-vendedor {
+    width: 38px;
+    height: 38px;
 
-    font-size: 22px;
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
 
     margin-bottom: 5px;
 
+    border-radius: 9px;
+
+    background: #eff6ff;
+
+    color: #2563eb;
+}
+
+
+.icone-atalho-vendedor svg {
+    width: 21px;
+    height: 21px;
 }
 
 
 .atalho-vendedor strong {
-
     color: #111827;
 
     font-size: 14px;
-
 }
 
 
 .atalho-vendedor small {
-
     color: #6b7280;
 
     font-size: 12px;
-
 }
 
 
@@ -598,30 +598,105 @@
 ========================================== */
 
 .mensagem-dashboard {
-
     display: none;
 
     margin-bottom: 20px;
 
-    padding: 12px 14px;
+    padding:
+        12px
+        14px;
 
     border-radius: 8px;
 
     background: #fef2f2;
 
-    border: 1px solid #fecaca;
+    border:
+        1px solid #fecaca;
 
     color: #b91c1c;
 
     font-size: 14px;
-
 }
 
 
 .mensagem-dashboard.visivel {
+    display: block;
+}
 
+
+/* ==========================================
+   AVISO DE SEGURANÇA
+========================================== */
+
+.aviso-painel {
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 15px;
+
+    background: #ffffff;
+
+    border:
+        1px solid #e5e7eb;
+
+    border-radius: 14px;
+
+    padding: 20px;
+
+    margin-bottom: 20px;
+
+    box-shadow:
+        0
+        4px
+        14px
+        rgba(0, 0, 0, 0.04);
+}
+
+
+.aviso-icone {
+    width: 40px;
+    height: 40px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 10px;
+
+    background: #fef3c7;
+
+    color: #b45309;
+}
+
+
+.aviso-icone svg {
+    width: 21px;
+    height: 21px;
+}
+
+
+.aviso-painel strong {
     display: block;
 
+    margin-bottom: 5px;
+
+    color: #111827;
+}
+
+
+.aviso-painel p {
+    margin: 0;
+
+    color: #6b7280;
+
+    line-height: 1.5;
+
+    font-size: 13px;
 }
 
 
@@ -632,18 +707,14 @@
 @media (max-width: 1000px) {
 
     .cards-dashboard-vendedor {
-
         grid-template-columns:
             repeat(2, minmax(0, 1fr));
-
     }
 
 
     .atalhos-vendedor {
-
         grid-template-columns:
             repeat(2, minmax(0, 1fr));
-
     }
 
 }
@@ -652,18 +723,21 @@
 @media (max-width: 700px) {
 
     .cards-alerta-vendedor {
-
         grid-template-columns: 1fr;
-
     }
 
 
     .titulo-ultimas-vendas {
-
         align-items: flex-start;
 
         flex-direction: column;
+    }
 
+
+    .painel-boas-vindas-vendedor {
+        align-items: flex-start;
+
+        flex-direction: column;
     }
 
 }
@@ -672,23 +746,12 @@
 @media (max-width: 550px) {
 
     .cards-dashboard-vendedor {
-
         grid-template-columns: 1fr;
-
     }
 
 
     .atalhos-vendedor {
-
         grid-template-columns: 1fr;
-
-    }
-
-
-    .painel-boas-vindas-vendedor {
-
-        align-items: flex-start;
-
     }
 
 }

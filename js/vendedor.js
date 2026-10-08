@@ -48,6 +48,16 @@ const btnSair =
 
 
 /* ==========================================
+   IDENTIFICAÇÃO DA LOJA
+========================================== */
+
+const nomeLojaVendedor =
+    document.getElementById(
+        "nomeLojaVendedor"
+    );
+
+
+/* ==========================================
    DATA ATUAL
 ========================================== */
 
@@ -80,6 +90,81 @@ function mostrarDataAtual() {
             .charAt(0)
             .toUpperCase() +
         dataFormatada.slice(1);
+}
+
+
+/* ==========================================
+   MOSTRAR NOME DA LOJA
+========================================== */
+
+async function mostrarNomeLoja(perfil) {
+
+    if (!nomeLojaVendedor) {
+
+        return;
+    }
+
+
+    nomeLojaVendedor.textContent =
+        "Carregando...";
+
+
+    if (!perfil || !perfil.loja_id) {
+
+        nomeLojaVendedor.textContent =
+            "Loja não identificada";
+
+        return;
+    }
+
+
+    try {
+
+        const resultadoLoja =
+            await vendedorSupabase
+                .from("lojas")
+                .select("nome")
+                .eq(
+                    "id",
+                    perfil.loja_id
+                )
+                .maybeSingle();
+
+
+        if (
+            resultadoLoja.error ||
+            !resultadoLoja.data
+        ) {
+
+            console.error(
+                "Erro ao buscar loja:",
+                resultadoLoja.error
+            );
+
+
+            nomeLojaVendedor.textContent =
+                "Loja não identificada";
+
+            return;
+        }
+
+
+        nomeLojaVendedor.textContent =
+            resultadoLoja.data.nome ||
+            "Loja";
+    }
+
+    catch (erro) {
+
+        console.error(
+            "Erro ao carregar nome da loja:",
+            erro
+        );
+
+
+        nomeLojaVendedor.textContent =
+            "Loja não identificada";
+    }
 }
 
 
@@ -124,7 +209,7 @@ async function protegerVendedor() {
             await vendedorSupabase
                 .from("perfis")
                 .select(
-                    "id, nome_completo, usuario, tipo, ativo"
+                    "id, nome_completo, usuario, tipo, ativo, loja_id"
                 )
                 .eq(
                     "id",
@@ -288,6 +373,15 @@ async function protegerVendedor() {
                 nome +
                 "!";
         }
+
+
+        /* ======================================
+           MOSTRAR LOJA
+        ====================================== */
+
+        await mostrarNomeLoja(
+            perfil
+        );
 
 
         /* ======================================

@@ -1,6 +1,7 @@
 /* ==========================================
    SISTEMA DA LOJA
    PAINEL ADMINISTRATIVO
+   CSS PADRONIZADO
 ========================================== */
 
 
@@ -9,18 +10,17 @@
 ========================================== */
 
 * {
-
     margin: 0;
-
     padding: 0;
-
     box-sizing: border-box;
-
 }
 
 
-body {
+/* ==========================================
+   BODY
+========================================== */
 
+body {
     font-family:
         Arial,
         Helvetica,
@@ -31,7 +31,6 @@ body {
 
     color:
         #1f2937;
-
 }
 
 
@@ -40,11 +39,8 @@ body {
 ========================================== */
 
 .layout-admin {
-
     display: flex;
-
     min-height: 100vh;
-
 }
 
 
@@ -53,9 +49,7 @@ body {
 ========================================== */
 
 .menu-lateral {
-
     width: 260px;
-
     min-height: 100vh;
 
     background:
@@ -65,30 +59,29 @@ body {
         white;
 
     display: flex;
-
     flex-direction: column;
 
     position: fixed;
 
     left: 0;
-
     top: 0;
-
     bottom: 0;
 
+    z-index: 1000;
 }
 
 
 /* ==========================================
-   LOGO
+   LOGO / NOME DA LOJA
 ========================================== */
 
 .logo-admin {
+    min-height: 90px;
 
     height: 90px;
 
     padding:
-        20px;
+        16px 20px;
 
     display: flex;
 
@@ -100,14 +93,19 @@ body {
         1px solid
         rgba(255,255,255,0.08);
 
+    flex-shrink: 0;
 }
 
 
+/* ==========================================
+   ÍCONE SL
+========================================== */
+
 .logo-icone {
-
     width: 42px;
-
     height: 42px;
+
+    min-width: 42px;
 
     border-radius: 10px;
 
@@ -117,27 +115,66 @@ body {
     display: flex;
 
     align-items: center;
-
     justify-content: center;
 
     font-weight: bold;
 
     font-size: 14px;
 
+    color: white;
 }
 
 
-.logo-admin strong {
+/* ==========================================
+   TÍTULO DA LOJA / SISTEMA
+========================================== */
 
+.logo-admin strong {
     display: block;
 
     font-size: 15px;
 
+    line-height: 1.25;
+
+    color: white;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
 }
 
 
-.logo-admin span {
+/* Compatibilidade com páginas
+   que ainda utilizam h1 */
 
+.logo-admin h1 {
+    display: block;
+
+    margin: 0;
+
+    font-size: 15px;
+
+    line-height: 1.25;
+
+    color: white;
+
+    font-weight: bold;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+
+/* ==========================================
+   SUBTÍTULO
+========================================== */
+
+.logo-admin span {
     display: block;
 
     margin-top: 4px;
@@ -147,17 +184,25 @@ body {
     color:
         #9ca3af;
 
+    line-height: 1.2;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
 }
 
 
 /* ==========================================
-   USUÁRIO
+   USUÁRIO LOGADO
 ========================================== */
 
 .usuario-logado {
+    min-height: 76px;
 
     padding:
-        18px 20px;
+        16px 20px;
 
     display: flex;
 
@@ -169,14 +214,19 @@ body {
         1px solid
         rgba(255,255,255,0.08);
 
+    flex-shrink: 0;
 }
 
 
+/* ==========================================
+   AVATAR
+========================================== */
+
 .avatar-admin {
-
     width: 40px;
-
     height: 40px;
+
+    min-width: 40px;
 
     border-radius: 50%;
 
@@ -186,26 +236,33 @@ body {
     display: flex;
 
     align-items: center;
-
     justify-content: center;
 
     font-weight: bold;
 
+    font-size: 14px;
+
+    color: white;
 }
 
 
-.dados-usuario {
+/* ==========================================
+   DADOS DO USUÁRIO
+========================================== */
 
+.dados-usuario {
     min-width: 0;
 
+    flex: 1;
 }
 
 
 .dados-usuario strong {
-
     display: block;
 
     font-size: 13px;
+
+    line-height: 1.25;
 
     white-space: nowrap;
 
@@ -213,11 +270,11 @@ body {
 
     text-overflow: ellipsis;
 
+    color: white;
 }
 
 
 .dados-usuario span {
-
     display: block;
 
     margin-top: 3px;
@@ -227,6 +284,30 @@ body {
 
     font-size: 11px;
 
+    line-height: 1.2;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+
+/* Compatibilidade com páginas
+   que utilizam small */
+
+.usuario-logado small {
+    display: block;
+
+    margin-top: 3px;
+
+    color:
+        #9ca3af;
+
+    font-size: 11px;
+
+    line-height: 1.2;
 }
 
 
@@ -235,19 +316,20 @@ body {
 ========================================== */
 
 .menu {
-
     padding:
         15px 12px;
 
     flex: 1;
 
     overflow-y: auto;
-
 }
 
 
-.titulo-menu {
+/* ==========================================
+   TÍTULO DAS SEÇÕES
+========================================== */
 
+.titulo-menu {
     color:
         #6b7280;
 
@@ -259,12 +341,14 @@ body {
 
     padding:
         14px 10px 8px;
-
 }
 
 
-.item-menu {
+/* ==========================================
+   ITEM DO MENU
+========================================== */
 
+.item-menu {
     display: flex;
 
     align-items: center;
@@ -274,6 +358,8 @@ body {
     width: 100%;
 
     min-height: 44px;
+
+    height: 44px;
 
     padding:
         0 12px;
@@ -292,48 +378,78 @@ body {
     transition:
         0.2s;
 
+    white-space: nowrap;
 }
 
 
 .item-menu:hover {
-
     background:
         #1f2937;
 
     color:
         white;
-
 }
 
 
 .item-menu.ativo {
-
     background:
         #2563eb;
 
     color:
         white;
-
 }
 
 
-.icone-menu {
+/* ==========================================
+   ÍCONE DO MENU
+========================================== */
 
+.icone-menu {
     width: 20px;
+
+    min-width: 20px;
+
+    height: 20px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
 
     text-align: center;
 
     font-size: 16px;
 
+    line-height: 1;
+}
+
+
+/* Compatibilidade com páginas
+   que ainda usam span sem classe */
+
+.item-menu > span:first-child {
+    width: 20px;
+
+    min-width: 20px;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    text-align: center;
+
+    line-height: 1;
 }
 
 
 /* ==========================================
-   SAIR
+   ÁREA SAIR
 ========================================== */
 
 .area-sair {
-
     padding:
         15px 12px;
 
@@ -341,11 +457,15 @@ body {
         1px solid
         rgba(255,255,255,0.08);
 
+    flex-shrink: 0;
 }
 
 
-.botao-sair {
+/* ==========================================
+   BOTÃO SAIR
+========================================== */
 
+.botao-sair {
     width: 100%;
 
     height: 42px;
@@ -375,17 +495,17 @@ body {
 
     gap: 12px;
 
+    transition:
+        0.2s;
 }
 
 
 .botao-sair:hover {
-
     background:
         #1f2937;
 
     color:
         white;
-
 }
 
 
@@ -394,16 +514,15 @@ body {
 ========================================== */
 
 .conteudo-admin {
-
     margin-left: 260px;
 
-    width: calc(100% - 260px);
+    width:
+        calc(100% - 260px);
 
     min-height: 100vh;
 
     padding:
         30px;
-
 }
 
 
@@ -412,7 +531,6 @@ body {
 ========================================== */
 
 .cabecalho-admin {
-
     display: flex;
 
     justify-content: space-between;
@@ -420,59 +538,48 @@ body {
     align-items: center;
 
     margin-bottom: 25px;
-
 }
 
 
 .cabecalho-admin h1 {
-
     font-size: 27px;
 
     color:
         #111827;
-
 }
 
 
 .cabecalho-admin p {
-
     margin-top: 6px;
 
     color:
         #6b7280;
 
     font-size: 13px;
-
 }
 
 
 .data-atual {
-
     text-align: right;
-
 }
 
 
 .data-atual span {
-
     display: block;
 
     color:
         #6b7280;
 
     font-size: 11px;
-
 }
 
 
 .data-atual strong {
-
     display: block;
 
     margin-top: 4px;
 
     font-size: 13px;
-
 }
 
 
@@ -481,7 +588,6 @@ body {
 ========================================== */
 
 .mensagem-admin {
-
     display: none;
 
     margin-bottom: 20px;
@@ -498,14 +604,11 @@ body {
         #1e40af;
 
     font-size: 13px;
-
 }
 
 
 .mensagem-admin.visivel {
-
     display: block;
-
 }
 
 
@@ -514,7 +617,6 @@ body {
 ========================================== */
 
 .cards-dashboard {
-
     display: grid;
 
     grid-template-columns:
@@ -523,12 +625,10 @@ body {
     gap: 18px;
 
     margin-bottom: 25px;
-
 }
 
 
 .card-dashboard {
-
     background:
         white;
 
@@ -550,14 +650,11 @@ body {
     box-shadow:
         0 2px 8px
         rgba(0,0,0,0.03);
-
 }
 
 
 .card-icone {
-
     width: 48px;
-
     height: 48px;
 
     border-radius: 10px;
@@ -565,60 +662,47 @@ body {
     display: flex;
 
     align-items: center;
-
     justify-content: center;
 
     font-size: 21px;
-
 }
 
 
 .card-icone.produtos {
-
     background:
         #dbeafe;
-
 }
 
 
 .card-icone.estoque {
-
     background:
         #dcfce7;
-
 }
 
 
 .card-icone.vendas {
-
     background:
         #fef3c7;
-
 }
 
 
 .card-icone.clientes {
-
     background:
         #ede9fe;
-
 }
 
 
 .card-dashboard span {
-
     display: block;
 
     color:
         #6b7280;
 
     font-size: 11px;
-
 }
 
 
 .card-dashboard strong {
-
     display: block;
 
     margin-top: 5px;
@@ -627,7 +711,6 @@ body {
 
     color:
         #111827;
-
 }
 
 
@@ -636,13 +719,11 @@ body {
 ========================================== */
 
 .area-dashboard {
-
     display: flex;
 
     flex-direction: column;
 
     gap: 20px;
-
 }
 
 
@@ -651,7 +732,6 @@ body {
 ========================================== */
 
 .painel-boas-vindas {
-
     background:
         #2563eb;
 
@@ -670,12 +750,10 @@ body {
     align-items: center;
 
     min-height: 180px;
-
 }
 
 
 .etiqueta {
-
     font-size: 10px;
 
     font-weight: bold;
@@ -683,21 +761,17 @@ body {
     letter-spacing: 1px;
 
     opacity: 0.75;
-
 }
 
 
 .painel-boas-vindas h2 {
-
     margin-top: 10px;
 
     font-size: 24px;
-
 }
 
 
 .painel-boas-vindas p {
-
     margin-top: 10px;
 
     max-width: 620px;
@@ -707,18 +781,15 @@ body {
     line-height: 1.6;
 
     opacity: 0.9;
-
 }
 
 
 .ilustracao-dashboard {
-
     font-size: 80px;
 
     opacity: 0.9;
 
     padding-right: 30px;
-
 }
 
 
@@ -727,7 +798,6 @@ body {
 ========================================== */
 
 .painel {
-
     background:
         white;
 
@@ -743,29 +813,24 @@ body {
     box-shadow:
         0 2px 8px
         rgba(0,0,0,0.03);
-
 }
 
 
 .titulo-painel h2 {
-
     font-size: 17px;
 
     color:
         #111827;
-
 }
 
 
 .titulo-painel p {
-
     margin-top: 5px;
 
     color:
         #6b7280;
 
     font-size: 12px;
-
 }
 
 
@@ -774,7 +839,6 @@ body {
 ========================================== */
 
 .atalhos {
-
     display: grid;
 
     grid-template-columns:
@@ -783,12 +847,10 @@ body {
     gap: 14px;
 
     margin-top: 18px;
-
 }
 
 
 .atalho {
-
     border:
         1px solid
         #e5e7eb;
@@ -808,11 +870,13 @@ body {
     transition:
         0.2s;
 
+    text-decoration: none;
+
+    color: inherit;
 }
 
 
 .atalho:hover {
-
     border-color:
         #2563eb;
 
@@ -822,35 +886,29 @@ body {
     box-shadow:
         0 5px 15px
         rgba(0,0,0,0.06);
-
 }
 
 
 .atalho span {
-
     display: block;
 
     font-size: 25px;
 
     margin-bottom: 12px;
-
 }
 
 
 .atalho strong {
-
     display: block;
 
     color:
         #111827;
 
     font-size: 13px;
-
 }
 
 
 .atalho small {
-
     display: block;
 
     margin-top: 5px;
@@ -859,7 +917,6 @@ body {
         #6b7280;
 
     font-size: 11px;
-
 }
 
 
@@ -868,32 +925,25 @@ body {
 ========================================== */
 
 .aviso-painel {
-
     display: flex;
 
     align-items: flex-start;
 
     gap: 15px;
-
 }
 
 
 .aviso-icone {
-
     font-size: 22px;
-
 }
 
 
 .aviso-painel strong {
-
     font-size: 13px;
-
 }
 
 
 .aviso-painel p {
-
     margin-top: 5px;
 
     color:
@@ -902,7 +952,29 @@ body {
     font-size: 12px;
 
     line-height: 1.5;
+}
 
+
+/* ==========================================
+   ROLAGEM DO MENU
+========================================== */
+
+.menu::-webkit-scrollbar {
+    width: 5px;
+}
+
+
+.menu::-webkit-scrollbar-track {
+    background:
+        transparent;
+}
+
+
+.menu::-webkit-scrollbar-thumb {
+    background:
+        #374151;
+
+    border-radius: 10px;
 }
 
 
@@ -915,18 +987,14 @@ body {
 ) {
 
     .cards-dashboard {
-
         grid-template-columns:
             repeat(2, 1fr);
-
     }
 
 
     .atalhos {
-
         grid-template-columns:
             repeat(2, 1fr);
-
     }
 
 }
@@ -937,14 +1005,11 @@ body {
 ) {
 
     .menu-lateral {
-
         width: 220px;
-
     }
 
 
     .conteudo-admin {
-
         margin-left: 220px;
 
         width:
@@ -952,42 +1017,33 @@ body {
 
         padding:
             20px;
-
     }
 
 
     .cards-dashboard {
-
         grid-template-columns:
             1fr;
-
     }
 
 
     .atalhos {
-
         grid-template-columns:
             1fr;
-
     }
 
 
     .painel-boas-vindas {
-
         flex-direction: column;
 
         align-items:
             flex-start;
 
         gap: 20px;
-
     }
 
 
     .ilustracao-dashboard {
-
         display: none;
-
     }
 
 }

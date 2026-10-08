@@ -12,25 +12,269 @@
 
     <title>Sistema da Loja - Lojas</title>
 
+
     <link
         rel="stylesheet"
         href="style.css"
     >
+
 
     <link
         rel="stylesheet"
         href="admin.css"
     >
 
+
     <link
         rel="stylesheet"
         href="lojas.css"
     >
 
+
+    <style>
+
+        /* ==========================================
+           PADRONIZAÇÃO VISUAL
+        =========================================== */
+
+
+        .logo-admin {
+
+            display: flex !important;
+
+            align-items: center;
+
+            gap: 12px;
+
+        }
+
+
+        .logo-admin .logo-icone-admin {
+
+            width: 42px;
+
+            height: 42px;
+
+            min-width: 42px;
+
+            border-radius: 10px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 14px;
+
+            font-weight: 800;
+
+            letter-spacing: 0.5px;
+
+            color: #ffffff;
+
+            background: linear-gradient(
+                135deg,
+                #2563eb,
+                #1d4ed8
+            );
+
+            box-shadow:
+                0 4px 12px rgba(
+                    37,
+                    99,
+                    235,
+                    0.22
+                );
+
+        }
+
+
+        .logo-admin h1 {
+
+            margin: 0;
+
+            line-height: 1.05;
+
+        }
+
+
+        /* ==========================================
+           USUÁRIO
+        =========================================== */
+
+        .usuario-admin {
+
+            display: flex !important;
+
+            align-items: center;
+
+            gap: 12px;
+
+        }
+
+
+        .icone-usuario-admin {
+
+            width: 40px;
+
+            height: 40px;
+
+            min-width: 40px;
+
+            border-radius: 50%;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            background: rgba(
+                37,
+                99,
+                235,
+                0.10
+            );
+
+            color: #2563eb;
+
+        }
+
+
+        .icone-usuario-admin svg {
+
+            width: 21px;
+
+            height: 21px;
+
+            display: block;
+
+        }
+
+
+        /* ==========================================
+           ÍCONES DO MENU
+        =========================================== */
+
+        .menu-item {
+
+            display: flex !important;
+
+            align-items: center;
+
+            gap: 11px;
+
+        }
+
+
+        .icone-menu-admin {
+
+            width: 20px;
+
+            height: 20px;
+
+            min-width: 20px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+        }
+
+
+        .icone-menu-admin svg {
+
+            width: 18px;
+
+            height: 18px;
+
+            display: block;
+
+        }
+
+
+        /* ==========================================
+           BOTÃO SAIR
+        =========================================== */
+
+        .btn-sair {
+
+            display: flex !important;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 10px;
+
+        }
+
+
+        .icone-sair-admin {
+
+            width: 19px;
+
+            height: 19px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+        }
+
+
+        .icone-sair-admin svg {
+
+            width: 18px;
+
+            height: 18px;
+
+            display: block;
+
+        }
+
+
+        /* ==========================================
+           ATUALIZAR
+        =========================================== */
+
+        .icone-atualizar {
+
+            width: 17px;
+
+            height: 17px;
+
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+        }
+
+
+        .icone-atualizar svg {
+
+            width: 16px;
+
+            height: 16px;
+
+            display: block;
+
+        }
+
+    </style>
+
 </head>
 
 
 <body>
+
 
     <div class="layout-admin">
 
@@ -42,31 +286,89 @@
         <aside class="menu-lateral">
 
 
+            <!-- LOGO -->
+
             <div class="logo-admin">
+
+
+                <div class="logo-icone-admin">
+                    SL
+                </div>
+
 
                 <h1>
                     Sistema<br>
                     da Loja
                 </h1>
 
+
             </div>
 
+
+            <!-- USUÁRIO -->
 
             <div class="usuario-admin">
 
-                <div
-                    id="nomeUsuario"
-                    class="nome-usuario"
-                >
-                    Administrador Geral
+
+                <div class="icone-usuario-admin">
+
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                    >
+
+
+                        <circle
+                            cx="12"
+                            cy="8"
+                            r="3"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                        />
+
+
+                        <path
+                            d="M5 20c.8-4 3.1-6 7-6s6.2 2 7 6"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                        />
+
+
+                    </svg>
+
+
                 </div>
 
-                <div class="tipo-usuario">
-                    Administrador Geral
+
+                <div>
+
+
+                    <div
+                        id="nomeUsuario"
+                        class="nome-usuario"
+                    >
+                        Administrador Geral
+                    </div>
+
+
+                    <div class="tipo-usuario">
+                        Administrador Geral
+                    </div>
+
+
                 </div>
+
 
             </div>
 
+
+            <!-- ==========================================
+                 MENU
+            =========================================== -->
 
             <nav class="menu-admin">
 
@@ -76,11 +378,82 @@
                 </div>
 
 
+                <!-- DASHBOARD -->
+
                 <a
                     href="admin-geral.html"
                     class="menu-item"
                 >
-                    📊 Dashboard Geral
+
+
+                    <span class="icone-menu-admin">
+
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                        >
+
+
+                            <rect
+                                x="4"
+                                y="4"
+                                width="6"
+                                height="6"
+                                rx="1"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            />
+
+
+                            <rect
+                                x="14"
+                                y="4"
+                                width="6"
+                                height="6"
+                                rx="1"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            />
+
+
+                            <rect
+                                x="4"
+                                y="14"
+                                width="6"
+                                height="6"
+                                rx="1"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            />
+
+
+                            <rect
+                                x="14"
+                                y="14"
+                                width="6"
+                                height="6"
+                                rx="1"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            />
+
+
+                        </svg>
+
+
+                    </span>
+
+
+                    <span>
+                        Dashboard Geral
+                    </span>
+
+
                 </a>
 
 
@@ -89,34 +462,210 @@
                 </div>
 
 
+                <!-- LOJAS -->
+
                 <a
                     href="lojas.html"
                     class="menu-item ativo"
                 >
-                    🏪 Lojas
+
+
+                    <span class="icone-menu-admin">
+
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                        >
+
+
+                            <path
+                                d="M4 10h16"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                            />
+
+
+                            <path
+                                d="M5 10v9h14v-9"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linejoin="round"
+                            />
+
+
+                            <path
+                                d="M3 10 5 4h14l2 6"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linejoin="round"
+                            />
+
+
+                            <path
+                                d="M9 19v-5h6v5"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linejoin="round"
+                            />
+
+
+                        </svg>
+
+
+                    </span>
+
+
+                    <span>
+                        Lojas
+                    </span>
+
+
                 </a>
 
+
+                <!-- ADMINISTRADORES -->
 
                 <a
                     href="administradores.html"
                     class="menu-item"
                 >
-                    👥 Administradores
+
+
+                    <span class="icone-menu-admin">
+
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                        >
+
+
+                            <circle
+                                cx="9"
+                                cy="8"
+                                r="3"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            />
+
+
+                            <path
+                                d="M3.5 20c.7-3.5 2.5-5 5.5-5s4.8 1.5 5.5 5"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                            />
+
+
+                            <circle
+                                cx="17"
+                                cy="9"
+                                r="2.5"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            />
+
+
+                            <path
+                                d="M14.5 20c.4-2.6 1.3-4 3.5-4s3.1 1.4 3.5 4"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                            />
+
+
+                        </svg>
+
+
+                    </span>
+
+
+                    <span>
+                        Administradores
+                    </span>
+
+
                 </a>
 
 
             </nav>
 
 
+            <!-- ==========================================
+                 SAIR
+            =========================================== -->
+
             <div class="menu-rodape">
+
 
                 <button
                     type="button"
                     id="btnSair"
                     class="btn-sair"
                 >
-                    🚪 Sair
+
+
+                    <span class="icone-sair-admin">
+
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                        >
+
+
+                            <path
+                                d="M10 5H5v14h5"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+
+
+                            <path
+                                d="M14 8l4 4-4 4"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+
+
+                            <path
+                                d="M9 12h9"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                            />
+
+
+                        </svg>
+
+
+                    </span>
+
+
+                    <span>
+                        Sair
+                    </span>
+
+
                 </button>
+
 
             </div>
 
@@ -131,19 +680,26 @@
         <main class="conteudo-admin">
 
 
+            <!-- CABEÇALHO -->
+
             <header class="cabecalho-admin">
 
+
                 <div>
+
 
                     <h2>
                         Lojas
                     </h2>
 
+
                     <p>
                         Cadastro e gerenciamento das lojas
                     </p>
 
+
                 </div>
+
 
             </header>
 
@@ -164,19 +720,25 @@
 
             <section class="painel">
 
+
                 <div class="titulo-painel">
 
+
                     <div>
+
 
                         <h3 id="tituloFormulario">
                             Cadastrar nova loja
                         </h3>
 
+
                         <p id="descricaoFormulario">
                             Informe o nome da nova loja.
                         </p>
 
+
                     </div>
+
 
                 </div>
 
@@ -186,11 +748,14 @@
                     class="formulario-loja"
                 >
 
+
                     <div class="campo-formulario">
+
 
                         <label for="nomeLoja">
                             Nome da loja
                         </label>
+
 
                         <input
                             type="text"
@@ -201,10 +766,12 @@
                             maxlength="100"
                         >
 
+
                     </div>
 
 
                     <div class="acoes-formulario">
+
 
                         <button
                             type="submit"
@@ -224,9 +791,12 @@
                             Cancelar
                         </button>
 
+
                     </div>
 
+
                 </form>
+
 
             </section>
 
@@ -237,17 +807,22 @@
 
             <section class="painel">
 
+
                 <div class="titulo-painel">
 
+
                     <div>
+
 
                         <h3>
                             Lojas cadastradas
                         </h3>
 
+
                         <p>
                             Lojas disponíveis no sistema.
                         </p>
+
 
                     </div>
 
@@ -257,8 +832,70 @@
                         id="btnAtualizar"
                         class="botao-secundario"
                     >
-                        🔄 Atualizar
+
+
+                        <span class="icone-atualizar">
+
+
+                            <svg
+                                viewBox="0 0 24 24"
+                                aria-hidden="true"
+                            >
+
+
+                                <path
+                                    d="M20 11a8 8 0 0 0-14.8-4L3 10"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                />
+
+
+                                <path
+                                    d="M3 5v5h5"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                />
+
+
+                                <path
+                                    d="M4 13a8 8 0 0 0 14.8 4L21 14"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                />
+
+
+                                <path
+                                    d="M21 19v-5h-5"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                />
+
+
+                            </svg>
+
+
+                        </span>
+
+
+                        <span>
+                            Atualizar
+                        </span>
+
+
                     </button>
+
 
                 </div>
 
@@ -282,49 +919,64 @@
 
                 <div class="tabela-container">
 
+
                     <table class="tabela-lojas">
+
 
                         <thead>
 
+
                             <tr>
+
 
                                 <th>
                                     Loja
                                 </th>
 
+
                                 <th>
                                     Administradores
                                 </th>
+
 
                                 <th>
                                     Status
                                 </th>
 
+
                                 <th>
                                     Criada em
                                 </th>
+
 
                                 <th>
                                     Ação
                                 </th>
 
+
                             </tr>
+
 
                         </thead>
 
 
                         <tbody id="listaLojas">
 
+
                         </tbody>
+
 
                     </table>
 
+
                 </div>
+
 
             </section>
 
 
         </main>
+
 
     </div>
 
@@ -338,23 +990,17 @@
     ></script>
 
 
-    <!-- ==========================================
-         CONFIGURAÇÃO
-    =========================================== -->
+    <!-- CONFIGURAÇÃO -->
 
     <script src="js/config.js"></script>
 
 
-    <!-- ==========================================
-         LOGIN / SESSÃO
-    =========================================== -->
+    <!-- LOGIN / SESSÃO -->
 
     <script src="js/login.js"></script>
 
 
-    <!-- ==========================================
-         LOJAS
-    =========================================== -->
+    <!-- LOJAS -->
 
     <script src="js/lojas.js"></script>
 

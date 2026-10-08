@@ -10,9 +10,7 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>
-        Sistema da Loja - Relatórios
-    </title>
+    <title>Sistema da Loja - Relatórios</title>
 
     <link
         rel="stylesheet"
@@ -31,6 +29,7 @@
 
 </head>
 
+
 <body>
 
 
@@ -44,33 +43,22 @@
     <aside class="menu-lateral">
 
 
+        <!-- LOGO -->
+
         <div class="logo-admin">
 
-            <strong>
-                Sistema da Loja
-            </strong>
-
-            <span>
-                Administração
-            </span>
-
-        </div>
-
-
-        <div class="usuario-logado">
-
-            <div class="avatar-admin">
-                A
+            <div class="logo-icone">
+                SL
             </div>
 
             <div>
 
-                <strong id="nomeAdministrador">
-                    Administrador
+                <strong>
+                    Sistema da Loja
                 </strong>
 
                 <span>
-                    ADMIN
+                    Administração
                 </span>
 
             </div>
@@ -78,116 +66,641 @@
         </div>
 
 
+        <!-- USUÁRIO LOGADO -->
+
+        <div class="usuario-logado">
+
+            <div class="avatar-admin">
+                A
+            </div>
+
+            <div class="dados-usuario">
+
+                <strong id="nomeAdministrador">
+                    Administrador
+                </strong>
+
+                <span>
+                    Administrador
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- ======================================
+             MENU
+        ======================================= -->
+
         <nav class="menu">
 
+
+            <!-- PRINCIPAL -->
 
             <div class="titulo-menu">
                 PRINCIPAL
             </div>
 
 
+            <!-- DASHBOARD -->
+
             <a
                 href="admin.html"
                 class="item-menu"
             >
-                <span>🏠</span>
-                Dashboard
+
+                <span class="icone-menu">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                    >
+
+                        <path
+                            d="M3 10.5 12 3l9 7.5"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        />
+
+                        <path
+                            d="M5 9.5V21h14V9.5"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linejoin="round"
+                        />
+
+                        <path
+                            d="M9 21v-6h6v6"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linejoin="round"
+                        />
+
+                    </svg>
+
+                </span>
+
+                <span>
+                    Dashboard
+                </span>
+
             </a>
 
+
+            <!-- USUÁRIOS -->
 
             <a
                 href="usuarios.html"
                 class="item-menu"
             >
-                <span>👥</span>
-                Usuários
+
+                <span class="icone-menu">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                    >
+
+                        <circle
+                            cx="9"
+                            cy="8"
+                            r="3"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                        />
+
+                        <path
+                            d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                        />
+
+                        <path
+                            d="M16 5.5a3 3 0 0 1 0 5.8"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                        />
+
+                        <path
+                            d="M17 14.5c2.3.7 4 2.8 4 5.5"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                        />
+
+                    </svg>
+
+                </span>
+
+                <span>
+                    Usuários
+                </span>
+
             </a>
 
+
+            <!-- LOJAS - SOMENTE ADMIN GERAL -->
+
+            <a
+                href="lojas.html"
+                class="item-menu"
+                id="menuLojas"
+                style="display: none;"
+            >
+
+                <span class="icone-menu">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                    >
+
+                        <path
+                            d="M4 10h16"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                        />
+
+                        <path
+                            d="M5 10v10h14V10"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linejoin="round"
+                        />
+
+                        <path
+                            d="M3 10 5 4h14l2 6"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linejoin="round"
+                        />
+
+                        <path
+                            d="M9 20v-5h6v5"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linejoin="round"
+                        />
+
+                    </svg>
+
+                </span>
+
+                <span>
+                    Lojas
+                </span>
+
+            </a>
+
+
+            <!-- ======================================
+                 ESTOQUE E VENDAS
+            ======================================= -->
 
             <div class="titulo-menu">
                 ESTOQUE E VENDAS
             </div>
 
 
+            <!-- PRODUTOS -->
+
             <a
                 href="produtos.html"
                 class="item-menu"
             >
-                <span>📦</span>
-                Produtos
+
+                <span class="icone-menu">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                    >
+
+                        <path
+                            d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Z"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linejoin="round"
+                        />
+
+                        <path
+                            d="m4 7.5 8 4.5 8-4.5"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linejoin="round"
+                        />
+
+                        <path
+                            d="M12 12v9"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                        />
+
+                    </svg>
+
+                </span>
+
+                <span>
+                    Produtos
+                </span>
+
             </a>
 
+
+            <!-- CATEGORIAS -->
 
             <a
                 href="categorias.html"
                 class="item-menu"
             >
-                <span>🏷️</span>
-                Categorias
+
+                <span class="icone-menu">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                    >
+
+                        <path
+                            d="M4 5h6v6H4z"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linejoin="round"
+                        />
+
+                        <path
+                            d="M14 5h6v6h-6z"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linejoin="round"
+                        />
+
+                        <path
+                            d="M4 13h6v6H4z"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linejoin="round"
+                        />
+
+                        <path
+                            d="M14 13h6v6h-6z"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linejoin="round"
+                        />
+
+                    </svg>
+
+                </span>
+
+                <span>
+                    Categorias
+                </span>
+
             </a>
 
+
+            <!-- ESTOQUE -->
 
             <a
                 href="estoque.html"
                 class="item-menu"
             >
-                <span>📋</span>
-                Estoque
+
+                <span class="icone-menu">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                    >
+
+                        <path
+                            d="M4 4h16v16H4z"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linejoin="round"
+                        />
+
+                        <path
+                            d="M8 8h8"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                        />
+
+                        <path
+                            d="M8 12h8"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                        />
+
+                        <path
+                            d="M8 16h5"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                        />
+
+                    </svg>
+
+                </span>
+
+                <span>
+                    Estoque
+                </span>
+
             </a>
 
+
+            <!-- VENDAS -->
 
             <a
                 href="vendas.html"
                 class="item-menu"
             >
-                <span>🛒</span>
-                Vendas
+
+                <span class="icone-menu">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                    >
+
+                        <path
+                            d="M3 4h2l2.2 11.2a2 2 0 0 0 2 1.6h7.6a2 2 0 0 0 2-1.6L21 8H6"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        />
+
+                        <circle
+                            cx="10"
+                            cy="20"
+                            r="1"
+                            fill="currentColor"
+                        />
+
+                        <circle
+                            cx="18"
+                            cy="20"
+                            r="1"
+                            fill="currentColor"
+                        />
+
+                    </svg>
+
+                </span>
+
+                <span>
+                    Vendas
+                </span>
+
             </a>
 
+
+            <!-- HISTÓRICO DE VENDAS -->
 
             <a
                 href="historico-vendas.html"
                 class="item-menu"
             >
-                <span>📜</span>
-                Histórico de vendas
+
+                <span class="icone-menu">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                    >
+
+                        <path
+                            d="M4 5h16v14H4z"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linejoin="round"
+                        />
+
+                        <path
+                            d="M8 9h8"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                        />
+
+                        <path
+                            d="M8 13h6"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                        />
+
+                        <path
+                            d="M8 17h4"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                        />
+
+                    </svg>
+
+                </span>
+
+                <span>
+                    Histórico de vendas
+                </span>
+
             </a>
 
+
+            <!-- CLIENTES -->
 
             <a
                 href="clientes.html"
                 class="item-menu"
             >
-                <span>👤</span>
-                Clientes
+
+                <span class="icone-menu">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                    >
+
+                        <circle
+                            cx="12"
+                            cy="8"
+                            r="3"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                        />
+
+                        <path
+                            d="M5 20c0-3.9 3.1-7 7-7s7 3.1 7 7"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                        />
+
+                    </svg>
+
+                </span>
+
+                <span>
+                    Clientes
+                </span>
+
             </a>
 
+
+            <!-- ======================================
+                 FINANCEIRO
+            ======================================= -->
 
             <div class="titulo-menu">
                 FINANCEIRO
             </div>
 
 
+            <!-- FINANCEIRO -->
+
             <a
                 href="financeiro.html"
                 class="item-menu"
             >
-                <span>💰</span>
-                Financeiro
+
+                <span class="icone-menu">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                    >
+
+                        <circle
+                            cx="12"
+                            cy="12"
+                            r="8"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                        />
+
+                        <path
+                            d="M12 7v10"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                        />
+
+                        <path
+                            d="M15 9.5c-.7-.8-1.7-1.2-3-1.2-1.6 0-2.7.8-2.7 2 0 3 5.7 1.1 5.7 4 0 1.3-1.2 2.2-3 2.2-1.4 0-2.6-.5-3.3-1.4"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.7"
+                            stroke-linecap="round"
+                        />
+
+                    </svg>
+
+                </span>
+
+                <span>
+                    Financeiro
+                </span>
+
             </a>
 
+
+            <!-- RELATÓRIOS -->
 
             <a
                 href="relatorios.html"
                 class="item-menu ativo"
             >
-                <span>📊</span>
-                Relatórios
+
+                <span class="icone-menu">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                    >
+
+                        <path
+                            d="M4 19V5"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                        />
+
+                        <path
+                            d="M4 19h16"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                        />
+
+                        <path
+                            d="m7 15 3-3 3 2 5-6"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        />
+
+                    </svg>
+
+                </span>
+
+                <span>
+                    Relatórios
+                </span>
+
             </a>
 
 
         </nav>
 
+
+        <!-- SAIR -->
 
         <div class="area-sair">
 
@@ -196,7 +709,48 @@
                 class="botao-sair"
                 id="btnSair"
             >
-                🚪 Sair
+
+                <span class="icone-menu">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                    >
+
+                        <path
+                            d="M10 5H5v14h5"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        />
+
+                        <path
+                            d="M13 8l4 4-4 4"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        />
+
+                        <path
+                            d="M9 12h8"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                        />
+
+                    </svg>
+
+                </span>
+
+                <span>
+                    Sair
+                </span>
+
             </button>
 
         </div>
@@ -205,13 +759,14 @@
     </aside>
 
 
-
     <!-- ==========================================
          CONTEÚDO
     =========================================== -->
 
     <main class="conteudo-admin">
 
+
+        <!-- CABEÇALHO -->
 
         <header class="cabecalho-admin">
 
@@ -230,19 +785,20 @@
         </header>
 
 
-
         <!-- ==========================================
              FILTRO
         =========================================== -->
 
         <section class="painel-relatorios filtro-relatorios">
 
+
             <div class="titulo-painel">
+
 
                 <div>
 
                     <h2>
-                        📅 Período do relatório
+                        Período do relatório
                     </h2>
 
                     <p>
@@ -250,6 +806,7 @@
                     </p>
 
                 </div>
+
 
             </div>
 
@@ -290,7 +847,43 @@
                     id="btnGerarRelatorio"
                     class="botao-principal"
                 >
-                    📊 Gerar relatório
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                        width="17"
+                        height="17"
+                    >
+
+                        <path
+                            d="M4 19V5"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                        />
+
+                        <path
+                            d="M4 19h16"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                        />
+
+                        <path
+                            d="m7 15 3-3 3 2 5-6"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        />
+
+                    </svg>
+
+                    Gerar relatório
+
                 </button>
 
 
@@ -306,7 +899,6 @@
         </section>
 
 
-
         <!-- ==========================================
              INDICADORES
         =========================================== -->
@@ -314,10 +906,53 @@
         <section class="cards-relatorios">
 
 
+            <!-- VENDAS -->
+
             <div class="card-relatorio card-vendas">
 
                 <div class="icone-card">
-                    🧾
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                        width="27"
+                        height="27"
+                    >
+
+                        <path
+                            d="M5 4h14v16H5z"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                            stroke-linejoin="round"
+                        />
+
+                        <path
+                            d="M8 8h8"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                            stroke-linecap="round"
+                        />
+
+                        <path
+                            d="M8 12h8"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                            stroke-linecap="round"
+                        />
+
+                        <path
+                            d="M8 16h5"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                            stroke-linecap="round"
+                        />
+
+                    </svg>
+
                 </div>
 
                 <div>
@@ -335,10 +970,46 @@
             </div>
 
 
+            <!-- FATURAMENTO -->
+
             <div class="card-relatorio card-faturamento">
 
                 <div class="icone-card">
-                    💰
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                        width="27"
+                        height="27"
+                    >
+
+                        <circle
+                            cx="12"
+                            cy="12"
+                            r="8"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                        />
+
+                        <path
+                            d="M12 7v10"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                            stroke-linecap="round"
+                        />
+
+                        <path
+                            d="M15 9.5c-.7-.8-1.7-1.2-3-1.2-1.6 0-2.7.8-2.7 2 0 3 5.7 1.1 5.7 4 0 1.3-1.2 2.2-3 2.2-1.4 0-2.6-.5-3.3-1.4"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.5"
+                            stroke-linecap="round"
+                        />
+
+                    </svg>
+
                 </div>
 
                 <div>
@@ -356,10 +1027,54 @@
             </div>
 
 
+            <!-- TICKET MÉDIO -->
+
             <div class="card-relatorio card-ticket">
 
                 <div class="icone-card">
-                    🎯
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                        width="27"
+                        height="27"
+                    >
+
+                        <circle
+                            cx="12"
+                            cy="12"
+                            r="8"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                        />
+
+                        <path
+                            d="M12 8v8"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                            stroke-linecap="round"
+                        />
+
+                        <path
+                            d="M9 10.5h6"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                            stroke-linecap="round"
+                        />
+
+                        <path
+                            d="M9 13.5h6"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                            stroke-linecap="round"
+                        />
+
+                    </svg>
+
                 </div>
 
                 <div>
@@ -377,10 +1092,59 @@
             </div>
 
 
+            <!-- DESCONTOS -->
+
             <div class="card-relatorio card-desconto">
 
                 <div class="icone-card">
-                    🏷️
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                        width="27"
+                        height="27"
+                    >
+
+                        <path
+                            d="M6 5h12v14H6z"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                            stroke-linejoin="round"
+                        />
+
+                        <path
+                            d="M8 8h8"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                            stroke-linecap="round"
+                        />
+
+                        <path
+                            d="m9 16 6-6"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                            stroke-linecap="round"
+                        />
+
+                        <circle
+                            cx="9"
+                            cy="10"
+                            r="1"
+                            fill="currentColor"
+                        />
+
+                        <circle
+                            cx="15"
+                            cy="15"
+                            r="1"
+                            fill="currentColor"
+                        />
+
+                    </svg>
+
                 </div>
 
                 <div>
@@ -398,10 +1162,44 @@
             </div>
 
 
+            <!-- CUSTO -->
+
             <div class="card-relatorio card-custo">
 
                 <div class="icone-card">
-                    📦
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                        width="27"
+                        height="27"
+                    >
+
+                        <path
+                            d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Z"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                            stroke-linejoin="round"
+                        />
+
+                        <path
+                            d="m4 7.5 8 4.5 8-4.5"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                            stroke-linejoin="round"
+                        />
+
+                        <path
+                            d="M12 12v9"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                        />
+
+                    </svg>
+
                 </div>
 
                 <div>
@@ -419,10 +1217,46 @@
             </div>
 
 
+            <!-- LUCRO -->
+
             <div class="card-relatorio card-lucro">
 
                 <div class="icone-card">
-                    📈
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                        width="27"
+                        height="27"
+                    >
+
+                        <path
+                            d="M4 19V5"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                            stroke-linecap="round"
+                        />
+
+                        <path
+                            d="M4 19h16"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                            stroke-linecap="round"
+                        />
+
+                        <path
+                            d="m7 15 3-3 3 2 5-6"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        />
+
+                    </svg>
+
                 </div>
 
                 <div>
@@ -443,19 +1277,20 @@
         </section>
 
 
-
         <!-- ==========================================
              RESUMO DO PERÍODO
         =========================================== -->
 
         <section class="painel-relatorios resumo-periodo">
 
+
             <div class="titulo-painel">
+
 
                 <div>
 
                     <h2>
-                        📊 Resumo do período
+                        Resumo do período
                     </h2>
 
                     <p id="periodoRelatorio">
@@ -463,6 +1298,7 @@
                     </p>
 
                 </div>
+
 
             </div>
 
@@ -511,8 +1347,8 @@
 
             </div>
 
-        </section>
 
+        </section>
 
 
         <!-- ==========================================
@@ -528,12 +1364,14 @@
 
             <div class="painel-relatorios">
 
+
                 <div class="titulo-painel">
+
 
                     <div>
 
                         <h2>
-                            🏆 Produtos mais vendidos
+                            Produtos mais vendidos
                         </h2>
 
                         <p>
@@ -541,6 +1379,7 @@
                         </p>
 
                     </div>
+
 
                 </div>
 
@@ -570,6 +1409,7 @@
 
                     <table class="tabela-relatorio">
 
+
                         <thead>
 
                             <tr>
@@ -594,15 +1434,17 @@
 
                         </thead>
 
+
                         <tbody id="listaProdutosVendidos">
                         </tbody>
+
 
                     </table>
 
                 </div>
 
-            </div>
 
+            </div>
 
 
             <!-- ======================================
@@ -611,12 +1453,14 @@
 
             <div class="painel-relatorios">
 
+
                 <div class="titulo-painel">
+
 
                     <div>
 
                         <h2>
-                            💳 Formas de pagamento
+                            Formas de pagamento
                         </h2>
 
                         <p>
@@ -624,6 +1468,7 @@
                         </p>
 
                     </div>
+
 
                 </div>
 
@@ -651,11 +1496,11 @@
                     style="display:none;"
                 ></div>
 
+
             </div>
 
 
         </section>
-
 
 
         <!-- ==========================================
@@ -664,12 +1509,14 @@
 
         <section class="painel-relatorios painel-vendas-dia">
 
+
             <div class="titulo-painel">
+
 
                 <div>
 
                     <h2>
-                        📅 Vendas por dia
+                        Vendas por dia
                     </h2>
 
                     <p>
@@ -677,6 +1524,7 @@
                     </p>
 
                 </div>
+
 
             </div>
 
@@ -706,6 +1554,7 @@
 
                 <table class="tabela-relatorio">
 
+
                     <thead>
 
                         <tr>
@@ -730,8 +1579,10 @@
 
                     </thead>
 
+
                     <tbody id="listaVendasDia">
                     </tbody>
+
 
                 </table>
 
@@ -743,22 +1594,144 @@
 
     </main>
 
-</div>
 
+</div>
 
 
 <!-- ==========================================
      SUPABASE
 =========================================== -->
 
-<script
-    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
-></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+
+<!-- CONFIGURAÇÃO -->
 
 <script src="js/config.js"></script>
 
+
+<!-- LAYOUT PADRÃO -->
+
+<script src="js/layout.js"></script>
+
+
+<!-- LÓGICA DOS RELATÓRIOS -->
+
 <script src="js/relatorios.js"></script>
+
+
+<!-- ==========================================
+     LOJAS
+     SOMENTE ADMINISTRADOR GERAL
+=========================================== -->
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    async function () {
+
+        const menuLojas =
+            document.getElementById(
+                "menuLojas"
+            );
+
+
+        if (!menuLojas) {
+
+            return;
+
+        }
+
+
+        try {
+
+            const {
+                data: {
+                    user
+                },
+                error: erroUsuario
+            } =
+                await supabaseClient
+                    .auth
+                    .getUser();
+
+
+            if (
+                erroUsuario ||
+                !user
+            ) {
+
+                menuLojas.style.display =
+                    "none";
+
+                return;
+
+            }
+
+
+            const {
+                data: perfil,
+                error
+            } =
+                await supabaseClient
+                    .from("perfis")
+                    .select(
+                        "usuario, tipo, ativo"
+                    )
+                    .eq(
+                        "id",
+                        user.id
+                    )
+                    .maybeSingle();
+
+
+            if (error) {
+
+                console.error(
+                    "Erro ao verificar perfil:",
+                    error
+                );
+
+                menuLojas.style.display =
+                    "none";
+
+                return;
+
+            }
+
+
+            const ehAdministradorGeral =
+                perfil &&
+                perfil.usuario ===
+                    "admingeral" &&
+                perfil.tipo ===
+                    "admin_geral" &&
+                perfil.ativo === true;
+
+
+            menuLojas.style.display =
+                ehAdministradorGeral
+                    ? "flex"
+                    : "none";
+
+
+        } catch (erro) {
+
+            console.error(
+                "Erro ao verificar acesso às lojas:",
+                erro
+            );
+
+            menuLojas.style.display =
+                "none";
+
+        }
+
+    }
+);
+
+</script>
 
 
 </body>

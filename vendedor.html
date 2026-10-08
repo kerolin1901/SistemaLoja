@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="pt-BR">
 
 <head>
@@ -10,7 +11,9 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Dashboard - Vendedor - Sistema da Loja</title>
+    <title>
+        Dashboard - Vendedor - Sistema da Loja
+    </title>
 
     <link
         rel="stylesheet"
@@ -38,17 +41,22 @@
         <aside class="menu-lateral-vendedor">
 
 
+            <!-- LOGO / LOJA -->
+
             <div class="logo-vendedor">
+
 
                 <div class="logo-icone">
                     SL
                 </div>
 
+
                 <div>
 
-                    <strong>
-                        Sistema da Loja
+                    <strong id="nomeLojaVendedor">
+                        Carregando...
                     </strong>
+
 
                     <span>
                         Área do Vendedor
@@ -56,10 +64,14 @@
 
                 </div>
 
+
             </div>
 
 
+            <!-- USUÁRIO -->
+
             <div class="usuario-vendedor">
+
 
                 <div
                     class="avatar-vendedor"
@@ -68,36 +80,81 @@
                     V
                 </div>
 
+
                 <div class="dados-vendedor">
+
 
                     <strong id="nomeVendedor">
                         Vendedor
                     </strong>
 
+
                     <span>
                         Vendedor
                     </span>
 
+
                 </div>
+
 
             </div>
 
 
+            <!-- ======================================
+                 MENU
+            ======================================= -->
+
             <nav class="menu-vendedor">
 
+
+                <!-- PRINCIPAL -->
 
                 <div class="titulo-menu">
                     PRINCIPAL
                 </div>
 
 
+                <!-- DASHBOARD -->
+
                 <a
                     href="vendedor.html"
                     class="item-menu ativo"
                 >
 
-                    <span>
-                        ▦
+                    <span class="icone-menu">
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                        >
+
+                            <path
+                                d="M3 10.5 12 3l9 7.5"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+
+                            <path
+                                d="M5 9.5V21h14V9.5"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linejoin="round"
+                            />
+
+                            <path
+                                d="M9 21v-6h6v6"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linejoin="round"
+                            />
+
+                        </svg>
+
                     </span>
 
                     Dashboard
@@ -105,18 +162,53 @@
                 </a>
 
 
+                <!-- VENDAS -->
+
                 <div class="titulo-menu">
                     VENDAS
                 </div>
 
+
+                <!-- PRODUTOS -->
 
                 <a
                     href="vendedor-produtos.html"
                     class="item-menu"
                 >
 
-                    <span>
-                        📦
+                    <span class="icone-menu">
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                        >
+
+                            <path
+                                d="M4 7.5 12 3l8 4.5v9L12 21l-8-4.5z"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linejoin="round"
+                            />
+
+                            <path
+                                d="M4 7.5 12 12l8-4.5"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linejoin="round"
+                            />
+
+                            <path
+                                d="M12 12v9"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                            />
+
+                        </svg>
+
                     </span>
 
                     Produtos
@@ -124,13 +216,49 @@
                 </a>
 
 
+                <!-- VENDAS -->
+
                 <a
                     href="vendedor-vendas.html"
                     class="item-menu"
                 >
 
-                    <span>
-                        🛒
+                    <span class="icone-menu">
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                        >
+
+                            <circle
+                                cx="9"
+                                cy="20"
+                                r="1.5"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            />
+
+                            <circle
+                                cx="18"
+                                cy="20"
+                                r="1.5"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            />
+
+                            <path
+                                d="M3 4h2l2.2 11.5h10.9L21 7H6"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+
+                        </svg>
+
                     </span>
 
                     Vendas
@@ -138,13 +266,55 @@
                 </a>
 
 
+                <!-- CLIENTES -->
+
                 <a
                     href="vendedor-clientes.html"
                     class="item-menu"
                 >
 
-                    <span>
-                        👤
+                    <span class="icone-menu">
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                        >
+
+                            <circle
+                                cx="9"
+                                cy="8"
+                                r="3"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            />
+
+                            <path
+                                d="M3.5 20c.7-3.4 2.5-5 5.5-5s4.8 1.6 5.5 5"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                            />
+
+                            <path
+                                d="M16 11c2.2.2 3.7 1.6 4.5 4"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                            />
+
+                            <path
+                                d="M16 5.5a3 3 0 0 1 0 5.8"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                            />
+
+                        </svg>
+
                     </span>
 
                     Clientes
@@ -152,13 +322,71 @@
                 </a>
 
 
+                <!-- ESTOQUE -->
+
                 <a
                     href="vendedor-estoque.html"
                     class="item-menu"
                 >
 
-                    <span>
-                        📊
+                    <span class="icone-menu">
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                        >
+
+                            <path
+                                d="M4 19V5"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                            />
+
+                            <path
+                                d="M4 19h16"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                            />
+
+                            <rect
+                                x="7"
+                                y="12"
+                                width="3"
+                                height="5"
+                                rx="1"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            />
+
+                            <rect
+                                x="12"
+                                y="9"
+                                width="3"
+                                height="8"
+                                rx="1"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            />
+
+                            <rect
+                                x="17"
+                                y="6"
+                                width="3"
+                                height="11"
+                                rx="1"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            />
+
+                        </svg>
+
                     </span>
 
                     Estoque
@@ -169,7 +397,10 @@
             </nav>
 
 
+            <!-- SAIR -->
+
             <div class="area-sair">
+
 
                 <button
                     type="button"
@@ -177,13 +408,47 @@
                     class="botao-sair"
                 >
 
-                    <span>
-                        ⇥
+                    <span class="icone-menu">
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                        >
+
+                            <path
+                                d="M10 5H5v14h5"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+
+                            <path
+                                d="M14 8l4 4-4 4"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+
+                            <path
+                                d="M9 12h9"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                            />
+
+                        </svg>
+
                     </span>
 
                     Sair
 
                 </button>
+
 
             </div>
 
@@ -202,30 +467,37 @@
 
             <header class="cabecalho-vendedor">
 
+
                 <div>
 
                     <h1>
                         Dashboard
                     </h1>
 
+
                     <p>
                         Área de trabalho do vendedor.
                     </p>
+
 
                 </div>
 
 
                 <div class="data-atual">
 
+
                     <span>
                         Hoje
                     </span>
+
 
                     <strong id="dataAtual">
                         --
                     </strong>
 
+
                 </div>
+
 
             </header>
 
@@ -239,22 +511,31 @@
 
                 <div>
 
+
                     <span class="etiqueta-vendedor">
                         ÁREA DO VENDEDOR
                     </span>
 
+
                     <h2>
+
                         Bem-vindo,
+
                         <span id="nomeVendedorBoasVindas">
                             Vendedor!
                         </span>
+
                     </h2>
 
+
                     <p>
+
                         Aqui você pode consultar produtos,
                         realizar vendas, cadastrar clientes
                         e consultar o estoque.
+
                     </p>
+
 
                 </div>
 
@@ -276,17 +557,20 @@
 
                 <div class="titulo-secao-dashboard">
 
+
                     <div>
 
                         <h2>
                             Resumo de hoje
                         </h2>
 
+
                         <p>
                             Suas vendas realizadas hoje.
                         </p>
 
                     </div>
+
 
                 </div>
 
@@ -296,68 +580,84 @@
 
                     <div class="card-dashboard-vendedor">
 
+
                         <span>
                             🛒 Vendas hoje
                         </span>
+
 
                         <strong id="vendasHoje">
                             0
                         </strong>
 
+
                         <small>
                             vendas finalizadas
                         </small>
+
 
                     </div>
 
 
                     <div class="card-dashboard-vendedor">
+
 
                         <span>
                             💰 Total vendido
                         </span>
 
+
                         <strong id="totalVendidoHoje">
                             R$ 0,00
                         </strong>
+
 
                         <small>
                             vendas de hoje
                         </small>
 
+
                     </div>
 
 
                     <div class="card-dashboard-vendedor">
+
 
                         <span>
                             📦 Produtos vendidos
                         </span>
 
+
                         <strong id="produtosVendidosHoje">
                             0
                         </strong>
 
+
                         <small>
                             unidades hoje
                         </small>
+
 
                     </div>
 
 
                     <div class="card-dashboard-vendedor">
 
+
                         <span>
                             👤 Clientes atendidos
                         </span>
+
 
                         <strong id="clientesAtendidosHoje">
                             0
                         </strong>
 
+
                         <small>
                             clientes hoje
                         </small>
+
 
                     </div>
 
@@ -377,17 +677,21 @@
 
                 <div class="titulo-secao-dashboard">
 
+
                     <div>
 
                         <h2>
                             Atenção
                         </h2>
 
+
                         <p>
                             Produtos que precisam de atenção.
                         </p>
 
+
                     </div>
+
 
                 </div>
 
@@ -400,21 +704,27 @@
                         class="card-alerta-vendedor"
                     >
 
+
                         <div class="icone-alerta">
                             ⚠️
                         </div>
 
+
                         <div>
+
 
                             <strong id="estoqueBaixo">
                                 0
                             </strong>
 
+
                             <span>
                                 Produtos com estoque baixo
                             </span>
 
+
                         </div>
+
 
                     </a>
 
@@ -424,21 +734,27 @@
                         class="card-alerta-vendedor card-alerta-vermelho"
                     >
 
+
                         <div class="icone-alerta">
                             🚨
                         </div>
 
+
                         <div>
+
 
                             <strong id="produtosEsgotados">
                                 0
                             </strong>
 
+
                             <span>
                                 Produtos esgotados
                             </span>
 
+
                         </div>
+
 
                     </a>
 
@@ -458,15 +774,18 @@
 
                 <div class="titulo-ultimas-vendas">
 
+
                     <div>
 
                         <h2>
                             Últimas vendas
                         </h2>
 
+
                         <p>
                             Suas últimas vendas finalizadas.
                         </p>
+
 
                     </div>
 
@@ -478,12 +797,15 @@
                         Nova venda
                     </a>
 
+
                 </div>
 
 
                 <div class="tabela-dashboard-container">
 
+
                     <table class="tabela-dashboard-vendedor">
+
 
                         <thead>
 
@@ -516,6 +838,7 @@
 
                         <tbody id="listaUltimasVendas">
 
+
                             <tr>
 
                                 <td
@@ -527,9 +850,12 @@
 
                             </tr>
 
+
                         </tbody>
 
+
                     </table>
+
 
                 </div>
 
@@ -546,17 +872,21 @@
 
                 <div class="titulo-ultimas-vendas">
 
+
                     <div>
 
                         <h2>
                             Acessos rápidos
                         </h2>
 
+
                         <p>
                             Principais funções disponíveis.
                         </p>
 
+
                     </div>
+
 
                 </div>
 
@@ -573,9 +903,11 @@
                             📦
                         </span>
 
+
                         <strong>
                             Produtos
                         </strong>
+
 
                         <small>
                             Consultar produtos
@@ -593,9 +925,11 @@
                             🛒
                         </span>
 
+
                         <strong>
                             Nova venda
                         </strong>
+
 
                         <small>
                             Registrar uma venda
@@ -613,9 +947,11 @@
                             👤
                         </span>
 
+
                         <strong>
                             Clientes
                         </strong>
+
 
                         <small>
                             Consultar clientes
@@ -633,9 +969,11 @@
                             📊
                         </span>
 
+
                         <strong>
                             Estoque
                         </strong>
+
 
                         <small>
                             Consultar estoque
@@ -656,23 +994,59 @@
 
             <section class="painel aviso-painel">
 
+
                 <div class="aviso-icone">
-                    🔒
+
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                    >
+
+                        <rect
+                            x="5"
+                            y="10"
+                            width="14"
+                            height="10"
+                            rx="2"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                        />
+
+                        <path
+                            d="M8 10V7a4 4 0 0 1 8 0v3"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                        />
+
+                    </svg>
+
+
                 </div>
 
+
                 <div>
+
 
                     <strong>
                         Área do vendedor
                     </strong>
 
+
                     <p>
+
                         Valores de custo, lucro e informações
                         financeiras da loja não ficam disponíveis
                         nesta área.
+
                     </p>
 
+
                 </div>
+
 
             </section>
 
@@ -693,7 +1067,9 @@
     </div>
 
 
-    <!-- SUPABASE -->
+    <!-- ======================================
+         SUPABASE
+    ======================================= -->
 
     <script
         src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
@@ -703,7 +1079,7 @@
     <script src="js/config.js"></script>
 
 
-    <!-- PROTEÇÃO E LOGOUT JÁ EXISTENTES -->
+    <!-- PROTEÇÃO E LOGOUT -->
 
     <script src="js/vendedor.js"></script>
 

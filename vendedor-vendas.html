@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="pt-BR">
 
 <head>
@@ -10,17 +11,133 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Vendas - Vendedor - Sistema da Loja</title>
+    <title>
+        Vendas - Vendedor - Sistema da Loja
+    </title>
+
 
     <link
         rel="stylesheet"
         href="vendedor.css"
     >
 
+
     <link
         rel="stylesheet"
         href="vendedor-vendas.css"
     >
+
+
+    <!-- ======================================
+         AJUSTES VISUAIS
+    ======================================= -->
+
+    <style>
+
+        /* ======================================
+           LOGO / LOJA
+        ====================================== */
+
+        .logo-vendedor {
+
+            display: flex !important;
+
+            align-items: center;
+
+            gap: 12px;
+
+            flex-shrink: 0;
+
+        }
+
+
+        .logo-vendedor .logo-icone {
+
+            flex-shrink: 0;
+
+        }
+
+
+        .logo-vendedor strong {
+
+            display: block;
+
+            overflow: hidden;
+
+            text-overflow: ellipsis;
+
+            white-space: nowrap;
+
+        }
+
+
+        .logo-vendedor span {
+
+            display: block;
+
+        }
+
+
+        /* ======================================
+           ÍCONES DO MENU
+        ====================================== */
+
+        .icone-menu {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            width: 20px;
+
+            height: 20px;
+
+            flex-shrink: 0;
+
+        }
+
+
+        .icone-menu svg {
+
+            width: 18px;
+
+            height: 18px;
+
+            display: block;
+
+        }
+
+
+        /* ======================================
+           ÍCONE DO AVISO
+        ====================================== */
+
+        .aviso-icone {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            flex-shrink: 0;
+
+        }
+
+
+        .aviso-icone svg {
+
+            width: 22px;
+
+            height: 22px;
+
+            display: block;
+
+        }
+
+    </style>
 
 </head>
 
@@ -38,28 +155,43 @@
         <aside class="menu-lateral-vendedor">
 
 
+            <!-- ==================================
+                 LOGO / LOJA
+            =================================== -->
+
             <div class="logo-vendedor">
+
 
                 <div class="logo-icone">
                     SL
                 </div>
 
+
                 <div>
 
-                    <strong>
-                        Sistema da Loja
+
+                    <strong id="nomeLojaVendedor">
+                        Carregando...
                     </strong>
+
 
                     <span>
                         Área do Vendedor
                     </span>
 
+
                 </div>
+
 
             </div>
 
 
+            <!-- ==================================
+                 USUÁRIO
+            =================================== -->
+
             <div class="usuario-vendedor">
+
 
                 <div
                     class="avatar-vendedor"
@@ -68,20 +200,29 @@
                     V
                 </div>
 
+
                 <div class="dados-vendedor">
+
 
                     <strong id="nomeVendedor">
                         Vendedor
                     </strong>
 
+
                     <span>
                         Vendedor
                     </span>
 
+
                 </div>
+
 
             </div>
 
+
+            <!-- ==================================
+                 MENU
+            =================================== -->
 
             <nav class="menu-vendedor">
 
@@ -91,16 +232,60 @@
                 </div>
 
 
+                <!-- DASHBOARD -->
+
                 <a
                     href="vendedor.html"
                     class="item-menu"
                 >
 
-                    <span>
-                        ▦
+                    <span class="icone-menu">
+
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                        >
+
+
+                            <path
+                                d="M3 10.5 12 3l9 7.5"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+
+
+                            <path
+                                d="M5 9.5V21h14V9.5"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linejoin="round"
+                            />
+
+
+                            <path
+                                d="M9 21v-6h6v6"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linejoin="round"
+                            />
+
+
+                        </svg>
+
+
                     </span>
 
-                    Dashboard
+
+                    <span>
+                        Dashboard
+                    </span>
+
 
                 </a>
 
@@ -110,58 +295,274 @@
                 </div>
 
 
+                <!-- PRODUTOS -->
+
                 <a
                     href="vendedor-produtos.html"
                     class="item-menu"
                 >
 
-                    <span>
-                        📦
+
+                    <span class="icone-menu">
+
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                        >
+
+
+                            <path
+                                d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Z"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linejoin="round"
+                            />
+
+
+                            <path
+                                d="m4 7.5 8 4.5 8-4.5"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linejoin="round"
+                            />
+
+
+                            <path
+                                d="M12 12v9"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                            />
+
+
+                        </svg>
+
+
                     </span>
 
-                    Produtos
+
+                    <span>
+                        Produtos
+                    </span>
+
 
                 </a>
 
+
+                <!-- VENDAS -->
 
                 <a
                     href="vendedor-vendas.html"
                     class="item-menu ativo"
                 >
 
-                    <span>
-                        🛒
+
+                    <span class="icone-menu">
+
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                        >
+
+
+                            <circle
+                                cx="9"
+                                cy="20"
+                                r="1.5"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            />
+
+
+                            <circle
+                                cx="18"
+                                cy="20"
+                                r="1.5"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            />
+
+
+                            <path
+                                d="M3 4h2l2.2 11.5h10.9L21 7H6"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+
+
+                        </svg>
+
+
                     </span>
 
-                    Vendas
+
+                    <span>
+                        Vendas
+                    </span>
+
 
                 </a>
 
+
+                <!-- CLIENTES -->
 
                 <a
                     href="vendedor-clientes.html"
                     class="item-menu"
                 >
 
-                    <span>
-                        👤
+
+                    <span class="icone-menu">
+
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                        >
+
+
+                            <circle
+                                cx="9"
+                                cy="8"
+                                r="3"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            />
+
+
+                            <path
+                                d="M3.5 20c.7-3.4 2.5-5 5.5-5s4.8 1.6 5.5 5"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                            />
+
+
+                            <path
+                                d="M16 11c2.2.2 3.7 1.6 4.5 4"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                            />
+
+
+                            <path
+                                d="M16 5.5a3 3 0 0 1 0 5.8"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                            />
+
+
+                        </svg>
+
+
                     </span>
 
-                    Clientes
+
+                    <span>
+                        Clientes
+                    </span>
+
 
                 </a>
 
+
+                <!-- ESTOQUE -->
 
                 <a
                     href="vendedor-estoque.html"
                     class="item-menu"
                 >
 
-                    <span>
-                        📊
+
+                    <span class="icone-menu">
+
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                        >
+
+
+                            <path
+                                d="M4 19V5"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                            />
+
+
+                            <path
+                                d="M4 19h16"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                            />
+
+
+                            <rect
+                                x="7"
+                                y="12"
+                                width="3"
+                                height="5"
+                                rx="1"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            />
+
+
+                            <rect
+                                x="12"
+                                y="9"
+                                width="3"
+                                height="8"
+                                rx="1"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            />
+
+
+                            <rect
+                                x="17"
+                                y="6"
+                                width="3"
+                                height="11"
+                                rx="1"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            />
+
+
+                        </svg>
+
+
                     </span>
 
-                    Estoque
+
+                    <span>
+                        Estoque
+                    </span>
+
 
                 </a>
 
@@ -169,7 +570,12 @@
             </nav>
 
 
+            <!-- ==================================
+                 SAIR
+            =================================== -->
+
             <div class="area-sair">
+
 
                 <button
                     type="button"
@@ -177,13 +583,58 @@
                     class="botao-sair"
                 >
 
-                    <span>
-                        ⇥
+
+                    <span class="icone-menu">
+
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                        >
+
+
+                            <path
+                                d="M10 5H5v14h5"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+
+
+                            <path
+                                d="M14 8l4 4-4 4"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+
+
+                            <path
+                                d="M9 12h9"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                            />
+
+
+                        </svg>
+
+
                     </span>
 
-                    Sair
+
+                    <span>
+                        Sair
+                    </span>
+
 
                 </button>
+
 
             </div>
 
@@ -198,32 +649,42 @@
         <main class="conteudo-vendedor">
 
 
+            <!-- CABEÇALHO -->
+
             <header class="cabecalho-vendedor">
 
+
                 <div>
+
 
                     <h1>
                         Nova Venda
                     </h1>
 
+
                     <p>
                         Registre uma venda para o cliente.
                     </p>
+
 
                 </div>
 
 
                 <div class="data-atual">
 
+
                     <span>
                         Hoje
                     </span>
+
 
                     <strong id="dataAtual">
                         --
                     </strong>
 
+
                 </div>
+
 
             </header>
 
@@ -237,17 +698,22 @@
 
                 <div class="cabecalho-painel-venda">
 
+
                     <div>
+
 
                         <h2>
                             Produtos da venda
                         </h2>
 
+
                         <p>
                             Adicione os produtos vendidos.
                         </p>
 
+
                     </div>
+
 
                 </div>
 
@@ -261,26 +727,33 @@
 
                     <div class="campo-venda campo-produto">
 
+
                         <label for="produtoVenda">
                             Produto
                         </label>
 
+
                         <select id="produtoVenda">
+
 
                             <option value="">
                                 Selecione um produto
                             </option>
 
+
                         </select>
+
 
                     </div>
 
 
                     <div class="campo-venda campo-quantidade">
 
+
                         <label for="quantidadeVenda">
                             Quantidade
                         </label>
+
 
                         <input
                             type="number"
@@ -290,14 +763,17 @@
                             value="1"
                         >
 
+
                     </div>
 
 
                     <div class="campo-venda campo-preco">
 
+
                         <label>
                             Preço de venda
                         </label>
+
 
                         <div
                             class="preco-produto-selecionado"
@@ -306,10 +782,12 @@
                             R$ 0,00
                         </div>
 
+
                     </div>
 
 
                     <div class="campo-venda campo-botao">
+
 
                         <button
                             type="button"
@@ -318,6 +796,7 @@
                         >
                             + Adicionar
                         </button>
+
 
                     </div>
 
@@ -341,59 +820,74 @@
 
                 <div class="tabela-venda-container">
 
+
                     <table class="tabela-venda">
+
 
                         <thead>
 
+
                             <tr>
+
 
                                 <th>
                                     Produto
                                 </th>
 
+
                                 <th>
                                     SKU
                                 </th>
+
 
                                 <th>
                                     Quantidade
                                 </th>
 
+
                                 <th>
                                     Preço unitário
                                 </th>
+
 
                                 <th>
                                     Subtotal
                                 </th>
 
+
                                 <th>
                                     Ação
                                 </th>
 
+
                             </tr>
+
 
                         </thead>
 
 
                         <tbody id="listaItensVenda">
 
+
                             <tr>
+
 
                                 <td
                                     colspan="6"
                                     class="carrinho-vazio"
                                 >
-
                                     Nenhum produto adicionado.
-
                                 </td>
+
 
                             </tr>
 
+
                         </tbody>
 
+
                     </table>
+
 
                 </div>
 
@@ -410,73 +904,92 @@
 
                         <div class="campo-venda">
 
+
                             <label for="clienteVenda">
                                 Cliente
                             </label>
 
+
                             <select id="clienteVenda">
+
 
                                 <option value="">
                                     Consumidor não identificado
                                 </option>
 
+
                             </select>
+
 
                         </div>
 
 
                         <div class="campo-venda">
+
 
                             <label for="formaPagamento">
                                 Forma de pagamento
                             </label>
 
+
                             <select id="formaPagamento">
+
 
                                 <option value="">
                                     Selecione
                                 </option>
 
+
                                 <option value="Dinheiro">
                                     Dinheiro
                                 </option>
+
 
                                 <option value="PIX">
                                     PIX
                                 </option>
 
+
                                 <option value="Cartão de Débito">
                                     Cartão de Débito
                                 </option>
+
 
                                 <option value="Cartão de Crédito">
                                     Cartão de Crédito
                                 </option>
 
+
                                 <option value="Boleto">
                                     Boleto
                                 </option>
+
 
                                 <option value="Outro">
                                     Outro
                                 </option>
 
+
                             </select>
+
 
                         </div>
 
 
                         <div class="campo-venda">
 
+
                             <label for="observacoesVenda">
                                 Observações
                             </label>
+
 
                             <textarea
                                 id="observacoesVenda"
                                 rows="4"
                                 placeholder="Observações da venda..."
                             ></textarea>
+
 
                         </div>
 
@@ -493,24 +1006,30 @@
 
                         <div class="linha-resumo">
 
+
                             <span>
                                 Subtotal
                             </span>
 
+
                             <strong id="subtotalVenda">
                                 R$ 0,00
                             </strong>
+
 
                         </div>
 
 
                         <div class="linha-resumo linha-desconto">
 
+
                             <label for="descontoVenda">
                                 Desconto
                             </label>
 
+
                             <div class="campo-desconto">
+
 
                                 <input
                                     type="number"
@@ -520,24 +1039,30 @@
                                     value="0"
                                 >
 
+
                                 <span>
                                     R$
                                 </span>
 
+
                             </div>
+
 
                         </div>
 
 
                         <div class="linha-resumo linha-total">
 
+
                             <span>
                                 Total
                             </span>
 
+
                             <strong id="totalVenda">
                                 R$ 0,00
                             </strong>
+
 
                         </div>
 
@@ -547,9 +1072,7 @@
                             id="btnFinalizarVenda"
                             class="botao-finalizar"
                         >
-
                             Finalizar Venda
-
                         </button>
 
 
@@ -568,15 +1091,56 @@
 
             <section class="painel aviso-painel">
 
+
                 <div class="aviso-icone">
-                    ℹ️
+
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                    >
+
+
+                        <circle
+                            cx="12"
+                            cy="12"
+                            r="9"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                        />
+
+
+                        <path
+                            d="M12 10v6"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                        />
+
+
+                        <circle
+                            cx="12"
+                            cy="7"
+                            r="1"
+                            fill="currentColor"
+                        />
+
+
+                    </svg>
+
+
                 </div>
 
+
                 <div>
+
 
                     <strong>
                         Segurança
                     </strong>
+
 
                     <p>
                         O vendedor trabalha somente com preço
@@ -584,7 +1148,9 @@
                         loja não ficam disponíveis nesta tela.
                     </p>
 
+
                 </div>
+
 
             </section>
 
@@ -603,7 +1169,157 @@
         src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
     ></script>
 
+
     <script src="js/config.js"></script>
+
+
+    <!-- ==========================================
+         NOME DA LOJA DO VENDEDOR
+    =========================================== -->
+
+    <script>
+
+        async function carregarNomeLojaVendedor() {
+
+            const elemento =
+                document.getElementById(
+                    "nomeLojaVendedor"
+                );
+
+
+            if (!elemento) {
+
+                return;
+
+            }
+
+
+            try {
+
+                const resultadoSessao =
+                    await supabaseClient
+                        .auth
+                        .getSession();
+
+
+                const session =
+                    resultadoSessao
+                        .data
+                        .session;
+
+
+                if (!session) {
+
+                    elemento.textContent =
+                        "Sistema da Loja";
+
+                    return;
+
+                }
+
+
+                const resultadoPerfil =
+                    await supabaseClient
+                        .from("perfis")
+                        .select("loja_id")
+                        .eq(
+                            "id",
+                            session.user.id
+                        )
+                        .maybeSingle();
+
+
+                if (
+                    resultadoPerfil.error ||
+                    !resultadoPerfil.data ||
+                    !resultadoPerfil.data.loja_id
+                ) {
+
+                    console.error(
+                        "Erro ao buscar loja:",
+                        resultadoPerfil.error
+                    );
+
+                    elemento.textContent =
+                        "Sistema da Loja";
+
+                    return;
+
+                }
+
+
+                const resultadoLoja =
+                    await supabaseClient
+                        .from("lojas")
+                        .select("nome")
+                        .eq(
+                            "id",
+                            resultadoPerfil.data.loja_id
+                        )
+                        .maybeSingle();
+
+
+                if (
+                    resultadoLoja.error ||
+                    !resultadoLoja.data
+                ) {
+
+                    console.error(
+                        "Erro ao buscar nome da loja:",
+                        resultadoLoja.error
+                    );
+
+                    elemento.textContent =
+                        "Sistema da Loja";
+
+                    return;
+
+                }
+
+
+                elemento.textContent =
+                    resultadoLoja.data.nome ||
+                    "Sistema da Loja";
+
+            }
+
+            catch (erro) {
+
+                console.error(
+                    "Erro ao carregar nome da loja:",
+                    erro
+                );
+
+                elemento.textContent =
+                    "Sistema da Loja";
+
+            }
+
+        }
+
+
+        if (
+            document.readyState === "loading"
+        ) {
+
+            document.addEventListener(
+                "DOMContentLoaded",
+                carregarNomeLojaVendedor
+            );
+
+        }
+        else {
+
+            carregarNomeLojaVendedor();
+
+        }
+
+    </script>
+
+
+    <!-- ==========================================
+         LÓGICA DAS VENDAS
+    =========================================== -->
 
     <script src="js/vendedor-vendas.js"></script>
 
