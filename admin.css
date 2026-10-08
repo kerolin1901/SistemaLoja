@@ -1,7 +1,7 @@
 /* ==========================================
    SISTEMA DA LOJA
    PAINEL ADMINISTRATIVO
-   CSS PADRONIZADO
+   ADMIN.CSS COMPLETO
 ========================================== */
 
 
@@ -15,10 +15,6 @@
     box-sizing: border-box;
 }
 
-
-/* ==========================================
-   BODY
-========================================== */
 
 body {
     font-family:
@@ -66,22 +62,18 @@ body {
     left: 0;
     top: 0;
     bottom: 0;
-
-    z-index: 1000;
 }
 
 
 /* ==========================================
-   LOGO / NOME DA LOJA
+   LOGO
 ========================================== */
 
 .logo-admin {
-    min-height: 90px;
-
     height: 90px;
 
     padding:
-        16px 20px;
+        20px;
 
     display: flex;
 
@@ -92,20 +84,12 @@ body {
     border-bottom:
         1px solid
         rgba(255,255,255,0.08);
-
-    flex-shrink: 0;
 }
 
-
-/* ==========================================
-   ÍCONE SL
-========================================== */
 
 .logo-icone {
     width: 42px;
     height: 42px;
-
-    min-width: 42px;
 
     border-radius: 10px;
 
@@ -120,59 +104,15 @@ body {
     font-weight: bold;
 
     font-size: 14px;
-
-    color: white;
 }
 
-
-/* ==========================================
-   TÍTULO DA LOJA / SISTEMA
-========================================== */
 
 .logo-admin strong {
     display: block;
 
     font-size: 15px;
-
-    line-height: 1.25;
-
-    color: white;
-
-    white-space: nowrap;
-
-    overflow: hidden;
-
-    text-overflow: ellipsis;
 }
 
-
-/* Compatibilidade com páginas
-   que ainda utilizam h1 */
-
-.logo-admin h1 {
-    display: block;
-
-    margin: 0;
-
-    font-size: 15px;
-
-    line-height: 1.25;
-
-    color: white;
-
-    font-weight: bold;
-
-    white-space: nowrap;
-
-    overflow: hidden;
-
-    text-overflow: ellipsis;
-}
-
-
-/* ==========================================
-   SUBTÍTULO
-========================================== */
 
 .logo-admin span {
     display: block;
@@ -183,26 +123,16 @@ body {
 
     color:
         #9ca3af;
-
-    line-height: 1.2;
-
-    white-space: nowrap;
-
-    overflow: hidden;
-
-    text-overflow: ellipsis;
 }
 
 
 /* ==========================================
-   USUÁRIO LOGADO
+   USUÁRIO
 ========================================== */
 
 .usuario-logado {
-    min-height: 76px;
-
     padding:
-        16px 20px;
+        18px 20px;
 
     display: flex;
 
@@ -213,20 +143,12 @@ body {
     border-bottom:
         1px solid
         rgba(255,255,255,0.08);
-
-    flex-shrink: 0;
 }
 
-
-/* ==========================================
-   AVATAR
-========================================== */
 
 .avatar-admin {
     width: 40px;
     height: 40px;
-
-    min-width: 40px;
 
     border-radius: 50%;
 
@@ -240,20 +162,12 @@ body {
 
     font-weight: bold;
 
-    font-size: 14px;
-
-    color: white;
+    flex-shrink: 0;
 }
 
 
-/* ==========================================
-   DADOS DO USUÁRIO
-========================================== */
-
 .dados-usuario {
     min-width: 0;
-
-    flex: 1;
 }
 
 
@@ -262,15 +176,11 @@ body {
 
     font-size: 13px;
 
-    line-height: 1.25;
-
     white-space: nowrap;
 
     overflow: hidden;
 
     text-overflow: ellipsis;
-
-    color: white;
 }
 
 
@@ -283,31 +193,6 @@ body {
         #9ca3af;
 
     font-size: 11px;
-
-    line-height: 1.2;
-
-    white-space: nowrap;
-
-    overflow: hidden;
-
-    text-overflow: ellipsis;
-}
-
-
-/* Compatibilidade com páginas
-   que utilizam small */
-
-.usuario-logado small {
-    display: block;
-
-    margin-top: 3px;
-
-    color:
-        #9ca3af;
-
-    font-size: 11px;
-
-    line-height: 1.2;
 }
 
 
@@ -325,10 +210,6 @@ body {
 }
 
 
-/* ==========================================
-   TÍTULO DAS SEÇÕES
-========================================== */
-
 .titulo-menu {
     color:
         #6b7280;
@@ -344,10 +225,6 @@ body {
 }
 
 
-/* ==========================================
-   ITEM DO MENU
-========================================== */
-
 .item-menu {
     display: flex;
 
@@ -358,8 +235,6 @@ body {
     width: 100%;
 
     min-height: 44px;
-
-    height: 44px;
 
     padding:
         0 12px;
@@ -377,8 +252,6 @@ body {
 
     transition:
         0.2s;
-
-    white-space: nowrap;
 }
 
 
@@ -401,52 +274,36 @@ body {
 
 
 /* ==========================================
-   ÍCONE DO MENU
+   ÍCONES DO MENU
 ========================================== */
 
 .icone-menu {
     width: 20px;
-
-    min-width: 20px;
-
     height: 20px;
 
     display: flex;
 
     align-items: center;
-
     justify-content: center;
 
-    text-align: center;
+    flex-shrink: 0;
 
     font-size: 16px;
-
-    line-height: 1;
 }
 
 
-/* Compatibilidade com páginas
-   que ainda usam span sem classe */
+.icone-menu svg {
+    width: 18px;
+    height: 18px;
 
-.item-menu > span:first-child {
-    width: 20px;
+    display: block;
 
-    min-width: 20px;
-
-    display: inline-flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    text-align: center;
-
-    line-height: 1;
+    flex-shrink: 0;
 }
 
 
 /* ==========================================
-   ÁREA SAIR
+   SAIR
 ========================================== */
 
 .area-sair {
@@ -456,14 +313,8 @@ body {
     border-top:
         1px solid
         rgba(255,255,255,0.08);
-
-    flex-shrink: 0;
 }
 
-
-/* ==========================================
-   BOTÃO SAIR
-========================================== */
 
 .botao-sair {
     width: 100%;
@@ -494,9 +345,6 @@ body {
     align-items: center;
 
     gap: 12px;
-
-    transition:
-        0.2s;
 }
 
 
@@ -506,6 +354,25 @@ body {
 
     color:
         white;
+}
+
+
+.botao-sair span {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 20px;
+    height: 20px;
+}
+
+
+.botao-sair svg {
+    width: 18px;
+    height: 18px;
+
+    display: block;
 }
 
 
@@ -533,15 +400,25 @@ body {
 .cabecalho-admin {
     display: flex;
 
-    justify-content: space-between;
+    justify-content:
+        space-between;
 
     align-items: center;
 
-    margin-bottom: 25px;
+    margin-bottom:
+        25px;
 }
 
 
 .cabecalho-admin h1 {
+    font-size: 27px;
+
+    color:
+        #111827;
+}
+
+
+.cabecalho-admin h2 {
     font-size: 27px;
 
     color:
@@ -590,12 +467,14 @@ body {
 .mensagem-admin {
     display: none;
 
-    margin-bottom: 20px;
+    margin-bottom:
+        20px;
 
     padding:
         12px 15px;
 
-    border-radius: 8px;
+    border-radius:
+        8px;
 
     background:
         #dbeafe;
@@ -622,9 +501,11 @@ body {
     grid-template-columns:
         repeat(4, 1fr);
 
-    gap: 18px;
+    gap:
+        18px;
 
-    margin-bottom: 25px;
+    margin-bottom:
+        25px;
 }
 
 
@@ -636,7 +517,8 @@ body {
         1px solid
         #e5e7eb;
 
-    border-radius: 12px;
+    border-radius:
+        12px;
 
     padding:
         20px;
@@ -645,7 +527,8 @@ body {
 
     align-items: center;
 
-    gap: 15px;
+    gap:
+        15px;
 
     box-shadow:
         0 2px 8px
@@ -657,14 +540,18 @@ body {
     width: 48px;
     height: 48px;
 
-    border-radius: 10px;
+    border-radius:
+        10px;
 
     display: flex;
 
     align-items: center;
+
     justify-content: center;
 
     font-size: 21px;
+
+    flex-shrink: 0;
 }
 
 
@@ -723,7 +610,8 @@ body {
 
     flex-direction: column;
 
-    gap: 20px;
+    gap:
+        20px;
 }
 
 
@@ -738,18 +626,21 @@ body {
     color:
         white;
 
-    border-radius: 14px;
+    border-radius:
+        14px;
 
     padding:
         28px;
 
     display: flex;
 
-    justify-content: space-between;
+    justify-content:
+        space-between;
 
     align-items: center;
 
-    min-height: 180px;
+    min-height:
+        180px;
 }
 
 
@@ -760,36 +651,47 @@ body {
 
     letter-spacing: 1px;
 
-    opacity: 0.75;
+    opacity:
+        0.75;
 }
 
 
 .painel-boas-vindas h2 {
-    margin-top: 10px;
+    margin-top:
+        10px;
 
-    font-size: 24px;
+    font-size:
+        24px;
 }
 
 
 .painel-boas-vindas p {
-    margin-top: 10px;
+    margin-top:
+        10px;
 
-    max-width: 620px;
+    max-width:
+        620px;
 
-    font-size: 13px;
+    font-size:
+        13px;
 
-    line-height: 1.6;
+    line-height:
+        1.6;
 
-    opacity: 0.9;
+    opacity:
+        0.9;
 }
 
 
 .ilustracao-dashboard {
-    font-size: 80px;
+    font-size:
+        80px;
 
-    opacity: 0.9;
+    opacity:
+        0.9;
 
-    padding-right: 30px;
+    padding-right:
+        30px;
 }
 
 
@@ -805,7 +707,8 @@ body {
         1px solid
         #e5e7eb;
 
-    border-radius: 12px;
+    border-radius:
+        12px;
 
     padding:
         22px;
@@ -816,8 +719,10 @@ body {
 }
 
 
-.titulo-painel h2 {
-    font-size: 17px;
+.titulo-painel h2,
+.titulo-painel h3 {
+    font-size:
+        17px;
 
     color:
         #111827;
@@ -825,12 +730,14 @@ body {
 
 
 .titulo-painel p {
-    margin-top: 5px;
+    margin-top:
+        5px;
 
     color:
         #6b7280;
 
-    font-size: 12px;
+    font-size:
+        12px;
 }
 
 
@@ -844,9 +751,11 @@ body {
     grid-template-columns:
         repeat(4, 1fr);
 
-    gap: 14px;
+    gap:
+        14px;
 
-    margin-top: 18px;
+    margin-top:
+        18px;
 }
 
 
@@ -858,21 +767,26 @@ body {
     background:
         white;
 
-    border-radius: 10px;
+    border-radius:
+        10px;
 
     padding:
         18px;
 
-    text-align: left;
+    text-align:
+        left;
 
-    cursor: pointer;
+    cursor:
+        pointer;
 
     transition:
         0.2s;
 
-    text-decoration: none;
+    text-decoration:
+        none;
 
-    color: inherit;
+    color:
+        inherit;
 }
 
 
@@ -889,12 +803,43 @@ body {
 }
 
 
-.atalho span {
+/* ==========================================
+   ÍCONES DOS ATALHOS
+   CORREÇÃO DE TAMANHO
+========================================== */
+
+.atalho > span {
+    width: 36px;
+    height: 36px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom:
+        12px;
+
+    font-size:
+        22px;
+}
+
+
+/*
+   IMPORTANTE:
+   Limita os SVGs para não ficarem gigantes.
+*/
+
+.atalho > span svg {
+    width: 28px;
+    height: 28px;
+
     display: block;
 
-    font-size: 25px;
+    max-width: 28px;
+    max-height: 28px;
 
-    margin-bottom: 12px;
+    flex-shrink: 0;
 }
 
 
@@ -904,19 +849,22 @@ body {
     color:
         #111827;
 
-    font-size: 13px;
+    font-size:
+        13px;
 }
 
 
 .atalho small {
     display: block;
 
-    margin-top: 5px;
+    margin-top:
+        5px;
 
     color:
         #6b7280;
 
-    font-size: 11px;
+    font-size:
+        11px;
 }
 
 
@@ -927,54 +875,422 @@ body {
 .aviso-painel {
     display: flex;
 
-    align-items: flex-start;
+    align-items:
+        flex-start;
 
-    gap: 15px;
+    gap:
+        15px;
 }
 
 
 .aviso-icone {
-    font-size: 22px;
+    width: 28px;
+    height: 28px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    font-size:
+        22px;
+}
+
+
+.aviso-icone svg {
+    width: 22px;
+    height: 22px;
+
+    display: block;
 }
 
 
 .aviso-painel strong {
-    font-size: 13px;
+    font-size:
+        13px;
 }
 
 
 .aviso-painel p {
-    margin-top: 5px;
+    margin-top:
+        5px;
 
     color:
         #6b7280;
 
-    font-size: 12px;
+    font-size:
+        12px;
 
-    line-height: 1.5;
+    line-height:
+        1.5;
 }
 
 
 /* ==========================================
-   ROLAGEM DO MENU
+   TABELAS
 ========================================== */
 
-.menu::-webkit-scrollbar {
-    width: 5px;
+.table-container {
+    overflow-x:
+        auto;
 }
 
 
-.menu::-webkit-scrollbar-track {
-    background:
-        transparent;
+table {
+    width:
+        100%;
+
+    border-collapse:
+        collapse;
+
+    margin-top:
+        15px;
 }
 
 
-.menu::-webkit-scrollbar-thumb {
+th {
+    padding:
+        13px;
+
     background:
+        #f8fafc;
+
+    color:
+        #475569;
+
+    font-size:
+        13px;
+
+    text-align:
+        left;
+}
+
+
+td {
+    padding:
+        13px;
+
+    border-top:
+        1px solid
+        #e2e8f0;
+
+    font-size:
+        14px;
+}
+
+
+.status {
+    display:
+        inline-block;
+
+    padding:
+        5px 9px;
+
+    border-radius:
+        20px;
+
+    font-size:
+        11px;
+
+    font-weight:
+        bold;
+}
+
+
+.status-ativo {
+    background:
+        #dcfce7;
+
+    color:
+        #166534;
+}
+
+
+.status-inativo {
+    background:
+        #fee2e2;
+
+    color:
+        #991b1b;
+}
+
+
+.status-expirado {
+    background:
+        #fef3c7;
+
+    color:
+        #92400e;
+}
+
+
+/* ==========================================
+   INFO
+========================================== */
+
+.info-box {
+    padding:
+        18px;
+
+    border-radius:
+        15px;
+
+    background:
+        #fff7ed;
+
+    color:
+        #9a3412;
+
+    font-size:
+        14px;
+}
+
+
+.info-box p {
+    margin-bottom:
+        0;
+
+    line-height:
+        1.6;
+}
+
+
+/* ==========================================
+   FORMULÁRIOS
+========================================== */
+
+.formulario {
+    display: flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        18px;
+
+    width:
+        100%;
+}
+
+
+.campo-formulario {
+    display: flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        7px;
+
+    width:
+        100%;
+}
+
+
+.campo-formulario label {
+    color:
         #374151;
 
-    border-radius: 10px;
+    font-size:
+        13px;
+
+    font-weight:
+        700;
+}
+
+
+.campo-formulario input,
+.campo-formulario select,
+.campo-formulario textarea {
+    width:
+        100%;
+
+    min-height:
+        40px;
+
+    padding:
+        10px 13px;
+
+    border:
+        1px solid
+        #d1d5db;
+
+    border-radius:
+        7px;
+
+    background:
+        #ffffff;
+
+    color:
+        #1f2937;
+
+    font-family:
+        inherit;
+
+    font-size:
+        13px;
+
+    outline:
+        none;
+}
+
+
+.campo-formulario input:focus,
+.campo-formulario select:focus,
+.campo-formulario textarea:focus {
+    border-color:
+        #2563eb;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(37,99,235,0.10);
+}
+
+
+/* ==========================================
+   AÇÕES DO FORMULÁRIO
+========================================== */
+
+.acoes-formulario {
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        10px;
+}
+
+
+.botao-principal {
+    min-height:
+        38px;
+
+    padding:
+        9px 17px;
+
+    border:
+        none;
+
+    border-radius:
+        7px;
+
+    background:
+        #2563eb;
+
+    color:
+        #ffffff;
+
+    font-family:
+        inherit;
+
+    font-size:
+        13px;
+
+    font-weight:
+        700;
+
+    cursor:
+        pointer;
+}
+
+
+.botao-principal:hover {
+    background:
+        #1d4ed8;
+}
+
+
+.botao-principal:disabled {
+    opacity:
+        0.6;
+
+    cursor:
+        not-allowed;
+}
+
+
+.botao-secundario {
+    min-height:
+        36px;
+
+    padding:
+        8px 13px;
+
+    border:
+        1px solid
+        #d1d5db;
+
+    border-radius:
+        7px;
+
+    background:
+        #ffffff;
+
+    color:
+        #374151;
+
+    font-family:
+        inherit;
+
+    font-size:
+        12px;
+
+    font-weight:
+        600;
+
+    cursor:
+        pointer;
+}
+
+
+.botao-secundario:hover {
+    background:
+        #f9fafb;
+
+    border-color:
+        #9ca3af;
+}
+
+
+/* ==========================================
+   CARREGANDO
+========================================== */
+
+.carregando {
+    padding:
+        25px 10px;
+
+    color:
+        #6b7280;
+
+    text-align:
+        center;
+
+    font-size:
+        13px;
+}
+
+
+/* ==========================================
+   SEM REGISTROS
+========================================== */
+
+.sem-registros {
+    padding:
+        25px 10px;
+
+    color:
+        #6b7280;
+
+    text-align:
+        center;
+
+    font-size:
+        13px;
 }
 
 
@@ -1001,16 +1317,42 @@ body {
 
 
 @media (
-    max-width: 750px
+    max-width: 900px
 ) {
 
     .menu-lateral {
-        width: 220px;
+        width:
+            220px;
     }
 
 
     .conteudo-admin {
-        margin-left: 220px;
+        margin-left:
+            220px;
+
+        width:
+            calc(100% - 220px);
+
+        padding:
+            20px;
+    }
+
+}
+
+
+@media (
+    max-width: 750px
+) {
+
+    .menu-lateral {
+        width:
+            220px;
+    }
+
+
+    .conteudo-admin {
+        margin-left:
+            220px;
 
         width:
             calc(100% - 220px);
@@ -1033,17 +1375,56 @@ body {
 
 
     .painel-boas-vindas {
-        flex-direction: column;
+        flex-direction:
+            column;
 
         align-items:
             flex-start;
 
-        gap: 20px;
+        gap:
+            20px;
     }
 
 
     .ilustracao-dashboard {
-        display: none;
+        display:
+            none;
+    }
+
+}
+
+
+@media (
+    max-width: 600px
+) {
+
+    .conteudo-admin {
+        padding:
+            15px;
+    }
+
+
+    .cabecalho-admin {
+        align-items:
+            flex-start;
+
+        flex-direction:
+            column;
+
+        gap:
+            10px;
+    }
+
+
+    .data-atual {
+        text-align:
+            left;
+    }
+
+
+    .atalho {
+        padding:
+            15px;
     }
 
 }
