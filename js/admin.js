@@ -31,6 +31,7 @@ const dataAtual =
 ========================================== */
 
 let verificacaoLicencaEmAndamento = false;
+
 let intervaloVerificacaoLicenca = null;
 
 
@@ -42,22 +43,17 @@ let intervaloVerificacaoLicenca = null;
 function converterDataLicenca(data) {
 
     if (!data) {
-
         return null;
     }
-
 
     const partes =
         String(data).split("-");
 
-
     if (
         partes.length !== 3
     ) {
-
         return null;
     }
-
 
     const ano =
         Number(partes[0]);
@@ -68,16 +64,13 @@ function converterDataLicenca(data) {
     const dia =
         Number(partes[2]);
 
-
     if (
         !ano ||
         !mes ||
         !dia
     ) {
-
         return null;
     }
-
 
     return new Date(
         ano,
@@ -96,7 +89,6 @@ function obterHojeSemHorario() {
 
     const agora =
         new Date();
-
 
     return new Date(
         agora.getFullYear(),
@@ -117,23 +109,18 @@ function calcularDiasRestantes(
     const hoje =
         obterHojeSemHorario();
 
-
     const vencimento =
         converterDataLicenca(
             dataVencimento
         );
 
-
     if (!vencimento) {
-
         return null;
     }
-
 
     const diferenca =
         vencimento.getTime() -
         hoje.getTime();
-
 
     return Math.round(
         diferenca /
@@ -155,18 +142,14 @@ function mostrarAvisoLicenca(
             ".conteudo-admin"
         );
 
-
     if (!conteudoAdmin) {
-
         return;
     }
-
 
     let aviso =
         document.getElementById(
             "avisoLicenca"
         );
-
 
     /*
        Sem data de vencimento:
@@ -179,19 +162,16 @@ function mostrarAvisoLicenca(
     ) {
 
         if (aviso) {
-
             aviso.remove();
         }
 
         return;
     }
 
-
     const diasRestantes =
         calcularDiasRestantes(
             loja.data_vencimento
         );
-
 
     /*
        Data inválida:
@@ -203,13 +183,11 @@ function mostrarAvisoLicenca(
     ) {
 
         if (aviso) {
-
             aviso.remove();
         }
 
         return;
     }
-
 
     /*
        Mais de 7 dias:
@@ -221,13 +199,11 @@ function mostrarAvisoLicenca(
     ) {
 
         if (aviso) {
-
             aviso.remove();
         }
 
         return;
     }
-
 
     /*
        Licença vencida:
@@ -240,13 +216,11 @@ function mostrarAvisoLicenca(
     ) {
 
         if (aviso) {
-
             aviso.remove();
         }
 
         return;
     }
-
 
     /*
        Criar aviso caso ainda não exista.
@@ -259,10 +233,8 @@ function mostrarAvisoLicenca(
                 "div"
             );
 
-
         aviso.id =
             "avisoLicenca";
-
 
         /*
            Estilo do aviso.
@@ -307,7 +279,6 @@ function mostrarAvisoLicenca(
         aviso.style.fontWeight =
             "600";
 
-
         /*
            Colocar antes do cabeçalho.
         */
@@ -317,7 +288,6 @@ function mostrarAvisoLicenca(
                 ".cabecalho-admin"
             );
 
-
         if (cabecalho) {
 
             conteudoAdmin.insertBefore(
@@ -325,22 +295,21 @@ function mostrarAvisoLicenca(
                 cabecalho
             );
 
-        }
-        else {
+        } else {
 
             conteudoAdmin.prepend(
                 aviso
             );
-        }
-    }
 
+        }
+
+    }
 
     /*
        Montar mensagem.
     */
 
     let mensagem = "";
-
 
     if (
         diasRestantes === 0
@@ -349,16 +318,14 @@ function mostrarAvisoLicenca(
         mensagem =
             "Atenção: a licença da sua loja vence hoje. Entre em contato com o Administrador Geral para renovar o acesso.";
 
-    }
-    else if (
+    } else if (
         diasRestantes === 1
     ) {
 
         mensagem =
             "Atenção: a licença da sua loja vence em 1 dia. Entre em contato com o Administrador Geral para renovar o acesso.";
 
-    }
-    else {
+    } else {
 
         mensagem =
             "Atenção: a licença da sua loja vence em " +
@@ -366,7 +333,6 @@ function mostrarAvisoLicenca(
             " dias. Entre em contato com o Administrador Geral para renovar o acesso.";
 
     }
-
 
     aviso.innerHTML =
         `
@@ -383,6 +349,7 @@ function mostrarAvisoLicenca(
             ${mensagem}
         </span>
         `;
+
 }
 
 
@@ -404,15 +371,11 @@ async function verificarLicencaLoja(
         return false;
     }
 
-
     if (verificacaoLicencaEmAndamento) {
-
         return true;
     }
 
-
     verificacaoLicencaEmAndamento = true;
-
 
     try {
 
@@ -424,7 +387,6 @@ async function verificarLicencaLoja(
                 )
                 .eq("id", lojaId)
                 .maybeSingle();
-
 
         /* ======================================
            ERRO AO CONSULTAR A LOJA
@@ -440,10 +402,8 @@ async function verificarLicencaLoja(
             return true;
         }
 
-
         const loja =
             resultadoLoja.data;
-
 
         /* ======================================
            LOJA NÃO ENCONTRADA
@@ -458,7 +418,6 @@ async function verificarLicencaLoja(
             return false;
         }
 
-
         /* ======================================
            LOJA DESATIVADA
         ====================================== */
@@ -471,7 +430,6 @@ async function verificarLicencaLoja(
 
             return false;
         }
-
 
         /* ======================================
            SEM DATA DE VENCIMENTO
@@ -486,7 +444,6 @@ async function verificarLicencaLoja(
             return true;
         }
 
-
         /* ======================================
            MOSTRAR AVISO
         ====================================== */
@@ -495,7 +452,6 @@ async function verificarLicencaLoja(
             loja
         );
 
-
         /* ======================================
            VERIFICAR DATA DE VENCIMENTO
         ====================================== */
@@ -503,12 +459,10 @@ async function verificarLicencaLoja(
         const hoje =
             obterHojeSemHorario();
 
-
         const dataVencimento =
             converterDataLicenca(
                 loja.data_vencimento
             );
-
 
         if (!dataVencimento) {
 
@@ -519,7 +473,6 @@ async function verificarLicencaLoja(
 
             return true;
         }
-
 
         /* ======================================
            LICENÇA VENCIDA
@@ -536,7 +489,6 @@ async function verificarLicencaLoja(
 
             return false;
         }
-
 
         /* ======================================
            LICENÇA VÁLIDA
@@ -561,7 +513,9 @@ async function verificarLicencaLoja(
 
         verificacaoLicencaEmAndamento =
             false;
+
     }
+
 }
 
 
@@ -587,22 +541,20 @@ async function encerrarSessaoPorLicenca(
             "Erro ao encerrar sessão:",
             erro
         );
-    }
 
+    }
 
     sessionStorage.removeItem(
         "sistemaLojaPerfil"
     );
 
-
     if (mensagem) {
-
         alert(mensagem);
     }
 
-
     window.location.href =
         "index.html";
+
 }
 
 
@@ -620,15 +572,11 @@ async function verificarLicencaUsuarioAtual() {
         const session =
             resultadoSessao.data.session;
 
-
         if (!session) {
-
             return false;
         }
 
-
         let perfil = null;
-
 
         /* ======================================
            TENTAR PEGAR PERFIL DA SESSÃO
@@ -638,7 +586,6 @@ async function verificarLicencaUsuarioAtual() {
             sessionStorage.getItem(
                 "sistemaLojaPerfil"
             );
-
 
         if (perfilSalvo) {
 
@@ -658,9 +605,10 @@ async function verificarLicencaUsuarioAtual() {
                 );
 
                 perfil = null;
-            }
-        }
 
+            }
+
+        }
 
         /* ======================================
            SE NÃO TEM PERFIL,
@@ -681,20 +629,19 @@ async function verificarLicencaUsuarioAtual() {
                     )
                     .maybeSingle();
 
-
             if (
                 resultadoPerfil.error ||
                 !resultadoPerfil.data
             ) {
 
                 return false;
-            }
 
+            }
 
             perfil =
                 resultadoPerfil.data;
-        }
 
+        }
 
         /* ======================================
            SOMENTE ADMIN DA LOJA
@@ -705,8 +652,8 @@ async function verificarLicencaUsuarioAtual() {
         ) {
 
             return true;
-        }
 
+        }
 
         /* ======================================
            VERIFICAR LICENÇA
@@ -727,7 +674,9 @@ async function verificarLicencaUsuarioAtual() {
         );
 
         return true;
+
     }
+
 }
 
 
@@ -742,8 +691,8 @@ function iniciarMonitoramentoLicenca() {
         clearInterval(
             intervaloVerificacaoLicenca
         );
-    }
 
+    }
 
     intervaloVerificacaoLicenca =
         setInterval(
@@ -754,7 +703,6 @@ function iniciarMonitoramentoLicenca() {
             },
             30000
         );
-
 
     /*
        Verificar quando a aba volta
@@ -771,10 +719,11 @@ function iniciarMonitoramentoLicenca() {
             ) {
 
                 await verificarLicencaUsuarioAtual();
+
             }
+
         }
     );
-
 
     /*
        Verificar quando a janela
@@ -789,6 +738,7 @@ function iniciarMonitoramentoLicenca() {
 
         }
     );
+
 }
 
 
@@ -806,7 +756,6 @@ async function carregarAdministrador() {
         const usuario =
             resultado.data.user;
 
-
         /* ======================================
            NÃO ESTÁ LOGADO
         ====================================== */
@@ -817,8 +766,8 @@ async function carregarAdministrador() {
                 "index.html";
 
             return false;
-        }
 
+        }
 
         /* ======================================
            BUSCAR PERFIL
@@ -830,7 +779,6 @@ async function carregarAdministrador() {
                 .select("*")
                 .eq("id", usuario.id)
                 .single();
-
 
         /* ======================================
            PERFIL NÃO ENCONTRADO
@@ -853,12 +801,11 @@ async function carregarAdministrador() {
                 "index.html";
 
             return false;
-        }
 
+        }
 
         const perfil =
             perfilResultado.data;
-
 
         /* ======================================
            NÃO É ADMIN
@@ -870,8 +817,8 @@ async function carregarAdministrador() {
                 "vendedor.html";
 
             return false;
-        }
 
+        }
 
         /* ======================================
            USUÁRIO DESATIVADO
@@ -895,8 +842,8 @@ async function carregarAdministrador() {
                 "index.html";
 
             return false;
-        }
 
+        }
 
         /* ======================================
            VERIFICAR LICENÇA DA LOJA
@@ -908,12 +855,9 @@ async function carregarAdministrador() {
                 true
             );
 
-
         if (!licencaValida) {
-
             return false;
         }
-
 
         /* ======================================
            MOSTRAR NOME
@@ -924,8 +868,8 @@ async function carregarAdministrador() {
             nomeAdministrador.textContent =
                 perfil.nome_completo ||
                 "Administrador";
-        }
 
+        }
 
         /* ======================================
            MOSTRAR AVATAR
@@ -941,8 +885,8 @@ async function carregarAdministrador() {
                 nome
                     .charAt(0)
                     .toUpperCase();
-        }
 
+        }
 
         /* ======================================
            SALVAR PERFIL
@@ -953,13 +897,11 @@ async function carregarAdministrador() {
             JSON.stringify(perfil)
         );
 
-
         /* ======================================
            INICIAR MONITORAMENTO
         ====================================== */
 
         iniciarMonitoramentoLicenca();
-
 
         return true;
 
@@ -980,7 +922,535 @@ async function carregarAdministrador() {
             "index.html";
 
         return false;
+
     }
+
+}
+
+
+/* ==========================================
+   INDICADORES DO DASHBOARD
+========================================== */
+
+function formatarMoedaDashboard(valor) {
+
+    return Number(valor || 0).toLocaleString(
+        "pt-BR",
+        {
+            style: "currency",
+            currency: "BRL"
+        }
+    );
+
+}
+
+
+function obterInicioMesDashboard(data) {
+
+    return new Date(
+        data.getFullYear(),
+        data.getMonth(),
+        1
+    );
+
+}
+
+
+function obterInicioProximoMesDashboard(data) {
+
+    return new Date(
+        data.getFullYear(),
+        data.getMonth() + 1,
+        1
+    );
+
+}
+
+
+function obterInicioDiaSeguinteDashboard(data) {
+
+    return new Date(
+        data.getFullYear(),
+        data.getMonth(),
+        data.getDate() + 1
+    );
+
+}
+
+
+/* ==========================================
+   CRIAR CARTÕES DOS INDICADORES
+========================================== */
+
+function criarCartoesIndicadoresDashboard() {
+
+    const cardsDashboard =
+        document.querySelector(
+            ".cards-dashboard"
+        );
+
+    if (!cardsDashboard) {
+
+        console.warn(
+            "Área .cards-dashboard não encontrada. Indicadores não foram exibidos."
+        );
+
+        return false;
+
+    }
+
+    if (
+        document.getElementById(
+            "indicadoresDashboard"
+        )
+    ) {
+
+        return true;
+
+    }
+
+    const estilos =
+        document.createElement("style");
+
+    estilos.id =
+        "estilosIndicadoresDashboard";
+
+    estilos.textContent = `
+        .indicadores-dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+            gap: 16px;
+            margin: 0 0 24px;
+        }
+
+        .indicador-dashboard {
+            min-width: 0;
+            padding: 20px;
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+        }
+
+        .indicador-dashboard-titulo {
+            margin: 0 0 12px;
+            color: #64748b;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .indicador-dashboard-valor {
+            margin: 0;
+            color: #0f172a;
+            font-size: clamp(22px, 2.2vw, 29px);
+            font-weight: 700;
+            line-height: 1.25;
+            overflow-wrap: anywhere;
+        }
+
+        .indicador-dashboard-descricao {
+            margin: 8px 0 0;
+            color: #64748b;
+            font-size: 12px;
+            line-height: 1.4;
+        }
+
+        @media (max-width: 520px) {
+            .indicadores-dashboard {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 10px;
+            }
+
+            .indicador-dashboard {
+                padding: 14px;
+            }
+
+            .indicador-dashboard-valor {
+                font-size: 21px;
+            }
+        }
+    `;
+
+    document.head.appendChild(estilos);
+
+    const secao =
+        document.createElement("section");
+
+    secao.id =
+        "indicadoresDashboard";
+
+    secao.className =
+        "indicadores-dashboard";
+
+    secao.setAttribute(
+        "aria-label",
+        "Indicadores da loja"
+    );
+
+    const indicadores = [
+        {
+            id: "indicadorVendasHoje",
+            titulo: "Vendas de hoje",
+            descricao: "Vendas finalizadas hoje",
+            valor: "Carregando..."
+        },
+        {
+            id: "indicadorFaturamentoHoje",
+            titulo: "Faturamento de hoje",
+            descricao: "Total das vendas finalizadas hoje",
+            valor: "Carregando..."
+        },
+        {
+            id: "indicadorVendasMes",
+            titulo: "Vendas do mês",
+            descricao: "Vendas finalizadas neste mês",
+            valor: "Carregando..."
+        },
+        {
+            id: "indicadorLucroMes",
+            titulo: "Lucro bruto do mês",
+            descricao: "Faturamento menos custo dos itens vendidos",
+            valor: "Carregando..."
+        },
+        {
+            id: "indicadorEstoqueBaixo",
+            titulo: "Estoque baixo",
+            descricao: "Produtos esgotados ou no mínimo",
+            valor: "Carregando..."
+        }
+    ];
+
+    indicadores.forEach(function (indicador) {
+
+        const card =
+            document.createElement("article");
+
+        card.className =
+            "indicador-dashboard";
+
+        card.innerHTML = `
+            <p class="indicador-dashboard-titulo">${indicador.titulo}</p>
+            <p class="indicador-dashboard-valor" id="${indicador.id}">${indicador.valor}</p>
+            <p class="indicador-dashboard-descricao">${indicador.descricao}</p>
+        `;
+
+        secao.appendChild(card);
+
+    });
+
+    cardsDashboard.parentNode.insertBefore(
+        secao,
+        cardsDashboard
+    );
+
+    return true;
+
+}
+
+
+/* ==========================================
+   ATUALIZAR VALOR DE UM INDICADOR
+========================================== */
+
+function definirValorIndicadorDashboard(
+    id,
+    valor
+) {
+
+    const elemento =
+        document.getElementById(id);
+
+    if (elemento) {
+        elemento.textContent = valor;
+    }
+
+}
+
+
+/* ==========================================
+   CARREGAR INDICADORES DO DASHBOARD
+========================================== */
+
+async function carregarIndicadoresDashboard() {
+
+    if (
+        !criarCartoesIndicadoresDashboard()
+    ) {
+
+        return;
+
+    }
+
+    const agora =
+        new Date();
+
+    const inicioHoje =
+        new Date(
+            agora.getFullYear(),
+            agora.getMonth(),
+            agora.getDate()
+        );
+
+    const inicioAmanha =
+        obterInicioDiaSeguinteDashboard(
+            agora
+        );
+
+    const inicioMes =
+        obterInicioMesDashboard(
+            agora
+        );
+
+    const inicioProximoMes =
+        obterInicioProximoMesDashboard(
+            agora
+        );
+
+    const inicioMesISO =
+        inicioMes.toISOString();
+
+    const inicioProximoMesISO =
+        inicioProximoMes.toISOString();
+
+    try {
+
+        const resultadoVendas =
+            await adminSupabase
+                .from("vendas")
+                .select(
+                    "id, total, criado_em"
+                )
+                .eq(
+                    "status",
+                    "finalizada"
+                )
+                .gte(
+                    "criado_em",
+                    inicioMesISO
+                )
+                .lt(
+                    "criado_em",
+                    inicioProximoMesISO
+                );
+
+        if (resultadoVendas.error) {
+            throw resultadoVendas.error;
+        }
+
+        const vendasMes =
+            resultadoVendas.data || [];
+
+        const vendasHoje =
+            vendasMes.filter(
+                function (venda) {
+
+                    if (!venda.criado_em) {
+                        return false;
+                    }
+
+                    const dataVenda =
+                        new Date(
+                            venda.criado_em
+                        );
+
+                    return (
+                        dataVenda >= inicioHoje &&
+                        dataVenda < inicioAmanha
+                    );
+
+                }
+            );
+
+        const faturamentoHoje =
+            vendasHoje.reduce(
+                function (total, venda) {
+
+                    return total +
+                        (Number(venda.total) || 0);
+
+                },
+                0
+            );
+
+        const faturamentoMes =
+            vendasMes.reduce(
+                function (total, venda) {
+
+                    return total +
+                        (Number(venda.total) || 0);
+
+                },
+                0
+            );
+
+        definirValorIndicadorDashboard(
+            "indicadorVendasHoje",
+            String(vendasHoje.length)
+        );
+
+        definirValorIndicadorDashboard(
+            "indicadorFaturamentoHoje",
+            formatarMoedaDashboard(
+                faturamentoHoje
+            )
+        );
+
+        definirValorIndicadorDashboard(
+            "indicadorVendasMes",
+            String(vendasMes.length)
+        );
+
+        const idsVendasMes =
+            vendasMes
+                .map(
+                    function (venda) {
+                        return venda.id;
+                    }
+                )
+                .filter(Boolean);
+
+        if (
+            idsVendasMes.length === 0
+        ) {
+
+            definirValorIndicadorDashboard(
+                "indicadorLucroMes",
+                formatarMoedaDashboard(0)
+            );
+
+        } else {
+
+            const resultadoItens =
+                await adminSupabase
+                    .from("itens_venda")
+                    .select(
+                        "venda_id, quantidade, custo_unitario"
+                    )
+                    .in(
+                        "venda_id",
+                        idsVendasMes
+                    );
+
+            if (resultadoItens.error) {
+
+                console.error(
+                    "Erro ao carregar custos dos itens vendidos:",
+                    resultadoItens.error
+                );
+
+                definirValorIndicadorDashboard(
+                    "indicadorLucroMes",
+                    "—"
+                );
+
+            } else {
+
+                const custoMes =
+                    (resultadoItens.data || []).reduce(
+                        function (total, item) {
+
+                            return total +
+                                (Number(item.custo_unitario) || 0) *
+                                (Number(item.quantidade) || 0);
+
+                        },
+                        0
+                    );
+
+                definirValorIndicadorDashboard(
+                    "indicadorLucroMes",
+                    formatarMoedaDashboard(
+                        faturamentoMes - custoMes
+                    )
+                );
+
+            }
+
+        }
+
+    }
+
+    catch (erro) {
+
+        console.error(
+            "Erro ao carregar indicadores de vendas:",
+            erro
+        );
+
+        definirValorIndicadorDashboard(
+            "indicadorVendasHoje",
+            "—"
+        );
+
+        definirValorIndicadorDashboard(
+            "indicadorFaturamentoHoje",
+            "—"
+        );
+
+        definirValorIndicadorDashboard(
+            "indicadorVendasMes",
+            "—"
+        );
+
+        definirValorIndicadorDashboard(
+            "indicadorLucroMes",
+            "—"
+        );
+
+    }
+
+    try {
+
+        const resultadoProdutos =
+            await adminSupabase
+                .from("produtos")
+                .select(
+                    "estoque, estoque_minimo"
+                );
+
+        if (resultadoProdutos.error) {
+            throw resultadoProdutos.error;
+        }
+
+        const quantidadeEstoqueBaixo =
+            (resultadoProdutos.data || []).filter(
+                function (produto) {
+
+                    const estoque =
+                        Number(produto.estoque) || 0;
+
+                    const estoqueMinimo =
+                        Number(produto.estoque_minimo) || 0;
+
+                    return (
+                        estoque <= 0 ||
+                        estoque <= estoqueMinimo
+                    );
+
+                }
+            ).length;
+
+        definirValorIndicadorDashboard(
+            "indicadorEstoqueBaixo",
+            String(quantidadeEstoqueBaixo)
+        );
+
+    }
+
+    catch (erro) {
+
+        console.error(
+            "Erro ao carregar indicador de estoque baixo:",
+            erro
+        );
+
+        definirValorIndicadorDashboard(
+            "indicadorEstoqueBaixo",
+            "—"
+        );
+
+    }
+
 }
 
 
@@ -991,14 +1461,11 @@ async function carregarAdministrador() {
 function mostrarDataAtual() {
 
     if (!dataAtual) {
-
         return;
     }
 
-
     const agora =
         new Date();
-
 
     dataAtual.textContent =
         agora.toLocaleDateString(
@@ -1010,6 +1477,7 @@ function mostrarDataAtual() {
                 year: "numeric"
             }
         );
+
 }
 
 
@@ -1025,7 +1493,6 @@ async function sair() {
             "Saindo do sistema..."
         );
 
-
         if (intervaloVerificacaoLicenca) {
 
             clearInterval(
@@ -1034,14 +1501,13 @@ async function sair() {
 
             intervaloVerificacaoLicenca =
                 null;
-        }
 
+        }
 
         const resultado =
             await adminSupabase.auth.signOut({
                 scope: "local"
             });
-
 
         if (resultado.error) {
 
@@ -1055,8 +1521,8 @@ async function sair() {
             );
 
             return;
-        }
 
+        }
 
         /* ======================================
            LIMPAR PERFIL
@@ -1065,7 +1531,6 @@ async function sair() {
         sessionStorage.removeItem(
             "sistemaLojaPerfil"
         );
-
 
         /* ======================================
            VOLTAR PARA LOGIN
@@ -1083,7 +1548,6 @@ async function sair() {
             erro
         );
 
-
         /* ======================================
            MESMO COM ERRO,
            LIMPAR SESSÃO LOCAL
@@ -1093,10 +1557,11 @@ async function sair() {
             "sistemaLojaPerfil"
         );
 
-
         window.location.href =
             "index.html";
+
     }
+
 }
 
 
@@ -1111,7 +1576,6 @@ function configurarMenuFuturo() {
             "[data-futuro]"
         );
 
-
     itens.forEach(function (item) {
 
         item.addEventListener(
@@ -1120,21 +1584,22 @@ function configurarMenuFuturo() {
 
                 event.preventDefault();
 
-
                 const nome =
                     item.getAttribute(
                         "data-futuro"
                     );
-
 
                 alert(
                     'A área "' +
                     nome +
                     '" será desenvolvida nesta etapa.'
                 );
+
             }
         );
+
     });
+
 }
 
 
@@ -1149,7 +1614,6 @@ function configurarBotaoSair() {
             "btnSair"
         );
 
-
     if (!botaoSair) {
 
         console.error(
@@ -1157,18 +1621,18 @@ function configurarBotaoSair() {
         );
 
         return;
-    }
 
+    }
 
     botaoSair.addEventListener(
         "click",
         sair
     );
 
-
     console.log(
         "Botão Sair configurado."
     );
+
 }
 
 
@@ -1185,14 +1649,14 @@ async function iniciarAdmin() {
     const administradorValido =
         await carregarAdministrador();
 
-
     if (!administradorValido) {
-
         return;
     }
 
+    await carregarIndicadoresDashboard();
 
     configurarMenuFuturo();
+
 }
 
 
@@ -1209,8 +1673,7 @@ if (
         iniciarAdmin
     );
 
-}
-else {
+} else {
 
     iniciarAdmin();
 
