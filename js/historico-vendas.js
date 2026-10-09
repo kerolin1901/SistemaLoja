@@ -3,14 +3,12 @@
    HISTÓRICO DE VENDAS
 ========================================== */
 
-
 /* ==========================================
    SUPABASE
 ========================================== */
 
 const historicoSupabase =
     supabaseClient;
-
 
 /* ==========================================
    ELEMENTOS
@@ -121,7 +119,6 @@ const btnSair =
         "btnSair"
     );
 
-
 /* ==========================================
    DADOS AUXILIARES
 ========================================== */
@@ -129,7 +126,6 @@ const btnSair =
 let clientesHistorico = [];
 
 let perfisHistorico = [];
-
 
 /* ==========================================
    FORMATAÇÃO
@@ -148,17 +144,14 @@ function formatarMoeda(valor) {
     );
 }
 
-
 function formatarData(data) {
 
     if (!data) {
         return "-";
     }
 
-
     const dataObj =
         new Date(data);
-
 
     return dataObj.toLocaleString(
         "pt-BR",
@@ -168,7 +161,6 @@ function formatarData(data) {
         }
     );
 }
-
 
 function formatarFormaPagamento(
     forma
@@ -196,12 +188,10 @@ function formatarFormaPagamento(
 
     };
 
-
     return formas[forma] ||
         forma ||
         "-";
 }
-
 
 /* ==========================================
    MENSAGEM
@@ -216,20 +206,16 @@ function mostrarMensagem(
         return;
     }
 
-
     mensagemHistorico.textContent =
         texto;
-
 
     mensagemHistorico.className =
         "mensagem-historico " +
         "mensagem-" +
         tipo;
 
-
     mensagemHistorico.style.display =
         "block";
-
 
     setTimeout(() => {
 
@@ -238,7 +224,6 @@ function mostrarMensagem(
 
     }, 5000);
 }
-
 
 /* ==========================================
    PROTEGER PÁGINA
@@ -255,7 +240,6 @@ async function protegerPaginaHistorico() {
         .auth
         .getSession();
 
-
     if (
         error ||
         !session
@@ -266,7 +250,6 @@ async function protegerPaginaHistorico() {
 
         return false;
     }
-
 
     const {
         data: perfil,
@@ -279,7 +262,6 @@ async function protegerPaginaHistorico() {
             session.user.id
         )
         .single();
-
 
     if (
         erroPerfil ||
@@ -300,7 +282,6 @@ async function protegerPaginaHistorico() {
         return false;
     }
 
-
     if (
         !perfil.ativo
     ) {
@@ -319,7 +300,6 @@ async function protegerPaginaHistorico() {
         return false;
     }
 
-
     if (
         perfil.tipo !==
         "admin"
@@ -335,7 +315,6 @@ async function protegerPaginaHistorico() {
         return false;
     }
 
-
     if (nomeAdministrador) {
 
         nomeAdministrador.textContent =
@@ -344,7 +323,6 @@ async function protegerPaginaHistorico() {
             "Administrador";
     }
 
-
     if (avatarAdministrador) {
 
         const nome =
@@ -352,23 +330,19 @@ async function protegerPaginaHistorico() {
             perfil.usuario ||
             "A";
 
-
         avatarAdministrador.textContent =
             nome
                 .charAt(0)
                 .toUpperCase();
     }
 
-
     sessionStorage.setItem(
         "sistemaLojaPerfil",
         JSON.stringify(perfil)
     );
 
-
     return true;
 }
-
 
 /* ==========================================
    CARREGAR CLIENTES
@@ -387,7 +361,6 @@ async function carregarClientesHistorico() {
             telefone
         `);
 
-
     if (error) {
 
         console.error(
@@ -400,11 +373,9 @@ async function carregarClientesHistorico() {
         return;
     }
 
-
     clientesHistorico =
         data || [];
 }
-
 
 /* ==========================================
    CARREGAR PERFIS
@@ -423,7 +394,6 @@ async function carregarPerfisHistorico() {
             usuario
         `);
 
-
     if (error) {
 
         console.error(
@@ -436,11 +406,9 @@ async function carregarPerfisHistorico() {
         return;
     }
 
-
     perfisHistorico =
         data || [];
 }
-
 
 /* ==========================================
    ENCONTRAR CLIENTE
@@ -457,7 +425,6 @@ function encontrarCliente(
     );
 }
 
-
 /* ==========================================
    ENCONTRAR PERFIL
 ========================================== */
@@ -472,7 +439,6 @@ function encontrarPerfil(
             String(usuarioId)
     );
 }
-
 
 /* ==========================================
    CARREGAR VENDAS
@@ -489,7 +455,6 @@ async function carregarVendas() {
     containerTabelaVendas.style.display =
         "none";
 
-
     /*
        Primeiro carregamos os dados
        auxiliares.
@@ -498,7 +463,6 @@ async function carregarVendas() {
     await carregarClientesHistorico();
 
     await carregarPerfisHistorico();
-
 
     /*
        Agora carregamos somente a tabela
@@ -528,7 +492,6 @@ async function carregarVendas() {
                 }
             );
 
-
     /* ==========================================
        FILTRO POR DATA
     ========================================== */
@@ -541,7 +504,6 @@ async function carregarVendas() {
         const fim =
             `${filtroData.value}T23:59:59`;
 
-
         consulta =
             consulta
                 .gte(
@@ -553,7 +515,6 @@ async function carregarVendas() {
                     fim
                 );
     }
-
 
     /* ==========================================
        FILTRO PAGAMENTO
@@ -570,7 +531,6 @@ async function carregarVendas() {
             );
     }
 
-
     /* ==========================================
        FILTRO STATUS
     ========================================== */
@@ -586,16 +546,13 @@ async function carregarVendas() {
             );
     }
 
-
     const {
         data,
         error
     } = await consulta;
 
-
     carregandoVendas.style.display =
         "none";
-
 
     if (error) {
 
@@ -604,10 +561,8 @@ async function carregarVendas() {
             error
         );
 
-
         semVendas.style.display =
             "flex";
-
 
         mostrarMensagem(
             "Não foi possível carregar as vendas: " +
@@ -615,19 +570,15 @@ async function carregarVendas() {
             "erro"
         );
 
-
         return;
     }
-
 
     const vendas =
         data || [];
 
-
     atualizarResumo(
         vendas
     );
-
 
     if (
         vendas.length === 0
@@ -639,16 +590,13 @@ async function carregarVendas() {
         return;
     }
 
-
     containerTabelaVendas.style.display =
         "block";
-
 
     renderizarVendas(
         vendas
     );
 }
-
 
 /* ==========================================
    ATUALIZAR RESUMO
@@ -660,7 +608,6 @@ function atualizarResumo(
 
     const quantidade =
         vendas.length;
-
 
     const valor =
         vendas.reduce(
@@ -677,7 +624,6 @@ function atualizarResumo(
                     return total;
                 }
 
-
                 return total +
                     (
                         Number(
@@ -689,22 +635,17 @@ function atualizarResumo(
             0
         );
 
-
     const hoje =
         new Date();
-
 
     const ano =
         hoje.getFullYear();
 
-
     const mes =
         hoje.getMonth();
 
-
     const dia =
         hoje.getDate();
-
 
     const quantidadeHoje =
         vendas.filter(
@@ -714,7 +655,6 @@ function atualizarResumo(
                     new Date(
                         venda.criado_em
                     );
-
 
                 return (
                     data.getFullYear() ===
@@ -728,21 +668,17 @@ function atualizarResumo(
             }
         ).length;
 
-
     totalVendas.textContent =
         quantidade;
-
 
     valorTotalVendas.textContent =
         formatarMoeda(
             valor
         );
 
-
     vendasHoje.textContent =
         quantidadeHoje;
 }
-
 
 /* ==========================================
    RENDERIZAR VENDAS
@@ -755,7 +691,6 @@ function renderizarVendas(
     listaVendas.innerHTML =
         "";
 
-
     vendas.forEach(
         venda => {
 
@@ -764,34 +699,28 @@ function renderizarVendas(
                     "tr"
                 );
 
-
             const cliente =
                 encontrarCliente(
                     venda.cliente_id
                 );
-
 
             const perfil =
                 encontrarPerfil(
                     venda.usuario_id
                 );
 
-
             const nomeCliente =
                 cliente?.nome ||
                 "Consumidor não identificado";
-
 
             const nomeVendedor =
                 perfil?.nome_completo ||
                 perfil?.usuario ||
                 "Administrador";
 
-
             const status =
                 venda.status ||
                 "finalizada";
-
 
             const statusTexto =
                 status ===
@@ -799,56 +728,63 @@ function renderizarVendas(
                     ? "Cancelada"
                     : "Finalizada";
 
-
             linha.innerHTML = `
 
                 <td>
 
                     <span class="numero-venda">
+
                         #${venda.id}
+
                     </span>
 
                 </td>
 
-
                 <td>
+
                     ${formatarData(venda.criado_em)}
+
                 </td>
 
-
                 <td>
+
                     ${nomeCliente}
+
                 </td>
 
-
                 <td>
+
                     ${nomeVendedor}
+
                 </td>
 
-
                 <td>
+
                     ${formatarFormaPagamento(venda.forma_pagamento)}
+
                 </td>
 
-
                 <td>
+
                     ${formatarMoeda(venda.subtotal)}
-                </td>
 
+                </td>
 
                 <td>
-                    ${formatarMoeda(venda.desconto)}
-                </td>
 
+                    ${formatarMoeda(venda.desconto)}
+
+                </td>
 
                 <td>
 
                     <span class="valor-venda">
+
                         ${formatarMoeda(venda.total)}
+
                     </span>
 
                 </td>
-
 
                 <td>
 
@@ -864,7 +800,6 @@ function renderizarVendas(
 
                 </td>
 
-
                 <td>
 
                     <button
@@ -877,10 +812,24 @@ function renderizarVendas(
 
                     </button>
 
+                    ${
+                        status === "finalizada"
+                            ? `
+                                <button
+    type="button"
+    class="btn-detalhes btn-excluir-venda"
+    data-excluir-venda-id="${venda.id}"
+    style="margin-left: 6px;"
+>
+    Excluir venda
+</button>
+                            `
+                            : ""
+                    }
+
                 </td>
 
             `;
-
 
             listaVendas.appendChild(
                 linha
@@ -888,7 +837,6 @@ function renderizarVendas(
 
         }
     );
-
 
     listaVendas
         .querySelectorAll(
@@ -910,8 +858,120 @@ function renderizarVendas(
 
             }
         );
+
+    /* ==========================================
+       EVENTO PARA EXCLUIR VENDA
+    ========================================== */
+
+    listaVendas
+        .querySelectorAll(
+            "[data-excluir-venda-id]"
+        )
+        .forEach(
+            botao => {
+
+                botao.addEventListener(
+                    "click",
+                    () => {
+
+                        excluirVenda(
+                            botao.dataset.excluirVendaId,
+                            botao
+                        );
+
+                    }
+                );
+
+            }
+        );
 }
 
+/* ==========================================
+   EXCLUIR VENDA
+========================================== */
+
+async function excluirVenda(
+    vendaId,
+    botao
+) {
+
+    const confirmar = window.confirm(
+        `Tem certeza que deseja excluir a venda #${vendaId}?\n\nO estoque será restaurado e os lançamentos financeiros vinculados serão removidos. Essa ação não pode ser desfeita.`
+    );
+
+    if (!confirmar) {
+        return;
+    }
+
+    const textoOriginal =
+        botao.textContent;
+
+    botao.disabled = true;
+
+    botao.textContent =
+        "Excluindo...";
+
+    try {
+
+        const {
+            data,
+            error
+        } = await historicoSupabase.rpc(
+            "excluir_venda",
+            {
+                p_venda_id: Number(vendaId)
+            }
+        );
+
+        if (error) {
+            throw error;
+        }
+
+        if (
+            !data ||
+            data.sucesso !== true
+        ) {
+
+            throw new Error(
+                data?.mensagem ||
+                "Não foi possível excluir a venda."
+            );
+        }
+
+        if (
+            numeroVendaModal.textContent ===
+            `Venda #${vendaId}`
+        ) {
+
+            fecharModal();
+        }
+
+        await carregarVendas();
+
+        mostrarMensagem(
+            "Venda excluída com sucesso. O estoque foi atualizado.",
+            "sucesso"
+        );
+
+    } catch (erro) {
+
+        console.error(
+            "Erro ao excluir venda:",
+            erro
+        );
+
+        mostrarMensagem(
+            erro?.message ||
+            "Erro ao excluir a venda.",
+            "erro"
+        );
+
+        botao.disabled = false;
+
+        botao.textContent =
+            textoOriginal;
+    }
+}
 
 /* ==========================================
    ABRIR DETALHES
@@ -924,14 +984,11 @@ async function abrirDetalhesVenda(
     detalhesVenda.innerHTML =
         "Carregando detalhes...";
 
-
     numeroVendaModal.textContent =
         `Venda #${vendaId}`;
 
-
     modalVenda.style.display =
         "flex";
-
 
     const {
         data: venda,
@@ -956,7 +1013,6 @@ async function abrirDetalhesVenda(
         )
         .single();
 
-
     if (erroVenda) {
 
         console.error(
@@ -964,13 +1020,11 @@ async function abrirDetalhesVenda(
             erroVenda
         );
 
-
         detalhesVenda.innerHTML =
             "Não foi possível carregar os dados da venda.";
 
         return;
     }
-
 
     const {
         data: itens,
@@ -995,7 +1049,6 @@ async function abrirDetalhesVenda(
             }
         );
 
-
     if (erroItens) {
 
         console.error(
@@ -1003,13 +1056,11 @@ async function abrirDetalhesVenda(
             erroItens
         );
 
-
         detalhesVenda.innerHTML =
             "A venda foi carregada, mas não foi possível carregar os produtos.";
 
         return;
     }
-
 
     /*
        Carregar os produtos dos itens
@@ -1028,9 +1079,7 @@ async function abrirDetalhesVenda(
             )
         ];
 
-
     let produtosItens = [];
-
 
     if (
         produtoIds.length > 0
@@ -1051,7 +1100,6 @@ async function abrirDetalhesVenda(
                 produtoIds
             );
 
-
         if (
             !erroProdutos
         ) {
@@ -1061,29 +1109,24 @@ async function abrirDetalhesVenda(
         }
     }
 
-
     const cliente =
         encontrarCliente(
             venda.cliente_id
         );
-
 
     const perfil =
         encontrarPerfil(
             venda.usuario_id
         );
 
-
     const nomeCliente =
         cliente?.nome ||
         "Consumidor não identificado";
-
 
     const nomeVendedor =
         perfil?.nome_completo ||
         perfil?.usuario ||
         "Administrador";
-
 
     let html = `
 
@@ -1101,7 +1144,6 @@ async function abrirDetalhesVenda(
 
             </div>
 
-
             <div class="detalhe-info">
 
                 <span>
@@ -1113,7 +1155,6 @@ async function abrirDetalhesVenda(
                 </strong>
 
             </div>
-
 
             <div class="detalhe-info">
 
@@ -1127,7 +1168,6 @@ async function abrirDetalhesVenda(
 
             </div>
 
-
             <div class="detalhe-info">
 
                 <span>
@@ -1139,7 +1179,6 @@ async function abrirDetalhesVenda(
                 </strong>
 
             </div>
-
 
             <div class="detalhe-info">
 
@@ -1157,7 +1196,6 @@ async function abrirDetalhesVenda(
 
             </div>
 
-
             <div class="detalhe-info">
 
                 <span>
@@ -1172,11 +1210,9 @@ async function abrirDetalhesVenda(
 
         </div>
 
-
         <h3>
             Produtos
         </h3>
-
 
         <div class="tabela-scroll">
 
@@ -1214,7 +1250,6 @@ async function abrirDetalhesVenda(
 
     `;
 
-
     (itens || []).forEach(
         item => {
 
@@ -1228,7 +1263,6 @@ async function abrirDetalhesVenda(
                             item.produto_id
                         )
                 );
-
 
             html += `
 
@@ -1260,7 +1294,6 @@ async function abrirDetalhesVenda(
         }
     );
 
-
     html += `
 
                 </tbody>
@@ -1268,7 +1301,6 @@ async function abrirDetalhesVenda(
             </table>
 
         </div>
-
 
         <div class="resumo-detalhes">
 
@@ -1284,7 +1316,6 @@ async function abrirDetalhesVenda(
 
             </div>
 
-
             <div>
 
                 <span>
@@ -1296,7 +1327,6 @@ async function abrirDetalhesVenda(
                 </strong>
 
             </div>
-
 
             <div class="total-detalhes">
 
@@ -1313,7 +1343,6 @@ async function abrirDetalhesVenda(
         </div>
 
     `;
-
 
     if (
         venda.observacoes
@@ -1339,11 +1368,9 @@ async function abrirDetalhesVenda(
         `;
     }
 
-
     detalhesVenda.innerHTML =
         html;
 }
-
 
 /* ==========================================
    FECHAR MODAL
@@ -1358,18 +1385,15 @@ function fecharModal() {
         "";
 }
 
-
 btnFecharModal.addEventListener(
     "click",
     fecharModal
 );
 
-
 btnFecharModalRodape.addEventListener(
     "click",
     fecharModal
 );
-
 
 modalVenda.addEventListener(
     "click",
@@ -1386,7 +1410,6 @@ modalVenda.addEventListener(
     }
 );
 
-
 /* ==========================================
    FILTROS
 ========================================== */
@@ -1396,18 +1419,15 @@ filtroData.addEventListener(
     carregarVendas
 );
 
-
 filtroFormaPagamento.addEventListener(
     "change",
     carregarVendas
 );
 
-
 filtroStatus.addEventListener(
     "change",
     carregarVendas
 );
-
 
 btnLimparFiltros.addEventListener(
     "click",
@@ -1427,12 +1447,10 @@ btnLimparFiltros.addEventListener(
     }
 );
 
-
 btnAtualizar.addEventListener(
     "click",
     carregarVendas
 );
-
 
 /* ==========================================
    SAIR
@@ -1447,27 +1465,22 @@ btnSair.addEventListener(
                 "Deseja realmente sair do sistema?"
             );
 
-
         if (!confirmou) {
             return;
         }
-
 
         await historicoSupabase
             .auth
             .signOut();
 
-
         sessionStorage.removeItem(
             "sistemaLojaPerfil"
         );
-
 
         window.location.href =
             "index.html";
     }
 );
-
 
 /* ==========================================
    MENU FUTURO
@@ -1484,12 +1497,10 @@ document.querySelectorAll(
 
                 evento.preventDefault();
 
-
                 const nome =
                     item.getAttribute(
                         "data-futuro"
                     );
-
 
                 alert(
                     `A área de ${nome} será desenvolvida nas próximas etapas.`
@@ -1501,7 +1512,6 @@ document.querySelectorAll(
     }
 );
 
-
 /* ==========================================
    INICIAR
 ========================================== */
@@ -1511,14 +1521,11 @@ async function iniciarHistoricoVendas() {
     const autorizado =
         await protegerPaginaHistorico();
 
-
     if (!autorizado) {
         return;
     }
 
-
     await carregarVendas();
 }
-
 
 iniciarHistoricoVendas();
