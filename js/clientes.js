@@ -63,7 +63,8 @@ async function protegerPaginaClientes() {
 
         return false;
     }
-
+    // Guarda o perfil autenticado para usar o loja_id ao cadastrar clientes.
+    perfilClientesAtual = perfil;
 
     const nomeAdministrador =
         document.getElementById("nomeAdministrador");
@@ -173,6 +174,7 @@ const clientesSupabase =
 ========================================== */
 
 let clienteEditandoId = null;
+let perfilClientesAtual = null;
 
 
 /* ==========================================
@@ -577,6 +579,19 @@ async function salvarCliente(evento) {
     }
 
 
+    // Ao cadastrar, a política RLS exige o loja_id da loja do usuário.
+    // Não altera essa informação durante a edição de um cliente existente.
+    if (
+        !clienteEditandoId &&
+        (!perfilClientesAtual || !perfilClientesAtual.loja_id)
+    ) {
+        mostrarMensagem(
+            "Não foi possível identificar a loja deste usuário. Saia do sistema e entre novamente.",
+            "erro"
+        );
+        return;
+    }
+
     btnSalvarCliente.disabled =
         true;
 
@@ -619,11 +634,13 @@ async function salvarCliente(evento) {
                 .eq("id", clienteEditandoId);
 
     } else {
-
         resultado =
             await clientesSupabase
                 .from("clientes")
-                .insert(dadosCliente);
+                .insert({
+                    ...dadosCliente,
+                    loja_id: perfilClientesAtual.loja_id
+                });
     }
 
 
