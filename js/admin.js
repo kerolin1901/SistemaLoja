@@ -1657,6 +1657,12 @@ function criarCartoesIndicadoresDashboard() {
                 valor: "Carregando..."
             },
             {
+                id: "indicadorLucroLiquidoMes",
+                titulo: "Lucro líquido do mês",
+                descricao: "Lucro bruto + outras entradas − despesas operacionais",
+                valor: "Carregando..."
+            },
+            {
                 id: "indicadorEstoqueBaixo",
                 titulo: "Estoque baixo",
                 descricao: "Produtos esgotados ou no mínimo",
@@ -2164,11 +2170,15 @@ async function carregarIndicadoresDashboard() {
 
                 .filter(Boolean);
 
+        let lucroBrutoMes = null;
+
         if (
 
             idsVendasMes.length === 0
 
         ) {
+
+            lucroBrutoMes = 0;
 
             definirValorIndicadorDashboard(
 
@@ -2238,16 +2248,141 @@ async function carregarIndicadoresDashboard() {
 
                     );
 
+                lucroBrutoMes = faturamentoMes - custoMes;
+
                 definirValorIndicadorDashboard(
 
                     "indicadorLucroMes",
 
                     formatarMoedaDashboard(
 
-                        faturamentoMes - custoMes
+                        lucroBrutoMes
 
                     )
 
+                );
+
+            }
+
+        }
+
+        if (lucroBrutoMes === null) {
+
+            definirValorIndicadorDashboard(
+
+                "indicadorLucroLiquidoMes",
+
+                "—"
+
+            );
+
+        } else {
+
+            try {
+
+                const formatarDataFinanceira = function (data) {
+                    return String(data.getFullYear()) + "-" +
+                        String(data.getMonth() + 1).padStart(2, "0") + "-" +
+                        String(data.getDate()).padStart(2, "0");
+                };
+
+                const inicioMesFinanceiro =
+                    formatarDataFinanceira(inicioMes);
+
+                const inicioProximoMesFinanceiro =
+                    formatarDataFinanceira(inicioProximoMes);
+
+                const resultadoFinanceiro =
+                    await adminSupabase
+                        .from("financeiro")
+                        .select("tipo, categoria, valor, data_movimento")
+                        .gte("data_movimento", inicioMesFinanceiro)
+                        .lt("data_movimento", inicioProximoMesFinanceiro);
+
+                if (resultadoFinanceiro.error) {
+                    throw resultadoFinanceiro.error;
+                }
+
+                const categoriasDespesasOperacionais = new Set([
+                    "despesa",
+                    "salario",
+                    "aluguel",
+                    "impostos",
+                    "frete",
+                    "outros"
+                ]);
+
+                const lancamentosFinanceiros =
+                    resultadoFinanceiro.data || [];
+
+                const despesasOperacionaisMes =
+                    lancamentosFinanceiros.reduce(
+                        function (total, lancamento) {
+                            if (lancamento.tipo !== "saida") {
+                                return total;
+                            }
+
+                            const categoria = String(lancamento.categoria || "")
+                                .normalize("NFD")
+                                .replace(/[\u0300-\u036f]/g, "")
+                                .trim()
+                                .toLowerCase();
+
+                            if (!categoriasDespesasOperacionais.has(categoria)) {
+                                return total;
+                            }
+
+                            return total + (Number(lancamento.valor) || 0);
+                        },
+                        0
+                    );
+
+                // Entradas financeiras que não são vendas já estão fora do lucro bruto.
+                // Somá-las evita ignorar receitas extras, como serviços prestados.
+                const outrasEntradasOperacionaisMes =
+                    lancamentosFinanceiros.reduce(
+                        function (total, lancamento) {
+                            if (lancamento.tipo !== "entrada") {
+                                return total;
+                            }
+
+                            const categoria = String(lancamento.categoria || "")
+                                .normalize("NFD")
+                                .replace(/[\u0300-\u036f]/g, "")
+                                .trim()
+                                .toLowerCase();
+
+                            if (categoria === "venda") {
+                                return total;
+                            }
+
+                            return total + (Number(lancamento.valor) || 0);
+                        },
+                        0
+                    );
+
+                const lucroLiquidoMes =
+                    lucroBrutoMes +
+                    outrasEntradasOperacionaisMes -
+                    despesasOperacionaisMes;
+
+                definirValorIndicadorDashboard(
+                    "indicadorLucroLiquidoMes",
+                    formatarMoedaDashboard(
+                        lucroLiquidoMes
+                    )
+                );
+
+            } catch (erroFinanceiro) {
+
+                console.error(
+                    "Erro ao calcular lucro líquido do mês:",
+                    erroFinanceiro
+                );
+
+                definirValorIndicadorDashboard(
+                    "indicadorLucroLiquidoMes",
+                    "—"
                 );
 
             }
@@ -2293,6 +2428,14 @@ async function carregarIndicadoresDashboard() {
         definirValorIndicadorDashboard(
 
             "indicadorLucroMes",
+
+            "—"
+
+        );
+
+        definirValorIndicadorDashboard(
+
+            "indicadorLucroLiquidoMes",
 
             "—"
 
