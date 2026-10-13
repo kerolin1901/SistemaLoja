@@ -2312,7 +2312,15 @@ async function carregarIndicadoresDashboard() {
 
                 .select(
 
-                    "estoque, estoque_minimo"
+                    "estoque, estoque_minimo, ativo"
+
+                )
+
+                .eq(
+
+                    "ativo",
+
+                    true
 
                 );
 
