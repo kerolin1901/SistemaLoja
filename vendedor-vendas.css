@@ -1,310 +1,570 @@
 /* ==========================================
+
    SISTEMA DA LOJA
-   VENDAS DO VENDEDOR
+
+   VENDAS
+
 ========================================== */
+
+
+
 
 
 /* ==========================================
-   PAINEL
+
+   PAINEL PRINCIPAL
+
 ========================================== */
 
-.painel-venda {
+
+
+.painel-vendas {
 
     background: #ffffff;
 
     border: 1px solid #e5e7eb;
 
-    border-radius: 14px;
+    border-radius: 16px;
 
-    padding: 24px;
+    padding: 26px;
 
-    box-shadow:
-        0 4px 14px rgba(0, 0, 0, 0.04);
-
-}
-
-
-.cabecalho-painel-venda h2 {
-
-    margin: 0 0 6px 0;
-
-    color: #111827;
-
-    font-size: 21px;
+    box-shadow: 0 3px 12px rgba(15, 23, 42, 0.04);
 
 }
 
 
-.cabecalho-painel-venda p {
 
-    margin: 0 0 24px 0;
-
-    color: #6b7280;
-
-    font-size: 14px;
-
-}
 
 
 /* ==========================================
-   CAMPOS
+
+   TÍTULO
+
 ========================================== */
 
-.campo-venda label {
-
-    display: block;
-
-    margin-bottom: 7px;
-
-    font-size: 13px;
-
-    font-weight: 700;
-
-    color: #374151;
-
-}
 
 
-.campo-venda input,
-.campo-venda select,
-.campo-venda textarea {
-
-    width: 100%;
-
-    box-sizing: border-box;
-
-    border: 1px solid #d1d5db;
-
-    border-radius: 8px;
-
-    background: #ffffff;
-
-    color: #111827;
-
-    font-size: 14px;
-
-    outline: none;
-
-}
-
-
-.campo-venda input,
-.campo-venda select {
-
-    height: 43px;
-
-    padding: 0 12px;
-
-}
-
-
-.campo-venda textarea {
-
-    padding: 12px;
-
-    resize: vertical;
-
-    min-height: 90px;
-
-}
-
-
-.campo-venda input:focus,
-.campo-venda select:focus,
-.campo-venda textarea:focus {
-
-    border-color: #2563eb;
-
-    box-shadow:
-        0 0 0 3px rgba(37, 99, 235, 0.10);
-
-}
-
-
-/* ==========================================
-   ADICIONAR PRODUTO
-========================================== */
-
-.adicionar-produto {
-
-    display: grid;
-
-    grid-template-columns:
-        minmax(250px, 2fr)
-        130px
-        150px
-        145px;
-
-    gap: 14px;
-
-    align-items: end;
-
-    padding: 18px;
-
-    background: #f9fafb;
-
-    border: 1px solid #e5e7eb;
-
-    border-radius: 10px;
-
-}
-
-
-.preco-produto-selecionado {
-
-    height: 43px;
-
-    box-sizing: border-box;
+.titulo-painel-vendas {
 
     display: flex;
 
     align-items: center;
 
-    padding: 0 12px;
+    justify-content: space-between;
 
-    border: 1px solid #e5e7eb;
+    gap: 20px;
 
-    border-radius: 8px;
+
+
+    padding-bottom: 22px;
+
+    margin-bottom: 22px;
+
+
+
+    border-bottom: 1px solid #eef0f3;
+
+}
+
+
+
+.titulo-painel-vendas h2 {
+
+    margin: 0;
+
+    color: #111827;
+
+    font-size: 20px;
+
+    font-weight: 700;
+
+}
+
+
+
+.titulo-painel-vendas p {
+
+    margin: 6px 0 0;
+
+    color: #6b7280;
+
+    font-size: 13px;
+
+}
+
+
+
+.status-venda {
+
+    display: inline-flex;
+
+    align-items: center;
+
+
+
+    padding: 7px 12px;
+
+
+
+    border-radius: 999px;
+
+
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+}
+
+
+
+
+
+/* ==========================================
+
+   CAMPOS
+
+========================================== */
+
+
+
+.campo-venda {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 7px;
+
+}
+
+
+
+.campo-venda label {
+
+    color: #374151;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+}
+
+
+
+.campo-venda input,
+
+.campo-venda select {
+
+    width: 100%;
+
+    height: 44px;
+
+    box-sizing: border-box;
+
+
+
+    padding: 0 13px;
+
+
+
+    border: 1px solid #d1d5db;
+
+    border-radius: 9px;
+
+
 
     background: #ffffff;
 
     color: #111827;
 
-    font-weight: 800;
+
+
+    font-family: inherit;
+
+    font-size: 14px;
+
+
+
+    outline: none;
+
+
+
+    transition:
+
+        border-color 0.18s ease,
+
+        box-shadow 0.18s ease;
 
 }
 
 
-.botao-adicionar {
 
-    width: 100%;
+.campo-venda input:hover,
 
-    height: 43px;
+.campo-venda select:hover {
+
+    border-color: #9ca3af;
+
+}
+
+
+
+.campo-venda input:focus,
+
+.campo-venda select:focus {
+
+    border-color: #2563eb;
+
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.10);
+
+}
+
+
+
+
+
+/* ==========================================
+
+   CLIENTE
+
+========================================== */
+
+
+
+.campo-cliente {
+
+    margin-bottom: 20px;
+
+}
+
+
+
+.campo-cliente select {
+
+    max-width: 500px;
+
+}
+
+
+
+
+
+/* ==========================================
+
+   ADICIONAR PRODUTO
+
+========================================== */
+
+
+
+.area-adicionar-produto {
+
+    display: grid;
+
+
+
+    grid-template-columns:
+
+        minmax(250px, 2fr)
+
+        130px
+
+        160px
+
+        auto;
+
+
+
+    gap: 14px;
+
+
+
+    align-items: end;
+
+
+
+    padding: 20px;
+
+
+
+    background: #f8fafc;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 12px;
+
+}
+
+
+
+.produto-campo {
+
+    min-width: 0;
+
+}
+
+
+
+.preco-campo input {
+
+    background: #f8fafc;
+
+    color: #374151;
+
+    font-weight: 600;
+
+}
+
+
+
+.botao-adicionar-area {
+
+    display: flex;
+
+    align-items: flex-end;
+
+}
+
+
+
+
+
+/* ==========================================
+
+   BOTÃO ADICIONAR
+
+========================================== */
+
+
+
+.btn-adicionar {
+
+    height: 44px;
+
+
+
+    padding: 0 20px;
+
+
 
     border: none;
 
-    border-radius: 8px;
+    border-radius: 9px;
+
+
 
     background: #2563eb;
 
     color: #ffffff;
 
-    font-weight: 700;
-
-    cursor: pointer;
-
-}
 
 
-.botao-adicionar:hover {
-
-    background: #1d4ed8;
-
-}
-
-
-/* ==========================================
-   MENSAGEM
-========================================== */
-
-.mensagem-venda {
-
-    min-height: 0;
-
-    margin: 14px 0;
+    font-family: inherit;
 
     font-size: 14px;
 
-}
+    font-weight: 600;
 
 
-.mensagem-venda.erro {
-
-    padding: 11px 14px;
-
-    border-radius: 8px;
-
-    background: #fef2f2;
-
-    border: 1px solid #fecaca;
-
-    color: #b91c1c;
-
-}
-
-
-.mensagem-venda.sucesso {
-
-    padding: 11px 14px;
-
-    border-radius: 8px;
-
-    background: #f0fdf4;
-
-    border: 1px solid #bbf7d0;
-
-    color: #15803d;
-
-}
-
-
-/* ==========================================
-   TABELA
-========================================== */
-
-.tabela-venda-container {
-
-    overflow-x: auto;
-
-    border: 1px solid #e5e7eb;
-
-    border-radius: 10px;
-
-}
-
-
-.tabela-venda {
-
-    width: 100%;
-
-    min-width: 850px;
-
-    border-collapse: collapse;
-
-}
-
-
-.tabela-venda thead {
-
-    background: #f9fafb;
-
-}
-
-
-.tabela-venda th {
-
-    padding: 13px 14px;
-
-    text-align: left;
-
-    font-size: 12px;
-
-    text-transform: uppercase;
-
-    color: #6b7280;
-
-    border-bottom: 1px solid #e5e7eb;
 
     white-space: nowrap;
 
+
+
+    cursor: pointer;
+
+
+
+    box-shadow: 0 2px 5px rgba(37, 99, 235, 0.18);
+
+
+
+    transition:
+
+        background 0.18s ease,
+
+        transform 0.18s ease,
+
+        box-shadow 0.18s ease;
+
 }
 
 
-.tabela-venda td {
 
-    padding: 14px;
+.btn-adicionar:hover {
 
-    border-bottom: 1px solid #f0f0f0;
+    background: #1d4ed8;
+
+    transform: translateY(-1px);
+
+    box-shadow: 0 5px 12px rgba(37, 99, 235, 0.22);
+
+}
+
+
+
+.btn-adicionar:active {
+
+    transform: translateY(0);
+
+}
+
+
+
+
+
+/* ==========================================
+
+   CARRINHO
+
+========================================== */
+
+
+
+.carrinho-venda {
+
+    margin-top: 25px;
+
+
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 12px;
+
+
+
+    overflow: hidden;
+
+}
+
+
+
+.cabecalho-carrinho {
+
+    padding: 17px 20px;
+
+
+
+    background: #f8fafc;
+
+    border-bottom: 1px solid #e5e7eb;
+
+}
+
+
+
+.cabecalho-carrinho h3 {
+
+    margin: 0;
+
+
+
+    color: #111827;
+
+    font-size: 16px;
+
+    font-weight: 700;
+
+}
+
+
+
+.cabecalho-carrinho span {
+
+    display: block;
+
+
+
+    margin-top: 4px;
+
+
+
+    color: #6b7280;
+
+    font-size: 12px;
+
+}
+
+
+
+
+
+/* ==========================================
+
+   CARRINHO VAZIO
+
+========================================== */
+
+
+
+.carrinho-vazio {
+
+    min-height: 180px;
+
+
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+
+
+    padding: 25px;
+
+
+
+    text-align: center;
+
+}
+
+
+
+.icone-carrinho {
+
+    width: 52px;
+
+    height: 52px;
+
+
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+
+
+    margin-bottom: 12px;
+
+
+
+    border-radius: 14px;
+
+
+
+    background: #eff6ff;
+
+
+
+    font-size: 23px;
+
+}
+
+
+
+.carrinho-vazio strong {
 
     color: #374151;
 
@@ -313,141 +573,241 @@
 }
 
 
-.tabela-venda tbody tr:last-child td {
+
+.carrinho-vazio span {
+
+    margin-top: 5px;
+
+
+
+    color: #9ca3af;
+
+    font-size: 13px;
+
+}
+
+
+
+
+
+/* ==========================================
+
+   LISTA DO CARRINHO
+
+========================================== */
+
+
+
+.lista-carrinho {
+
+    display: none;
+
+}
+
+
+
+.item-carrinho {
+
+    display: grid;
+
+
+
+    grid-template-columns:
+
+        minmax(220px, 1fr)
+
+        110px
+
+        130px
+
+        130px
+
+        45px;
+
+
+
+    align-items: center;
+
+
+
+    gap: 15px;
+
+
+
+    padding: 16px 20px;
+
+
+
+    border-bottom: 1px solid #f0f0f0;
+
+}
+
+
+
+.item-carrinho:last-child {
 
     border-bottom: none;
 
 }
 
 
-.produto-item-nome {
 
-    font-weight: 700;
+.nome-item-carrinho {
 
     color: #111827;
+
+    font-size: 14px;
+
+    font-weight: 600;
 
 }
 
 
-.produto-item-sku {
 
-    color: #6b7280;
+.info-item-carrinho {
 
-    font-family: monospace;
+    margin-top: 3px;
+
+
+
+    color: #9ca3af;
 
     font-size: 12px;
 
 }
+
+
+
+.quantidade-item {
+
+    color: #374151;
+
+    font-size: 13px;
+
+}
+
 
 
 .preco-item {
 
-    font-weight: 700;
+    color: #374151;
 
-    white-space: nowrap;
+    font-size: 13px;
 
 }
+
 
 
 .subtotal-item {
 
-    font-weight: 800;
-
     color: #111827;
 
-    white-space: nowrap;
-
-}
-
-
-.carrinho-vazio {
-
-    text-align: center;
-
-    padding: 35px !important;
-
-    color: #6b7280 !important;
-
-}
-
-
-/* ==========================================
-   BOTÃO REMOVER
-========================================== */
-
-.botao-remover-item {
-
-    border: 1px solid #fecaca;
-
-    background: #fef2f2;
-
-    color: #b91c1c;
-
-    border-radius: 7px;
-
-    padding: 7px 10px;
-
-    cursor: pointer;
-
-    font-size: 12px;
+    font-size: 14px;
 
     font-weight: 700;
 
 }
 
 
-.botao-remover-item:hover {
 
-    background: #fee2e2;
+.btn-remover-item {
 
-}
+    width: 34px;
 
-
-/* ==========================================
-   DADOS FINAIS
-========================================== */
-
-.dados-final-venda {
-
-    display: grid;
-
-    grid-template-columns:
-        minmax(300px, 1fr)
-        minmax(300px, 420px);
-
-    gap: 30px;
-
-    margin-top: 24px;
-
-}
+    height: 34px;
 
 
-.dados-cliente-venda {
 
     display: flex;
 
-    flex-direction: column;
+    align-items: center;
 
-    gap: 18px;
-
-}
+    justify-content: center;
 
 
-/* ==========================================
-   RESUMO
-========================================== */
-
-.resumo-venda {
-
-    padding: 20px;
-
-    background: #f9fafb;
 
     border: 1px solid #e5e7eb;
 
-    border-radius: 10px;
+    border-radius: 8px;
+
+
+
+    background: #ffffff;
+
+    color: #dc2626;
+
+
+
+    cursor: pointer;
+
+
+
+    font-size: 15px;
+
+
+
+    transition:
+
+        background 0.18s ease,
+
+        border-color 0.18s ease;
 
 }
+
+
+
+.btn-remover-item:hover {
+
+    background: #fef2f2;
+
+    border-color: #fecaca;
+
+}
+
+
+
+
+
+/* ==========================================
+
+   RESUMO
+
+========================================== */
+
+
+
+.resumo-venda {
+
+    display: flex;
+
+    justify-content: flex-end;
+
+
+
+    margin-top: 22px;
+
+}
+
+
+
+.resumo-valores {
+
+    width: 360px;
+
+
+
+    padding: 18px;
+
+
+
+    background: #f8fafc;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 12px;
+
+}
+
 
 
 .linha-resumo {
@@ -458,200 +818,785 @@
 
     justify-content: space-between;
 
-    gap: 20px;
 
-    padding: 10px 0;
+
+    min-height: 38px;
+
+
 
     color: #4b5563;
 
+    font-size: 14px;
+
 }
+
 
 
 .linha-resumo strong {
 
     color: #111827;
 
+    font-weight: 700;
+
 }
+
 
 
 .linha-desconto {
 
-    align-items: center;
+    gap: 20px;
 
 }
+
 
 
 .linha-desconto label {
 
-    font-size: 14px;
-
-    font-weight: 600;
-
     color: #4b5563;
 
+    font-size: 14px;
+
 }
+
 
 
 .campo-desconto {
 
-    display: flex;
+    position: relative;
 
-    align-items: center;
-
-    gap: 7px;
+    width: 130px;
 
 }
 
-
-.campo-desconto input {
-
-    width: 110px;
-
-    height: 38px;
-
-    box-sizing: border-box;
-
-    padding: 0 10px;
-
-    border: 1px solid #d1d5db;
-
-    border-radius: 7px;
-
-    background: #ffffff;
-
-    text-align: right;
-
-}
 
 
 .campo-desconto span {
 
+    position: absolute;
+
+    left: 11px;
+
+    top: 50%;
+
+
+
+    transform: translateY(-50%);
+
+
+
     color: #6b7280;
+
+    font-size: 13px;
+
+}
+
+
+
+.campo-desconto input {
+
+    width: 100%;
+
+    height: 38px;
+
+
+
+    box-sizing: border-box;
+
+
+
+    padding: 0 10px 0 32px;
+
+
+
+    border: 1px solid #d1d5db;
+
+    border-radius: 8px;
+
+
+
+    background: #ffffff;
+
+
+
+    font-family: inherit;
+
+    font-size: 13px;
+
+
+
+    outline: none;
+
+}
+
+
+
+.campo-desconto input:focus {
+
+    border-color: #2563eb;
+
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.08);
+
+}
+
+
+
+.linha-total {
+
+    margin-top: 10px;
+
+    padding-top: 15px;
+
+
+
+    border-top: 1px solid #dfe3e8;
+
+
+
+    color: #111827;
+
+    font-size: 16px;
 
     font-weight: 700;
 
 }
 
 
-.linha-total {
-
-    margin-top: 8px;
-
-    padding-top: 17px;
-
-    border-top: 1px solid #d1d5db;
-
-    font-size: 17px;
-
-}
-
 
 .linha-total strong {
+
+    color: #2563eb;
 
     font-size: 22px;
 
 }
 
 
+
+
+
 /* ==========================================
-   FINALIZAR
+
+   FINALIZAÇÃO
+
 ========================================== */
 
-.botao-finalizar {
 
-    width: 100%;
 
-    height: 48px;
+.dados-finalizacao {
+
+    display: grid;
+
+
+
+    grid-template-columns: 280px 1fr;
+
+
+
+    gap: 16px;
+
+
+
+    margin-top: 25px;
+
+
+
+    padding-top: 22px;
+
+
+
+    border-top: 1px solid #eef0f3;
+
+}
+
+
+
+.campo-observacoes {
+
+    min-width: 0;
+
+}
+
+
+
+
+
+/* ==========================================
+
+   MENSAGEM
+
+========================================== */
+
+
+
+.mensagem-venda {
+
+    display: none;
+
+
 
     margin-top: 18px;
+
+
+
+    padding: 11px 14px;
+
+
+
+    border-radius: 9px;
+
+
+
+    font-size: 13px;
+
+}
+
+
+
+.mensagem-venda.sucesso {
+
+    display: block;
+
+
+
+    background: #ecfdf5;
+
+    border: 1px solid #a7f3d0;
+
+
+
+    color: #047857;
+
+}
+
+
+
+.mensagem-venda.erro {
+
+    display: block;
+
+
+
+    background: #fef2f2;
+
+    border: 1px solid #fecaca;
+
+
+
+    color: #b91c1c;
+
+}
+
+
+
+
+
+/* ==========================================
+
+   AÇÕES
+
+========================================== */
+
+
+
+.acoes-venda {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: flex-end;
+
+
+
+    gap: 12px;
+
+
+
+    margin-top: 25px;
+
+    padding-top: 20px;
+
+
+
+    border-top: 1px solid #eef0f3;
+
+}
+
+
+
+
+
+/* ==========================================
+
+   CANCELAR
+
+========================================== */
+
+
+
+.btn-cancelar-venda {
+
+    height: 44px;
+
+
+
+    padding: 0 20px;
+
+
+
+    border: 1px solid #d1d5db;
+
+    border-radius: 9px;
+
+
+
+    background: #ffffff;
+
+    color: #4b5563;
+
+
+
+    font-family: inherit;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+
+
+    cursor: pointer;
+
+
+
+    transition:
+
+        background 0.18s ease,
+
+        border-color 0.18s ease,
+
+        color 0.18s ease;
+
+}
+
+
+
+.btn-cancelar-venda:hover {
+
+    background: #f9fafb;
+
+    border-color: #9ca3af;
+
+    color: #111827;
+
+}
+
+
+
+
+
+/* ==========================================
+
+   FINALIZAR
+
+========================================== */
+
+
+
+.btn-finalizar-venda {
+
+    height: 44px;
+
+
+
+    padding: 0 23px;
+
+
 
     border: none;
 
     border-radius: 9px;
 
+
+
     background: #16a34a;
 
     color: #ffffff;
 
-    font-size: 15px;
 
-    font-weight: 800;
+
+    font-family: inherit;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+
 
     cursor: pointer;
 
+
+
+    box-shadow: 0 2px 5px rgba(22, 163, 74, 0.18);
+
+
+
+    transition:
+
+        background 0.18s ease,
+
+        transform 0.18s ease,
+
+        box-shadow 0.18s ease;
+
 }
 
 
-.botao-finalizar:hover {
+
+.btn-finalizar-venda:hover {
 
     background: #15803d;
 
+
+
+    transform: translateY(-1px);
+
+
+
+    box-shadow: 0 5px 12px rgba(22, 163, 74, 0.22);
+
 }
 
 
-.botao-finalizar:disabled {
 
-    opacity: 0.6;
+.btn-finalizar-venda:active {
 
-    cursor: not-allowed;
+    transform: translateY(0);
 
 }
+
+
+
 
 
 /* ==========================================
+
    RESPONSIVO
+
 ========================================== */
 
-@media (max-width: 1000px) {
 
-    .adicionar-produto {
+
+@media (max-width: 1100px) {
+
+
+
+    .area-adicionar-produto {
 
         grid-template-columns:
-            1fr 1fr;
+
+            minmax(220px, 1fr)
+
+            120px
+
+            150px;
 
     }
 
 
-    .campo-produto {
 
-        grid-column: span 2;
+    .botao-adicionar-area {
+
+        grid-column: 1 / -1;
+
+    }
+
+
+
+    .btn-adicionar {
+
+        width: 100%;
 
     }
 
 }
+
+
+
 
 
 @media (max-width: 800px) {
 
-    .dados-final-venda {
+
+
+    .painel-vendas {
+
+        padding: 18px;
+
+    }
+
+
+
+    .titulo-painel-vendas {
+
+        align-items: flex-start;
+
+        flex-direction: column;
+
+    }
+
+
+
+    .area-adicionar-produto {
+
+        grid-template-columns: 1fr 1fr;
+
+    }
+
+
+
+    .produto-campo {
+
+        grid-column: 1 / -1;
+
+    }
+
+
+
+    .dados-finalizacao {
 
         grid-template-columns: 1fr;
+
+    }
+
+
+
+    .resumo-venda {
+
+        justify-content: stretch;
+
+    }
+
+
+
+    .resumo-valores {
+
+        width: 100%;
+
+        box-sizing: border-box;
+
+    }
+
+
+
+    .item-carrinho {
+
+        grid-template-columns: 1fr 1fr;
+
+    }
+
+
+
+    .btn-remover-item {
+
+        justify-self: end;
 
     }
 
 }
 
 
-@media (max-width: 600px) {
-
-    .painel-venda {
-
-        padding: 16px;
-
-    }
 
 
-    .adicionar-produto {
+
+@media (max-width: 550px) {
+
+
+
+    .area-adicionar-produto {
 
         grid-template-columns: 1fr;
 
     }
 
 
-    .campo-produto {
 
-        grid-column: span 1;
+    .produto-campo {
+
+        grid-column: auto;
 
     }
 
+
+
+    .quantidade-campo,
+
+    .preco-campo {
+
+        width: 100%;
+
+    }
+
+
+
+    .acoes-venda {
+
+        flex-direction: column-reverse;
+
+        align-items: stretch;
+
+    }
+
+
+
+    .btn-cancelar-venda,
+
+    .btn-finalizar-venda {
+
+        width: 100%;
+
+    }
+
+}
+
+
+/* =========================================================
+   AJUSTE VISUAL — VENDAS DO VENDEDOR
+   Aproxima o painel do padrão visual da tela administrativa
+   sem alterar os IDs usados pelo JavaScript.
+========================================================= */
+.conteudo-vendedor { min-width: 0; }
+.conteudo-vendedor .cabecalho-vendedor { margin-bottom: 24px; }
+.conteudo-vendedor .cabecalho-vendedor h1 { color: #111827; letter-spacing: -0.025em; }
+.conteudo-vendedor .cabecalho-vendedor p { color: #6b7280; }
+.conteudo-vendedor .painel-venda {
+    background: #fff; border: 1px solid #e5e7eb; border-radius: 16px;
+    padding: 26px; box-shadow: 0 3px 12px rgba(15,23,42,.04);
+}
+.conteudo-vendedor .cabecalho-painel-venda {
+    display:flex; align-items:center; justify-content:space-between; gap:20px;
+    padding-bottom:22px; margin-bottom:22px; border-bottom:1px solid #eef0f3;
+}
+.conteudo-vendedor .cabecalho-painel-venda h2 { margin:0; color:#111827; font-size:20px; font-weight:700; }
+.conteudo-vendedor .cabecalho-painel-venda p { margin:6px 0 0; color:#6b7280; font-size:13px; }
+.conteudo-vendedor .adicionar-produto {
+    display:grid; grid-template-columns:minmax(220px,1fr) 120px 150px auto;
+    align-items:end; gap:14px; padding:18px; margin-bottom:20px;
+    background:#f9fafb; border:1px solid #e5e7eb; border-radius:12px;
+}
+.conteudo-vendedor .campo-venda { min-width:0; display:flex; flex-direction:column; gap:7px; }
+.conteudo-vendedor .campo-venda label { color:#374151; font-size:13px; font-weight:600; }
+.conteudo-vendedor .campo-venda input,
+.conteudo-vendedor .campo-venda select,
+.conteudo-vendedor .campo-venda textarea,
+.conteudo-vendedor .campo-busca-venda {
+    width:100%; min-width:0; box-sizing:border-box; border:1px solid #d1d5db;
+    border-radius:9px; background:#fff; color:#111827; font:inherit; font-size:14px;
+}
+.conteudo-vendedor .campo-venda input,
+.conteudo-vendedor .campo-venda select,
+.conteudo-vendedor .campo-busca-venda { min-height:44px; padding:0 12px; }
+.conteudo-vendedor .campo-venda textarea { padding:12px; resize:vertical; }
+.conteudo-vendedor .campo-venda input:focus,
+.conteudo-vendedor .campo-venda select:focus,
+.conteudo-vendedor .campo-venda textarea:focus,
+.conteudo-vendedor .campo-busca-venda:focus { outline:2px solid #bfdbfe; border-color:#3b82f6; }
+.conteudo-vendedor .preco-produto-selecionado {
+    min-height:44px; display:flex; align-items:center; box-sizing:border-box;
+    padding:0 12px; border:1px solid #e5e7eb; border-radius:9px;
+    background:#fff; color:#111827; font-weight:700;
+}
+.conteudo-vendedor .botao-adicionar,
+.conteudo-vendedor .botao-finalizar {
+    min-height:44px; border:0; border-radius:9px; padding:0 20px;
+    background:#16a34a; color:#fff; font:inherit; font-size:14px;
+    font-weight:700; cursor:pointer; transition:background .18s ease, transform .18s ease;
+}
+.conteudo-vendedor .botao-adicionar:hover,
+.conteudo-vendedor .botao-finalizar:hover { background:#15803d; }
+.conteudo-vendedor .botao-adicionar:disabled,
+.conteudo-vendedor .botao-finalizar:disabled { opacity:.6; cursor:not-allowed; }
+.conteudo-vendedor .tabela-venda-container { width:100%; overflow-x:auto; border:1px solid #e5e7eb; border-radius:10px; }
+.conteudo-vendedor .tabela-venda { width:100%; min-width:680px; border-collapse:collapse; background:#fff; }
+.conteudo-vendedor .tabela-venda th { background:#f9fafb; color:#4b5563; font-size:12px; font-weight:700; text-align:left; white-space:nowrap; }
+.conteudo-vendedor .tabela-venda th,
+.conteudo-vendedor .tabela-venda td { padding:13px 14px; border-bottom:1px solid #eef0f3; }
+.conteudo-vendedor .tabela-venda td { color:#374151; font-size:13px; }
+.conteudo-vendedor .tabela-venda tbody tr:last-child td { border-bottom:0; }
+.conteudo-vendedor .carrinho-vazio { padding:28px !important; text-align:center; color:#6b7280 !important; }
+.conteudo-vendedor .dados-final-venda { display:grid; grid-template-columns:minmax(0,1fr) minmax(260px,340px); gap:24px; margin-top:24px; }
+.conteudo-vendedor .dados-cliente-venda { display:flex; flex-direction:column; gap:16px; min-width:0; }
+.conteudo-vendedor .resumo-venda { align-self:start; padding:18px; border:1px solid #e5e7eb; border-radius:12px; background:#f9fafb; }
+.conteudo-vendedor .linha-resumo { display:flex; align-items:center; justify-content:space-between; gap:14px; padding:10px 0; color:#4b5563; font-size:14px; }
+.conteudo-vendedor .linha-resumo strong { color:#111827; }
+.conteudo-vendedor .linha-total { margin-top:6px; padding-top:16px; border-top:1px solid #e5e7eb; color:#111827; font-size:16px; font-weight:700; }
+.conteudo-vendedor .linha-total strong { color:#15803d; font-size:22px; }
+.conteudo-vendedor .campo-desconto { display:flex; align-items:center; gap:8px; }
+.conteudo-vendedor .campo-desconto input { width:120px; min-height:38px; padding:0 10px; border:1px solid #d1d5db; border-radius:8px; }
+.conteudo-vendedor .resumo-venda .botao-finalizar { width:100%; margin-top:14px; }
+.conteudo-vendedor .mensagem-venda { margin:14px 0; }
+.conteudo-vendedor .mensagem-venda:empty { display:none; }
+.conteudo-vendedor .controle-quantidade-carrinho { display:flex; align-items:center; gap:6px; }
+.conteudo-vendedor .controle-quantidade-carrinho button,
+.conteudo-vendedor .botao-remover-item { min-height:32px; padding:4px 9px; border:1px solid #d1d5db; border-radius:7px; background:#fff; color:#374151; cursor:pointer; }
+.conteudo-vendedor .controle-quantidade-carrinho input { width:55px; min-height:32px; text-align:center; border:1px solid #d1d5db; border-radius:7px; }
+.conteudo-vendedor .botao-remover-item { color:#b91c1c; border-color:#fecaca; }
+.conteudo-vendedor .aviso-painel { margin-top:20px; }
+@media (max-width: 1050px) {
+    .conteudo-vendedor .adicionar-produto { grid-template-columns:minmax(0,1fr) 120px 150px; }
+    .conteudo-vendedor .campo-botao { grid-column:1/-1; }
+    .conteudo-vendedor .botao-adicionar { width:100%; }
+}
+@media (max-width: 800px) {
+    .conteudo-vendedor .painel-venda { padding:18px; }
+    .conteudo-vendedor .adicionar-produto { grid-template-columns:1fr 1fr; }
+    .conteudo-vendedor .campo-produto { grid-column:1/-1; }
+    .conteudo-vendedor .campo-botao { grid-column:1/-1; }
+    .conteudo-vendedor .dados-final-venda { grid-template-columns:1fr; }
+    .conteudo-vendedor .resumo-venda { width:100%; box-sizing:border-box; }
+}
+@media (max-width: 550px) {
+    .conteudo-vendedor .adicionar-produto { grid-template-columns:1fr; }
+    .conteudo-vendedor .campo-produto,
+    .conteudo-vendedor .campo-botao { grid-column:auto; }
+    .conteudo-vendedor .cabecalho-painel-venda { align-items:flex-start; flex-direction:column; }
+}
+
+
+/* =========================================================
+   LAYOUT ALINHADO À TELA ADMINISTRATIVA DE VENDAS
+   Mantém todos os IDs usados pelo JS do vendedor.
+========================================================= */
+.conteudo-vendedor .painel-venda { display:flex; flex-direction:column; gap:0; }
+.conteudo-vendedor .cabecalho-painel-venda { order:0; }
+.conteudo-vendedor .dados-final-venda { display:contents; }
+.conteudo-vendedor .dados-cliente-venda { display:contents; }
+/* Cliente antes dos produtos, como na tela administrativa */
+.conteudo-vendedor .dados-cliente-venda > .campo-venda:first-child { order:1; margin-bottom:18px; }
+.conteudo-vendedor .adicionar-produto { order:2; margin-bottom:18px; }
+.conteudo-vendedor .mensagem-venda { order:3; }
+.conteudo-vendedor .tabela-venda-container { order:4; margin-bottom:18px; }
+/* A área final fica abaixo do carrinho */
+.conteudo-vendedor .dados-cliente-venda > .campo-venda:nth-child(2) { order:6; }
+.conteudo-vendedor .dados-cliente-venda > .campo-venda:nth-child(3) { order:7; }
+.conteudo-vendedor .resumo-venda { order:5; width:100%; box-sizing:border-box; display:grid; grid-template-columns:1fr minmax(160px, 220px); gap:0 20px; align-items:center; margin:0 0 18px; padding:18px; }
+.conteudo-vendedor .resumo-venda .linha-resumo { grid-column:1; }
+.conteudo-vendedor .resumo-venda .linha-desconto { grid-column:2; grid-row:1 / span 2; align-self:center; }
+.conteudo-vendedor .resumo-venda .linha-total { grid-column:1; grid-row:3; }
+.conteudo-vendedor .resumo-venda .botao-finalizar { grid-column:2; grid-row:3; margin-top:0; }
+.conteudo-vendedor .dados-cliente-venda > .campo-venda:nth-child(2),
+.conteudo-vendedor .dados-cliente-venda > .campo-venda:nth-child(3) { margin-top:0; margin-bottom:16px; }
+.conteudo-vendedor .dados-cliente-venda > .campo-venda:nth-child(2) select,
+.conteudo-vendedor .dados-cliente-venda > .campo-venda:nth-child(3) textarea { width:100%; }
+.conteudo-vendedor .campo-desconto { flex-direction:row-reverse; }
+.conteudo-vendedor .campo-desconto span { position:static; transform:none; }
+.conteudo-vendedor .campo-desconto input { width:100%; }
+.conteudo-vendedor .aviso-painel { margin-top:20px; }
+@media (max-width:800px) {
+ .conteudo-vendedor .resumo-venda { grid-template-columns:1fr; }
+ .conteudo-vendedor .resumo-venda .linha-resumo,
+ .conteudo-vendedor .resumo-venda .linha-desconto,
+ .conteudo-vendedor .resumo-venda .linha-total,
+ .conteudo-vendedor .resumo-venda .botao-finalizar { grid-column:1; grid-row:auto; }
+ .conteudo-vendedor .resumo-venda .linha-desconto { margin:8px 0; }
+ .conteudo-vendedor .resumo-venda .botao-finalizar { margin-top:14px; }
 }
