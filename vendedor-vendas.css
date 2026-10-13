@@ -1600,3 +1600,88 @@
  .conteudo-vendedor .resumo-venda .linha-desconto { margin:8px 0; }
  .conteudo-vendedor .resumo-venda .botao-finalizar { margin-top:14px; }
 }
+
+
+/* CORREÇÃO FINAL: manter ações no rodapé do formulário e menu adaptável */
+.conteudo-vendedor .painel-venda #acoesVendaComprovante {
+    order: 99 !important;
+    display: flex !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    justify-content: flex-end !important;
+    align-items: center !important;
+    gap: 10px !important;
+    flex-wrap: wrap !important;
+    margin: 0 !important;
+    padding-top: 18px !important;
+    border-top: 1px solid #eef0f3 !important;
+}
+.conteudo-vendedor .painel-venda #acoesVendaComprovante #btnFinalizarVenda,
+.conteudo-vendedor .painel-venda #acoesVendaComprovante #btnImprimirComprovanteVenda {
+    width: auto !important;
+    min-width: 0 !important;
+    flex: 0 0 auto !important;
+    min-height: 42px !important;
+    margin: 0 !important;
+}
+.conteudo-vendedor .painel-venda #acoesVendaComprovante #btnImprimirComprovanteVenda {
+    border: 1px solid #2563eb !important;
+    border-radius: 8px !important;
+    background: #fff !important;
+    color: #1d4ed8 !important;
+}
+@media (max-width: 550px) {
+    .conteudo-vendedor .painel-venda #acoesVendaComprovante {
+        justify-content: stretch !important;
+    }
+    .conteudo-vendedor .painel-venda #acoesVendaComprovante button {
+        flex: 1 1 100% !important;
+        width: 100% !important;
+    }
+}
+
+
+/* Ações fixas no rodapé do formulário de venda */
+.conteudo-vendedor .painel-venda #acoesVendaComprovante {
+    display: flex;
+    width: 100%;
+    box-sizing: border-box;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 18px;
+    padding-top: 18px;
+    border-top: 1px solid #eef0f3;
+}
+.conteudo-vendedor .painel-venda #acoesVendaComprovante button {
+    width: auto;
+    min-width: 0;
+    flex: 0 0 auto;
+    min-height: 42px;
+    margin: 0;
+}
+.conteudo-vendedor .painel-venda #btnCancelarVendaVendedor {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 11px 16px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background: #fff;
+    color: #374151;
+    font-weight: 600;
+    cursor: pointer;
+}
+.conteudo-vendedor .painel-venda #btnCancelarVendaVendedor:hover {
+    background: #f3f4f6;
+}
+@media (max-width: 550px) {
+    .conteudo-vendedor .painel-venda #acoesVendaComprovante {
+        justify-content: stretch;
+    }
+    .conteudo-vendedor .painel-venda #acoesVendaComprovante button {
+        flex: 1 1 100%;
+        width: 100%;
+    }
+}

@@ -8,33 +8,21 @@
 
 ========================================== */
 
-
-
-
-
 /* ==========================================
 
    SUPABASE
 
 ========================================== */
 
-
-
 const vendedorVendasSupabase =
 
     supabaseClient;
-
-
-
-
 
 /* ==========================================
 
    ELEMENTOS
 
 ========================================== */
-
-
 
 const produtoVenda =
 
@@ -44,10 +32,6 @@ const produtoVenda =
 
     );
 
-
-
-
-
 const quantidadeVenda =
 
     document.getElementById(
@@ -55,10 +39,6 @@ const quantidadeVenda =
         "quantidadeVenda"
 
     );
-
-
-
-
 
 const precoProdutoSelecionado =
 
@@ -68,10 +48,6 @@ const precoProdutoSelecionado =
 
     );
 
-
-
-
-
 const btnAdicionarProduto =
 
     document.getElementById(
@@ -79,10 +55,6 @@ const btnAdicionarProduto =
         "btnAdicionarProduto"
 
     );
-
-
-
-
 
 const listaItensVenda =
 
@@ -92,10 +64,6 @@ const listaItensVenda =
 
     );
 
-
-
-
-
 const clienteVenda =
 
     document.getElementById(
@@ -103,10 +71,6 @@ const clienteVenda =
         "clienteVenda"
 
     );
-
-
-
-
 
 const formaPagamento =
 
@@ -116,10 +80,6 @@ const formaPagamento =
 
     );
 
-
-
-
-
 const observacoesVenda =
 
     document.getElementById(
@@ -127,10 +87,6 @@ const observacoesVenda =
         "observacoesVenda"
 
     );
-
-
-
-
 
 const subtotalVenda =
 
@@ -140,10 +96,6 @@ const subtotalVenda =
 
     );
 
-
-
-
-
 const descontoVenda =
 
     document.getElementById(
@@ -151,10 +103,6 @@ const descontoVenda =
         "descontoVenda"
 
     );
-
-
-
-
 
 const totalVenda =
 
@@ -164,10 +112,6 @@ const totalVenda =
 
     );
 
-
-
-
-
 const btnFinalizarVenda =
 
     document.getElementById(
@@ -175,10 +119,6 @@ const btnFinalizarVenda =
         "btnFinalizarVenda"
 
     );
-
-
-
-
 
 const mensagemVenda =
 
@@ -188,10 +128,6 @@ const mensagemVenda =
 
     );
 
-
-
-
-
 const nomeVendedor =
 
     document.getElementById(
@@ -199,10 +135,6 @@ const nomeVendedor =
         "nomeVendedor"
 
     );
-
-
-
-
 
 const avatarVendedor =
 
@@ -212,10 +144,6 @@ const avatarVendedor =
 
     );
 
-
-
-
-
 const dataAtual =
 
     document.getElementById(
@@ -224,39 +152,21 @@ const dataAtual =
 
     );
 
-
-
-
-
 /* ==========================================
 
    ESTADO
 
 ========================================== */
 
-
-
 let produtos = [];
-
-
 
 let clientes = [];
 
-
-
 let itensVenda = [];
-
-
 
 let buscaProdutoVenda = null;
 
-
-
 let buscaClienteVenda = null;
-
-
-
-
 
 /* ==========================================
 
@@ -264,11 +174,7 @@ let buscaClienteVenda = null;
 
 ========================================== */
 
-
-
 function formatarMoeda(valor) {
-
-
 
     return (
 
@@ -288,13 +194,7 @@ function formatarMoeda(valor) {
 
     );
 
-
-
 }
-
-
-
-
 
 /* ==========================================
 
@@ -302,11 +202,7 @@ function formatarMoeda(valor) {
 
 ========================================== */
 
-
-
 function escaparHTML(texto) {
-
-
 
     const div =
 
@@ -316,23 +212,13 @@ function escaparHTML(texto) {
 
         );
 
-
-
     div.textContent =
 
         texto ?? "";
 
-
-
     return div.innerHTML;
 
-
-
 }
-
-
-
-
 
 /* ==========================================
 
@@ -340,11 +226,7 @@ function escaparHTML(texto) {
 
 ========================================== */
 
-
-
 function mostrarDataAtual() {
-
-
 
     if (!dataAtual) {
 
@@ -352,13 +234,9 @@ function mostrarDataAtual() {
 
     }
 
-
-
     const agora =
 
         new Date();
-
-
 
     const texto =
 
@@ -380,29 +258,19 @@ function mostrarDataAtual() {
 
         );
 
-
-
     dataAtual.textContent =
 
         texto.charAt(0).toUpperCase() +
 
         texto.slice(1);
 
-
-
 }
-
-
-
-
 
 /* ==========================================
 
    MENSAGEM
 
 ========================================== */
-
-
 
 function mostrarMensagem(
 
@@ -412,23 +280,15 @@ function mostrarMensagem(
 
 ) {
 
-
-
     mensagemVenda.textContent =
 
         texto;
-
-
 
     mensagemVenda.className =
 
         "mensagem-venda";
 
-
-
     if (tipo) {
-
-
 
         mensagemVenda.classList.add(
 
@@ -436,17 +296,9 @@ function mostrarMensagem(
 
         );
 
-
-
     }
 
-
-
 }
-
-
-
-
 
 /* ==========================================
 
@@ -454,15 +306,9 @@ function mostrarMensagem(
 
 ========================================== */
 
-
-
 async function protegerVendedor() {
 
-
-
     try {
-
-
 
         const resultadoSessao =
 
@@ -472,10 +318,6 @@ async function protegerVendedor() {
 
                 .getSession();
 
-
-
-
-
         const session =
 
             resultadoSessao
@@ -484,29 +326,15 @@ async function protegerVendedor() {
 
                 .session;
 
-
-
-
-
         if (!session) {
-
-
 
             window.location.href =
 
                 "index.html";
 
-
-
             return false;
 
-
-
         }
-
-
-
-
 
         const resultadoPerfil =
 
@@ -530,10 +358,6 @@ async function protegerVendedor() {
 
                 .maybeSingle();
 
-
-
-
-
         if (
 
             resultadoPerfil.error ||
@@ -542,8 +366,6 @@ async function protegerVendedor() {
 
         ) {
 
-
-
             await vendedorVendasSupabase
 
                 .auth
@@ -554,31 +376,17 @@ async function protegerVendedor() {
 
                 });
 
-
-
             window.location.href =
 
                 "index.html";
 
-
-
             return false;
 
-
-
         }
-
-
-
-
 
         const perfil =
 
             resultadoPerfil.data;
-
-
-
-
 
         if (
 
@@ -586,23 +394,13 @@ async function protegerVendedor() {
 
         ) {
 
-
-
             window.location.href =
 
                 "admin.html";
 
-
-
             return false;
 
-
-
         }
-
-
-
-
 
         if (
 
@@ -610,8 +408,6 @@ async function protegerVendedor() {
 
         ) {
 
-
-
             await vendedorVendasSupabase
 
                 .auth
@@ -622,23 +418,13 @@ async function protegerVendedor() {
 
                 });
 
-
-
             window.location.href =
 
                 "index.html";
 
-
-
             return false;
 
-
-
         }
-
-
-
-
 
         if (
 
@@ -646,8 +432,6 @@ async function protegerVendedor() {
 
         ) {
 
-
-
             await vendedorVendasSupabase
 
                 .auth
@@ -658,15 +442,11 @@ async function protegerVendedor() {
 
                 });
 
-
-
             sessionStorage.removeItem(
 
                 "sistemaLojaPerfil"
 
             );
-
-
 
             alert(
 
@@ -674,23 +454,13 @@ async function protegerVendedor() {
 
             );
 
-
-
             window.location.href =
 
                 "index.html";
 
-
-
             return false;
 
-
-
         }
-
-
-
-
 
         const nome =
 
@@ -700,17 +470,9 @@ async function protegerVendedor() {
 
             "Vendedor";
 
-
-
-
-
         nomeVendedor.textContent =
 
             nome;
-
-
-
-
 
         avatarVendedor.textContent =
 
@@ -722,10 +484,6 @@ async function protegerVendedor() {
 
                 .toUpperCase();
 
-
-
-
-
         sessionStorage.setItem(
 
             "sistemaLojaPerfil",
@@ -734,21 +492,11 @@ async function protegerVendedor() {
 
         );
 
-
-
-
-
         return true;
-
-
 
     }
 
-
-
     catch (erro) {
-
-
 
         console.error(
 
@@ -758,27 +506,15 @@ async function protegerVendedor() {
 
         );
 
-
-
         window.location.href =
 
             "index.html";
 
-
-
         return false;
-
-
 
     }
 
-
-
 }
-
-
-
-
 
 /* ==========================================
 
@@ -786,21 +522,13 @@ async function protegerVendedor() {
 
 ========================================== */
 
-
-
 function criarBuscaProduto() {
-
-
 
     if (buscaProdutoVenda) {
 
         return;
 
     }
-
-
-
-
 
     buscaProdutoVenda =
 
@@ -810,49 +538,25 @@ function criarBuscaProduto() {
 
         );
 
-
-
-
-
     buscaProdutoVenda.type =
 
         "text";
-
-
-
-
 
     buscaProdutoVenda.id =
 
         "buscaProdutoVenda";
 
-
-
-
-
     buscaProdutoVenda.className =
 
         "campo-busca-venda";
-
-
-
-
 
     buscaProdutoVenda.placeholder =
 
         "🔎 Digite o nome ou SKU do produto";
 
-
-
-
-
     buscaProdutoVenda.autocomplete =
 
         "off";
-
-
-
-
 
     produtoVenda.parentNode.insertBefore(
 
@@ -862,10 +566,6 @@ function criarBuscaProduto() {
 
     );
 
-
-
-
-
     buscaProdutoVenda.addEventListener(
 
         "input",
@@ -874,13 +574,7 @@ function criarBuscaProduto() {
 
     );
 
-
-
 }
-
-
-
-
 
 /* ==========================================
 
@@ -888,11 +582,7 @@ function criarBuscaProduto() {
 
 ========================================== */
 
-
-
 function filtrarProdutos() {
-
-
 
     const texto =
 
@@ -908,13 +598,7 @@ function filtrarProdutos() {
 
         .toLowerCase();
 
-
-
-
-
     if (!texto) {
-
-
 
         preencherListaProdutos(
 
@@ -922,29 +606,17 @@ function filtrarProdutos() {
 
         );
 
-
-
         atualizarPrecoProduto();
-
-
 
         return;
 
-
-
     }
-
-
-
-
 
     const encontrados =
 
         produtos.filter(
 
             function (produto) {
-
-
 
                 const nome =
 
@@ -954,10 +626,6 @@ function filtrarProdutos() {
 
                     ).toLowerCase();
 
-
-
-
-
                 const sku =
 
                     String(
@@ -965,10 +633,6 @@ function filtrarProdutos() {
                         produto.sku || ""
 
                     ).toLowerCase();
-
-
-
-
 
                 return (
 
@@ -978,15 +642,9 @@ function filtrarProdutos() {
 
                 );
 
-
-
             }
 
         );
-
-
-
-
 
     preencherListaProdutos(
 
@@ -994,55 +652,29 @@ function filtrarProdutos() {
 
     );
 
-
-
-
-
     if (
 
         encontrados.length === 1
 
     ) {
 
-
-
         produtoVenda.value =
 
             encontrados[0].id;
 
-
-
         atualizarPrecoProduto();
-
-
 
         return;
 
-
-
     }
-
-
-
-
 
     produtoVenda.value =
 
         "";
 
-
-
-
-
     atualizarPrecoProduto();
 
-
-
 }
-
-
-
-
 
 /* ==========================================
 
@@ -1050,21 +682,13 @@ function filtrarProdutos() {
 
 ========================================== */
 
-
-
 function preencherListaProdutos(
 
     lista
 
 ) {
 
-
-
     produtoVenda.innerHTML = "";
-
-
-
-
 
     const opcaoInicial =
 
@@ -1074,17 +698,9 @@ function preencherListaProdutos(
 
         );
 
-
-
-
-
     opcaoInicial.value =
 
         "";
-
-
-
-
 
     if (
 
@@ -1092,31 +708,19 @@ function preencherListaProdutos(
 
     ) {
 
-
-
         opcaoInicial.textContent =
 
             "Nenhum produto encontrado";
-
-
 
     }
 
     else {
 
-
-
         opcaoInicial.textContent =
 
             "Selecione um produto";
 
-
-
     }
-
-
-
-
 
     produtoVenda.appendChild(
 
@@ -1124,15 +728,9 @@ function preencherListaProdutos(
 
     );
 
-
-
-
-
     lista.forEach(
 
         function (produto) {
-
-
 
             const option =
 
@@ -1142,17 +740,9 @@ function preencherListaProdutos(
 
                 );
 
-
-
-
-
             option.value =
 
                 produto.id;
-
-
-
-
 
             option.textContent =
 
@@ -1176,29 +766,17 @@ function preencherListaProdutos(
 
                 );
 
-
-
-
-
             produtoVenda.appendChild(
 
                 option
 
             );
 
-
-
         }
 
     );
 
-
-
 }
-
-
-
-
 
 /* ==========================================
 
@@ -1206,11 +784,7 @@ function preencherListaProdutos(
 
 ========================================== */
 
-
-
 async function carregarProdutos() {
-
-
 
     const resultado =
 
@@ -1256,13 +830,7 @@ async function carregarProdutos() {
 
             );
 
-
-
-
-
     if (resultado.error) {
-
-
 
         console.error(
 
@@ -1272,8 +840,6 @@ async function carregarProdutos() {
 
         );
 
-
-
         mostrarMensagem(
 
             "Não foi possível carregar os produtos.",
@@ -1282,31 +848,15 @@ async function carregarProdutos() {
 
         );
 
-
-
         return;
 
-
-
     }
-
-
-
-
 
     produtos =
 
         resultado.data || [];
 
-
-
-
-
     criarBuscaProduto();
-
-
-
-
 
     preencherListaProdutos(
 
@@ -1314,19 +864,9 @@ async function carregarProdutos() {
 
     );
 
-
-
-
-
     atualizarPrecoProduto();
 
-
-
 }
-
-
-
-
 
 /* ==========================================
 
@@ -1334,21 +874,13 @@ async function carregarProdutos() {
 
 ========================================== */
 
-
-
 function criarBuscaCliente() {
-
-
 
     if (buscaClienteVenda) {
 
         return;
 
     }
-
-
-
-
 
     buscaClienteVenda =
 
@@ -1358,49 +890,25 @@ function criarBuscaCliente() {
 
         );
 
-
-
-
-
     buscaClienteVenda.type =
 
         "text";
-
-
-
-
 
     buscaClienteVenda.id =
 
         "buscaClienteVenda";
 
-
-
-
-
     buscaClienteVenda.className =
 
         "campo-busca-venda";
-
-
-
-
 
     buscaClienteVenda.placeholder =
 
         "🔎 Digite o nome ou telefone do cliente";
 
-
-
-
-
     buscaClienteVenda.autocomplete =
 
         "off";
-
-
-
-
 
     clienteVenda.parentNode.insertBefore(
 
@@ -1410,10 +918,6 @@ function criarBuscaCliente() {
 
     );
 
-
-
-
-
     buscaClienteVenda.addEventListener(
 
         "input",
@@ -1422,13 +926,7 @@ function criarBuscaCliente() {
 
     );
 
-
-
 }
-
-
-
-
 
 /* ==========================================
 
@@ -1436,11 +934,7 @@ function criarBuscaCliente() {
 
 ========================================== */
 
-
-
 function filtrarClientes() {
-
-
 
     const texto =
 
@@ -1456,13 +950,7 @@ function filtrarClientes() {
 
         .toLowerCase();
 
-
-
-
-
     if (!texto) {
-
-
 
         preencherListaClientes(
 
@@ -1470,25 +958,15 @@ function filtrarClientes() {
 
         );
 
-
-
         return;
 
-
-
     }
-
-
-
-
 
     const encontrados =
 
         clientes.filter(
 
             function (cliente) {
-
-
 
                 const nome =
 
@@ -1498,10 +976,6 @@ function filtrarClientes() {
 
                     ).toLowerCase();
 
-
-
-
-
                 const telefone =
 
                     String(
@@ -1509,10 +983,6 @@ function filtrarClientes() {
                         cliente.telefone || ""
 
                     ).toLowerCase();
-
-
-
-
 
                 return (
 
@@ -1522,15 +992,9 @@ function filtrarClientes() {
 
                 );
 
-
-
             }
 
         );
-
-
-
-
 
     preencherListaClientes(
 
@@ -1538,45 +1002,25 @@ function filtrarClientes() {
 
     );
 
-
-
-
-
     if (
 
         encontrados.length === 1
 
     ) {
 
-
-
         clienteVenda.value =
 
             encontrados[0].id;
 
-
-
         return;
 
-
-
     }
-
-
-
-
 
     clienteVenda.value =
 
         "";
 
-
-
 }
-
-
-
-
 
 /* ==========================================
 
@@ -1584,21 +1028,13 @@ function filtrarClientes() {
 
 ========================================== */
 
-
-
 function preencherListaClientes(
 
     lista
 
 ) {
 
-
-
     clienteVenda.innerHTML = "";
-
-
-
-
 
     const consumidor =
 
@@ -1608,25 +1044,13 @@ function preencherListaClientes(
 
         );
 
-
-
-
-
     consumidor.value =
 
         "";
 
-
-
-
-
     consumidor.textContent =
 
         "Consumidor não identificado";
-
-
-
-
 
     clienteVenda.appendChild(
 
@@ -1634,17 +1058,11 @@ function preencherListaClientes(
 
     );
 
-
-
-
-
     if (
 
         lista.length === 0
 
     ) {
-
-
 
         const option =
 
@@ -1654,25 +1072,13 @@ function preencherListaClientes(
 
             );
 
-
-
-
-
         option.value =
 
             "";
 
-
-
-
-
         option.textContent =
 
             "Nenhum cliente encontrado";
-
-
-
-
 
         clienteVenda.appendChild(
 
@@ -1680,25 +1086,13 @@ function preencherListaClientes(
 
         );
 
-
-
-
-
         return;
 
-
-
     }
-
-
-
-
 
     lista.forEach(
 
         function (cliente) {
-
-
 
             const option =
 
@@ -1708,25 +1102,13 @@ function preencherListaClientes(
 
                 );
 
-
-
-
-
             option.value =
 
                 cliente.id;
 
-
-
-
-
             let texto =
 
                 cliente.nome || "Cliente";
-
-
-
-
 
             if (
 
@@ -1734,29 +1116,17 @@ function preencherListaClientes(
 
             ) {
 
-
-
                 texto +=
 
                     " — " +
 
                     cliente.telefone;
 
-
-
             }
-
-
-
-
 
             option.textContent =
 
                 texto;
-
-
-
-
 
             clienteVenda.appendChild(
 
@@ -1764,19 +1134,11 @@ function preencherListaClientes(
 
             );
 
-
-
         }
 
     );
 
-
-
 }
-
-
-
-
 
 /* ==========================================
 
@@ -1784,11 +1146,7 @@ function preencherListaClientes(
 
 ========================================== */
 
-
-
 async function carregarClientes() {
-
-
 
     const resultado =
 
@@ -1826,13 +1184,7 @@ async function carregarClientes() {
 
             );
 
-
-
-
-
     if (resultado.error) {
-
-
 
         console.error(
 
@@ -1842,31 +1194,15 @@ async function carregarClientes() {
 
         );
 
-
-
         return;
 
-
-
     }
-
-
-
-
 
     clientes =
 
         resultado.data || [];
 
-
-
-
-
     criarBuscaCliente();
-
-
-
-
 
     preencherListaClientes(
 
@@ -1874,13 +1210,7 @@ async function carregarClientes() {
 
     );
 
-
-
 }
-
-
-
-
 
 /* ==========================================
 
@@ -1888,27 +1218,17 @@ async function carregarClientes() {
 
 ========================================== */
 
-
-
 function atualizarPrecoProduto() {
-
-
 
     const produtoId =
 
         produtoVenda.value;
-
-
-
-
 
     const produto =
 
         produtos.find(
 
             function (item) {
-
-
 
                 return (
 
@@ -1918,45 +1238,23 @@ function atualizarPrecoProduto() {
 
                 );
 
-
-
             }
 
         );
 
-
-
-
-
     if (!produto) {
-
-
 
         precoProdutoSelecionado.textContent =
 
             "R$ 0,00";
 
-
-
-
-
         quantidadeVenda.max =
 
             "";
 
-
-
-
-
         return;
 
-
-
     }
-
-
-
-
 
     precoProdutoSelecionado.textContent =
 
@@ -1965,10 +1263,6 @@ function atualizarPrecoProduto() {
             produto.preco_venda
 
         );
-
-
-
-
 
     quantidadeVenda.max =
 
@@ -1982,10 +1276,6 @@ function atualizarPrecoProduto() {
 
         );
 
-
-
-
-
     const quantidadeAtual =
 
         Number(
@@ -1994,10 +1284,6 @@ function atualizarPrecoProduto() {
 
         ) || 1;
 
-
-
-
-
     if (
 
         quantidadeAtual >
@@ -2005,8 +1291,6 @@ function atualizarPrecoProduto() {
         Number(produto.estoque)
 
     ) {
-
-
 
         quantidadeVenda.value =
 
@@ -2020,17 +1304,9 @@ function atualizarPrecoProduto() {
 
             );
 
-
-
     }
 
-
-
 }
-
-
-
-
 
 /* ==========================================
 
@@ -2038,11 +1314,7 @@ function atualizarPrecoProduto() {
 
 ========================================== */
 
-
-
 function adicionarProduto() {
-
-
 
     mostrarMensagem(
 
@@ -2050,21 +1322,11 @@ function adicionarProduto() {
 
     );
 
-
-
-
-
     const produtoId =
 
         produtoVenda.value;
 
-
-
-
-
     if (!produtoId) {
-
-
 
         mostrarMensagem(
 
@@ -2074,25 +1336,15 @@ function adicionarProduto() {
 
         );
 
-
-
         return;
 
-
-
     }
-
-
-
-
 
     const produto =
 
         produtos.find(
 
             function (item) {
-
-
 
                 return (
 
@@ -2102,19 +1354,11 @@ function adicionarProduto() {
 
                 );
 
-
-
             }
 
         );
 
-
-
-
-
     if (!produto) {
-
-
 
         mostrarMensagem(
 
@@ -2124,17 +1368,9 @@ function adicionarProduto() {
 
         );
 
-
-
         return;
 
-
-
     }
-
-
-
-
 
     const quantidade =
 
@@ -2143,10 +1379,6 @@ function adicionarProduto() {
             quantidadeVenda.value
 
         );
-
-
-
-
 
     if (
 
@@ -2160,8 +1392,6 @@ function adicionarProduto() {
 
     ) {
 
-
-
         mostrarMensagem(
 
             "Informe uma quantidade válida.",
@@ -2170,17 +1400,9 @@ function adicionarProduto() {
 
         );
 
-
-
         return;
 
-
-
     }
-
-
-
-
 
     const estoque =
 
@@ -2190,17 +1412,11 @@ function adicionarProduto() {
 
         );
 
-
-
-
-
     const itemExistente =
 
         itensVenda.find(
 
             function (item) {
-
-
 
                 return (
 
@@ -2210,15 +1426,9 @@ function adicionarProduto() {
 
                 );
 
-
-
             }
 
         );
-
-
-
-
 
     const quantidadeAtual =
 
@@ -2232,19 +1442,11 @@ function adicionarProduto() {
 
             : 0;
 
-
-
-
-
     const quantidadeFinal =
 
         quantidadeAtual +
 
         quantidade;
-
-
-
-
 
     if (
 
@@ -2253,8 +1455,6 @@ function adicionarProduto() {
         estoque
 
     ) {
-
-
 
         mostrarMensagem(
 
@@ -2266,55 +1466,33 @@ function adicionarProduto() {
 
         );
 
-
-
         return;
-
-
 
     }
 
-
-
-
-
     if (itemExistente) {
-
-
 
         itemExistente.quantidade =
 
             quantidadeFinal;
 
-
-
     }
 
     else {
 
-
-
         itensVenda.push({
-
-
 
             produto_id:
 
                 produto.id,
 
-
-
             nome:
 
                 produto.nome,
 
-
-
             sku:
 
                 produto.sku,
-
-
 
             preco_unitario:
 
@@ -2324,47 +1502,25 @@ function adicionarProduto() {
 
                 ),
 
-
-
             estoque:
 
                 estoque,
-
-
 
             quantidade:
 
                 quantidade
 
-
-
         });
-
-
 
     }
 
-
-
-
-
     renderizarItens();
 
-
-
     atualizarResumo();
-
-
-
-
 
     quantidadeVenda.value =
 
         "1";
-
-
-
-
 
     mostrarMensagem(
 
@@ -2374,13 +1530,7 @@ function adicionarProduto() {
 
     );
 
-
-
 }
-
-
-
-
 
 /* ==========================================
 
@@ -2388,11 +1538,7 @@ function adicionarProduto() {
 
 ========================================== */
 
-
-
 function renderizarItens() {
-
-
 
     if (
 
@@ -2400,15 +1546,9 @@ function renderizarItens() {
 
     ) {
 
-
-
         listaItensVenda.innerHTML = `
 
-
-
             <tr>
-
-
 
                 <td
 
@@ -2422,25 +1562,13 @@ function renderizarItens() {
 
                 </td>
 
-
-
             </tr>
-
-
 
         `;
 
-
-
         return;
 
-
-
     }
-
-
-
-
 
     listaItensVenda.innerHTML =
 
@@ -2456,8 +1584,6 @@ function renderizarItens() {
 
                 ) {
 
-
-
                     const subtotal =
 
                         Number(
@@ -2472,10 +1598,6 @@ function renderizarItens() {
 
                         );
 
-
-
-
-
                     const estoque =
 
                         Number(
@@ -2483,10 +1605,6 @@ function renderizarItens() {
                             item.estoque
 
                         );
-
-
-
-
 
                     const podeDiminuir =
 
@@ -2496,10 +1614,6 @@ function renderizarItens() {
 
                         ) > 1;
 
-
-
-
-
                     const podeAumentar =
 
                         Number(
@@ -2508,21 +1622,11 @@ function renderizarItens() {
 
                         ) < estoque;
 
-
-
-
-
                     return `
-
-
 
                         <tr>
 
-
-
                             <td>
-
-
 
                                 <div
 
@@ -2538,17 +1642,9 @@ function renderizarItens() {
 
                                 </div>
 
-
-
                             </td>
 
-
-
-
-
                             <td>
-
-
 
                                 <span
 
@@ -2566,25 +1662,15 @@ function renderizarItens() {
 
                                 </span>
 
-
-
                             </td>
 
-
-
-
-
                             <td>
-
-
 
                                 <div
 
                                     class="controle-quantidade-carrinho"
 
                                 >
-
-
 
                                     <button
 
@@ -2601,10 +1687,6 @@ function renderizarItens() {
                                         −
 
                                     </button>
-
-
-
-
 
                                     <input
 
@@ -2628,10 +1710,6 @@ function renderizarItens() {
 
                                     >
 
-
-
-
-
                                     <button
 
                                         type="button"
@@ -2648,13 +1726,7 @@ function renderizarItens() {
 
                                     </button>
 
-
-
                                 </div>
-
-
-
-
 
                                 <small>
 
@@ -2662,17 +1734,9 @@ function renderizarItens() {
 
                                 </small>
 
-
-
                             </td>
 
-
-
-
-
                             <td>
-
-
 
                                 <span
 
@@ -2688,17 +1752,9 @@ function renderizarItens() {
 
                                 </span>
 
-
-
                             </td>
 
-
-
-
-
                             <td>
-
-
 
                                 <span
 
@@ -2714,17 +1770,9 @@ function renderizarItens() {
 
                                 </span>
 
-
-
                             </td>
 
-
-
-
-
                             <td>
-
-
 
                                 <button
 
@@ -2740,19 +1788,11 @@ function renderizarItens() {
 
                                 </button>
 
-
-
                             </td>
-
-
 
                         </tr>
 
-
-
                     `;
-
-
 
                 }
 
@@ -2760,19 +1800,9 @@ function renderizarItens() {
 
             .join("");
 
-
-
-
-
     configurarBotoesCarrinho();
 
-
-
 }
-
-
-
-
 
 /* ==========================================
 
@@ -2780,11 +1810,7 @@ function renderizarItens() {
 
 ========================================== */
 
-
-
 function configurarBotoesCarrinho() {
-
-
 
     document
 
@@ -2798,15 +1824,11 @@ function configurarBotoesCarrinho() {
 
             function (botao) {
 
-
-
                 botao.addEventListener(
 
                     "click",
 
                     function () {
-
-
 
                         const indice =
 
@@ -2816,10 +1838,6 @@ function configurarBotoesCarrinho() {
 
                             );
 
-
-
-
-
                         alterarQuantidadeCarrinho(
 
                             indice,
@@ -2828,21 +1846,13 @@ function configurarBotoesCarrinho() {
 
                         );
 
-
-
                     }
 
                 );
 
-
-
             }
 
         );
-
-
-
-
 
     document
 
@@ -2856,15 +1866,11 @@ function configurarBotoesCarrinho() {
 
             function (botao) {
 
-
-
                 botao.addEventListener(
 
                     "click",
 
                     function () {
-
-
 
                         const indice =
 
@@ -2874,10 +1880,6 @@ function configurarBotoesCarrinho() {
 
                             );
 
-
-
-
-
                         alterarQuantidadeCarrinho(
 
                             indice,
@@ -2886,21 +1888,13 @@ function configurarBotoesCarrinho() {
 
                         );
 
-
-
                     }
 
                 );
 
-
-
             }
 
         );
-
-
-
-
 
     document
 
@@ -2914,15 +1908,11 @@ function configurarBotoesCarrinho() {
 
             function (campo) {
 
-
-
                 campo.addEventListener(
 
                     "change",
 
                     function () {
-
-
 
                         const indice =
 
@@ -2932,10 +1922,6 @@ function configurarBotoesCarrinho() {
 
                             );
 
-
-
-
-
                         definirQuantidadeCarrinho(
 
                             indice,
@@ -2944,15 +1930,9 @@ function configurarBotoesCarrinho() {
 
                         );
 
-
-
                     }
 
                 );
-
-
-
-
 
                 campo.addEventListener(
 
@@ -2960,8 +1940,6 @@ function configurarBotoesCarrinho() {
 
                     function () {
 
-
-
                         const indice =
 
                             Number(
@@ -2969,10 +1947,6 @@ function configurarBotoesCarrinho() {
                                 campo.dataset.indice
 
                             );
-
-
-
-
 
                         definirQuantidadeCarrinho(
 
@@ -2982,21 +1956,13 @@ function configurarBotoesCarrinho() {
 
                         );
 
-
-
                     }
 
                 );
 
-
-
             }
 
         );
-
-
-
-
 
     document
 
@@ -3010,15 +1976,11 @@ function configurarBotoesCarrinho() {
 
             function (botao) {
 
-
-
                 botao.addEventListener(
 
                     "click",
 
                     function () {
-
-
 
                         const indice =
 
@@ -3028,10 +1990,6 @@ function configurarBotoesCarrinho() {
 
                             );
 
-
-
-
-
                         itensVenda.splice(
 
                             indice,
@@ -3040,43 +1998,25 @@ function configurarBotoesCarrinho() {
 
                         );
 
-
-
-
-
                         renderizarItens();
 
-
-
                         atualizarResumo();
-
-
 
                     }
 
                 );
 
-
-
             }
 
         );
 
-
-
 }
-
-
-
-
 
 /* ==========================================
 
    ALTERAR QUANTIDADE
 
 ========================================== */
-
-
 
 function alterarQuantidadeCarrinho(
 
@@ -3086,25 +2026,15 @@ function alterarQuantidadeCarrinho(
 
 ) {
 
-
-
     const item =
 
         itensVenda[indice];
-
-
-
-
 
     if (!item) {
 
         return;
 
     }
-
-
-
-
 
     const novaQuantidade =
 
@@ -3120,10 +2050,6 @@ function alterarQuantidadeCarrinho(
 
         );
 
-
-
-
-
     definirQuantidadeCarrinho(
 
         indice,
@@ -3132,21 +2058,13 @@ function alterarQuantidadeCarrinho(
 
     );
 
-
-
 }
-
-
-
-
 
 /* ==========================================
 
    DEFINIR QUANTIDADE
 
 ========================================== */
-
-
 
 function definirQuantidadeCarrinho(
 
@@ -3156,25 +2074,15 @@ function definirQuantidadeCarrinho(
 
 ) {
 
-
-
     const item =
 
         itensVenda[indice];
-
-
-
-
 
     if (!item) {
 
         return;
 
     }
-
-
-
-
 
     let quantidade =
 
@@ -3183,10 +2091,6 @@ function definirQuantidadeCarrinho(
             quantidadeInformada
 
         );
-
-
-
-
 
     if (
 
@@ -3198,17 +2102,9 @@ function definirQuantidadeCarrinho(
 
     ) {
 
-
-
         quantidade = 1;
 
-
-
     }
-
-
-
-
 
     if (
 
@@ -3216,17 +2112,9 @@ function definirQuantidadeCarrinho(
 
     ) {
 
-
-
         quantidade = 1;
 
-
-
     }
-
-
-
-
 
     const estoque =
 
@@ -3236,10 +2124,6 @@ function definirQuantidadeCarrinho(
 
         );
 
-
-
-
-
     if (
 
         quantidade >
@@ -3248,15 +2132,9 @@ function definirQuantidadeCarrinho(
 
     ) {
 
-
-
         quantidade =
 
             estoque;
-
-
-
-
 
         mostrarMensagem(
 
@@ -3268,35 +2146,17 @@ function definirQuantidadeCarrinho(
 
         );
 
-
-
     }
-
-
-
-
 
     item.quantidade =
 
         quantidade;
 
-
-
-
-
     renderizarItens();
-
-
 
     atualizarResumo();
 
-
-
 }
-
-
-
-
 
 /* ==========================================
 
@@ -3304,11 +2164,7 @@ function definirQuantidadeCarrinho(
 
 ========================================== */
 
-
-
 function calcularSubtotal() {
-
-
 
     return itensVenda.reduce(
 
@@ -3319,8 +2175,6 @@ function calcularSubtotal() {
             item
 
         ) {
-
-
 
             return (
 
@@ -3344,21 +2198,13 @@ function calcularSubtotal() {
 
             );
 
-
-
         },
 
         0
 
     );
 
-
-
 }
-
-
-
-
 
 /* ==========================================
 
@@ -3366,19 +2212,11 @@ function calcularSubtotal() {
 
 ========================================== */
 
-
-
 function atualizarResumo() {
-
-
 
     const subtotal =
 
         calcularSubtotal();
-
-
-
-
 
     let desconto =
 
@@ -3388,33 +2226,19 @@ function atualizarResumo() {
 
         ) || 0;
 
-
-
-
-
     if (
 
         desconto < 0
 
     ) {
 
-
-
         desconto = 0;
-
-
 
         descontoVenda.value =
 
             "0";
 
-
-
     }
-
-
-
-
 
     if (
 
@@ -3422,35 +2246,21 @@ function atualizarResumo() {
 
     ) {
 
-
-
         desconto =
 
             subtotal;
-
-
 
         descontoVenda.value =
 
             subtotal.toFixed(2);
 
-
-
     }
-
-
-
-
 
     const total =
 
         subtotal -
 
         desconto;
-
-
-
-
 
     subtotalVenda.textContent =
 
@@ -3460,10 +2270,6 @@ function atualizarResumo() {
 
         );
 
-
-
-
-
     totalVenda.textContent =
 
         formatarMoeda(
@@ -3472,13 +2278,7 @@ function atualizarResumo() {
 
         );
 
-
-
 }
-
-
-
-
 
 /* ==========================================
 
@@ -3486,11 +2286,7 @@ function atualizarResumo() {
 
 ========================================== */
 
-
-
 async function finalizarVenda() {
-
-
 
     mostrarMensagem(
 
@@ -3498,17 +2294,11 @@ async function finalizarVenda() {
 
     );
 
-
-
-
-
     if (
 
         itensVenda.length === 0
 
     ) {
-
-
 
         mostrarMensagem(
 
@@ -3518,25 +2308,15 @@ async function finalizarVenda() {
 
         );
 
-
-
         return;
 
-
-
     }
-
-
-
-
 
     if (
 
         !formaPagamento.value
 
     ) {
-
-
 
         mostrarMensagem(
 
@@ -3546,25 +2326,13 @@ async function finalizarVenda() {
 
         );
 
-
-
         return;
 
-
-
     }
-
-
-
-
 
     const subtotal =
 
         calcularSubtotal();
-
-
-
-
 
     const desconto =
 
@@ -3574,10 +2342,6 @@ async function finalizarVenda() {
 
         ) || 0;
 
-
-
-
-
     if (
 
         desconto < 0 ||
@@ -3585,8 +2349,6 @@ async function finalizarVenda() {
         desconto > subtotal
 
     ) {
-
-
 
         mostrarMensagem(
 
@@ -3596,17 +2358,25 @@ async function finalizarVenda() {
 
         );
 
-
-
         return;
-
-
 
     }
 
+    const total = subtotal - desconto;
 
+    const confirmou = window.confirm(
+        `Confirma a finalização desta venda?
 
+Subtotal: ${formatarMoeda(subtotal)}
+Desconto: ${formatarMoeda(desconto)}
+Total: ${formatarMoeda(total)}
 
+Se confirmar, a venda será registrada e o estoque será atualizado.`
+    );
+
+    if (!confirmou) {
+        return;
+    }
 
     const itensParaEnviar =
 
@@ -3614,17 +2384,11 @@ async function finalizarVenda() {
 
             function (item) {
 
-
-
                 return {
-
-
 
                     produto_id:
 
                         item.produto_id,
-
-
 
                     quantidade:
 
@@ -3634,39 +2398,21 @@ async function finalizarVenda() {
 
                         )
 
-
-
                 };
-
-
 
             }
 
         );
 
-
-
-
-
     btnFinalizarVenda.disabled =
 
         true;
-
-
-
-
 
     btnFinalizarVenda.textContent =
 
         "Finalizando...";
 
-
-
-
-
     try {
-
-
 
         const resultado =
 
@@ -3690,19 +2436,13 @@ async function finalizarVenda() {
 
                                 : null,
 
-
-
                         p_desconto:
 
                             desconto,
 
-
-
                         p_forma_pagamento:
 
                             formaPagamento.value,
-
-
 
                         p_observacoes:
 
@@ -3712,8 +2452,6 @@ async function finalizarVenda() {
 
                             null,
 
-
-
                         p_itens:
 
                             itensParaEnviar
@@ -3722,13 +2460,7 @@ async function finalizarVenda() {
 
                 );
 
-
-
-
-
         if (resultado.error) {
-
-
 
             console.error(
 
@@ -3737,10 +2469,6 @@ async function finalizarVenda() {
                 resultado.error
 
             );
-
-
-
-
 
             mostrarMensagem(
 
@@ -3752,25 +2480,13 @@ async function finalizarVenda() {
 
             );
 
-
-
             return;
 
-
-
         }
-
-
-
-
 
         const resposta =
 
             resultado.data;
-
-
-
-
 
         if (
 
@@ -3779,8 +2495,6 @@ async function finalizarVenda() {
             resposta.sucesso !== true
 
         ) {
-
-
 
             mostrarMensagem(
 
@@ -3792,17 +2506,21 @@ async function finalizarVenda() {
 
             );
 
-
-
             return;
-
-
 
         }
 
-
-
-
+        // Disponibiliza a impressão da venda que acabou de ser registrada.
+        if (
+            window.SistemaLojaComprovantes &&
+            typeof window.SistemaLojaComprovantes.adicionarBotao === "function"
+        ) {
+            window.SistemaLojaComprovantes.adicionarBotao(
+                vendedorVendasSupabase,
+                resposta.venda_id,
+                btnFinalizarVenda
+            );
+        }
 
         mostrarMensagem(
 
@@ -3816,33 +2534,19 @@ async function finalizarVenda() {
 
         );
 
-
-
-
-
         /* ======================================
 
            LIMPAR VENDA
 
         ====================================== */
 
-
-
         itensVenda =
 
             [];
 
-
-
-
-
         clienteVenda.value =
 
             "";
-
-
-
-
 
         if (
 
@@ -3850,51 +2554,27 @@ async function finalizarVenda() {
 
         ) {
 
-
-
             buscaClienteVenda.value =
 
                 "";
 
-
-
         }
-
-
-
-
 
         formaPagamento.value =
 
             "";
 
-
-
-
-
         observacoesVenda.value =
 
             "";
-
-
-
-
 
         descontoVenda.value =
 
             "0";
 
-
-
-
-
         produtoVenda.value =
 
             "";
-
-
-
-
 
         if (
 
@@ -3902,41 +2582,21 @@ async function finalizarVenda() {
 
         ) {
 
-
-
             buscaProdutoVenda.value =
 
                 "";
 
-
-
         }
-
-
-
-
 
         quantidadeVenda.value =
 
             "1";
 
-
-
-
-
         atualizarPrecoProduto();
-
-
 
         renderizarItens();
 
-
-
         atualizarResumo();
-
-
-
-
 
         /* ======================================
 
@@ -3944,13 +2604,7 @@ async function finalizarVenda() {
 
         ====================================== */
 
-
-
         await carregarProdutos();
-
-
-
-
 
         /* ======================================
 
@@ -3958,19 +2612,11 @@ async function finalizarVenda() {
 
         ====================================== */
 
-
-
         await carregarClientes();
-
-
 
     }
 
-
-
     catch (erro) {
-
-
 
         console.error(
 
@@ -3980,10 +2626,6 @@ async function finalizarVenda() {
 
         );
 
-
-
-
-
         mostrarMensagem(
 
             "Ocorreu um erro ao finalizar a venda.",
@@ -3992,39 +2634,21 @@ async function finalizarVenda() {
 
         );
 
-
-
     }
 
-
-
     finally {
-
-
 
         btnFinalizarVenda.disabled =
 
             false;
 
-
-
-
-
         btnFinalizarVenda.textContent =
 
             "Finalizar Venda";
 
-
-
     }
 
-
-
 }
-
-
-
-
 
 /* ==========================================
 
@@ -4032,11 +2656,7 @@ async function finalizarVenda() {
 
 ========================================== */
 
-
-
 function configurarBotaoSair() {
-
-
 
     const botao =
 
@@ -4046,19 +2666,11 @@ function configurarBotaoSair() {
 
         );
 
-
-
-
-
     if (!botao) {
 
         return;
 
     }
-
-
-
-
 
     botao.addEventListener(
 
@@ -4066,11 +2678,7 @@ function configurarBotaoSair() {
 
         async function () {
 
-
-
             try {
-
-
 
                 await vendedorVendasSupabase
 
@@ -4082,15 +2690,9 @@ function configurarBotaoSair() {
 
                     });
 
-
-
             }
 
-
-
             catch (erro) {
-
-
 
                 console.error(
 
@@ -4100,13 +2702,7 @@ function configurarBotaoSair() {
 
                 );
 
-
-
             }
-
-
-
-
 
             sessionStorage.removeItem(
 
@@ -4114,35 +2710,21 @@ function configurarBotaoSair() {
 
             );
 
-
-
-
-
             window.location.href =
 
                 "index.html";
-
-
 
         }
 
     );
 
-
-
 }
-
-
-
-
 
 /* ==========================================
 
    EVENTOS
 
 ========================================== */
-
-
 
 produtoVenda.addEventListener(
 
@@ -4152,10 +2734,6 @@ produtoVenda.addEventListener(
 
 );
 
-
-
-
-
 btnAdicionarProduto.addEventListener(
 
     "click",
@@ -4164,29 +2742,17 @@ btnAdicionarProduto.addEventListener(
 
 );
 
-
-
-
-
 quantidadeVenda.addEventListener(
 
     "input",
 
     function () {
 
-
-
         atualizarPrecoProduto();
-
-
 
     }
 
 );
-
-
-
-
 
 descontoVenda.addEventListener(
 
@@ -4196,9 +2762,72 @@ descontoVenda.addEventListener(
 
 );
 
+/* ==========================================
 
+   CANCELAR VENDA EM ANDAMENTO
 
+========================================== */
 
+function configurarAcoesVenda() {
+    const painelVenda = document.querySelector(".painel-venda");
+    if (!painelVenda || !btnFinalizarVenda) return;
+
+    let acoes = document.getElementById("acoesVendaComprovante");
+    if (!acoes) {
+        acoes = document.createElement("div");
+        acoes.id = "acoesVendaComprovante";
+        acoes.className = "acoes-venda-comprovante";
+        painelVenda.appendChild(acoes);
+    }
+
+    let btnCancelarVenda = document.getElementById("btnCancelarVendaVendedor");
+    if (!btnCancelarVenda) {
+        btnCancelarVenda = document.createElement("button");
+        btnCancelarVenda.type = "button";
+        btnCancelarVenda.id = "btnCancelarVendaVendedor";
+        btnCancelarVenda.className = "botao-cancelar-venda";
+        btnCancelarVenda.textContent = "Cancelar";
+        btnCancelarVenda.addEventListener("click", cancelarVendaEmAndamento);
+    }
+
+    // Mantém os botões no rodapé da tela, como na área do administrador.
+    acoes.appendChild(btnCancelarVenda);
+    acoes.appendChild(btnFinalizarVenda);
+
+    btnCancelarVenda.style.display = "inline-flex";
+}
+
+function cancelarVendaEmAndamento() {
+    const temDados =
+        itensVenda.length > 0 ||
+        (clienteVenda && clienteVenda.value) ||
+        (formaPagamento && formaPagamento.value) ||
+        (observacoesVenda && observacoesVenda.value.trim()) ||
+        (descontoVenda && Number(descontoVenda.value) > 0);
+
+    if (temDados && !window.confirm("Deseja cancelar esta venda? Os produtos e os dados preenchidos serão removidos. A venda ainda não foi registrada.")) {
+        return;
+    }
+
+    itensVenda = [];
+
+    if (clienteVenda) clienteVenda.value = "";
+    if (buscaClienteVenda) buscaClienteVenda.value = "";
+    if (formaPagamento) formaPagamento.value = "";
+    if (observacoesVenda) observacoesVenda.value = "";
+    if (descontoVenda) descontoVenda.value = "0";
+    if (produtoVenda) produtoVenda.value = "";
+    if (buscaProdutoVenda) buscaProdutoVenda.value = "";
+    if (quantidadeVenda) quantidadeVenda.value = "1";
+
+    atualizarPrecoProduto();
+    renderizarItens();
+    atualizarResumo();
+
+    mostrarMensagem("Venda cancelada. Nenhuma venda foi registrada.", "info");
+}
+
+configurarAcoesVenda();
 
 btnFinalizarVenda.addEventListener(
 
@@ -4208,36 +2837,19 @@ btnFinalizarVenda.addEventListener(
 
 );
 
-
-
-
-
 /* ==========================================
 
    INICIALIZAÇÃO
 
 ========================================== */
 
-
-
 async function iniciarVendasVendedor() {
 
-    // Conecta o botão Sair imediatamente, antes de consultas assíncronas.
-    configurarBotaoSair();
-
     mostrarDataAtual();
-
-
-
-
 
     const autorizado =
 
         await protegerVendedor();
-
-
-
-
 
     if (!autorizado) {
 
@@ -4245,31 +2857,17 @@ async function iniciarVendasVendedor() {
 
     }
 
-
-
-
-
     await carregarProdutos();
-
-
 
     await carregarClientes();
 
-
-
-
-
     renderizarItens();
-
-
 
     atualizarResumo();
 
+    configurarBotaoSair();
+
 }
-
-
-
-
 
 document.addEventListener(
 

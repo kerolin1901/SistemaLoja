@@ -2670,6 +2670,14 @@ Pagamento: ${formaPagamento.options[formaPagamento.selectedIndex].text}`
         );
 
 
+        if (window.SistemaLojaComprovantes) {
+            window.SistemaLojaComprovantes.adicionarBotao(
+                vendasSupabase,
+                data.venda_id,
+                btnFinalizarVenda
+            );
+        }
+
         limparVenda();
 
 

@@ -1370,6 +1370,22 @@ async function abrirDetalhesVenda(
 
     detalhesVenda.innerHTML =
         html;
+
+    let botaoImprimir = document.getElementById("btnReimprimirComprovante");
+    if (!botaoImprimir) {
+        botaoImprimir = document.createElement("button");
+        botaoImprimir.type = "button";
+        botaoImprimir.id = "btnReimprimirComprovante";
+        botaoImprimir.className = "btn-fechar";
+        botaoImprimir.textContent = "Imprimir / segunda via";
+        const acoes = modalVenda.querySelector(".modal-acoes");
+        if (acoes) acoes.insertBefore(botaoImprimir, acoes.firstChild);
+    }
+    botaoImprimir.onclick = function () {
+        if (window.SistemaLojaComprovantes) {
+            window.SistemaLojaComprovantes.imprimir(historicoSupabase, venda.id);
+        }
+    };
 }
 
 /* ==========================================

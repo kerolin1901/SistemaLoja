@@ -280,6 +280,24 @@
 
 
 
+
+    <style id="ajuste-layout-vendedor-final">
+        html, body { min-height: 100%; }
+        body { margin: 0; }
+        .layout-vendedor { min-height: 100vh; align-items: stretch; }
+        .menu-lateral-vendedor {
+            min-height: 100vh; height: 100vh; box-sizing: border-box;
+            position: sticky; top: 0; align-self: flex-start;
+            display: flex; flex-direction: column; overflow-y: auto;
+        }
+        .menu-lateral-vendedor .menu-vendedor { flex: 1 0 auto; }
+        .menu-lateral-vendedor .area-sair { margin-top: auto; flex-shrink: 0; }
+        .conteudo-vendedor { min-width: 0; min-height: 100vh; box-sizing: border-box; }
+        @media (max-width: 800px) {
+            .menu-lateral-vendedor { height: auto; min-height: 100vh; }
+        }
+    </style>
+
 </head>
 
 
@@ -2166,6 +2184,8 @@
 
 
 
+                <div id="acoesVendaComprovante" class="acoes-venda-comprovante"></div>
+
             </section>
 
 
@@ -2644,6 +2664,7 @@
 
 
 
+    <script src="js/comprovante-venda.js"></script>
     <script src="js/vendedor-vendas.js"></script>
 
 
