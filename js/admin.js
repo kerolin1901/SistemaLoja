@@ -1366,6 +1366,530 @@ function obterInicioDiaSeguinteDashboard(data) {
 
 /* ==========================================
 
+   CAIXA DO DIA — PAINEL INICIAL
+
+========================================== */
+
+function normalizarFormaPagamentoDashboard(forma) {
+    return String(forma || "outro")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .trim()
+        .toLowerCase()
+        .replace(/[\s-]+/g, "_");
+}
+
+function normalizarCategoriaFinanceiraDashboard(categoria) {
+    return String(categoria || "")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .trim()
+        .toLowerCase()
+        .replace(/\s+/g, " ");
+}
+
+function criarPainelCaixaDashboard(cardsDashboard) {
+    if (!cardsDashboard) {
+        return false;
+    }
+
+    if (!document.getElementById("estilosPainelCaixaDashboard")) {
+        const estilos = document.createElement("style");
+        estilos.id = "estilosPainelCaixaDashboard";
+        estilos.textContent = `
+            .painel-caixa-dashboard {
+                box-sizing: border-box;
+                width: 100%;
+                margin: 0 0 24px;
+                padding: 22px;
+                background: #ffffff;
+                border: 1px solid #e5e7eb;
+                border-radius: 16px;
+                box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+            }
+            .caixa-dashboard-cabecalho {
+                display: flex;
+                align-items: flex-start;
+                justify-content: space-between;
+                flex-wrap: wrap;
+                gap: 12px;
+                margin-bottom: 18px;
+            }
+            .caixa-dashboard-cabecalho h3 {
+                margin: 0;
+                color: #0f172a;
+                font-size: 19px;
+                font-weight: 700;
+            }
+            .caixa-dashboard-cabecalho p {
+                margin: 5px 0 0;
+                color: #64748b;
+                font-size: 12px;
+                line-height: 1.5;
+            }
+            .caixa-dashboard-data {
+                padding: 8px 11px;
+                border: 1px solid #dbeafe;
+                border-radius: 9px;
+                background: #eff6ff;
+                color: #1d4ed8;
+                font-size: 12px;
+                font-weight: 700;
+                white-space: nowrap;
+            }
+            .caixa-dashboard-total {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 16px;
+                flex-wrap: wrap;
+                margin-bottom: 20px;
+                padding: 18px 20px;
+                border: 1px solid #bfdbfe;
+                border-radius: 12px;
+                background: linear-gradient(110deg, #eff6ff 0%, #f8fbff 100%);
+            }
+            .caixa-dashboard-total span {
+                display: block;
+                color: #1e40af;
+                font-size: 12px;
+                font-weight: 700;
+            }
+            .caixa-dashboard-total strong {
+                display: block;
+                margin-top: 5px;
+                color: #1d4ed8;
+                font-size: clamp(25px, 2.7vw, 32px);
+                font-variant-numeric: tabular-nums;
+                line-height: 1.2;
+                overflow-wrap: anywhere;
+            }
+            .caixa-dashboard-total small {
+                display: block;
+                margin-top: 6px;
+                color: #475569;
+                font-size: 11px;
+                line-height: 1.45;
+            }
+            .caixa-dashboard-titulo-bloco {
+                margin: 0 0 10px;
+                color: #334155;
+                font-size: 13px;
+                font-weight: 700;
+            }
+            .caixa-dashboard-formas {
+                display: grid;
+                grid-template-columns: repeat(5, minmax(0, 1fr));
+                gap: 10px;
+                margin-bottom: 20px;
+            }
+            .caixa-dashboard-forma {
+                min-width: 0;
+                padding: 13px 14px;
+                border: 1px solid #e5e7eb;
+                border-radius: 11px;
+                background: #ffffff;
+            }
+            .caixa-dashboard-forma span {
+                display: block;
+                margin-bottom: 7px;
+                color: #64748b;
+                font-size: 11px;
+                font-weight: 600;
+                line-height: 1.35;
+            }
+            .caixa-dashboard-forma strong {
+                display: block;
+                color: #0f172a;
+                font-size: clamp(15px, 1.45vw, 19px);
+                line-height: 1.3;
+                font-variant-numeric: tabular-nums;
+                overflow-wrap: anywhere;
+            }
+            .caixa-dashboard-composicao {
+                display: grid;
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+                gap: 10px;
+            }
+            .caixa-dashboard-origem {
+                min-width: 0;
+                padding: 13px 14px;
+                border-radius: 10px;
+                background: #f8fafc;
+                border: 1px solid #eef2f7;
+            }
+            .caixa-dashboard-origem span {
+                display: block;
+                margin-bottom: 7px;
+                color: #64748b;
+                font-size: 11px;
+                line-height: 1.4;
+            }
+            .caixa-dashboard-origem strong {
+                color: #0f172a;
+                font-size: 17px;
+                line-height: 1.25;
+                font-variant-numeric: tabular-nums;
+                overflow-wrap: anywhere;
+            }
+            .caixa-dashboard-prazo {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                flex-wrap: wrap;
+                gap: 8px 14px;
+                margin-top: 12px;
+                padding: 12px 14px;
+                border: 1px dashed #cbd5e1;
+                border-radius: 10px;
+                background: #fafafa;
+            }
+            .caixa-dashboard-prazo span {
+                color: #475569;
+                font-size: 12px;
+                line-height: 1.45;
+            }
+            .caixa-dashboard-prazo strong {
+                color: #475569;
+                font-size: 15px;
+                font-variant-numeric: tabular-nums;
+            }
+            .caixa-dashboard-nota {
+                margin: 13px 0 0;
+                color: #64748b;
+                font-size: 11px;
+                line-height: 1.5;
+            }
+            @media (max-width: 920px) {
+                .caixa-dashboard-formas {
+                    grid-template-columns: repeat(3, minmax(0, 1fr));
+                }
+            }
+            @media (max-width: 620px) {
+                .painel-caixa-dashboard {
+                    padding: 15px;
+                }
+                .caixa-dashboard-total {
+                    padding: 15px;
+                }
+                .caixa-dashboard-formas {
+                    grid-template-columns: repeat(2, minmax(0, 1fr));
+                    gap: 8px;
+                }
+                .caixa-dashboard-composicao {
+                    grid-template-columns: 1fr;
+                    gap: 8px;
+                }
+                .caixa-dashboard-forma,
+                .caixa-dashboard-origem {
+                    padding: 12px;
+                }
+            }
+        `;
+        document.head.appendChild(estilos);
+    }
+
+    let painel = document.getElementById("painelCaixaDashboard");
+
+    if (!painel) {
+        painel = document.createElement("section");
+        painel.id = "painelCaixaDashboard";
+        painel.className = "painel-caixa-dashboard";
+        painel.setAttribute("aria-label", "Resumo do caixa do dia");
+        painel.innerHTML = `
+            <div class="caixa-dashboard-cabecalho">
+                <div>
+                    <h3>Caixa do dia</h3>
+                    <p>Entradas registradas hoje, separadas por forma de pagamento e origem.</p>
+                </div>
+                <div class="caixa-dashboard-data" id="caixaDataDashboard">Hoje</div>
+            </div>
+
+            <div class="caixa-dashboard-total">
+                <div>
+                    <span>Total de entradas do dia</span>
+                    <strong id="caixaTotalEntradasDashboard">Carregando...</strong>
+                    <small>Vendas pagas + recebimentos de notinhas + outras entradas financeiras.</small>
+                </div>
+            </div>
+
+            <h4 class="caixa-dashboard-titulo-bloco">Entradas por forma de pagamento</h4>
+            <div class="caixa-dashboard-formas">
+                <div class="caixa-dashboard-forma">
+                    <span>Dinheiro</span>
+                    <strong id="caixaFormaDinheiroDashboard">Carregando...</strong>
+                </div>
+                <div class="caixa-dashboard-forma">
+                    <span>Pix</span>
+                    <strong id="caixaFormaPixDashboard">Carregando...</strong>
+                </div>
+                <div class="caixa-dashboard-forma">
+                    <span>Cartão de débito</span>
+                    <strong id="caixaFormaDebitoDashboard">Carregando...</strong>
+                </div>
+                <div class="caixa-dashboard-forma">
+                    <span>Cartão de crédito</span>
+                    <strong id="caixaFormaCreditoDashboard">Carregando...</strong>
+                </div>
+                <div class="caixa-dashboard-forma">
+                    <span>Outros / boleto</span>
+                    <strong id="caixaFormaOutrosDashboard">Carregando...</strong>
+                </div>
+            </div>
+
+            <h4 class="caixa-dashboard-titulo-bloco">Composição das entradas</h4>
+            <div class="caixa-dashboard-composicao">
+                <div class="caixa-dashboard-origem">
+                    <span>Vendas pagas hoje</span>
+                    <strong id="caixaVendasPagasDashboard">Carregando...</strong>
+                </div>
+                <div class="caixa-dashboard-origem">
+                    <span>Recebimentos de notinhas hoje</span>
+                    <strong id="caixaRecebimentosNotinhasDashboard">Carregando...</strong>
+                </div>
+                <div class="caixa-dashboard-origem">
+                    <span>Outras entradas financeiras</span>
+                    <strong id="caixaOutrasEntradasDashboard">Carregando...</strong>
+                </div>
+            </div>
+
+            <div class="caixa-dashboard-prazo">
+                <span>Vendas a prazo registradas hoje (não são dinheiro recebido hoje)</span>
+                <strong id="caixaVendasPrazoDashboard">Carregando...</strong>
+            </div>
+
+            <p class="caixa-dashboard-nota">
+                Os valores por forma de pagamento são uma visão do mesmo movimento, agrupado por meio de pagamento. A composição abaixo separa a origem das entradas; não some as duas visões entre si. Vendas a prazo não entram no total recebido. Recebimentos de notinhas contam somente quando registrados e não estornados.
+            </p>
+        `;
+
+        cardsDashboard.parentNode.insertBefore(painel, cardsDashboard);
+    }
+
+    return true;
+}
+
+function definirValorCaixaDashboard(id, valor) {
+    const elemento = document.getElementById(id);
+    if (elemento) {
+        elemento.textContent = valor;
+    }
+}
+
+async function carregarResumoCaixaDashboard() {
+    const painel = document.getElementById("painelCaixaDashboard");
+    if (!painel) {
+        return;
+    }
+
+    const hoje = new Date();
+    const inicioHoje = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate());
+    const inicioAmanha = obterInicioDiaSeguinteDashboard(hoje);
+    const dataISO = String(hoje.getFullYear()) + "-" +
+        String(hoje.getMonth() + 1).padStart(2, "0") + "-" +
+        String(hoje.getDate()).padStart(2, "0");
+
+    definirValorCaixaDashboard(
+        "caixaDataDashboard",
+        "Hoje · " + hoje.toLocaleDateString("pt-BR")
+    );
+
+    const idsValores = [
+        "caixaTotalEntradasDashboard",
+        "caixaFormaDinheiroDashboard",
+        "caixaFormaPixDashboard",
+        "caixaFormaDebitoDashboard",
+        "caixaFormaCreditoDashboard",
+        "caixaFormaOutrosDashboard",
+        "caixaVendasPagasDashboard",
+        "caixaRecebimentosNotinhasDashboard",
+        "caixaOutrasEntradasDashboard",
+        "caixaVendasPrazoDashboard"
+    ];
+    idsValores.forEach((id) => definirValorCaixaDashboard(id, "Carregando..."));
+
+    try {
+        let perfil = null;
+        try {
+            perfil = JSON.parse(sessionStorage.getItem("sistemaLojaPerfil") || "null");
+        } catch (erroPerfil) {
+            console.warn("Perfil da sessão inválido ao carregar o caixa do dia:", erroPerfil);
+        }
+
+        const lojaId = perfil?.loja_id;
+        if (!lojaId) {
+            throw new Error("Não foi possível identificar a loja do administrador.");
+        }
+
+        const { data: vendas, error: erroVendas } = await adminSupabase
+            .from("vendas")
+            .select("id, total, forma_pagamento, criado_em")
+            .eq("loja_id", lojaId)
+            .eq("status", "finalizada")
+            .gte("criado_em", inicioHoje.toISOString())
+            .lt("criado_em", inicioAmanha.toISOString());
+
+        if (erroVendas) {
+            throw erroVendas;
+        }
+
+        const listaVendas = vendas || [];
+        const formasPagamento = {
+            dinheiro: 0,
+            pix: 0,
+            cartao_debito: 0,
+            cartao_credito: 0,
+            outros: 0
+        };
+        let totalVendasPagas = 0;
+        let totalVendasPrazo = 0;
+
+        listaVendas.forEach((venda) => {
+            const valor = Math.max(0, Number(venda.total) || 0);
+            const forma = normalizarFormaPagamentoDashboard(venda.forma_pagamento);
+
+            if (forma === "a_prazo") {
+                totalVendasPrazo += valor;
+                return;
+            }
+
+            totalVendasPagas += valor;
+
+            if (forma === "dinheiro") {
+                formasPagamento.dinheiro += valor;
+            } else if (forma === "pix") {
+                formasPagamento.pix += valor;
+            } else if (forma === "cartao_debito") {
+                formasPagamento.cartao_debito += valor;
+            } else if (forma === "cartao_credito") {
+                formasPagamento.cartao_credito += valor;
+            } else {
+                // Inclui boleto, outra forma ou forma não informada.
+                formasPagamento.outros += valor;
+            }
+        });
+
+        const { data: recebimentos, error: erroRecebimentos } = await adminSupabase
+            .from("recebimentos_notinha")
+            .select("id, valor_total")
+            .eq("loja_id", lojaId)
+            .eq("status", "registrado")
+            .eq("data_recebimento", dataISO);
+
+        if (erroRecebimentos) {
+            throw erroRecebimentos;
+        }
+
+        const listaRecebimentos = recebimentos || [];
+        const idsRecebimentos = listaRecebimentos
+            .map((recebimento) => recebimento.id)
+            .filter((id) => id !== null && id !== undefined);
+        const totalRecebimentosNotinhas = listaRecebimentos.reduce(
+            (total, recebimento) => total + (Number(recebimento.valor_total) || 0),
+            0
+        );
+
+        let formasRecebimentos = [];
+        if (idsRecebimentos.length > 0) {
+            const { data, error } = await adminSupabase
+                .from("formas_recebimento_notinha")
+                .select("recebimento_id, forma_pagamento, valor")
+                .eq("loja_id", lojaId)
+                .in("recebimento_id", idsRecebimentos);
+
+            if (error) {
+                throw error;
+            }
+            formasRecebimentos = data || [];
+        }
+
+        let totalFormasRecebimentos = 0;
+        formasRecebimentos.forEach((item) => {
+            const valor = Math.max(0, Number(item.valor) || 0);
+            totalFormasRecebimentos += valor;
+            const forma = normalizarFormaPagamentoDashboard(item.forma_pagamento);
+
+            if (forma === "dinheiro") {
+                formasPagamento.dinheiro += valor;
+            } else if (forma === "pix") {
+                formasPagamento.pix += valor;
+            } else if (forma === "cartao_debito") {
+                formasPagamento.cartao_debito += valor;
+            } else if (forma === "cartao_credito") {
+                formasPagamento.cartao_credito += valor;
+            } else {
+                formasPagamento.outros += valor;
+            }
+        });
+
+        // Se existir recebimento antigo sem detalhe de forma de pagamento,
+        // mantém o total reconciliado na categoria Outros, sem perder entrada.
+        const diferencaFormas = totalRecebimentosNotinhas - totalFormasRecebimentos;
+        if (diferencaFormas > 0.009) {
+            formasPagamento.outros += diferencaFormas;
+        }
+
+        const { data: entradasFinanceiras, error: erroEntradas } = await adminSupabase
+            .from("financeiro")
+            .select("categoria, valor")
+            .eq("loja_id", lojaId)
+            .eq("tipo", "entrada")
+            .eq("data_movimento", dataISO);
+
+        if (erroEntradas) {
+            throw erroEntradas;
+        }
+
+        const categoriasJaDetalhadas = new Set([
+            "venda",
+            "recebimento a prazo",
+            "recebimentos a prazo",
+            "recebimento de notinha",
+            "recebimentos de notinhas",
+            "recebimento de nota",
+            "recebimentos de notas"
+        ]);
+
+        const outrasEntradasFinanceiras = (entradasFinanceiras || []).reduce((total, lancamento) => {
+            const categoria = normalizarCategoriaFinanceiraDashboard(lancamento.categoria);
+            if (categoriasJaDetalhadas.has(categoria)) {
+                return total;
+            }
+            return total + Math.max(0, Number(lancamento.valor) || 0);
+        }, 0);
+
+        // Entradas manuais sem forma informada ficam em Outros para que o
+        // detalhamento por forma também reconcilie com o total do dia.
+        formasPagamento.outros += outrasEntradasFinanceiras;
+
+        const totalEntradasDia =
+            totalVendasPagas +
+            totalRecebimentosNotinhas +
+            outrasEntradasFinanceiras;
+
+        definirValorCaixaDashboard("caixaTotalEntradasDashboard", formatarMoedaDashboard(totalEntradasDia));
+        definirValorCaixaDashboard("caixaFormaDinheiroDashboard", formatarMoedaDashboard(formasPagamento.dinheiro));
+        definirValorCaixaDashboard("caixaFormaPixDashboard", formatarMoedaDashboard(formasPagamento.pix));
+        definirValorCaixaDashboard("caixaFormaDebitoDashboard", formatarMoedaDashboard(formasPagamento.cartao_debito));
+        definirValorCaixaDashboard("caixaFormaCreditoDashboard", formatarMoedaDashboard(formasPagamento.cartao_credito));
+        definirValorCaixaDashboard("caixaFormaOutrosDashboard", formatarMoedaDashboard(formasPagamento.outros));
+        definirValorCaixaDashboard("caixaVendasPagasDashboard", formatarMoedaDashboard(totalVendasPagas));
+        definirValorCaixaDashboard("caixaRecebimentosNotinhasDashboard", formatarMoedaDashboard(totalRecebimentosNotinhas));
+        definirValorCaixaDashboard("caixaOutrasEntradasDashboard", formatarMoedaDashboard(outrasEntradasFinanceiras));
+        definirValorCaixaDashboard("caixaVendasPrazoDashboard", formatarMoedaDashboard(totalVendasPrazo));
+
+    } catch (erro) {
+        console.error("Erro ao carregar o resumo do caixa do dia:", erro);
+        idsValores.forEach((id) => definirValorCaixaDashboard(id, "—"));
+        const nota = painel.querySelector(".caixa-dashboard-nota");
+        if (nota) {
+            nota.textContent = "Não foi possível carregar o resumo completo do caixa. Verifique as permissões e tente atualizar a página.";
+        }
+    }
+}
+
+/* ==========================================
+
    CRIAR CARTÕES DOS INDICADORES
 
 ========================================== */
@@ -1378,6 +1902,9 @@ function criarCartoesIndicadoresDashboard() {
         console.warn("Área .cards-dashboard não encontrada. Indicadores não foram exibidos.");
         return false;
     }
+
+    // O caixa do dia aparece logo após o cabeçalho e antes dos indicadores existentes.
+    criarPainelCaixaDashboard(cardsDashboard);
 
     let secao = document.getElementById("indicadoresDashboard");
 
@@ -2150,6 +2677,9 @@ async function carregarIndicadoresDashboard() {
         return;
 
     }
+
+    // Atualiza o caixa do dia com vendas, recebimentos de notinhas e outras entradas.
+    await carregarResumoCaixaDashboard();
 
     const agora =
 
