@@ -40,7 +40,6 @@
 
     >
 
-
     <style id="estilos-prazo-venda">
         .configuracao-prazo-venda {
             grid-column: 1 / -1;
@@ -73,6 +72,56 @@
                 grid-template-columns: 1fr;
             }
         }
+    
+        .configuracao-dinheiro-venda {
+            grid-column: 1 / -1;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+            width: 100%;
+            margin-top: 12px;
+            padding: 14px;
+            border: 1px solid #bbf7d0;
+            border-radius: 9px;
+            background: #f0fdf4;
+            box-sizing: border-box;
+        }
+        .configuracao-dinheiro-venda[hidden] {
+            display: none !important;
+        }
+        .configuracao-dinheiro-venda .campo-venda {
+            min-width: 0;
+        }
+        .valor-troco-venda {
+            display: flex;
+            align-items: center;
+            min-height: 38px;
+            padding: 0 12px;
+            border: 1px solid #bbf7d0;
+            border-radius: 7px;
+            background: #ffffff;
+            color: #15803d;
+            font-size: 18px;
+            font-weight: 800;
+            box-sizing: border-box;
+        }
+        .texto-ajuda-dinheiro {
+            grid-column: 1 / -1;
+            margin: 0;
+            color: #166534;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+        .texto-ajuda-dinheiro.invalido {
+            color: #b91c1c;
+            font-weight: 700;
+        }
+        @media (max-width: 600px) {
+            .configuracao-dinheiro-venda {
+                grid-template-columns: 1fr;
+            }
+        }
+
     </style>
 
 </head>
@@ -901,7 +950,6 @@
 
             </a>
 
-
             <a href="notinhas.html" class="item-menu">
                 <span class="icone-menu" aria-hidden="true">
                     <svg viewBox="0 0 24 24">
@@ -1662,6 +1710,29 @@
                         As parcelas seguintes vencem a cada 30 dias. A venda só será registrada depois da validação do sistema.
                     </p>
                 </div>
+
+                <div id="camposDinheiroVenda" class="configuracao-dinheiro-venda" hidden>
+                    <div class="campo-venda">
+                        <label for="valorRecebidoVenda">Valor recebido do cliente</label>
+                        <input
+                            type="number"
+                            id="valorRecebidoVenda"
+                            min="0"
+                            step="0.01"
+                            inputmode="decimal"
+                            autocomplete="off"
+                            placeholder="Ex.: 50,00"
+                        >
+                    </div>
+                    <div class="campo-venda">
+                        <label for="trocoVenda">Troco a devolver</label>
+                        <output id="trocoVenda" class="valor-troco-venda">R$ 0,00</output>
+                    </div>
+                    <p id="avisoDinheiroVenda" class="texto-ajuda-dinheiro">
+                        Informe quanto o cliente entregou. O troco será calculado automaticamente.
+                    </p>
+                </div>
+
                 <div class="campo-venda campo-observacoes">
 
                     <label for="observacoesVenda">

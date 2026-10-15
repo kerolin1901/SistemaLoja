@@ -132,6 +132,11 @@ const diasPrimeiroVencimentoVenda =
 
     document.getElementById("diasPrimeiroVencimentoVenda");
 
+const camposDinheiroVenda = document.getElementById("camposDinheiroVenda");
+const valorRecebidoVenda = document.getElementById("valorRecebidoVenda");
+const trocoVenda = document.getElementById("trocoVenda");
+const avisoDinheiroVenda = document.getElementById("avisoDinheiroVenda");
+
 const observacoesVenda =
 
     document.getElementById(
@@ -2488,7 +2493,7 @@ function atualizarResumo() {
 
         desconto;
 
-    if (
+if (
 
         valorSubtotal
 
@@ -2520,6 +2525,80 @@ function atualizarResumo() {
 
     }
 
+    atualizarTrocoDinheiro();
+
+}
+
+/* ==========================================
+   RECEBIMENTO EM DINHEIRO E TROCO
+========================================== */
+
+function valorRecebidoEmCentavos() {
+    if (!valorRecebidoVenda || String(valorRecebidoVenda.value).trim() === "") {
+        return null;
+    }
+
+    const valor = Number(valorRecebidoVenda.value);
+    if (!Number.isFinite(valor) || valor < 0) {
+        return null;
+    }
+
+    return Math.round(valor * 100);
+}
+
+function totalAtualEmCentavos() {
+    const subtotalCentavos = Math.round(calcularSubtotal() * 100);
+    let descontoCentavos = Math.round((Number(descontoVenda?.value) || 0) * 100);
+    descontoCentavos = Math.max(0, Math.min(subtotalCentavos, descontoCentavos));
+    return subtotalCentavos - descontoCentavos;
+}
+
+function atualizarTrocoDinheiro() {
+    if (!trocoVenda || !valorRecebidoVenda || !formaPagamento) {
+        return;
+    }
+
+    const ehDinheiro = formaPagamento.value === "dinheiro";
+    if (camposDinheiroVenda) {
+        camposDinheiroVenda.hidden = !ehDinheiro;
+    }
+
+    if (!ehDinheiro) {
+        trocoVenda.textContent = formatarMoeda(0);
+        if (avisoDinheiroVenda) {
+            avisoDinheiroVenda.textContent = "Informe quanto o cliente entregou. O troco será calculado automaticamente.";
+            avisoDinheiroVenda.classList.remove("invalido");
+        }
+        return;
+    }
+
+    const recebidoCentavos = valorRecebidoEmCentavos();
+    const totalCentavos = totalAtualEmCentavos();
+
+    if (recebidoCentavos === null) {
+        trocoVenda.textContent = formatarMoeda(0);
+        if (avisoDinheiroVenda) {
+            avisoDinheiroVenda.textContent = "Informe quanto o cliente entregou. O troco será calculado automaticamente.";
+            avisoDinheiroVenda.classList.remove("invalido");
+        }
+        return;
+    }
+
+    if (recebidoCentavos < totalCentavos) {
+        trocoVenda.textContent = formatarMoeda(0);
+        if (avisoDinheiroVenda) {
+            avisoDinheiroVenda.textContent = `Valor insuficiente. Faltam ${formatarMoeda((totalCentavos - recebidoCentavos) / 100)}.`;
+            avisoDinheiroVenda.classList.add("invalido");
+        }
+        return;
+    }
+
+    trocoVenda.textContent = formatarMoeda((recebidoCentavos - totalCentavos) / 100);
+    if (avisoDinheiroVenda) {
+        avisoDinheiroVenda.textContent = "Troco calculado automaticamente.";
+        avisoDinheiroVenda.classList.remove("invalido");
+    }
+    
 }
 
 /* ==========================================
@@ -3298,17 +3377,24 @@ function calcularDataPrimeiroVencimentoFiado(dias) {
 
 }
 
-
 function atualizarCamposPrazoVenda() {
-
     const vendaAPrazo = formaPagamento && formaPagamento.value === "a_prazo";
+    const vendaEmDinheiro = formaPagamento && formaPagamento.value === "dinheiro";
 
     if (camposPrazoVenda) {
         camposPrazoVenda.hidden = !vendaAPrazo;
     }
 
-}
+    if (camposDinheiroVenda) {
+        camposDinheiroVenda.hidden = !vendaEmDinheiro;
+    }
 
+    if (!vendaEmDinheiro && valorRecebidoVenda) {
+        valorRecebidoVenda.value = "";
+    }
+
+    atualizarTrocoDinheiro();
+}
 
 async function finalizarVenda() {
 
@@ -3415,9 +3501,36 @@ async function finalizarVenda() {
 
         desconto;
 
+
+
+    const totalCentavos = Math.round(total * 100);
+    let recebidoDinheiroCentavos = null;
+    let trocoDinheiroCentavos = 0;
+
+    if (forma === "dinheiro") {
+        recebidoDinheiroCentavos = valorRecebidoEmCentavos();
+
+        if (recebidoDinheiroCentavos === null) {
+            mostrarMensagem("Informe o valor que o cliente entregou em dinheiro.", "erro");
+            valorRecebidoVenda?.focus();
+            return;
+        }
+
+        if (recebidoDinheiroCentavos < totalCentavos) {
+            const faltaCentavos = totalCentavos - recebidoDinheiroCentavos;
+            mostrarMensagem(`O valor recebido é insuficiente. Faltam ${formatarMoeda(faltaCentavos / 100)}.`, "erro");
+            valorRecebidoVenda?.focus();
+            atualizarTrocoDinheiro();
+            return;
+        }
+
+        trocoDinheiroCentavos = recebidoDinheiroCentavos - totalCentavos;
+    }
     const resumoFormaPagamento = forma === "a_prazo"
         ? `Forma: A prazo\nParcelas: ${numeroParcelasFiado}\nPrimeiro vencimento: em ${diasPrimeiroVencimentoFiado} dias\nA dívida será registrada e não contará como valor recebido.`
-        : `Forma: ${formaPagamento.options[formaPagamento.selectedIndex].text}`;
+        : forma === "dinheiro"
+            ? `Forma: Dinheiro\nValor recebido: ${formatarMoeda(recebidoDinheiroCentavos / 100)}\nTroco: ${formatarMoeda(trocoDinheiroCentavos / 100)}`
+            : `Forma: ${formaPagamento.options[formaPagamento.selectedIndex].text}`;
 
     const confirmou = confirm(
         `Confirmar venda?\n\n` +
@@ -3572,13 +3685,15 @@ async function finalizarVenda() {
         if (window.SistemaLojaComprovantes) {
 
             window.SistemaLojaComprovantes.adicionarBotao(
-
                 vendasSupabase,
-
                 data.venda_id,
-
-                btnFinalizarVenda
-
+                btnFinalizarVenda,
+                forma === "dinheiro"
+                    ? {
+                        valorRecebido: recebidoDinheiroCentavos / 100,
+                        troco: trocoDinheiroCentavos / 100
+                    }
+                    : null
             );
 
         }
@@ -3864,6 +3979,10 @@ btnCancelarVenda.addEventListener(
     cancelarVenda
 
 );
+
+if (valorRecebidoVenda) {
+    valorRecebidoVenda.addEventListener("input", atualizarTrocoDinheiro);
+}
 
 if (formaPagamento) {
 
