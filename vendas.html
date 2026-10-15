@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="pt-BR">
 
 <head>
@@ -6,140 +7,222 @@
     <meta charset="UTF-8">
 
     <meta
+
         name="viewport"
+
         content="width=device-width, initial-scale=1.0"
+
     >
 
     <title>Sistema da Loja - Vendas</title>
 
     <link
+
         rel="stylesheet"
+
         href="style.css"
+
     >
 
     <link
+
         rel="stylesheet"
+
         href="admin.css"
+
     >
 
     <link
+
         rel="stylesheet"
+
         href="vendas.css"
+
     >
+
+
+    <style id="estilos-prazo-venda">
+        .configuracao-prazo-venda {
+            grid-column: 1 / -1;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+            width: 100%;
+            margin-top: 12px;
+            padding: 14px;
+            border: 1px solid #bfdbfe;
+            border-radius: 9px;
+            background: #eff6ff;
+            box-sizing: border-box;
+        }
+        .configuracao-prazo-venda[hidden] {
+            display: none !important;
+        }
+        .configuracao-prazo-venda .campo-venda {
+            min-width: 0;
+        }
+        .texto-ajuda-prazo {
+            grid-column: 1 / -1;
+            margin: 0;
+            color: #1e40af;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+        @media (max-width: 600px) {
+            .configuracao-prazo-venda {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 
 </head>
 
-
 <body>
-
 
 <div class="layout-admin">
 
-
     <!-- ==========================================
+
          MENU LATERAL
+
     =========================================== -->
 
     <aside class="menu-lateral">
-
 
         <!-- LOGO -->
 
         <div class="logo-admin">
 
             <div class="logo-icone">
+
                 SL
+
             </div>
 
             <div>
 
                 <strong>
+
                     Sistema da Loja
+
                 </strong>
 
                 <span>
+
                     Administração
+
                 </span>
 
             </div>
 
         </div>
-
 
         <!-- USUÁRIO LOGADO -->
 
         <div class="usuario-logado">
 
             <div class="avatar-admin">
+
                 A
+
             </div>
 
             <div class="dados-usuario">
 
                 <strong id="nomeAdministrador">
+
                     Administrador
+
                 </strong>
 
                 <span>
+
                     Administrador
+
                 </span>
 
             </div>
 
         </div>
 
-
         <!-- ======================================
+
              MENU
+
         ======================================= -->
 
         <nav class="menu">
 
-
             <!-- PRINCIPAL -->
 
             <div class="titulo-menu">
-                PRINCIPAL
-            </div>
 
+                PRINCIPAL
+
+            </div>
 
             <!-- DASHBOARD -->
 
             <a
+
                 href="admin.html"
+
                 class="item-menu"
+
             >
 
                 <span class="icone-menu">
 
                     <svg
+
                         viewBox="0 0 24 24"
+
                         aria-hidden="true"
+
                     >
 
                         <path
+
                             d="M3 10.5 12 3l9 7.5"
+
                             fill="none"
+
                             stroke="currentColor"
+
                             stroke-width="2"
+
                             stroke-linecap="round"
+
                             stroke-linejoin="round"
+
                         />
 
                         <path
+
                             d="M5 9.5V21h14V9.5"
+
                             fill="none"
+
                             stroke="currentColor"
+
                             stroke-width="2"
+
                             stroke-linejoin="round"
+
                         />
 
                         <path
+
                             d="M9 21v-6h6v6"
+
                             fill="none"
+
                             stroke="currentColor"
+
                             stroke-width="2"
+
                             stroke-linejoin="round"
+
                         />
 
                     </svg>
@@ -147,57 +230,89 @@
                 </span>
 
                 <span>
+
                     Dashboard
+
                 </span>
 
             </a>
-
 
             <!-- USUÁRIOS -->
 
             <a
+
                 href="usuarios.html"
+
                 class="item-menu"
+
             >
 
                 <span class="icone-menu">
 
                     <svg
+
                         viewBox="0 0 24 24"
+
                         aria-hidden="true"
+
                     >
 
                         <circle
+
                             cx="9"
+
                             cy="8"
+
                             r="3"
+
                             fill="none"
+
                             stroke="currentColor"
+
                             stroke-width="2"
+
                         />
 
                         <path
+
                             d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"
+
                             fill="none"
+
                             stroke="currentColor"
+
                             stroke-width="2"
+
                             stroke-linecap="round"
+
                         />
 
                         <path
+
                             d="M16 5.5a3 3 0 0 1 0 5.8"
+
                             fill="none"
+
                             stroke="currentColor"
+
                             stroke-width="2"
+
                             stroke-linecap="round"
+
                         />
 
                         <path
+
                             d="M17 14.5c2.3.7 4 2.8 4 5.5"
+
                             fill="none"
+
                             stroke="currentColor"
+
                             stroke-width="2"
+
                             stroke-linecap="round"
+
                         />
 
                     </svg>
@@ -205,58 +320,91 @@
                 </span>
 
                 <span>
+
                     Usuários
+
                 </span>
 
             </a>
-
 
             <!-- LOJAS - SOMENTE ADMIN GERAL -->
 
             <a
+
                 href="lojas.html"
+
                 class="item-menu"
+
                 id="menuLojas"
+
                 style="display: none;"
+
             >
 
                 <span class="icone-menu">
 
                     <svg
+
                         viewBox="0 0 24 24"
+
                         aria-hidden="true"
+
                     >
 
                         <path
+
                             d="M4 10h16"
+
                             fill="none"
+
                             stroke="currentColor"
+
                             stroke-width="2"
+
                             stroke-linecap="round"
+
                         />
 
                         <path
+
                             d="M5 10v10h14V10"
+
                             fill="none"
+
                             stroke="currentColor"
+
                             stroke-width="2"
+
                             stroke-linejoin="round"
+
                         />
 
                         <path
+
                             d="M3 10 5 4h14l2 6"
+
                             fill="none"
+
                             stroke="currentColor"
+
                             stroke-width="2"
+
                             stroke-linejoin="round"
+
                         />
 
                         <path
+
                             d="M9 20v-5h6v5"
+
                             fill="none"
+
                             stroke="currentColor"
+
                             stroke-width="2"
+
                             stroke-linejoin="round"
+
                         />
 
                     </svg>
@@ -264,56 +412,83 @@
                 </span>
 
                 <span>
+
                     Lojas
+
                 </span>
 
             </a>
 
-
             <!-- ======================================
+
                  ESTOQUE E VENDAS
+
             ======================================= -->
 
             <div class="titulo-menu">
-                ESTOQUE E VENDAS
-            </div>
 
+                ESTOQUE E VENDAS
+
+            </div>
 
             <!-- PRODUTOS -->
 
             <a
+
                 href="produtos.html"
+
                 class="item-menu"
+
             >
 
                 <span class="icone-menu">
 
                     <svg
+
                         viewBox="0 0 24 24"
+
                         aria-hidden="true"
+
                     >
 
                         <path
+
                             d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Z"
+
                             fill="none"
+
                             stroke="currentColor"
+
                             stroke-width="2"
+
                             stroke-linejoin="round"
+
                         />
 
                         <path
+
                             d="m4 7.5 8 4.5 8-4.5"
+
                             fill="none"
+
                             stroke="currentColor"
+
                             stroke-width="2"
+
                             stroke-linejoin="round"
+
                         />
 
                         <path
+
                             d="M12 12v9"
+
                             fill="none"
+
                             stroke="currentColor"
+
                             stroke-width="2"
+
                         />
 
                     </svg>
@@ -321,56 +496,87 @@
                 </span>
 
                 <span>
+
                     Produtos
+
                 </span>
 
             </a>
-
 
             <!-- CATEGORIAS -->
 
             <a
+
                 href="categorias.html"
+
                 class="item-menu"
+
             >
 
                 <span class="icone-menu">
 
                     <svg
+
                         viewBox="0 0 24 24"
+
                         aria-hidden="true"
+
                     >
 
                         <path
+
                             d="M4 5h6v6H4z"
+
                             fill="none"
+
                             stroke="currentColor"
+
                             stroke-width="2"
+
                             stroke-linejoin="round"
+
                         />
 
                         <path
+
                             d="M14 5h6v6h-6z"
+
                             fill="none"
+
                             stroke="currentColor"
+
                             stroke-width="2"
+
                             stroke-linejoin="round"
+
                         />
 
                         <path
+
                             d="M4 13h6v6H4z"
+
                             fill="none"
+
                             stroke="currentColor"
+
                             stroke-width="2"
+
                             stroke-linejoin="round"
+
                         />
 
                         <path
+
                             d="M14 13h6v6h-6z"
+
                             fill="none"
+
                             stroke="currentColor"
+
                             stroke-width="2"
+
                             stroke-linejoin="round"
+
                         />
 
                     </svg>
@@ -378,56 +584,87 @@
                 </span>
 
                 <span>
+
                     Categorias
+
                 </span>
 
             </a>
-
 
             <!-- ESTOQUE -->
 
             <a
+
                 href="estoque.html"
+
                 class="item-menu"
+
             >
 
                 <span class="icone-menu">
 
                     <svg
+
                         viewBox="0 0 24 24"
+
                         aria-hidden="true"
+
                     >
 
                         <path
+
                             d="M4 4h16v16H4z"
+
                             fill="none"
+
                             stroke="currentColor"
+
                             stroke-width="2"
+
                             stroke-linejoin="round"
+
                         />
 
                         <path
+
                             d="M8 8h8"
+
                             fill="none"
+
                             stroke="currentColor"
+
                             stroke-width="2"
+
                             stroke-linecap="round"
+
                         />
 
                         <path
+
                             d="M8 12h8"
+
                             fill="none"
+
                             stroke="currentColor"
+
                             stroke-width="2"
+
                             stroke-linecap="round"
+
                         />
 
                         <path
+
                             d="M8 16h5"
+
                             fill="none"
+
                             stroke="currentColor"
+
                             stroke-width="2"
+
                             stroke-linecap="round"
+
                         />
 
                     </svg>
@@ -435,47 +672,71 @@
                 </span>
 
                 <span>
+
                     Estoque
+
                 </span>
 
             </a>
-
 
             <!-- VENDAS -->
 
             <a
+
                 href="vendas.html"
+
                 class="item-menu ativo"
+
             >
 
                 <span class="icone-menu">
 
                     <svg
+
                         viewBox="0 0 24 24"
+
                         aria-hidden="true"
+
                     >
 
                         <path
+
                             d="M3 4h2l2.2 11.2a2 2 0 0 0 2 1.6h7.6a2 2 0 0 0 2-1.6L21 8H6"
+
                             fill="none"
+
                             stroke="currentColor"
+
                             stroke-width="2"
+
                             stroke-linecap="round"
+
                             stroke-linejoin="round"
+
                         />
 
                         <circle
+
                             cx="10"
+
                             cy="20"
+
                             r="1"
+
                             fill="currentColor"
+
                         />
 
                         <circle
+
                             cx="18"
+
                             cy="20"
+
                             r="1"
+
                             fill="currentColor"
+
                         />
 
                     </svg>
@@ -483,56 +744,87 @@
                 </span>
 
                 <span>
+
                     Vendas
+
                 </span>
 
             </a>
-
 
             <!-- HISTÓRICO DE VENDAS -->
 
             <a
+
                 href="historico-vendas.html"
+
                 class="item-menu"
+
             >
 
                 <span class="icone-menu">
 
                     <svg
+
                         viewBox="0 0 24 24"
+
                         aria-hidden="true"
+
                     >
 
                         <path
+
                             d="M4 5h16v14H4z"
+
                             fill="none"
+
                             stroke="currentColor"
+
                             stroke-width="2"
+
                             stroke-linejoin="round"
+
                         />
 
                         <path
+
                             d="M8 9h8"
+
                             fill="none"
+
                             stroke="currentColor"
+
                             stroke-width="2"
+
                             stroke-linecap="round"
+
                         />
 
                         <path
+
                             d="M8 13h6"
+
                             fill="none"
+
                             stroke="currentColor"
+
                             stroke-width="2"
+
                             stroke-linecap="round"
+
                         />
 
                         <path
+
                             d="M8 17h4"
+
                             fill="none"
+
                             stroke="currentColor"
+
                             stroke-width="2"
+
                             stroke-linecap="round"
+
                         />
 
                     </svg>
@@ -540,41 +832,61 @@
                 </span>
 
                 <span>
+
                     Histórico de vendas
+
                 </span>
 
             </a>
-
 
             <!-- CLIENTES -->
 
             <a
+
                 href="clientes.html"
+
                 class="item-menu"
+
             >
 
                 <span class="icone-menu">
 
                     <svg
+
                         viewBox="0 0 24 24"
+
                         aria-hidden="true"
+
                     >
 
                         <circle
+
                             cx="12"
+
                             cy="8"
+
                             r="3"
+
                             fill="none"
+
                             stroke="currentColor"
+
                             stroke-width="2"
+
                         />
 
                         <path
+
                             d="M5 20c0-3.9 3.1-7 7-7s7 3.1 7 7"
+
                             fill="none"
+
                             stroke="currentColor"
+
                             stroke-width="2"
+
                             stroke-linecap="round"
+
                         />
 
                     </svg>
@@ -582,58 +894,98 @@
                 </span>
 
                 <span>
+
                     Clientes
+
                 </span>
 
             </a>
 
 
+            <a href="notinhas.html" class="item-menu">
+                <span class="icone-menu" aria-hidden="true">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M5 4h14v16H5z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
+                        <path d="M8 9h8M8 13h8M8 17h5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                    </svg>
+                </span>
+                <span>Notinhas / Fiado</span>
+            </a>
+
             <!-- ======================================
+
                  FINANCEIRO
+
             ======================================= -->
 
             <div class="titulo-menu">
-                FINANCEIRO
-            </div>
 
+                FINANCEIRO
+
+            </div>
 
             <!-- FINANCEIRO -->
 
             <a
+
                 href="financeiro.html"
+
                 class="item-menu"
+
             >
 
                 <span class="icone-menu">
 
                     <svg
+
                         viewBox="0 0 24 24"
+
                         aria-hidden="true"
+
                     >
 
                         <circle
+
                             cx="12"
+
                             cy="12"
+
                             r="8"
+
                             fill="none"
+
                             stroke="currentColor"
+
                             stroke-width="2"
+
                         />
 
                         <path
+
                             d="M12 7v10"
+
                             fill="none"
+
                             stroke="currentColor"
+
                             stroke-width="2"
+
                             stroke-linecap="round"
+
                         />
 
                         <path
+
                             d="M15 9.5c-.7-.8-1.7-1.2-3-1.2-1.6 0-2.7.8-2.7 2 0 3 5.7 1.1 5.7 4 0 1.3-1.2 2.2-3 2.2-1.4 0-2.6-.5-3.3-1.4"
+
                             fill="none"
+
                             stroke="currentColor"
+
                             stroke-width="1.7"
+
                             stroke-linecap="round"
+
                         />
 
                     </svg>
@@ -641,49 +993,75 @@
                 </span>
 
                 <span>
+
                     Financeiro
+
                 </span>
 
             </a>
-
 
             <!-- RELATÓRIOS -->
 
             <a
+
                 href="relatorios.html"
+
                 class="item-menu"
+
             >
 
                 <span class="icone-menu">
 
                     <svg
+
                         viewBox="0 0 24 24"
+
                         aria-hidden="true"
+
                     >
 
                         <path
+
                             d="M4 19V5"
+
                             fill="none"
+
                             stroke="currentColor"
+
                             stroke-width="2"
+
                             stroke-linecap="round"
+
                         />
 
                         <path
+
                             d="M4 19h16"
+
                             fill="none"
+
                             stroke="currentColor"
+
                             stroke-width="2"
+
                             stroke-linecap="round"
+
                         />
 
                         <path
+
                             d="m7 15 3-3 3 2 5-6"
+
                             fill="none"
+
                             stroke="currentColor"
+
                             stroke-width="2"
+
                             stroke-linecap="round"
+
                             stroke-linejoin="round"
+
                         />
 
                     </svg>
@@ -691,56 +1069,83 @@
                 </span>
 
                 <span>
+
                     Relatórios
+
                 </span>
 
             </a>
 
-
         </nav>
-
 
         <!-- SAIR -->
 
         <div class="area-sair">
 
             <button
+
                 type="button"
+
                 class="botao-sair"
+
                 id="btnSair"
+
             >
 
                 <span class="icone-menu">
 
                     <svg
+
                         viewBox="0 0 24 24"
+
                         aria-hidden="true"
+
                     >
 
                         <path
+
                             d="M10 5H5v14h5"
+
                             fill="none"
+
                             stroke="currentColor"
+
                             stroke-width="2"
+
                             stroke-linecap="round"
+
                             stroke-linejoin="round"
+
                         />
 
                         <path
+
                             d="M13 8l4 4-4 4"
+
                             fill="none"
+
                             stroke="currentColor"
+
                             stroke-width="2"
+
                             stroke-linecap="round"
+
                             stroke-linejoin="round"
+
                         />
 
                         <path
+
                             d="M9 12h8"
+
                             fill="none"
+
                             stroke="currentColor"
+
                             stroke-width="2"
+
                             stroke-linecap="round"
+
                         />
 
                     </svg>
@@ -748,23 +1153,24 @@
                 </span>
 
                 <span>
+
                     Sair
+
                 </span>
 
             </button>
 
         </div>
 
-
     </aside>
 
-
     <!-- ==========================================
+
          CONTEÚDO
+
     =========================================== -->
 
     <main class="conteudo-admin">
-
 
         <!-- CABEÇALHO -->
 
@@ -773,465 +1179,613 @@
             <div>
 
                 <h1>
+
                     Vendas
+
                 </h1>
 
                 <p>
+
                     Registre vendas e acompanhe seus pedidos.
+
                 </p>
 
             </div>
 
-
             <div class="data-atual">
 
                 <span>
+
                     Hoje
+
                 </span>
 
                 <strong id="dataAtual">
+
                     --
+
                 </strong>
 
             </div>
 
         </header>
 
-
         <!-- ==========================================
+
              NOVA VENDA
+
         =========================================== -->
 
         <section class="painel-vendas">
 
-
             <div class="titulo-painel-vendas">
-
 
                 <div>
 
                     <h2>
+
                         Nova venda
+
                     </h2>
 
                     <p>
+
                         Adicione os produtos da venda ao carrinho.
+
                     </p>
 
                 </div>
 
-
                 <div class="status-venda">
-                    Nova venda
-                </div>
 
+                    Nova venda
+
+                </div>
 
             </div>
 
-
             <!-- ======================================
+
                  CLIENTE
+
             ======================================= -->
 
             <div class="campo-venda campo-cliente">
 
                 <label for="clienteVenda">
+
                     Cliente
+
                 </label>
 
                 <select id="clienteVenda">
 
                     <option value="">
+
                         Consumidor não identificado
+
                     </option>
 
                 </select>
 
             </div>
 
-
             <!-- ======================================
+
                  PRODUTO
+
             ======================================= -->
 
             <div class="area-adicionar-produto">
 
-
                 <div class="campo-venda produto-campo">
 
                     <label for="produtoVenda">
+
                         Produto
+
                     </label>
 
                     <select id="produtoVenda">
 
                         <option value="">
+
                             Selecione um produto
+
                         </option>
 
                     </select>
 
                 </div>
 
-
                 <div class="campo-venda quantidade-campo">
 
                     <label for="quantidadeVenda">
+
                         Quantidade
+
                     </label>
 
                     <input
+
                         type="number"
+
                         id="quantidadeVenda"
+
                         min="1"
+
                         step="1"
+
                         value="1"
+
                     >
 
                 </div>
-
 
                 <div class="campo-venda preco-campo">
 
                     <label for="precoVenda">
+
                         Preço unitário
+
                     </label>
 
                     <input
+
                         type="text"
+
                         id="precoVenda"
+
                         value="R$ 0,00"
+
                         readonly
+
                     >
 
                 </div>
-
 
                 <div class="botao-adicionar-area">
 
                     <button
+
                         type="button"
+
                         id="btnAdicionarProduto"
+
                         class="btn-adicionar"
+
                     >
+
                         + Adicionar
+
                     </button>
 
                 </div>
 
-
             </div>
 
-
             <!-- ======================================
+
                  CARRINHO
+
             ======================================= -->
 
             <div class="carrinho-venda">
-
 
                 <div class="cabecalho-carrinho">
 
                     <div>
 
                         <h3>
+
                             Produtos da venda
+
                         </h3>
 
                         <span id="quantidadeItensCarrinho">
+
                             0 itens
+
                         </span>
 
                     </div>
 
                 </div>
 
-
                 <div
+
                     id="carrinhoVazio"
+
                     class="carrinho-vazio"
+
                 >
 
                     <div class="icone-carrinho">
 
                         <svg
+
                             viewBox="0 0 24 24"
+
                             aria-hidden="true"
+
                             width="38"
+
                             height="38"
+
                         >
 
                             <path
+
                                 d="M3 4h2l2.2 11.2a2 2 0 0 0 2 1.6h7.6a2 2 0 0 0 2-1.6L21 8H6"
+
                                 fill="none"
+
                                 stroke="currentColor"
+
                                 stroke-width="1.8"
+
                                 stroke-linecap="round"
+
                                 stroke-linejoin="round"
+
                             />
 
                             <circle
+
                                 cx="10"
+
                                 cy="20"
+
                                 r="1.3"
+
                                 fill="currentColor"
+
                             />
 
                             <circle
+
                                 cx="18"
+
                                 cy="20"
+
                                 r="1.3"
+
                                 fill="currentColor"
+
                             />
 
                         </svg>
 
                     </div>
 
-
                     <strong>
+
                         Nenhum produto adicionado
+
                     </strong>
 
-
                     <span>
-                        Selecione um produto acima para começar a venda.
-                    </span>
 
+                        Selecione um produto acima para começar a venda.
+
+                    </span>
 
                 </div>
 
-
                 <div
-                    id="listaCarrinho"
-                    class="lista-carrinho"
-                ></div>
 
+                    id="listaCarrinho"
+
+                    class="lista-carrinho"
+
+                ></div>
 
             </div>
 
-
             <!-- ======================================
+
                  RESUMO
+
             ======================================= -->
 
             <div class="resumo-venda">
 
-
                 <div class="resumo-valores">
-
 
                     <div class="linha-resumo">
 
                         <span>
+
                             Subtotal
+
                         </span>
 
                         <strong id="valorSubtotal">
+
                             R$ 0,00
+
                         </strong>
 
                     </div>
 
-
                     <div class="linha-resumo linha-desconto">
 
                         <label for="descontoVenda">
-                            Desconto
-                        </label>
 
+                            Desconto
+
+                        </label>
 
                         <div class="campo-desconto">
 
                             <input
+
                                 type="number"
+
                                 id="descontoVenda"
+
                                 min="0"
+
                                 step="0.01"
+
                                 value="0"
+
                             >
 
                             <span>
+
                                 R$
+
                             </span>
 
                         </div>
 
                     </div>
 
-
                     <div class="linha-resumo linha-total">
 
                         <span>
+
                             Total da venda
+
                         </span>
 
                         <strong id="valorTotal">
+
                             R$ 0,00
+
                         </strong>
 
                     </div>
 
-
                 </div>
-
 
             </div>
 
-
             <!-- ======================================
+
                  PAGAMENTO
+
             ======================================= -->
 
             <div class="dados-finalizacao">
 
-
                 <div class="campo-venda">
 
                     <label for="formaPagamento">
+
                         Forma de pagamento
+
                     </label>
 
                     <select id="formaPagamento">
 
                         <option value="">
+
                             Selecione
+
                         </option>
 
                         <option value="dinheiro">
+
                             Dinheiro
+
                         </option>
 
                         <option value="pix">
+
                             PIX
+
                         </option>
 
                         <option value="cartao_credito">
+
                             Cartão de crédito
+
                         </option>
 
                         <option value="cartao_debito">
+
                             Cartão de débito
+
                         </option>
 
                         <option value="boleto">
+
                             Boleto
+
                         </option>
 
                         <option value="outro">
+
                             Outro
+
+                        </option>
+
+                        <option value="a_prazo">
+
+                            A prazo (fiado)
+
                         </option>
 
                     </select>
 
                 </div>
 
-
+                <div id="camposPrazoVenda" class="configuracao-prazo-venda" hidden>
+                    <div class="campo-venda">
+                        <label for="parcelasFiadoVenda">Número de parcelas</label>
+                        <select id="parcelasFiadoVenda">
+                            <option value="1">1 parcela</option>
+                            <option value="2">2 parcelas</option>
+                            <option value="3">3 parcelas</option>
+                            <option value="4">4 parcelas</option>
+                            <option value="5">5 parcelas</option>
+                            <option value="6">6 parcelas</option>
+                            <option value="7">7 parcelas</option>
+                            <option value="8">8 parcelas</option>
+                            <option value="9">9 parcelas</option>
+                            <option value="10">10 parcelas</option>
+                            <option value="11">11 parcelas</option>
+                            <option value="12">12 parcelas</option>
+                        </select>
+                    </div>
+                    <div class="campo-venda">
+                        <label for="diasPrimeiroVencimentoVenda">Primeiro vencimento</label>
+                        <select id="diasPrimeiroVencimentoVenda">
+                            <option value="7">Em 7 dias</option>
+                            <option value="15">Em 15 dias</option>
+                            <option value="30" selected>Em 30 dias</option>
+                        </select>
+                    </div>
+                    <p class="texto-ajuda-prazo">
+                        As parcelas seguintes vencem a cada 30 dias. A venda só será registrada depois da validação do sistema.
+                    </p>
+                </div>
                 <div class="campo-venda campo-observacoes">
 
                     <label for="observacoesVenda">
+
                         Observações
+
                     </label>
 
                     <input
+
                         type="text"
+
                         id="observacoesVenda"
+
                         maxlength="300"
+
                         placeholder="Observações da venda..."
+
                     >
 
                 </div>
 
-
             </div>
 
-
             <!-- ======================================
+
                  MENSAGEM
+
             ======================================= -->
 
             <div
+
                 id="mensagemVenda"
+
                 class="mensagem-venda"
+
             ></div>
 
-
             <!-- ======================================
+
                  BOTÕES
+
             ======================================= -->
 
             <div class="acoes-venda">
 
-
                 <button
+
                     type="button"
+
                     id="btnCancelarVenda"
-                    class="btn-cancelar-venda"
-                >
-                    Cancelar
-                </button>
 
+                    class="btn-cancelar-venda"
+
+                >
+
+                    Cancelar
+
+                </button>
 
                 <button
-                    type="button"
-                    id="btnFinalizarVenda"
-                    class="btn-finalizar-venda"
-                >
-                    ✓ Finalizar venda
-                </button>
 
+                    type="button"
+
+                    id="btnFinalizarVenda"
+
+                    class="btn-finalizar-venda"
+
+                >
+
+                    ✓ Finalizar venda
+
+                </button>
 
             </div>
 
-
         </section>
-
 
     </main>
 
-
 </div>
 
-
 <!-- ==========================================
+
      SUPABASE
+
 =========================================== -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-
 <script src="js/config.js"></script>
-
 
 <!-- LAYOUT PADRÃO -->
 
 <script src="js/layout.js"></script>
 
-
 <!-- LÓGICA DAS VENDAS -->
 
 <script src="js/comprovante-venda.js"></script>
 
-
 <script src="js/vendas.js"></script>
 
-
 <!-- ==========================================
+
      LOJAS
+
      SOMENTE ADMINISTRADOR GERAL
+
 =========================================== -->
 
 <script>
 
 document.addEventListener(
+
     "DOMContentLoaded",
+
     async function () {
 
         const menuLojas =
-            document.getElementById(
-                "menuLojas"
-            );
 
+            document.getElementById(
+
+                "menuLojas"
+
+            );
 
         if (!menuLojas) {
 
@@ -1239,105 +1793,141 @@ document.addEventListener(
 
         }
 
-
         try {
 
             const {
+
                 data: {
+
                     user
+
                 },
+
                 error: erroUsuario
+
             } =
+
                 await supabaseClient
+
                     .auth
+
                     .getUser();
 
-
             if (
+
                 erroUsuario ||
+
                 !user
+
             ) {
 
                 menuLojas.style.display =
+
                     "none";
 
                 return;
 
             }
 
-
             const {
-                data: perfil,
-                error
-            } =
-                await supabaseClient
-                    .from("perfis")
-                    .select(
-                        "usuario, tipo, ativo"
-                    )
-                    .eq(
-                        "id",
-                        user.id
-                    )
-                    .maybeSingle();
 
+                data: perfil,
+
+                error
+
+            } =
+
+                await supabaseClient
+
+                    .from("perfis")
+
+                    .select(
+
+                        "usuario, tipo, ativo"
+
+                    )
+
+                    .eq(
+
+                        "id",
+
+                        user.id
+
+                    )
+
+                    .maybeSingle();
 
             if (error) {
 
                 console.error(
+
                     "Erro ao verificar perfil:",
+
                     error
+
                 );
 
                 menuLojas.style.display =
+
                     "none";
 
                 return;
 
             }
 
-
             const ehAdministradorGeral =
+
                 perfil &&
+
                 perfil.usuario ===
+
                     "admingeral" &&
+
                 perfil.tipo ===
+
                     "admin_geral" &&
+
                 perfil.ativo === true;
 
-
             if (
+
                 ehAdministradorGeral
+
             ) {
 
                 menuLojas.style.display =
+
                     "flex";
 
             } else {
 
                 menuLojas.style.display =
+
                     "none";
 
             }
 
-
         } catch (erro) {
 
             console.error(
+
                 "Erro ao verificar acesso às lojas:",
+
                 erro
+
             );
 
             menuLojas.style.display =
+
                 "none";
 
         }
 
     }
+
 );
 
 </script>
-
 
 </body>
 

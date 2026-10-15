@@ -58,6 +58,18 @@ const faturamento =
 
     document.getElementById("faturamento");
 
+const totalRecebidoPeriodo =
+
+    document.getElementById("totalRecebidoPeriodo");
+
+const resultadoFinanceiroPeriodo =
+
+    document.getElementById("resultadoFinanceiroPeriodo");
+
+const saldoAtualAReceber =
+
+    document.getElementById("saldoAtualAReceber");
+
 const ticketMedio =
 
     document.getElementById("ticketMedio");
@@ -153,6 +165,8 @@ let produtosRelatorio =
     [];
 
 let nomeLojaRelatorio = "Sistema da Loja";
+let lojaIdRelatorio = null;
+let resumoFinanceiroComErro = false;
 
 /* ==========================================
 
@@ -207,45 +221,37 @@ function formatarData(data) {
 function formatarFormaPagamento(forma) {
 
     if (!forma) {
-
         return "Não informado";
-
     }
 
-    const valor =
-
-        forma.toLowerCase();
+    // Aceita os códigos gravados no banco (ex.: cartao_credito)
+    // e os nomes exibidos pela interface (ex.: Cartão de crédito).
+    const valor = String(forma)
+        .trim()
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[_-]+/g, " ")
+        .replace(/\s+/g, " ");
 
     const nomes = {
-
         pix: "PIX",
-
         dinheiro: "Dinheiro",
-
         cartao: "Cartão",
-
-        "cartão": "Cartão",
-
+        "cartao de credito": "Cartão de crédito",
+        "cartao credito": "Cartão de crédito",
         credito: "Cartão de crédito",
-
-        "cartão de crédito":
-
-            "Cartão de crédito",
-
+        "cartao de debito": "Cartão de débito",
+        "cartao debito": "Cartão de débito",
         debito: "Cartão de débito",
-
-        "cartão de débito":
-
-            "Cartão de débito",
-
-        boleto: "Boleto"
-
+        boleto: "Boleto",
+        outro: "Outro",
+        outros: "Outros",
+        "nao identificado": "Não identificada",
+        "nao identificada": "Não identificada"
     };
 
-    return nomes[valor] ||
-
-        forma;
-
+    return nomes[valor] || String(forma).trim();
 }
 
 /* ==========================================
@@ -376,6 +382,8 @@ async function protegerPaginaRelatorios() {
 
         resultado.data;
 
+    lojaIdRelatorio = perfil.loja_id || null;
+
     // O nome da loja é usado apenas no cabeçalho impresso.
     // Se a consulta não estiver disponível, o relatório continua funcionando.
     if (perfil.loja_id) {
@@ -498,6 +506,18 @@ function limparResultados() {
 
         formatarMoeda(0);
 
+    if (totalRecebidoPeriodo) {
+        totalRecebidoPeriodo.textContent = formatarMoeda(0);
+    }
+
+    if (resultadoFinanceiroPeriodo) {
+        resultadoFinanceiroPeriodo.textContent = formatarMoeda(0);
+    }
+
+    if (saldoAtualAReceber) {
+        saldoAtualAReceber.textContent = formatarMoeda(0);
+    }
+
     ticketMedio.textContent =
 
         formatarMoeda(0);
@@ -533,6 +553,14 @@ function limparResultados() {
     listaPagamentos.innerHTML =
 
         "";
+
+    const resumoVendasPrazo = document.getElementById("resumoVendasPrazo");
+    const totalVendasPrazo = document.getElementById("totalVendasPrazo");
+    const quantidadeVendasPrazo = document.getElementById("quantidadeVendasPrazo");
+    if (resumoVendasPrazo) resumoVendasPrazo.style.display = "none";
+    if (totalVendasPrazo) totalVendasPrazo.textContent = formatarMoeda(0);
+    if (quantidadeVendasPrazo) quantidadeVendasPrazo.textContent = "0 vendas a prazo no período";
+
 
     listaVendasDia.innerHTML =
 
@@ -574,6 +602,173 @@ function limparResultados() {
 
         "none";
 
+}
+
+/* =========================================================
+   INDICADORES DE DINHEIRO RECEBIDO E SALDO A RECEBER
+
+   - Total recebido no período: soma das entradas financeiras
+     efetivamente registradas dentro do período selecionado.
+   - Saldo atual a receber: saldo das parcelas de notinhas que
+     continuam abertas hoje, sem limitar pela data do relatório.
+   - Esses valores nunca são somados ao faturamento de vendas.
+========================================================= */
+
+async function carregarTotalRecebidoNoPeriodo(dataInicial, dataFinal) {
+    if (!totalRecebidoPeriodo) return;
+
+    if (!lojaIdRelatorio) {
+        totalRecebidoPeriodo.textContent = "Indisponível";
+        if (resultadoFinanceiroPeriodo) {
+            resultadoFinanceiroPeriodo.textContent = "Indisponível";
+        }
+        resumoFinanceiroComErro = true;
+        return;
+    }
+
+    try {
+        // Consulta entradas e saídas reais no período para separar o total recebido
+        // do resultado financeiro líquido (entradas menos saídas).
+        const resultado = await relatoriosSupabase
+            .from("financeiro")
+            .select("tipo, valor, data_movimento")
+            .eq("loja_id", lojaIdRelatorio)
+            .gte("data_movimento", dataInicial)
+            .lte("data_movimento", dataFinal);
+
+        if (resultado.error) throw resultado.error;
+
+        const lancamentos = resultado.data || [];
+        const centavosPorTipo = lancamentos.reduce((totais, lancamento) => {
+            const tipo = String(lancamento.tipo || "").trim().toLowerCase();
+            const centavos = Math.round((Number(lancamento.valor) || 0) * 100);
+
+            if (tipo === "entrada") totais.entradas += centavos;
+            if (tipo === "saida" || tipo === "saída") totais.saidas += centavos;
+
+            return totais;
+        }, { entradas: 0, saidas: 0 });
+
+        totalRecebidoPeriodo.textContent = formatarMoeda(
+            centavosPorTipo.entradas / 100
+        );
+
+        if (resultadoFinanceiroPeriodo) {
+            const saldoCentavos = centavosPorTipo.entradas - centavosPorTipo.saidas;
+            resultadoFinanceiroPeriodo.textContent = formatarMoeda(saldoCentavos / 100);
+            resultadoFinanceiroPeriodo.style.color = saldoCentavos >= 0 ? "#15803d" : "#dc2626";
+        }
+    } catch (erro) {
+        console.error("Não foi possível consultar o resumo financeiro do período:", erro);
+        totalRecebidoPeriodo.textContent = "Indisponível";
+        if (resultadoFinanceiroPeriodo) {
+            resultadoFinanceiroPeriodo.textContent = "Indisponível";
+        }
+        resumoFinanceiroComErro = true;
+    }
+}
+
+async function carregarSaldoAtualAReceber() {
+    if (!saldoAtualAReceber) return;
+
+    if (!lojaIdRelatorio) {
+        saldoAtualAReceber.textContent = "Indisponível";
+        resumoFinanceiroComErro = true;
+        return;
+    }
+
+    try {
+        const resultadoNotinhas = await relatoriosSupabase
+            .from("notinhas")
+            .select("id, total, status")
+            .eq("loja_id", lojaIdRelatorio)
+            .eq("status", "aberta");
+
+        if (resultadoNotinhas.error) throw resultadoNotinhas.error;
+
+        const notinhasAbertas = resultadoNotinhas.data || [];
+        if (notinhasAbertas.length === 0) {
+            saldoAtualAReceber.textContent = formatarMoeda(0);
+            return;
+        }
+
+        const idsNotinhas = notinhasAbertas.map(notinha => notinha.id);
+        const resultadoParcelas = await relatoriosSupabase
+            .from("parcelas_notinha")
+            .select("id, notinha_id, valor_original")
+            .eq("loja_id", lojaIdRelatorio)
+            .in("notinha_id", idsNotinhas);
+
+        if (resultadoParcelas.error) throw resultadoParcelas.error;
+
+        const parcelas = resultadoParcelas.data || [];
+        const parcelasIds = parcelas.map(parcela => parcela.id);
+        const pagoPorParcelaCentavos = new Map();
+
+        if (parcelasIds.length > 0) {
+            const resultadoAlocacoes = await relatoriosSupabase
+                .from("alocacoes_recebimento_notinha")
+                .select("parcela_id, valor_aplicado")
+                .eq("loja_id", lojaIdRelatorio)
+                .in("parcela_id", parcelasIds);
+
+            if (resultadoAlocacoes.error) throw resultadoAlocacoes.error;
+
+            (resultadoAlocacoes.data || []).forEach(alocacao => {
+                const chave = String(alocacao.parcela_id);
+                const centavos = Math.round((Number(alocacao.valor_aplicado) || 0) * 100);
+                pagoPorParcelaCentavos.set(
+                    chave,
+                    (pagoPorParcelaCentavos.get(chave) || 0) + centavos
+                );
+            });
+        }
+
+        const parcelasPorNotinha = new Map();
+        parcelas.forEach(parcela => {
+            const chave = String(parcela.notinha_id);
+            if (!parcelasPorNotinha.has(chave)) parcelasPorNotinha.set(chave, []);
+            parcelasPorNotinha.get(chave).push(parcela);
+        });
+
+        let saldoTotalCentavos = 0;
+
+        notinhasAbertas.forEach(notinha => {
+            const parcelasDaNotinha = parcelasPorNotinha.get(String(notinha.id)) || [];
+
+            // Se ainda não existirem parcelas, usa o total da notinha como fallback.
+            if (parcelasDaNotinha.length === 0) {
+                saldoTotalCentavos += Math.max(
+                    0,
+                    Math.round((Number(notinha.total) || 0) * 100)
+                );
+                return;
+            }
+
+            parcelasDaNotinha.forEach(parcela => {
+                const originalCentavos = Math.max(
+                    0,
+                    Math.round((Number(parcela.valor_original) || 0) * 100)
+                );
+                const pagoCentavos = pagoPorParcelaCentavos.get(String(parcela.id)) || 0;
+                saldoTotalCentavos += Math.max(0, originalCentavos - pagoCentavos);
+            });
+        });
+
+        saldoAtualAReceber.textContent = formatarMoeda(saldoTotalCentavos / 100);
+    } catch (erro) {
+        console.error("Não foi possível consultar o saldo atual a receber:", erro);
+        saldoAtualAReceber.textContent = "Indisponível";
+        resumoFinanceiroComErro = true;
+    }
+}
+
+async function carregarIndicadoresFinanceirosRelatorio(dataInicial, dataFinal) {
+    resumoFinanceiroComErro = false;
+    await Promise.all([
+        carregarTotalRecebidoNoPeriodo(dataInicial, dataFinal),
+        carregarSaldoAtualAReceber()
+    ]);
 }
 
 /* ==========================================
@@ -764,18 +959,29 @@ async function carregarVendas() {
 
         `Período: ${formatarData(dataInicial)} até ${formatarData(dataFinal)}`;
 
+    await carregarIndicadoresFinanceirosRelatorio(dataInicial, dataFinal);
+
     if (
 
         vendasRelatorio.length === 0
 
     ) {
 
+        // Evita manter produtos/itens de uma consulta anterior quando o período
+        // atual não tiver vendas; o PDF ainda poderá mostrar movimento financeiro.
+        itensRelatorio = [];
+        produtosRelatorio = [];
+
+        montarIndicadores();
+        montarProdutosVendidos();
+        montarPagamentos();
+        montarVendasPorDia();
+
         mostrarMensagem(
-
-            "Nenhuma venda finalizada encontrada neste período.",
-
-            "sucesso"
-
+            resumoFinanceiroComErro
+                ? "Não há vendas finalizadas no período, e não foi possível consultar todos os indicadores financeiros. Confira o Console."
+                : "Nenhuma venda finalizada encontrada neste período. Os indicadores financeiros e o saldo atual a receber foram consultados.",
+            resumoFinanceiroComErro ? "erro" : "sucesso"
         );
 
         return;
@@ -809,11 +1015,10 @@ async function carregarVendas() {
     montarVendasPorDia();
 
     mostrarMensagem(
-
-        "Relatório atualizado com sucesso.",
-
-        "sucesso"
-
+        resumoFinanceiroComErro
+            ? "Relatório de vendas atualizado, mas não foi possível consultar um ou mais indicadores de recebimento/saldo a receber. Confira o Console."
+            : "Relatório atualizado com sucesso.",
+        resumoFinanceiroComErro ? "erro" : "sucesso"
     );
 
 }
@@ -1594,386 +1799,154 @@ function montarProdutosVendidos() {
 
 /* ==========================================
 
-   FORMAS DE PAGAMENTO
+   FORMAS DE PAGAMENTO E VENDAS A PRAZO
 
 ========================================== */
 
+function obterCodigoFormaPagamentoRelatorio(forma) {
+    return String(forma || "")
+        .trim()
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[\s-]+/g, "_");
+}
+
+function ehVendaAPrazoRelatorio(venda) {
+    const forma = obterCodigoFormaPagamentoRelatorio(venda?.forma_pagamento);
+    return [
+        "a_prazo",
+        "a_prazo_(fiado)",
+        "venda_a_prazo",
+        "fiado"
+    ].includes(forma);
+}
+
 function montarPagamentos() {
+    const mapa = new Map();
+    const vendasAPrazo = [];
+    const vendasPagamentoImediato = [];
 
-    const mapa =
+    vendasRelatorio.forEach(venda => {
+        const valor = Number(venda.total) || 0;
 
-        new Map();
-
-    vendasRelatorio.forEach(
-
-        venda => {
-
-            const forma =
-
-                formatarFormaPagamento(
-
-                    venda.forma_pagamento
-
-                );
-
-            const valor =
-
-                Number(
-
-                    venda.total
-
-                ) || 0;
-
-            if (
-
-                !mapa.has(
-
-                    forma
-
-                )
-
-            ) {
-
-                mapa.set(
-
-                    forma,
-
-                    {
-
-                        quantidade: 0,
-
-                        valor: 0
-
-                    }
-
-                );
-
-            }
-
-            const registro =
-
-                mapa.get(
-
-                    forma
-
-                );
-
-            registro.quantidade++;
-
-            registro.valor +=
-
-                valor;
-
+        // A venda a prazo é uma venda realizada, não um recebimento.
+        // O dinheiro recebido depois aparece na movimentação financeira.
+        if (ehVendaAPrazoRelatorio(venda)) {
+            vendasAPrazo.push(venda);
+            return;
         }
 
+        vendasPagamentoImediato.push(venda);
+        const forma = formatarFormaPagamento(venda.forma_pagamento);
+
+        if (!mapa.has(forma)) {
+            mapa.set(forma, { quantidade: 0, valor: 0 });
+        }
+
+        const registro = mapa.get(forma);
+        registro.quantidade++;
+        registro.valor += valor;
+    });
+
+    const pagamentos = Array.from(mapa.entries())
+        .map(([nome, dados]) => ({
+            nome,
+            quantidade: dados.quantidade,
+            valor: dados.valor
+        }))
+        .sort((a, b) => b.valor - a.valor);
+
+    // Este bloco mostra o valor original das vendas a prazo no período.
+    // Não representa dinheiro recebido nem o saldo atual das dívidas.
+    const resumoVendasPrazo = document.getElementById("resumoVendasPrazo");
+    const totalVendasPrazo = document.getElementById("totalVendasPrazo");
+    const quantidadeVendasPrazo = document.getElementById("quantidadeVendasPrazo");
+    const valorVendasPrazo = vendasAPrazo.reduce(
+        (total, venda) => total + (Number(venda.total) || 0),
+        0
     );
 
-    const pagamentos =
-
-        Array.from(
-
-            mapa.entries()
-
-        )
-
-        .map(
-
-            ([nome, dados]) => ({
-
-                nome,
-
-                quantidade:
-
-                    dados.quantidade,
-
-                valor:
-
-                    dados.valor
-
-            })
-
-        )
-
-        .sort(
-
-            (
-
-                a,
-
-                b
-
-            ) =>
-
-                b.valor -
-
-                a.valor
-
-        );
-
-    if (
-
-        pagamentos.length === 0
-
-    ) {
-
-        carregandoPagamentos.style.display =
-
-            "none";
-
-        semPagamentos.style.display =
-
-            "block";
-
-        listaPagamentos.style.display =
-
-            "none";
-
-        return;
-
+    if (resumoVendasPrazo) {
+        resumoVendasPrazo.style.display = vendasAPrazo.length > 0 ? "block" : "none";
+    }
+    if (totalVendasPrazo) {
+        totalVendasPrazo.textContent = formatarMoeda(valorVendasPrazo);
+    }
+    if (quantidadeVendasPrazo) {
+        quantidadeVendasPrazo.textContent =
+            `${vendasAPrazo.length} ${vendasAPrazo.length === 1 ? "venda a prazo" : "vendas a prazo"} no período`;
     }
 
-    carregandoPagamentos.style.display =
-
-        "none";
-
-    semPagamentos.style.display =
-
-        "none";
-
-    listaPagamentos.style.display =
-
-        "flex";
-
-    listaPagamentos.innerHTML =
-
-        "";
-
-    const faturamentoTotal =
-
-        vendasRelatorio.reduce(
-
-            (
-
-                total,
-
-                venda
-
-            ) =>
-
-                total +
-
-                (
-
-                    Number(
-
-                        venda.total
-
-                    ) || 0
-
-                ),
-
-            0
-
-        );
-
-    pagamentos.forEach(
-
-        pagamento => {
-
-            const percentual =
-
-                faturamentoTotal > 0
-
-                    ? (
-
-                        pagamento.valor /
-
-                        faturamentoTotal
-
-                    )
-
-                    * 100
-
-                    : 0;
-
-            const item =
-
-                document.createElement(
-
-                    "div"
-
-                );
-
-            item.className =
-
-                "item-pagamento";
-
-            const topo =
-
-                document.createElement(
-
-                    "div"
-
-                );
-
-            topo.className =
-
-                "topo-pagamento";
-
-            const nome =
-
-                document.createElement(
-
-                    "span"
-
-                );
-
-            nome.className =
-
-                "nome-pagamento";
-
-            nome.textContent =
-
-                pagamento.nome;
-
-            const valor =
-
-                document.createElement(
-
-                    "span"
-
-                );
-
-            valor.className =
-
-                "valor-pagamento";
-
-            valor.textContent =
-
-                formatarMoeda(
-
-                    pagamento.valor
-
-                );
-
-            topo.appendChild(
-
-                nome
-
-            );
-
-            topo.appendChild(
-
-                valor
-
-            );
-
-            const info =
-
-                document.createElement(
-
-                    "div"
-
-                );
-
-            info.className =
-
-                "info-pagamento";
-
-            const quantidade =
-
-                document.createElement(
-
-                    "span"
-
-                );
-
-            quantidade.textContent =
-
-                `${pagamento.quantidade} venda(s)`;
-
-            const porcentagem =
-
-                document.createElement(
-
-                    "span"
-
-                );
-
-            porcentagem.textContent =
-
-                `${percentual.toFixed(1)}%`;
-
-            info.appendChild(
-
-                quantidade
-
-            );
-
-            info.appendChild(
-
-                porcentagem
-
-            );
-
-            const barra =
-
-                document.createElement(
-
-                    "div"
-
-                );
-
-            barra.className =
-
-                "barra-pagamento";
-
-            const preenchimento =
-
-                document.createElement(
-
-                    "span"
-
-                );
-
-            preenchimento.style.width =
-
-                `${percentual}%`;
-
-            barra.appendChild(
-
-                preenchimento
-
-            );
-
-            item.appendChild(
-
-                topo
-
-            );
-
-            item.appendChild(
-
-                info
-
-            );
-
-            item.appendChild(
-
-                barra
-
-            );
-
-            listaPagamentos.appendChild(
-
-                item
-
-            );
-
-        }
-
+    carregandoPagamentos.style.display = "none";
+
+    if (pagamentos.length === 0) {
+        semPagamentos.style.display = "block";
+        semPagamentos.textContent = vendasAPrazo.length > 0
+            ? "Nenhuma venda com pagamento imediato no período. As vendas a prazo estão discriminadas abaixo."
+            : "Nenhuma venda com pagamento imediato no período.";
+        listaPagamentos.style.display = "none";
+        listaPagamentos.innerHTML = "";
+        return;
+    }
+
+    semPagamentos.style.display = "none";
+    listaPagamentos.style.display = "flex";
+    listaPagamentos.innerHTML = "";
+
+    // O percentual considera somente vendas pagas no ato, para que as vendas
+    // a prazo não distorçam a distribuição dos pagamentos recebidos.
+    const totalVendasPagamentoImediato = vendasPagamentoImediato.reduce(
+        (total, venda) => total + (Number(venda.total) || 0),
+        0
     );
 
+    pagamentos.forEach(pagamento => {
+        const percentual = totalVendasPagamentoImediato > 0
+            ? (pagamento.valor / totalVendasPagamentoImediato) * 100
+            : 0;
+
+        const item = document.createElement("div");
+        item.className = "item-pagamento";
+
+        const topo = document.createElement("div");
+        topo.className = "topo-pagamento";
+
+        const nome = document.createElement("span");
+        nome.className = "nome-pagamento";
+        nome.textContent = pagamento.nome;
+
+        const valor = document.createElement("span");
+        valor.className = "valor-pagamento";
+        valor.textContent = formatarMoeda(pagamento.valor);
+
+        topo.appendChild(nome);
+        topo.appendChild(valor);
+
+        const info = document.createElement("div");
+        info.className = "info-pagamento";
+
+        const quantidade = document.createElement("span");
+        quantidade.textContent = `${pagamento.quantidade} ${pagamento.quantidade === 1 ? "venda" : "vendas"}`;
+
+        const porcentagem = document.createElement("span");
+        porcentagem.textContent = `${percentual.toFixed(1)}% das vendas pagas no ato`;
+
+        info.appendChild(quantidade);
+        info.appendChild(porcentagem);
+
+        const barra = document.createElement("div");
+        barra.className = "barra-pagamento";
+
+        const preenchimento = document.createElement("span");
+        preenchimento.style.width = `${Math.max(0, Math.min(100, percentual))}%`;
+        barra.appendChild(preenchimento);
+
+        item.appendChild(topo);
+        item.appendChild(info);
+        item.appendChild(barra);
+        listaPagamentos.appendChild(item);
+    });
 }
 
 /* ==========================================
@@ -2346,10 +2319,8 @@ async function imprimirRelatorioMensal() {
         return;
     }
 
-    if (vendasRelatorio.length === 0) {
-        mostrarMensagem("Não há vendas finalizadas no período. Gere um relatório com vendas antes de imprimir.", "erro");
-        return;
-    }
+    // O relatório pode ter recebimentos financeiros mesmo quando não houve
+    // venda no período (por exemplo, parcelas de vendas de meses anteriores).
 
     // Abrir a janela imediatamente para evitar bloqueio de pop-up pelo navegador.
     const janela = window.open("", "_blank");
@@ -2395,11 +2366,33 @@ async function imprimirRelatorioMensal() {
 
         // Consulta apenas os lançamentos do período selecionado. O RLS continua
         // determinando quais registros financeiros o administrador pode consultar.
-        const resultadoFinanceiro = await relatoriosSupabase
-            .from("financeiro")
-            .select("tipo, categoria, valor, data_movimento")
-            .gte("data_movimento", dataInicial)
-            .lte("data_movimento", dataFinal);
+        const consultarLancamentosFinanceiros = async (colunas) =>
+            await relatoriosSupabase
+                .from("financeiro")
+                .select(colunas)
+                .gte("data_movimento", dataInicial)
+                .lte("data_movimento", dataFinal);
+
+        // A coluna forma_pagamento foi adicionada à integração do fiado.
+        // A segunda consulta mantém compatibilidade com bancos antigos que ainda
+        // não tenham essa coluna, sem impedir a geração do restante do relatório.
+        let resultadoFinanceiro = await consultarLancamentosFinanceiros(
+            "tipo, categoria, valor, data_movimento, forma_pagamento, descricao"
+        );
+
+        if (
+            resultadoFinanceiro.error &&
+            /forma_pagamento|schema cache|column .*does not exist/i.test(
+                JSON.stringify(resultadoFinanceiro.error)
+            )
+        ) {
+            console.warn(
+                "A coluna forma_pagamento não está disponível; o relatório tentará carregar os dados sem ela."
+            );
+            resultadoFinanceiro = await consultarLancamentosFinanceiros(
+                "tipo, categoria, valor, data_movimento, descricao"
+            );
+        }
 
         if (resultadoFinanceiro.error) {
             console.error("Erro ao carregar financeiro para impressão:", resultadoFinanceiro.error);
@@ -2416,6 +2409,33 @@ async function imprimirRelatorioMensal() {
             .normalize("NFD")
             .replace(/[\u0300-\u036f]/g, "");
 
+        const ehRecebimentoPrazo = item => {
+            const categoria = normalizarCategoria(item.categoria);
+            return [
+                "recebimento a prazo",
+                "recebimentos a prazo",
+                "recebimento de fiado",
+                "recebimentos de fiado"
+            ].includes(categoria);
+        };
+
+        const obterFormaRecebimentoPrazo = item => {
+            if (item.forma_pagamento) {
+                return formatarFormaPagamento(item.forma_pagamento);
+            }
+
+            // Compatibilidade com os lançamentos cuja forma aparece no texto
+            // da descrição (ex.: "Recebimento a prazo #2 - pix").
+            const descricao = String(item.descricao || "");
+            const corresponde = descricao.match(
+                /recebimento(?:s)?\s+a\s+prazo\s*#?\d*\s*[-–—]\s*(.+)$/i
+            );
+
+            return corresponde
+                ? formatarFormaPagamento(corresponde[1].trim())
+                : "Não identificada";
+        };
+
         const totalVendasRecebidas = lancamentos.reduce((total, item) => {
             const categoria = normalizarCategoria(item.categoria);
             return total + (
@@ -2425,14 +2445,56 @@ async function imprimirRelatorioMensal() {
             );
         }, 0);
 
+        // Recebimentos de vendas a prazo ficam em categoria própria; não entram
+        // no grupo genérico "Outras entradas".
+        const totalRecebimentosPrazo = lancamentos.reduce((total, item) =>
+            total + (
+                item.tipo === "entrada" && ehRecebimentoPrazo(item)
+                    ? (Number(item.valor) || 0)
+                    : 0
+            ), 0);
+
+        const recebimentosPrazoPorForma = new Map();
+
+        lancamentos.forEach(item => {
+            if (item.tipo !== "entrada" || !ehRecebimentoPrazo(item)) {
+                return;
+            }
+
+            const forma = obterFormaRecebimentoPrazo(item);
+            const centavos = Math.round((Number(item.valor) || 0) * 100);
+            recebimentosPrazoPorForma.set(
+                forma,
+                (recebimentosPrazoPorForma.get(forma) || 0) + centavos
+            );
+        });
+
+        const detalhesRecebimentosPrazo = Array.from(recebimentosPrazoPorForma.entries())
+            .sort((a, b) => a[0].localeCompare(b[0], "pt-BR"))
+            .map(([forma, centavos]) =>
+                `${escaparHtmlRelatorio(forma)}: ${escaparHtmlRelatorio(formatarMoeda(centavos / 100))}`
+            )
+            .join(" • ");
+
         const totalOutrasEntradas = lancamentos.reduce((total, item) => {
             const categoria = normalizarCategoria(item.categoria);
             return total + (
-                item.tipo === "entrada" && categoria !== "venda"
+                item.tipo === "entrada" &&
+                categoria !== "venda" &&
+                !ehRecebimentoPrazo(item)
                     ? (Number(item.valor) || 0)
                     : 0
             );
         }, 0);
+
+        if (vendasRelatorio.length === 0 && lancamentos.length === 0) {
+            janela.close();
+            mostrarMensagem(
+                "Não há vendas nem movimentações financeiras no período selecionado.",
+                "erro"
+            );
+            return;
+        }
 
         const totalEntradasFinanceiro = lancamentos.reduce(
             (total, item) => total + (
@@ -2450,10 +2512,15 @@ async function imprimirRelatorioMensal() {
 
         const saldoPeriodo = totalEntradasFinanceiro - totalSaidasFinanceiro;
 
-        // Receitas adicionais para o lucro estimado: entradas não classificadas
-        // como Venda, Compra de mercadoria ou Fornecedor.
+        // Receitas adicionais para o lucro estimado. Recebimentos a prazo são
+        // cobranças de vendas já reconhecidas no resultado comercial; somá-los
+        // de novo aqui duplicaria o lucro. Compras/fornecedores também não são receitas.
         const categoriasNaoReceita = new Set([
             "venda",
+            "recebimento a prazo",
+            "recebimentos a prazo",
+            "recebimento de fiado",
+            "recebimentos de fiado",
             "compra de mercadoria",
             "fornecedor"
         ]);
@@ -2575,15 +2642,20 @@ async function imprimirRelatorioMensal() {
   .row:last-child { border-bottom:0; }
   .row .name { color:#475569; }
   .row .amount { font-weight:700; white-space:nowrap; text-align:right; }
+  .method-breakdown { margin:-3px 0 5px; padding:0 0 5px 10px; color:var(--muted); font-size:8px; line-height:1.35; overflow-wrap:anywhere; }
   .row.total { border-top:1px solid #94a3b8; border-bottom:0; margin-top:3px; padding-top:11px; font-size:10.5px; }
   .row.total .name, .row.total .amount { color:var(--navy); font-weight:800; }
   .positive { color:var(--green); }
   .negative { color:var(--red); }
-  .net-box { margin-top:13px; border:1px solid #a7f3d0; background:var(--green-bg); border-radius:8px; padding:12px 14px; display:flex; justify-content:space-between; align-items:center; gap:12px; break-inside:avoid; page-break-inside:avoid; }
-  .net-box .eyebrow { color:var(--green); font-size:8px; font-weight:800; text-transform:uppercase; letter-spacing:.6px; margin-bottom:3px; }
-  .net-box .name { color:#064e3b; font-size:12px; font-weight:800; }
-  .net-box .formula { color:var(--green); font-size:8px; margin-top:3px; }
-  .net-box .number { color:var(--green); font-size:21px; line-height:1; font-weight:800; white-space:nowrap; }
+  .result-boxes { display:grid; grid-template-columns:1fr 1fr; gap:9px; margin-top:13px; break-inside:avoid; page-break-inside:avoid; }
+  .net-box { margin-top:0; border:1px solid #a7f3d0; background:var(--green-bg); border-radius:8px; padding:11px 12px; display:flex; justify-content:space-between; align-items:center; gap:10px; min-width:0; break-inside:avoid; page-break-inside:avoid; }
+  .net-box .eyebrow { color:var(--green); font-size:7.5px; font-weight:800; text-transform:uppercase; letter-spacing:.45px; margin-bottom:3px; }
+  .net-box .name { color:#064e3b; font-size:11px; font-weight:800; }
+  .net-box .formula { color:var(--green); font-size:7.6px; margin-top:3px; }
+  .net-box .number { color:var(--green); font-size:19px; line-height:1; font-weight:800; white-space:nowrap; }
+  .financial-box { border-color:#bfdbfe; background:var(--blue-light); }
+  .financial-box .eyebrow, .financial-box .formula, .financial-box .number { color:#1d4ed8; }
+  .financial-box .name { color:#1e3a8a; }
   .note { display:flex; gap:8px; align-items:stretch; margin-top:11px; padding:9px 11px; border-left:3px solid #94a3b8; background:#f8fafc; color:var(--muted); font-size:8.2px; break-inside:avoid; page-break-inside:avoid; }
   .note-accent { width:3px; flex:0 0 3px; border-radius:2px; background:var(--blue); }
   .note-content strong { display:block; color:var(--navy); font-size:8.5px; margin-bottom:3px; }
@@ -2594,7 +2666,7 @@ async function imprimirRelatorioMensal() {
   .footer { display:flex; justify-content:space-between; gap:10px; margin-top:19px; padding-top:9px; border-top:1px solid var(--line); color:#94a3b8; font-size:8px; }
   @page { size:A4 portrait; margin:0; }
   @media print { body { background:#fff; -webkit-print-color-adjust:exact; print-color-adjust:exact; } .page { margin:0; box-shadow:none; width:210mm; min-height:297mm; } }
-  @media screen and (max-width:760px) { .page { width:100%; margin:0; padding:22px; } .top-banner { align-items:flex-start; flex-direction:column; } .period { text-align:left; } .meta { grid-template-columns:1fr; } .kpis { grid-template-columns:repeat(2,minmax(0,1fr)); } .summary-grid { grid-template-columns:1fr; } .ribbon { grid-template-columns:1fr; } }
+  @media screen and (max-width:760px) { .page { width:100%; margin:0; padding:22px; } .top-banner { align-items:flex-start; flex-direction:column; } .period { text-align:left; } .meta { grid-template-columns:1fr; } .kpis { grid-template-columns:repeat(2,minmax(0,1fr)); } .summary-grid { grid-template-columns:1fr; } .result-boxes { grid-template-columns:1fr; } .ribbon { grid-template-columns:1fr; } }
 </style>
 </head>
 <body>
@@ -2642,7 +2714,7 @@ async function imprimirRelatorioMensal() {
         <div class="row"><span class="name">Descontos concedidos</span><strong class="amount negative">− ${escaparHtmlRelatorio(formatarMoeda(totalDescontosResumo))}</strong></div>
         <div class="row"><span class="name">Vendas líquidas</span><strong class="amount">${escaparHtmlRelatorio(formatarMoeda(totalVendasLiquidas))}</strong></div>
         <div class="row"><span class="name">Custo dos produtos vendidos</span><strong class="amount negative">− ${escaparHtmlRelatorio(formatarMoeda(custoProdutosTotal))}</strong></div>
-        <div class="row total"><span class="name">LUCRO BRUTO</span><strong class="amount ${lucroBrutoPeriodo >= 0 ? 'positive' : 'negative'}">${escaparHtmlRelatorio(formatarMoeda(lucroBrutoPeriodo))}</strong></div>
+        <div class="row total"><span class="name">LUCRO BRUTO DAS VENDAS</span><strong class="amount ${lucroBrutoPeriodo >= 0 ? 'positive' : 'negative'}">${escaparHtmlRelatorio(formatarMoeda(lucroBrutoPeriodo))}</strong></div>
       </div>
     </div>
 
@@ -2650,6 +2722,8 @@ async function imprimirRelatorioMensal() {
       <div class="panel-head">MOVIMENTAÇÃO FINANCEIRA</div>
       <div class="panel-body">
         <div class="row"><span class="name">Vendas recebidas</span><strong class="amount">${escaparHtmlRelatorio(formatarMoeda(totalVendasRecebidas))}</strong></div>
+        <div class="row"><span class="name">Recebimentos a prazo</span><strong class="amount positive">+ ${escaparHtmlRelatorio(formatarMoeda(totalRecebimentosPrazo))}</strong></div>
+        ${detalhesRecebimentosPrazo ? `<div class="method-breakdown"><span>Por forma de pagamento: ${detalhesRecebimentosPrazo}</span></div>` : ""}
         <div class="row"><span class="name">Outras entradas</span><strong class="amount positive">+ ${escaparHtmlRelatorio(formatarMoeda(totalOutrasEntradas))}</strong></div>
         <div class="row"><span class="name">TOTAL DE ENTRADAS</span><strong class="amount">${escaparHtmlRelatorio(formatarMoeda(totalEntradasFinanceiro))}</strong></div>
         <div class="row"><span class="name">Saídas registradas</span><strong class="amount negative">− ${escaparHtmlRelatorio(formatarMoeda(totalSaidasFinanceiro))}</strong></div>
@@ -2658,12 +2732,18 @@ async function imprimirRelatorioMensal() {
     </div>
   </section>
 
-  <section class="net-box">
-    <div><div class="eyebrow">Resultado operacional estimado</div><div class="name">Lucro líquido estimado</div><div class="formula">Lucro bruto + outras receitas consideradas − despesas operacionais</div></div>
-    <div class="number">${escaparHtmlRelatorio(formatarMoeda(lucroLiquidoEstimado))}</div>
+  <section class="result-boxes">
+    <div class="net-box">
+      <div><div class="eyebrow">Resultado operacional estimado</div><div class="name">Resultado operacional estimado</div><div class="formula">Lucro bruto das vendas + outras receitas operacionais − despesas operacionais; inclui vendas a prazo.</div></div>
+      <div class="number">${escaparHtmlRelatorio(formatarMoeda(lucroLiquidoEstimado))}</div>
+    </div>
+    <div class="net-box financial-box">
+      <div><div class="eyebrow">Movimentação real de dinheiro</div><div class="name">Resultado financeiro do período</div><div class="formula">Entradas financeiras efetivas menos saídas registradas no período.</div></div>
+      <div class="number">${escaparHtmlRelatorio(formatarMoeda(saldoPeriodo))}</div>
+    </div>
   </section>
 
-  <div class="note"><div class="note-accent"></div><div class="note-content"><strong>COMO LER ESTE RELATÓRIO</strong>Lucro e saldo de caixa são indicadores diferentes. O lucro líquido estimado considera outras receitas e somente as despesas operacionais selecionadas. Compras de mercadoria e fornecedor não são descontadas novamente do lucro bruto; todas as saídas continuam reduzindo o saldo financeiro.</div></div>
+  <div class="note"><div class="note-accent"></div><div class="note-content"><strong>COMO LER ESTE RELATÓRIO</strong>O lucro estimado considera todas as vendas finalizadas, inclusive vendas a prazo, e não significa que todo esse dinheiro já entrou. O resultado financeiro mostra as entradas reais menos as saídas registradas no período. O saldo atual a receber, exibido na tela de Relatórios, representa dívidas de clientes ainda em aberto. Recebimentos a prazo não aumentam novamente o lucro de vendas já reconhecidas.</div></div>
 
   <section class="ribbon">
     <div class="ribbon-item"><span class="ribbon-label">MARGEM BRUTA</span><strong class="ribbon-value">${escaparHtmlRelatorio(margemBrutaTexto)}</strong></div>

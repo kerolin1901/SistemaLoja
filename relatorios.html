@@ -1483,7 +1483,7 @@
 
                     <span>
 
-                        Faturamento
+                        Faturamento de vendas
 
                     </span>
 
@@ -1497,7 +1497,49 @@
 
             </div>
 
-            <!-- TICKET MÉDIO -->
+            <!-- TOTAL RECEBIDO NO PERÍODO -->
+            <div class="card-relatorio card-lucro">
+                <div class="icone-card" aria-hidden="true" style="font-weight:800;color:#0891b2;">
+                    R$
+                </div>
+                <div>
+                    <span>Total recebido no período</span>
+                    <strong id="totalRecebidoPeriodo">R$ 0,00</strong>
+                    <small style="display:block;margin-top:5px;color:#64748b;font-size:11px;">
+                        Entradas financeiras efetivas
+                    </small>
+                </div>
+            </div>
+
+            <!-- SALDO ATUAL A RECEBER -->
+            <div class="card-relatorio card-ticket">
+                <div class="icone-card" aria-hidden="true" style="font-weight:800;color:#7c3aed;">
+                    ↗
+                </div>
+                <div>
+                    <span>Saldo atual a receber</span>
+                    <strong id="saldoAtualAReceber">R$ 0,00</strong>
+                    <small style="display:block;margin-top:5px;color:#64748b;font-size:11px;">
+                        Notinhas que continuam em aberto
+                    </small>
+                </div>
+            </div>
+
+            <!-- RESULTADO FINANCEIRO DO PERÍODO -->
+            <div class="card-relatorio card-faturamento">
+                <div class="icone-card" aria-hidden="true" style="font-weight:800;color:#15803d;">
+                    ↔
+                </div>
+                <div>
+                    <span>Resultado financeiro do período</span>
+                    <strong id="resultadoFinanceiroPeriodo">R$ 0,00</strong>
+                    <small style="display:block;margin-top:5px;color:#64748b;font-size:11px;">
+                        Entradas reais menos saídas
+                    </small>
+                </div>
+            </div>
+
+                        <!-- TICKET MÉDIO -->
 
             <div class="card-relatorio card-ticket">
 
@@ -1851,9 +1893,10 @@
 
                     <span>
 
-                        Lucro bruto
+                        Lucro bruto das vendas
 
                     </span>
+                    <small style="display:block;margin-bottom:5px;color:#64748b;font-size:11px;">Inclui vendas a prazo ainda não recebidas</small>
 
                     <strong id="lucroBruto">
 
@@ -1933,7 +1976,7 @@
 
                     <span>
 
-                        Lucro bruto
+                        Lucro bruto das vendas
 
                     </span>
 
@@ -2079,13 +2122,13 @@
 
                         <h2>
 
-                            Formas de pagamento
+                            Pagamentos recebidos e vendas a prazo
 
                         </h2>
 
                         <p>
 
-                            Distribuição das vendas por pagamento.
+                            As formas de pagamento imediato são separadas das vendas registradas a prazo.
 
                         </p>
 
@@ -2115,7 +2158,7 @@
 
                 >
 
-                    Nenhuma venda no período.
+                    Nenhuma venda com pagamento imediato no período.
 
                 </div>
 
@@ -2128,6 +2171,24 @@
                     style="display:none;"
 
                 ></div>
+
+                <div
+                    id="resumoVendasPrazo"
+                    class="item-pagamento"
+                    style="display:none; margin-top:14px; background:#eff6ff; border-color:#bfdbfe;"
+                >
+                    <div class="topo-pagamento">
+                        <span class="nome-pagamento">Vendas realizadas a prazo</span>
+                        <span class="valor-pagamento" id="totalVendasPrazo">R$ 0,00</span>
+                    </div>
+                    <div class="info-pagamento">
+                        <span id="quantidadeVendasPrazo">0 vendas a prazo no período</span>
+                        <span>Valor vendido, não valor recebido</span>
+                    </div>
+                    <p style="margin:10px 0 0; color:#1e40af; font-size:12px; line-height:1.5;">
+                        Os recebimentos dessas vendas são contabilizados separadamente quando o cliente efetivamente paga.
+                    </p>
+                </div>
 
             </div>
 

@@ -80,6 +80,18 @@ const formaPagamento =
 
     );
 
+const camposPrazoVenda =
+
+    document.getElementById("camposPrazoVenda");
+
+const parcelasFiadoVenda =
+
+    document.getElementById("parcelasFiadoVenda");
+
+const diasPrimeiroVencimentoVenda =
+
+    document.getElementById("diasPrimeiroVencimentoVenda");
+
 const observacoesVenda =
 
     document.getElementById(
@@ -2286,6 +2298,32 @@ function atualizarResumo() {
 
 ========================================== */
 
+function calcularDataPrimeiroVencimentoFiado(dias) {
+
+    const data = new Date();
+    data.setHours(12, 0, 0, 0);
+    data.setDate(data.getDate() + Number(dias));
+
+    const ano = data.getFullYear();
+    const mes = String(data.getMonth() + 1).padStart(2, "0");
+    const dia = String(data.getDate()).padStart(2, "0");
+
+    return `${ano}-${mes}-${dia}`;
+
+}
+
+
+function atualizarCamposPrazoVenda() {
+
+    const vendaAPrazo = formaPagamento && formaPagamento.value === "a_prazo";
+
+    if (camposPrazoVenda) {
+        camposPrazoVenda.hidden = !vendaAPrazo;
+    }
+
+}
+
+
 async function finalizarVenda() {
 
     mostrarMensagem(
@@ -2330,6 +2368,29 @@ async function finalizarVenda() {
 
     }
 
+    if (formaPagamento.value === "a_prazo") {
+
+        const clienteFiado = clientes.find(
+            (cliente) => String(cliente.id) === String(clienteVenda.value)
+        );
+
+        if (!clienteFiado) {
+            mostrarMensagem("Para vender a prazo, selecione um cliente cadastrado.", "erro");
+            clienteVenda.focus();
+            return;
+        }
+
+        if (!String(clienteFiado.telefone || "").trim()) {
+            mostrarMensagem("O cliente precisa ter telefone cadastrado para uma venda a prazo.", "erro");
+            clienteVenda.focus();
+            return;
+        }
+
+    }
+
+    const numeroParcelasFiado = Number(parcelasFiadoVenda?.value || 1);
+    const diasPrimeiroVencimentoFiado = Number(diasPrimeiroVencimentoVenda?.value || 30);
+
     const subtotal =
 
         calcularSubtotal();
@@ -2364,18 +2425,23 @@ async function finalizarVenda() {
 
     const total = subtotal - desconto;
 
+    const resumoFormaPagamento = formaPagamento.value === "a_prazo"
+        ? `Forma: A prazo\nParcelas: ${numeroParcelasFiado}\nPrimeiro vencimento: em ${diasPrimeiroVencimentoFiado} dias\nA dívida será registrada e não contará como valor recebido.`
+        : `Forma: ${formaPagamento.options[formaPagamento.selectedIndex].text}`;
+
     const confirmou = window.confirm(
-        `Confirma a finalização desta venda?
-
-Subtotal: ${formatarMoeda(subtotal)}
-Desconto: ${formatarMoeda(desconto)}
-Total: ${formatarMoeda(total)}
-
-Se confirmar, a venda será registrada e o estoque será atualizado.`
+        `Confirma a finalização desta venda?\n\n` +
+        `Subtotal: ${formatarMoeda(subtotal)}\n` +
+        `Desconto: ${formatarMoeda(desconto)}\n` +
+        `Total: ${formatarMoeda(total)}\n\n` +
+        `${resumoFormaPagamento}\n\n` +
+        `O estoque será atualizado uma única vez.`
     );
 
     if (!confirmou) {
+
         return;
+
     }
 
     const itensParaEnviar =
@@ -2404,6 +2470,13 @@ Se confirmar, a venda será registrada e o estoque será atualizado.`
 
         );
 
+    // Dados usados tanto na venda normal quanto na venda a prazo.
+    const clienteId = clienteVenda.value
+        ? Number(clienteVenda.value)
+        : null;
+
+    const observacoes = observacoesVenda.value.trim() || null;
+
     btnFinalizarVenda.disabled =
 
         true;
@@ -2414,51 +2487,34 @@ Se confirmar, a venda será registrada e o estoque será atualizado.`
 
     try {
 
-        const resultado =
+        const forma = formaPagamento.value.trim();
 
-            await vendedorVendasSupabase
+        let resultado;
 
-                .rpc(
+        if (forma === "a_prazo") {
 
-                    "finalizar_venda",
+            resultado = await vendedorVendasSupabase.rpc("registrar_venda_a_prazo", {
+                p_cliente_id: clienteId,
+                p_desconto: desconto,
+                p_observacoes: observacoes,
+                p_itens: itensParaEnviar,
+                p_numero_parcelas: numeroParcelasFiado,
+                p_primeiro_vencimento: calcularDataPrimeiroVencimentoFiado(
+                    diasPrimeiroVencimentoFiado
+                )
+            });
 
-                    {
+        } else {
 
-                        p_cliente_id:
+            resultado = await vendedorVendasSupabase.rpc("finalizar_venda", {
+                p_cliente_id: clienteId,
+                p_desconto: desconto,
+                p_forma_pagamento: forma,
+                p_observacoes: observacoes,
+                p_itens: itensParaEnviar
+            });
 
-                            clienteVenda.value
-
-                                ? Number(
-
-                                    clienteVenda.value
-
-                                )
-
-                                : null,
-
-                        p_desconto:
-
-                            desconto,
-
-                        p_forma_pagamento:
-
-                            formaPagamento.value,
-
-                        p_observacoes:
-
-                            observacoesVenda.value
-
-                                .trim() ||
-
-                            null,
-
-                        p_itens:
-
-                            itensParaEnviar
-
-                    }
-
-                );
+        }
 
         if (resultado.error) {
 
@@ -2511,28 +2567,42 @@ Se confirmar, a venda será registrada e o estoque será atualizado.`
         }
 
         // Disponibiliza a impressão da venda que acabou de ser registrada.
+
         if (
+
             window.SistemaLojaComprovantes &&
+
             typeof window.SistemaLojaComprovantes.adicionarBotao === "function"
+
         ) {
+
             window.SistemaLojaComprovantes.adicionarBotao(
+
                 vendedorVendasSupabase,
+
                 resposta.venda_id,
+
                 btnFinalizarVenda
+
             );
+
         }
 
-        mostrarMensagem(
+        if (forma === "a_prazo") {
 
-            "Venda #" +
+            mostrarMensagem(
+                `Venda #${resposta.venda_id} registrada. Notinha #${String(resposta.notinha_numero).padStart(6, "0")} criada; saldo a receber: ${formatarMoeda(resposta.total)}.`,
+                "sucesso"
+            );
 
-            resposta.venda_id +
+        } else {
 
-            " finalizada com sucesso!",
+            mostrarMensagem(
+                "Venda #" + resposta.venda_id + " finalizada com sucesso!",
+                "sucesso"
+            );
 
-            "sucesso"
-
-        );
+        }
 
         /* ======================================
 
@@ -2563,6 +2633,12 @@ Se confirmar, a venda será registrada e o estoque será atualizado.`
         formaPagamento.value =
 
             "";
+
+        if (parcelasFiadoVenda) parcelasFiadoVenda.value = "1";
+
+        if (diasPrimeiroVencimentoVenda) diasPrimeiroVencimentoVenda.value = "30";
+
+        atualizarCamposPrazoVenda();
 
         observacoesVenda.value =
 
@@ -2769,65 +2845,116 @@ descontoVenda.addEventListener(
 ========================================== */
 
 function configurarAcoesVenda() {
+
     const painelVenda = document.querySelector(".painel-venda");
+
     if (!painelVenda || !btnFinalizarVenda) return;
 
     let acoes = document.getElementById("acoesVendaComprovante");
+
     if (!acoes) {
+
         acoes = document.createElement("div");
+
         acoes.id = "acoesVendaComprovante";
+
         acoes.className = "acoes-venda-comprovante";
+
         painelVenda.appendChild(acoes);
+
     }
 
     let btnCancelarVenda = document.getElementById("btnCancelarVendaVendedor");
+
     if (!btnCancelarVenda) {
+
         btnCancelarVenda = document.createElement("button");
+
         btnCancelarVenda.type = "button";
+
         btnCancelarVenda.id = "btnCancelarVendaVendedor";
+
         btnCancelarVenda.className = "botao-cancelar-venda";
+
         btnCancelarVenda.textContent = "Cancelar";
+
         btnCancelarVenda.addEventListener("click", cancelarVendaEmAndamento);
+
     }
 
     // Mantém os botões no rodapé da tela, como na área do administrador.
+
     acoes.appendChild(btnCancelarVenda);
+
     acoes.appendChild(btnFinalizarVenda);
 
     btnCancelarVenda.style.display = "inline-flex";
+
 }
 
 function cancelarVendaEmAndamento() {
+
     const temDados =
+
         itensVenda.length > 0 ||
+
         (clienteVenda && clienteVenda.value) ||
+
         (formaPagamento && formaPagamento.value) ||
+
         (observacoesVenda && observacoesVenda.value.trim()) ||
+
         (descontoVenda && Number(descontoVenda.value) > 0);
 
     if (temDados && !window.confirm("Deseja cancelar esta venda? Os produtos e os dados preenchidos serão removidos. A venda ainda não foi registrada.")) {
+
         return;
+
     }
 
     itensVenda = [];
 
     if (clienteVenda) clienteVenda.value = "";
+
     if (buscaClienteVenda) buscaClienteVenda.value = "";
+
     if (formaPagamento) formaPagamento.value = "";
+
+    if (parcelasFiadoVenda) parcelasFiadoVenda.value = "1";
+
+    if (diasPrimeiroVencimentoVenda) diasPrimeiroVencimentoVenda.value = "30";
+
+    atualizarCamposPrazoVenda();
+
     if (observacoesVenda) observacoesVenda.value = "";
+
     if (descontoVenda) descontoVenda.value = "0";
+
     if (produtoVenda) produtoVenda.value = "";
+
     if (buscaProdutoVenda) buscaProdutoVenda.value = "";
+
     if (quantidadeVenda) quantidadeVenda.value = "1";
 
     atualizarPrecoProduto();
+
     renderizarItens();
+
     atualizarResumo();
 
     mostrarMensagem("Venda cancelada. Nenhuma venda foi registrada.", "info");
+
 }
 
 configurarAcoesVenda();
+
+if (formaPagamento) {
+
+    formaPagamento.addEventListener("change", atualizarCamposPrazoVenda);
+
+    atualizarCamposPrazoVenda();
+
+}
 
 btnFinalizarVenda.addEventListener(
 

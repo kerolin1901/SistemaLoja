@@ -14,6 +14,14 @@ const EMAIL_ADMIN =
 const EMAIL_ADMIN_GERAL =
     "amaraldesigner@outlook.com.br";
 
+/*
+   CONTA EXCLUSIVA DO AMBIENTE DE TESTES.
+   Não alterar o login da pasta original.
+*/
+
+const EMAIL_ADMIN_TESTE =
+    "walteras003@hotmail.com";
+
 
 /* ==========================================
    ELEMENTOS DA TELA
@@ -40,16 +48,12 @@ function mostrarMensagem(
     texto,
     tipo = "erro"
 ) {
-
     if (!campoMensagem) {
         return;
     }
 
-    campoMensagem.textContent =
-        texto;
-
-    campoMensagem.className =
-        "mensagem " + tipo;
+    campoMensagem.textContent = texto;
+    campoMensagem.className = "mensagem " + tipo;
 }
 
 
@@ -58,16 +62,12 @@ function mostrarMensagem(
 ========================================== */
 
 function limparMensagem() {
-
     if (!campoMensagem) {
         return;
     }
 
-    campoMensagem.textContent =
-        "";
-
-    campoMensagem.className =
-        "mensagem";
+    campoMensagem.textContent = "";
+    campoMensagem.className = "mensagem";
 }
 
 
@@ -76,48 +76,45 @@ function limparMensagem() {
 ========================================== */
 
 function obterEmailLogin(usuario) {
+    const usuarioNormalizado = usuario
+        .trim()
+        .toLowerCase();
 
-    const usuarioNormalizado =
-        usuario
-            .trim()
-            .toLowerCase();
+    /*
+       ADMINISTRADOR DE TESTE
 
+       Esta regra precisa vir antes da regra
+       genérica dos demais usuários.
+    */
 
-    /* ==========================================
+    if (usuarioNormalizado === "admin_teste") {
+        return EMAIL_ADMIN_TESTE;
+    }
+
+    /*
        ADMINISTRADOR DA LOJA
-    ========================================== */
+    */
 
-    if (
-        usuarioNormalizado === "admin"
-    ) {
-
+    if (usuarioNormalizado === "admin") {
         return EMAIL_ADMIN;
-
     }
 
-
-    /* ==========================================
+    /*
        ADMINISTRADOR GERAL
-    ========================================== */
+    */
 
-    if (
-        usuarioNormalizado === "admingeral"
-    ) {
-
+    if (usuarioNormalizado === "admingeral") {
         return EMAIL_ADMIN_GERAL;
-
     }
 
-
-    /* ==========================================
+    /*
        VENDEDORES E DEMAIS USUÁRIOS
-    ========================================== */
+    */
 
     return (
         usuarioNormalizado +
         "@login.sistemaloja.local"
     );
-
 }
 
 
@@ -125,50 +122,34 @@ function obterEmailLogin(usuario) {
    VERIFICAR LICENÇA DA LOJA
 ========================================== */
 
-async function verificarLicencaLoja(
-    lojaId
-) {
-
+async function verificarLicencaLoja(lojaId) {
     if (!lojaId) {
-
         return {
             permitida: false,
             mensagem:
                 "Seu usuário não está vinculado a uma loja."
         };
-
     }
 
-
     try {
-
         const {
             data: loja,
             error
         } = await supabaseClient
-
             .from("lojas")
-
             .select(`
                 id,
                 nome,
                 data_vencimento
             `)
-
-            .eq(
-                "id",
-                lojaId
-            )
-
+            .eq("id", lojaId)
             .maybeSingle();
 
-
-        /* ==========================================
+        /*
            ERRO AO BUSCAR LOJA
-        ========================================== */
+        */
 
         if (error) {
-
             console.error(
                 "Erro ao verificar licença da loja:",
                 error
@@ -179,103 +160,77 @@ async function verificarLicencaLoja(
                 mensagem:
                     "Não foi possível verificar a licença da loja."
             };
-
         }
 
-
-        /* ==========================================
+        /*
            LOJA NÃO ENCONTRADA
-        ========================================== */
+        */
 
         if (!loja) {
-
             return {
                 permitida: false,
                 mensagem:
                     "A loja vinculada ao seu usuário não foi encontrada."
             };
-
         }
 
-
-        /* ==========================================
+        /*
            DATA DE VENCIMENTO OBRIGATÓRIA
-        ========================================== */
+        */
 
-        if (
-            !loja.data_vencimento
-        ) {
-
+        if (!loja.data_vencimento) {
             return {
                 permitida: false,
                 mensagem:
                     "A licença desta loja não possui uma data de vencimento cadastrada. Entre em contato com o Administrador Geral."
             };
-
         }
 
-
-        /* ==========================================
+        /*
            DATA DE HOJE
-        ========================================== */
 
-        const agora =
-            new Date();
+           Formato YYYY-MM-DD para comparar
+           corretamente com o vencimento.
+        */
+
+        const agora = new Date();
 
         const ano =
             agora.getFullYear();
 
         const mes =
-            String(
-                agora.getMonth() + 1
-            ).padStart(
-                2,
-                "0"
-            );
+            String(agora.getMonth() + 1)
+                .padStart(2, "0");
 
         const dia =
-            String(
-                agora.getDate()
-            ).padStart(
-                2,
-                "0"
-            );
-
+            String(agora.getDate())
+                .padStart(2, "0");
 
         const hoje =
             `${ano}-${mes}-${dia}`;
 
-
-        /* ==========================================
+        /*
            LICENÇA VENCIDA
-        ========================================== */
+        */
 
-        if (
-            loja.data_vencimento <
-            hoje
-        ) {
-
+        if (loja.data_vencimento < hoje) {
             return {
                 permitida: false,
                 mensagem:
                     `A licença da loja "${loja.nome}" está vencida. Entre em contato com o Administrador Geral para renovar o acesso.`
             };
-
         }
 
-
-        /* ==========================================
+        /*
            LICENÇA VÁLIDA
-        ========================================== */
+        */
 
         return {
             permitida: true,
             mensagem: ""
         };
 
-
     } catch (erro) {
-
         console.error(
             "Erro inesperado ao verificar licença:",
             erro
@@ -286,9 +241,7 @@ async function verificarLicencaLoja(
             mensagem:
                 "Não foi possível verificar a licença da loja."
         };
-
     }
-
 }
 
 
@@ -297,393 +250,279 @@ async function verificarLicencaLoja(
 ========================================== */
 
 async function entrar() {
-
     limparMensagem();
 
-
-    /* ==========================================
+    /*
        PEGAR DADOS
-    ========================================== */
+    */
 
-    const usuario =
-        campoUsuario.value
-            .trim()
-            .toLowerCase();
+    const usuario = campoUsuario.value
+        .trim()
+        .toLowerCase();
 
-    const senha =
-        campoSenha.value;
+    const senha = campoSenha.value;
 
-
-    /* ==========================================
+    /*
        VALIDAR USUÁRIO
-    ========================================== */
+    */
 
     if (!usuario) {
-
         mostrarMensagem(
             "Digite seu usuário."
         );
 
         campoUsuario.focus();
-
         return;
-
     }
 
-
-    /* ==========================================
+    /*
        VALIDAR SENHA
-    ========================================== */
+    */
 
     if (!senha) {
-
         mostrarMensagem(
             "Digite sua senha."
         );
 
         campoSenha.focus();
-
         return;
-
     }
 
-
-    /* ==========================================
+    /*
        DESABILITAR BOTÃO
-    ========================================== */
+    */
 
-    botaoEntrar.disabled =
-        true;
-
-    botaoEntrar.textContent =
-        "Entrando...";
-
+    if (botaoEntrar) {
+        botaoEntrar.disabled = true;
+        botaoEntrar.textContent = "Entrando...";
+    }
 
     try {
-
-
-        /* ==========================================
+        /*
            OBTER E-MAIL INTERNO
-        ========================================== */
+        */
 
-        const email =
-            obterEmailLogin(
-                usuario
-            );
+        const email = obterEmailLogin(usuario);
 
-
-        /* ==========================================
+        /*
            LOGIN SUPABASE
-        ========================================== */
+        */
 
         const {
             data,
             error
-        } =
-            await supabaseClient
-                .auth
-                .signInWithPassword({
+        } = await supabaseClient.auth
+            .signInWithPassword({
+                email: email,
+                password: senha
+            });
 
-                    email:
-                        email,
-
-                    password:
-                        senha
-
-                });
-
-
-        /* ==========================================
+        /*
            ERRO NO LOGIN
-        ========================================== */
+        */
 
         if (error) {
-
             console.error(
                 "Erro no login:",
                 error
             );
 
-
             mostrarMensagem(
                 "Usuário ou senha incorretos."
             );
 
-
             return;
-
         }
 
-
-        /* ==========================================
+        /*
            VERIFICAR SESSÃO
-        ========================================== */
+        */
 
-        if (
-            !data ||
-            !data.user
-        ) {
-
+        if (!data || !data.user) {
             mostrarMensagem(
                 "Não foi possível iniciar a sessão."
             );
 
-
             return;
-
         }
 
-
-        /* ==========================================
+        /*
            BUSCAR PERFIL
-        ========================================== */
+        */
 
         const {
             data: perfil,
             error: erroPerfil
-        } =
-            await supabaseClient
+        } = await supabaseClient
+            .from("perfis")
+            .select(`
+                id,
+                nome_completo,
+                usuario,
+                tipo,
+                ativo,
+                loja_id
+            `)
+            .eq("id", data.user.id)
+            .maybeSingle();
 
-                .from("perfis")
-
-                .select(
-                    "id, nome_completo, usuario, tipo, ativo, loja_id"
-                )
-
-                .eq(
-                    "id",
-                    data.user.id
-                )
-
-                .maybeSingle();
-
-
-        /* ==========================================
+        /*
            ERRO PERFIL
-        ========================================== */
+        */
 
-        if (
-            erroPerfil
-        ) {
-
+        if (erroPerfil) {
             console.error(
                 "Erro ao buscar perfil:",
                 erroPerfil
             );
 
-
-            await supabaseClient
-                .auth
-                .signOut();
-
+            await supabaseClient.auth.signOut();
 
             mostrarMensagem(
                 "Não foi possível carregar seu perfil."
             );
 
-
             return;
-
         }
 
-
-        /* ==========================================
+        /*
            PERFIL NÃO ENCONTRADO
-        ========================================== */
+        */
 
         if (!perfil) {
-
-            await supabaseClient
-                .auth
-                .signOut();
-
+            await supabaseClient.auth.signOut();
 
             mostrarMensagem(
                 "Seu usuário ainda não possui um perfil."
             );
 
-
             return;
-
         }
 
-
-        /* ==========================================
+        /*
            USUÁRIO DESATIVADO
-        ========================================== */
+        */
 
-        if (
-            perfil.ativo !== true
-        ) {
-
-            await supabaseClient
-                .auth
-                .signOut();
-
+        if (perfil.ativo !== true) {
+            await supabaseClient.auth.signOut();
 
             mostrarMensagem(
                 "Seu usuário está desativado."
             );
 
-
             return;
-
         }
 
-
-        /* ==========================================
+        /*
            VERIFICAR LICENÇA DA LOJA
-           
-           IMPORTANTE:
-           O ADMINISTRADOR GERAL NÃO PERTENCE
-           A UMA LOJA E NÃO DEVE SER BLOQUEADO
-           PELA LICENÇA.
-        ========================================== */
 
-        if (
-            perfil.tipo !== "admin_geral"
-        ) {
+           O ADMINISTRADOR GERAL não pertence
+           a uma loja e não deve ser bloqueado
+           pela licença.
+        */
 
+        if (perfil.tipo !== "admin_geral") {
             const resultadoLicenca =
                 await verificarLicencaLoja(
                     perfil.loja_id
                 );
 
-
-            /* ==========================================
+            /*
                LICENÇA NÃO PERMITIDA
-            ========================================== */
+            */
 
-            if (
-                !resultadoLicenca.permitida
-            ) {
-
-                await supabaseClient
-                    .auth
-                    .signOut();
-
+            if (!resultadoLicenca.permitida) {
+                await supabaseClient.auth.signOut();
 
                 mostrarMensagem(
                     resultadoLicenca.mensagem,
                     "erro"
                 );
 
-
                 return;
-
             }
-
         }
 
-
-        /* ==========================================
+        /*
            SALVAR INFORMAÇÕES DA SESSÃO
-        ========================================== */
+        */
 
         sessionStorage.setItem(
             "sistemaLojaPerfil",
             JSON.stringify(perfil)
         );
 
-
-        /* ==========================================
+        /*
            REDIRECIONAR ADMINISTRADOR GERAL
-        ========================================== */
+        */
 
-        if (
-            perfil.tipo === "admin_geral"
-        ) {
-
+        if (perfil.tipo === "admin_geral") {
             window.location.href =
                 "admin-geral.html";
 
-
             return;
-
         }
 
-
-        /* ==========================================
+        /*
            REDIRECIONAR ADMINISTRADOR DA LOJA
-        ========================================== */
+        */
 
-        if (
-            perfil.tipo === "admin"
-        ) {
-
+        if (perfil.tipo === "admin") {
             window.location.href =
                 "admin.html";
 
-
             return;
-
         }
 
-
-        /* ==========================================
+        /*
            REDIRECIONAR VENDEDOR
-        ========================================== */
+        */
 
-        if (
-            perfil.tipo === "vendedor"
-        ) {
-
+        if (perfil.tipo === "vendedor") {
             window.location.href =
                 "vendedor.html";
 
-
             return;
-
         }
 
-
-        /* ==========================================
+        /*
            TIPO DESCONHECIDO
-        ========================================== */
+        */
 
-        await supabaseClient
-            .auth
-            .signOut();
+        await supabaseClient.auth.signOut();
 
+        sessionStorage.removeItem(
+            "sistemaLojaPerfil"
+        );
 
         mostrarMensagem(
             "Tipo de usuário inválido."
         );
 
-
     } catch (erro) {
-
-
-        /* ==========================================
+        /*
            ERRO INESPERADO
-        ========================================== */
+        */
 
         console.error(
             "Erro inesperado no login:",
             erro
         );
 
-
         mostrarMensagem(
             "Ocorreu um erro ao entrar no sistema."
         );
 
-
     } finally {
-
-
-        /* ==========================================
+        /*
            REATIVAR BOTÃO
-        ========================================== */
+        */
 
-        botaoEntrar.disabled =
-            false;
-
-        botaoEntrar.textContent =
-            "Entrar";
-
+        if (botaoEntrar) {
+            botaoEntrar.disabled = false;
+            botaoEntrar.textContent = "Entrar";
+        }
     }
-
 }
 
 
@@ -692,12 +531,10 @@ async function entrar() {
 ========================================== */
 
 if (botaoEntrar) {
-
     botaoEntrar.addEventListener(
         "click",
         entrar
     );
-
 }
 
 
@@ -706,22 +543,14 @@ if (botaoEntrar) {
 ========================================== */
 
 if (campoSenha) {
-
     campoSenha.addEventListener(
         "keydown",
         function (evento) {
-
-            if (
-                evento.key === "Enter"
-            ) {
-
+            if (evento.key === "Enter") {
                 entrar();
-
             }
-
         }
     );
-
 }
 
 
@@ -730,20 +559,12 @@ if (campoSenha) {
 ========================================== */
 
 if (campoUsuario) {
-
     campoUsuario.addEventListener(
         "keydown",
         function (evento) {
-
-            if (
-                evento.key === "Enter"
-            ) {
-
+            if (evento.key === "Enter") {
                 entrar();
-
             }
-
         }
     );
-
 }

@@ -1,0 +1,985 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Sistema da Loja - Notinhas / Fiado</title>
+
+    <!-- Mesmo padrão visual da tela Categorias -->
+    <link rel="stylesheet" href="admin.css">
+    <link rel="stylesheet" href="notinhas.css">
+
+    <style>
+        /* ==========================================
+           LAYOUT PADRÃO DO SISTEMA
+        ========================================== */
+
+        .layout-admin.notinhas-layout {
+            display: grid !important;
+            grid-template-columns: 250px minmax(0, 1fr) !important;
+            align-items: stretch;
+            width: 100%;
+            min-height: 100vh;
+            margin: 0 !important;
+            padding: 0 !important;
+            gap: 0 !important;
+            overflow-x: clip;
+        }
+
+        .layout-admin.notinhas-layout > .menu-lateral {
+            grid-column: 1;
+            grid-row: 1;
+            position: sticky;
+            top: 0;
+            left: auto !important;
+            width: 250px !important;
+            max-width: 250px;
+            min-width: 0;
+            height: 100vh;
+            min-height: 100vh;
+            margin: 0 !important;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
+
+        .layout-admin.notinhas-layout > .notinhas-main {
+            grid-column: 2;
+            grid-row: 1;
+            position: relative !important;
+            left: auto !important;
+            right: auto !important;
+            float: none !important;
+            transform: none !important;
+            width: 100% !important;
+            max-width: none !important;
+            min-width: 0;
+            margin: 0 !important;
+            box-sizing: border-box;
+            overflow-x: hidden;
+        }
+
+        /* ==========================================
+           LOGOTIPO E USUÁRIO
+        ========================================== */
+
+        .notinhas-layout .logo-admin {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-shrink: 0;
+        }
+
+        .notinhas-layout .logo-icone {
+            flex-shrink: 0;
+        }
+
+        .notinhas-layout .logo-admin strong,
+        .notinhas-layout .logo-admin span {
+            display: block;
+        }
+
+        .notinhas-layout .logo-admin strong {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .notinhas-layout .usuario-logado {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 0;
+        }
+
+        .notinhas-layout .avatar-admin {
+            flex-shrink: 0;
+        }
+
+        .notinhas-layout .dados-usuario {
+            min-width: 0;
+        }
+
+        .notinhas-layout .dados-usuario strong {
+            display: block;
+            max-width: 155px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .notinhas-layout .dados-usuario span {
+            display: block;
+        }
+
+        /* ==========================================
+           ÍCONES DO MENU PADRÃO
+        ========================================== */
+
+        .notinhas-layout .icone-menu {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 20px;
+            height: 20px;
+            min-width: 20px;
+            flex-shrink: 0;
+        }
+
+        .notinhas-layout .icone-menu svg {
+            display: block;
+            width: 18px;
+            height: 18px;
+        }
+
+        .notinhas-layout .menu .item-menu {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+        }
+
+        /* Mantém o item atual no azul padrão do sistema */
+        .notinhas-layout .menu .item-menu.ativo {
+            background: #2563eb;
+            color: #ffffff;
+        }
+
+        .notinhas-layout .menu [data-role].hidden {
+            display: none !important;
+        }
+
+        /* ==========================================
+           BOTÃO SAIR — PADRÃO DE CATEGORIAS
+        ========================================== */
+
+        .notinhas-layout .area-sair {
+            margin-top: auto;
+            padding-top: 12px;
+            flex-shrink: 0;
+        }
+
+        .notinhas-layout .botao-sair {
+            display: flex !important;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 10px;
+
+            width: 100%;
+            min-height: 40px;
+            margin: 0;
+            padding: 10px 12px;
+
+            border: 0;
+            border-radius: 6px;
+            background: transparent;
+            color: #cbd5e1;
+
+            font-family: inherit;
+            font-size: 12px;
+            font-weight: 600;
+            text-align: left;
+
+            cursor: pointer;
+            box-sizing: border-box;
+            transition: background 0.15s ease, color 0.15s ease;
+        }
+
+        .notinhas-layout .botao-sair:hover {
+            background: #1f2937;
+            color: #ffffff;
+        }
+
+        /* ==========================================
+           CONTEÚDO DA PÁGINA
+        ========================================== */
+
+        .notinhas-layout .notinhas-main {
+            padding: 30px;
+            min-width: 0;
+        }
+
+        .notinhas-main .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            width: 100%;
+            margin: 0 0 24px;
+        }
+
+        .notinhas-main .page-header > div {
+            min-width: 0;
+        }
+
+        .notinhas-main .btn-primary {
+            flex-shrink: 0;
+        }
+
+        .notinhas-main .content-panel {
+            width: 100%;
+            min-width: 0;
+            box-sizing: border-box;
+        }
+
+        .notinhas-main .table-wrap {
+            width: 100%;
+            max-width: 100%;
+            overflow-x: auto;
+        }
+
+        .notinhas-main table {
+            width: 100%;
+            min-width: 850px;
+        }
+
+        /* ==========================================
+           RESPONSIVO
+        ========================================== */
+
+        @media (max-width: 1000px) {
+            .layout-admin.notinhas-layout {
+                grid-template-columns: 230px minmax(0, 1fr) !important;
+            }
+
+            .layout-admin.notinhas-layout > .menu-lateral {
+                width: 230px !important;
+                max-width: 230px;
+            }
+
+            .notinhas-layout .notinhas-main {
+                padding: 22px 16px;
+            }
+        }
+
+        @media (max-width: 720px) {
+            .layout-admin.notinhas-layout {
+                display: flex !important;
+                flex-direction: column;
+            }
+
+            .layout-admin.notinhas-layout > .menu-lateral {
+                position: relative;
+                top: auto;
+                width: 100% !important;
+                max-width: none;
+                height: auto;
+                min-height: 0;
+                overflow: visible;
+            }
+
+            .notinhas-layout .menu {
+                min-width: 0;
+            }
+
+            .layout-admin.notinhas-layout > .notinhas-main {
+                width: 100% !important;
+                margin: 0 !important;
+                padding: 18px 12px;
+            }
+
+            .notinhas-main .page-header {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .notinhas-main .metric-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .notinhas-main .filters {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+    <!-- ==========================================
+         SUPABASE E SCRIPTS
+    ========================================== -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/config.js"></script>
+    <script src="js/layout.js"></script>
+    <script src="js/notinhas.js" defer></script>
+</head>
+
+<body>
+
+<div class="layout-admin notinhas-layout">
+
+    <!-- ==========================================
+         MENU LATERAL — PADRÃO CATEGORIAS
+    ========================================== -->
+
+    <aside class="menu-lateral">
+
+        <!-- LOGO / NOME DA LOJA -->
+
+        <div class="logo-admin">
+
+            <div class="logo-icone">
+                SL
+            </div>
+
+            <div>
+                <strong>Sistema da Loja</strong>
+                <span id="perfilLoja">Administração</span>
+            </div>
+
+        </div>
+
+        <!-- USUÁRIO LOGADO -->
+
+        <div class="usuario-logado">
+
+            <div class="avatar-admin" id="avatarUsuario">
+                A
+            </div>
+
+            <div class="dados-usuario">
+
+                <strong id="nomeUsuario">
+                    Carregando...
+                </strong>
+
+                <span id="tipoUsuario">
+                    Administrador
+                </span>
+
+            </div>
+
+        </div>
+
+        <!-- MENU -->
+
+        <nav class="menu" aria-label="Navegação principal">
+
+            <!-- ======================================
+                 ADMINISTRADOR — PRINCIPAL
+            ======================================= -->
+
+            <div class="titulo-menu" data-role="admin">
+                PRINCIPAL
+            </div>
+
+            <a href="admin.html" class="item-menu" data-role="admin">
+
+                <span class="icone-menu">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M3 10.5 12 3l9 7.5"
+                              fill="none" stroke="currentColor"
+                              stroke-width="2" stroke-linecap="round"
+                              stroke-linejoin="round"/>
+                        <path d="M5 9.5V21h14V9.5"
+                              fill="none" stroke="currentColor"
+                              stroke-width="2" stroke-linejoin="round"/>
+                        <path d="M9 21v-6h6v6"
+                              fill="none" stroke="currentColor"
+                              stroke-width="2" stroke-linejoin="round"/>
+                    </svg>
+                </span>
+
+                <span>Dashboard</span>
+            </a>
+
+            <a href="usuarios.html" class="item-menu" data-role="admin">
+
+                <span class="icone-menu">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <circle cx="9" cy="8" r="3"
+                                fill="none" stroke="currentColor"
+                                stroke-width="2"/>
+                        <path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"
+                              fill="none" stroke="currentColor"
+                              stroke-width="2" stroke-linecap="round"/>
+                        <path d="M16 5.5a3 3 0 0 1 0 5.8"
+                              fill="none" stroke="currentColor"
+                              stroke-width="2" stroke-linecap="round"/>
+                        <path d="M17 14.5c2.3.7 4 2.8 4 5.5"
+                              fill="none" stroke="currentColor"
+                              stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </span>
+
+                <span>Usuários</span>
+            </a>
+
+            <!-- ESTOQUE E VENDAS -->
+
+            <div class="titulo-menu" data-role="admin">
+                ESTOQUE E VENDAS
+            </div>
+
+            <a href="produtos.html" class="item-menu" data-role="admin">
+
+                <span class="icone-menu">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Z"
+                              fill="none" stroke="currentColor"
+                              stroke-width="2" stroke-linejoin="round"/>
+                        <path d="m4 7.5 8 4.5 8-4.5"
+                              fill="none" stroke="currentColor"
+                              stroke-width="2" stroke-linejoin="round"/>
+                        <path d="M12 12v9"
+                              fill="none" stroke="currentColor"
+                              stroke-width="2"/>
+                    </svg>
+                </span>
+
+                <span>Produtos</span>
+            </a>
+
+            <a href="categorias.html" class="item-menu" data-role="admin">
+
+                <span class="icone-menu">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M4 5h6v6H4z"
+                              fill="none" stroke="currentColor"
+                              stroke-width="2" stroke-linejoin="round"/>
+                        <path d="M14 5h6v6h-6z"
+                              fill="none" stroke="currentColor"
+                              stroke-width="2" stroke-linejoin="round"/>
+                        <path d="M4 13h6v6H4z"
+                              fill="none" stroke="currentColor"
+                              stroke-width="2" stroke-linejoin="round"/>
+                        <path d="M14 13h6v6h-6z"
+                              fill="none" stroke="currentColor"
+                              stroke-width="2" stroke-linejoin="round"/>
+                    </svg>
+                </span>
+
+                <span>Categorias</span>
+            </a>
+
+            <a href="estoque.html" class="item-menu" data-role="admin">
+
+                <span class="icone-menu">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M4 4h16v16H4z"
+                              fill="none" stroke="currentColor"
+                              stroke-width="2" stroke-linejoin="round"/>
+                        <path d="M8 8h8M8 12h8M8 16h5"
+                              fill="none" stroke="currentColor"
+                              stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </span>
+
+                <span>Estoque</span>
+            </a>
+
+            <a href="vendas.html" class="item-menu" data-role="admin">
+
+                <span class="icone-menu">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M3 4h2l2.2 11.2a2 2 0 0 0 2 1.6h7.6a2 2 0 0 0 2-1.6L21 8H6"
+                              fill="none" stroke="currentColor"
+                              stroke-width="2" stroke-linecap="round"
+                              stroke-linejoin="round"/>
+                        <circle cx="10" cy="20" r="1" fill="currentColor"/>
+                        <circle cx="18" cy="20" r="1" fill="currentColor"/>
+                    </svg>
+                </span>
+
+                <span>Vendas</span>
+            </a>
+
+            <a href="historico-vendas.html" class="item-menu" data-role="admin">
+
+                <span class="icone-menu">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M4 5h16v14H4z"
+                              fill="none" stroke="currentColor"
+                              stroke-width="2" stroke-linejoin="round"/>
+                        <path d="M8 9h8M8 13h6M8 17h4"
+                              fill="none" stroke="currentColor"
+                              stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </span>
+
+                <span>Histórico de vendas</span>
+            </a>
+
+            <a href="clientes.html" class="item-menu" data-role="admin">
+
+                <span class="icone-menu">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <circle cx="12" cy="8" r="3"
+                                fill="none" stroke="currentColor"
+                                stroke-width="2"/>
+                        <path d="M5 20c0-3.9 3.1-7 7-7s7 3.1 7 7"
+                              fill="none" stroke="currentColor"
+                              stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </span>
+
+                <span>Clientes</span>
+            </a>
+
+            <!-- FINANCEIRO -->
+
+            <div class="titulo-menu" data-role="admin">
+                FINANCEIRO
+            </div>
+
+            <a href="financeiro.html" class="item-menu" data-role="admin">
+
+                <span class="icone-menu">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <circle cx="12" cy="12" r="8"
+                                fill="none" stroke="currentColor"
+                                stroke-width="2"/>
+                        <path d="M12 7v10"
+                              fill="none" stroke="currentColor"
+                              stroke-width="2" stroke-linecap="round"/>
+                        <path d="M15 9.5c-.7-.8-1.7-1.2-3-1.2-1.6 0-2.7.8-2.7 2 0 3 5.7 1.1 5.7 4 0 1.3-1.2 2.2-3 2.2-1.4 0-2.6-.5-3.3-1.4"
+                              fill="none" stroke="currentColor"
+                              stroke-width="1.7" stroke-linecap="round"/>
+                    </svg>
+                </span>
+
+                <span>Financeiro</span>
+            </a>
+
+            <a href="notinhas.html"
+               class="item-menu ativo"
+               data-role="admin"
+               aria-current="page">
+
+                <span class="icone-menu">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M5 4h14v16H5z"
+                              fill="none" stroke="currentColor"
+                              stroke-width="2" stroke-linejoin="round"/>
+                        <path d="M8 9h8M8 13h8M8 17h5"
+                              fill="none" stroke="currentColor"
+                              stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </span>
+
+                <span>Notinhas / Fiado</span>
+            </a>
+
+            <a href="relatorios.html" class="item-menu" data-role="admin">
+
+                <span class="icone-menu">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M4 19V5"
+                              fill="none" stroke="currentColor"
+                              stroke-width="2" stroke-linecap="round"/>
+                        <path d="M4 19h16"
+                              fill="none" stroke="currentColor"
+                              stroke-width="2" stroke-linecap="round"/>
+                        <path d="m7 15 3-3 3 2 5-6"
+                              fill="none" stroke="currentColor"
+                              stroke-width="2" stroke-linecap="round"
+                              stroke-linejoin="round"/>
+                    </svg>
+                </span>
+
+                <span>Relatórios</span>
+            </a>
+
+
+            <!-- ======================================
+                 MENU DO VENDEDOR
+            ======================================= -->
+
+            <div class="titulo-menu" data-role="vendedor">
+                PRINCIPAL
+            </div>
+
+            <a href="vendedor.html" class="item-menu" data-role="vendedor">
+
+                <span class="icone-menu">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M3 10.5 12 3l9 7.5"
+                              fill="none" stroke="currentColor"
+                              stroke-width="2" stroke-linecap="round"
+                              stroke-linejoin="round"/>
+                        <path d="M5 9.5V21h14V9.5"
+                              fill="none" stroke="currentColor"
+                              stroke-width="2" stroke-linejoin="round"/>
+                        <path d="M9 21v-6h6v6"
+                              fill="none" stroke="currentColor"
+                              stroke-width="2" stroke-linejoin="round"/>
+                    </svg>
+                </span>
+
+                <span>Dashboard</span>
+            </a>
+
+            <div class="titulo-menu" data-role="vendedor">
+                VENDAS
+            </div>
+
+            <a href="vendedor-produtos.html" class="item-menu" data-role="vendedor">
+
+                <span class="icone-menu">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Z"
+                              fill="none" stroke="currentColor"
+                              stroke-width="2" stroke-linejoin="round"/>
+                        <path d="m4 7.5 8 4.5 8-4.5"
+                              fill="none" stroke="currentColor"
+                              stroke-width="2" stroke-linejoin="round"/>
+                        <path d="M12 12v9"
+                              fill="none" stroke="currentColor"
+                              stroke-width="2"/>
+                    </svg>
+                </span>
+
+                <span>Produtos</span>
+            </a>
+
+            <a href="vendedor-vendas.html" class="item-menu" data-role="vendedor">
+
+                <span class="icone-menu">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M3 4h2l2.2 11.5h10.9L21 7H6"
+                              fill="none" stroke="currentColor"
+                              stroke-width="2" stroke-linecap="round"
+                              stroke-linejoin="round"/>
+                        <circle cx="9" cy="20" r="1.5"
+                                fill="none" stroke="currentColor"
+                                stroke-width="2"/>
+                        <circle cx="18" cy="20" r="1.5"
+                                fill="none" stroke="currentColor"
+                                stroke-width="2"/>
+                    </svg>
+                </span>
+
+                <span>Vendas</span>
+            </a>
+
+            <a href="vendedor-clientes.html" class="item-menu" data-role="vendedor">
+
+                <span class="icone-menu">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <circle cx="9" cy="8" r="3"
+                                fill="none" stroke="currentColor"
+                                stroke-width="2"/>
+                        <path d="M3.5 20c.7-3.4 2.5-5 5.5-5s4.8 1.6 5.5 5"
+                              fill="none" stroke="currentColor"
+                              stroke-width="2" stroke-linecap="round"/>
+                        <path d="M16 5.5a3 3 0 0 1 0 5.8"
+                              fill="none" stroke="currentColor"
+                              stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </span>
+
+                <span>Clientes</span>
+            </a>
+
+            <a href="vendedor-estoque.html" class="item-menu" data-role="vendedor">
+
+                <span class="icone-menu">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M4 19V5M4 19h16"
+                              fill="none" stroke="currentColor"
+                              stroke-width="2" stroke-linecap="round"/>
+                        <rect x="7" y="12" width="3" height="5" rx="1"
+                              fill="none" stroke="currentColor"
+                              stroke-width="2"/>
+                        <rect x="12" y="9" width="3" height="8" rx="1"
+                              fill="none" stroke="currentColor"
+                              stroke-width="2"/>
+                        <rect x="17" y="6" width="3" height="11" rx="1"
+                              fill="none" stroke="currentColor"
+                              stroke-width="2"/>
+                    </svg>
+                </span>
+
+                <span>Estoque</span>
+            </a>
+
+            <div class="titulo-menu" data-role="vendedor">
+                FINANCEIRO
+            </div>
+
+            <a href="notinhas.html"
+               class="item-menu ativo"
+               data-role="vendedor"
+               aria-current="page">
+
+                <span class="icone-menu">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M5 4h14v16H5z"
+                              fill="none" stroke="currentColor"
+                              stroke-width="2" stroke-linejoin="round"/>
+                        <path d="M8 9h8M8 13h8M8 17h5"
+                              fill="none" stroke="currentColor"
+                              stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </span>
+
+                <span>Notinhas / Fiado</span>
+            </a>
+
+        </nav>
+
+        <!-- ======================================
+             SAIR — MESMA ESTRUTURA DE CATEGORIAS
+        ======================================= -->
+
+        <div class="area-sair">
+
+            <button
+                type="button"
+                class="botao-sair"
+                id="btnSair"
+            >
+
+                <span class="icone-menu">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M10 5H5v14h5"
+                              fill="none" stroke="currentColor"
+                              stroke-width="2" stroke-linecap="round"
+                              stroke-linejoin="round"/>
+                        <path d="M13 8l4 4-4 4"
+                              fill="none" stroke="currentColor"
+                              stroke-width="2" stroke-linecap="round"
+                              stroke-linejoin="round"/>
+                        <path d="M9 12h8"
+                              fill="none" stroke="currentColor"
+                              stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </span>
+
+                <span>Sair</span>
+
+            </button>
+
+        </div>
+
+    </aside>
+
+
+    <!-- ==========================================
+         CONTEÚDO PRINCIPAL
+    ========================================== -->
+
+    <main class="conteudo-admin notinhas-main">
+
+        <header class="cabecalho-admin page-header">
+
+            <div>
+                <p class="eyebrow">CONTAS A RECEBER</p>
+
+                <h2>Notinhas / Fiado</h2>
+
+                <p class="subtitle">
+                    Consulte dívidas, acompanhe parcelas e visualize recebimentos.
+                </p>
+            </div>
+
+            <a
+                class="btn-primary"
+                id="btnNovaVenda"
+                href="vendas.html"
+            >
+                + Nova venda
+            </a>
+
+        </header>
+
+        <!-- AVISOS -->
+
+        <div class="notice notice-info" id="avisoModulo" role="status">
+            Verificando acesso e conexão...
+        </div>
+
+        <div
+            class="notice notice-error hidden"
+            id="mensagemErro"
+            role="alert"
+        ></div>
+
+        <!-- INDICADORES -->
+
+        <section class="metric-grid" aria-label="Resumo das notinhas">
+
+            <article class="metric-card">
+                <span class="metric-label">Saldo a receber</span>
+                <strong id="totalAReceber">R$ 0,00</strong>
+                <small>Dívidas em aberto</small>
+            </article>
+
+            <article class="metric-card">
+                <span class="metric-label">Saldo vencido</span>
+                <strong id="totalVencido">R$ 0,00</strong>
+                <small id="quantidadeVencidas">0 parcelas atrasadas</small>
+            </article>
+
+            <article class="metric-card">
+                <span class="metric-label">Notinhas em aberto</span>
+                <strong id="quantidadeAbertas">0</strong>
+                <small>Inclui pagamentos parciais</small>
+            </article>
+
+            <article class="metric-card">
+                <span class="metric-label">Notinhas pagas</span>
+                <strong id="quantidadePagas">0</strong>
+                <small>Histórico preservado</small>
+            </article>
+
+        </section>
+
+        <!-- TABELA DE NOTINHAS -->
+
+        <section class="content-panel">
+
+            <div class="panel-heading">
+
+                <div>
+                    <h2>Todas as notinhas</h2>
+                    <p>
+                        Pesquise por cliente, telefone ou número da notinha.
+                    </p>
+                </div>
+
+                <button
+                    type="button"
+                    class="btn-secondary"
+                    id="btnAtualizar"
+                >
+                    Atualizar
+                </button>
+
+            </div>
+
+            <!-- FILTROS -->
+
+            <div class="filters">
+
+                <label class="search-field">
+                    <span>Buscar cliente ou notinha</span>
+                    <input
+                        type="search"
+                        id="buscaNotinha"
+                        placeholder="Nome, telefone ou número"
+                    >
+                </label>
+
+                <label>
+                    <span>Situação</span>
+                    <select id="filtroStatus">
+                        <option value="todas">Todas</option>
+                        <option value="aberta">Em aberto</option>
+                        <option value="paga">Paga</option>
+                        <option value="cancelada">Cancelada</option>
+                    </select>
+                </label>
+
+                <label>
+                    <span>Emissão inicial</span>
+                    <input type="date" id="dataInicio">
+                </label>
+
+                <label>
+                    <span>Emissão final</span>
+                    <input type="date" id="dataFim">
+                </label>
+
+            </div>
+
+            <!-- LISTA -->
+
+            <div class="table-wrap">
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Notinha</th>
+                            <th>Cliente</th>
+                            <th>Emissão</th>
+                            <th>Próximo vencimento</th>
+                            <th>Total</th>
+                            <th>Saldo</th>
+                            <th>Situação</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="listaNotinhas">
+                        <tr>
+                            <td colspan="8" class="empty-cell">
+                                Aguardando conexão...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+
+            <div class="table-footer">
+                <span id="contadorResultados">0 resultados</span>
+                <span id="estadoTabela"></span>
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- ==========================================
+     MODAL DE DETALHES DA NOTINHA
+========================================== -->
+
+<div
+    class="modal-backdrop hidden"
+    id="modalDetalhes"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="tituloDetalhes"
+>
+
+    <section class="modal modal-large">
+
+        <div class="modal-header">
+
+            <div>
+                <p class="eyebrow">CONSULTA FINANCEIRA</p>
+                <h2 id="tituloDetalhes">Detalhes da notinha</h2>
+            </div>
+
+            <button
+                type="button"
+                class="modal-close"
+                data-fechar="modalDetalhes"
+                aria-label="Fechar"
+            >×</button>
+
+        </div>
+
+        <div id="detalhesNotinha" class="modal-body">
+            Carregando detalhes...
+        </div>
+
+        <div class="modal-actions">
+
+            <button
+                type="button"
+                class="btn-secondary"
+                id="btnImprimirNotinha"
+            >
+                Imprimir / Salvar PDF
+            </button>
+
+            <button
+                type="button"
+                class="btn-secondary"
+                data-fechar="modalDetalhes"
+            >
+                Fechar
+            </button>
+
+        </div>
+
+    </section>
+
+</div>
+
+</body>
+</html>

@@ -1,18 +1,10 @@
 <!DOCTYPE html>
 
-
-
 <html lang="pt-BR">
-
-
 
 <head>
 
-
-
     <meta charset="UTF-8">
-
-
 
     <meta
 
@@ -22,17 +14,11 @@
 
     >
 
-
-
     <title>
 
         Vendas - Vendedor - Sistema da Loja
 
     </title>
-
-
-
-
 
     <link
 
@@ -42,10 +28,6 @@
 
     >
 
-
-
-
-
     <link
 
         rel="stylesheet"
@@ -54,21 +36,13 @@
 
     >
 
-
-
-
-
     <!-- ======================================
 
          AJUSTES VISUAIS
 
     ======================================= -->
 
-
-
     <style>
-
-
 
         /* ======================================
 
@@ -76,87 +50,41 @@
 
         ====================================== */
 
-
-
         .logo-vendedor {
-
-
 
             display: flex !important;
 
-
-
             align-items: center;
-
-
 
             gap: 12px;
 
-
-
             flex-shrink: 0;
 
-
-
         }
-
-
-
-
 
         .logo-vendedor .logo-icone {
 
-
-
             flex-shrink: 0;
 
-
-
         }
-
-
-
-
 
         .logo-vendedor strong {
 
-
-
             display: block;
-
-
 
             overflow: hidden;
 
-
-
             text-overflow: ellipsis;
-
-
 
             white-space: nowrap;
 
-
-
         }
-
-
-
-
 
         .logo-vendedor span {
 
-
-
             display: block;
 
-
-
         }
-
-
-
-
 
         /* ======================================
 
@@ -164,63 +92,31 @@
 
         ====================================== */
 
-
-
         .icone-menu {
-
-
 
             display: flex;
 
-
-
             align-items: center;
-
-
 
             justify-content: center;
 
-
-
             width: 20px;
-
-
 
             height: 20px;
 
-
-
             flex-shrink: 0;
 
-
-
         }
-
-
-
-
 
         .icone-menu svg {
 
-
-
             width: 18px;
-
-
 
             height: 18px;
 
-
-
             display: block;
 
-
-
         }
-
-
-
-
 
         /* ======================================
 
@@ -228,93 +124,251 @@
 
         ====================================== */
 
-
-
         .aviso-icone {
-
-
 
             display: flex;
 
-
-
             align-items: center;
-
-
 
             justify-content: center;
 
-
-
             flex-shrink: 0;
 
-
-
         }
-
-
-
-
 
         .aviso-icone svg {
 
-
-
             width: 22px;
-
-
 
             height: 22px;
 
-
-
             display: block;
-
-
 
         }
 
+    </style>
 
+    <style id="ajuste-layout-vendedor-final">
+
+        html, body { min-height: 100%; }
+
+        body { margin: 0; }
+
+        .layout-vendedor { min-height: 100vh; align-items: stretch; }
+
+        .menu-lateral-vendedor {
+
+            min-height: 100vh; height: 100vh; box-sizing: border-box;
+
+            position: sticky; top: 0; align-self: flex-start;
+
+            display: flex; flex-direction: column; overflow-y: auto;
+
+        }
+
+        .menu-lateral-vendedor .menu-vendedor { flex: 1 0 auto; }
+
+        .menu-lateral-vendedor .area-sair { margin-top: auto; flex-shrink: 0; }
+
+        .conteudo-vendedor { min-width: 0; min-height: 100vh; box-sizing: border-box; }
+
+        @media (max-width: 800px) {
+
+            .menu-lateral-vendedor { height: auto; min-height: 100vh; }
+
+        }
 
     </style>
 
 
-
-
-    <style id="ajuste-layout-vendedor-final">
-        html, body { min-height: 100%; }
-        body { margin: 0; }
-        .layout-vendedor { min-height: 100vh; align-items: stretch; }
-        .menu-lateral-vendedor {
-            min-height: 100vh; height: 100vh; box-sizing: border-box;
-            position: sticky; top: 0; align-self: flex-start;
-            display: flex; flex-direction: column; overflow-y: auto;
+    <style id="estilos-prazo-venda">
+        .configuracao-prazo-venda {
+            grid-column: 1 / -1;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+            width: 100%;
+            margin-top: 12px;
+            padding: 14px;
+            border: 1px solid #bfdbfe;
+            border-radius: 9px;
+            background: #eff6ff;
+            box-sizing: border-box;
         }
-        .menu-lateral-vendedor .menu-vendedor { flex: 1 0 auto; }
-        .menu-lateral-vendedor .area-sair { margin-top: auto; flex-shrink: 0; }
-        .conteudo-vendedor { min-width: 0; min-height: 100vh; box-sizing: border-box; }
-        @media (max-width: 800px) {
-            .menu-lateral-vendedor { height: auto; min-height: 100vh; }
+        .configuracao-prazo-venda[hidden] {
+            display: none !important;
+        }
+        .configuracao-prazo-venda .campo-venda {
+            min-width: 0;
+        }
+        .texto-ajuda-prazo {
+            grid-column: 1 / -1;
+            margin: 0;
+            color: #1e40af;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+        @media (max-width: 600px) {
+            .configuracao-prazo-venda {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+
+    <style id="ordem-venda-vendedor-corrigida">
+        .painel-venda > .campo-cliente-vendedor {
+            width: min(100%, 360px);
+            margin: 14px 0 18px;
+        }
+        .painel-venda .dados-final-venda-reorganizada {
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: stretch !important;
+            gap: 14px !important;
+            width: 100%;
+            margin-top: 16px;
+        }
+        .painel-venda .dados-final-venda-reorganizada > .resumo-venda {
+            align-self: flex-end;
+            width: min(100%, 380px);
+            margin: 0;
+        }
+        .painel-venda .dados-finalizacao-vendedor {
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            gap: 14px;
+            width: 100%;
+        }
+        .painel-venda .campo-pagamento-vendedor {
+            width: min(100%, 360px);
+        }
+        .painel-venda .dados-finalizacao-vendedor .configuracao-prazo-venda {
+            width: 100%;
+            margin-top: 0;
+        }
+        .painel-venda .campo-observacoes-vendedor {
+            width: 100%;
+        }
+        .painel-venda .campo-observacoes-vendedor input {
+            width: 100%;
+            min-height: 40px;
+            box-sizing: border-box;
+        }
+        .painel-venda .acoes-venda-comprovante {
+            margin-top: 16px;
+        }
+    </style>
+
+
+    <style id="ordem-final-vendedor-corrigida">
+        /* Impede o layout antigo de reorganizar os campos fora da ordem do HTML. */
+        .painel-venda {
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: stretch !important;
+            gap: 16px !important;
+            grid-template-columns: none !important;
+            grid-template-areas: none !important;
+        }
+
+        .painel-venda > .cabecalho-painel-venda {
+            order: 0 !important;
+            width: 100% !important;
+        }
+
+        .painel-venda > .campo-cliente-vendedor {
+            order: 1 !important;
+            width: min(100%, 360px) !important;
+            margin: 0 !important;
+        }
+
+        .painel-venda > .adicionar-produto {
+            order: 2 !important;
+            width: 100% !important;
+            margin: 0 !important;
+        }
+
+        .painel-venda > #mensagemVenda {
+            order: 3 !important;
+            width: 100% !important;
+            margin: 0 !important;
+        }
+
+        .painel-venda > .tabela-venda-container {
+            order: 4 !important;
+            width: 100% !important;
+            margin: 0 !important;
+        }
+
+        .painel-venda > .dados-final-venda-reorganizada {
+            order: 5 !important;
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: stretch !important;
+            gap: 16px !important;
+            width: 100% !important;
+            margin: 0 !important;
+        }
+
+        .painel-venda .dados-final-venda-reorganizada > .resumo-venda {
+            order: 1 !important;
+            align-self: flex-end !important;
+            width: min(100%, 380px) !important;
+            margin: 0 !important;
+        }
+
+        .painel-venda .dados-final-venda-reorganizada > .dados-finalizacao-vendedor {
+            order: 2 !important;
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: stretch !important;
+            gap: 12px !important;
+            width: 100% !important;
+            margin: 0 !important;
+        }
+
+        .painel-venda .dados-finalizacao-vendedor > .campo-pagamento-vendedor {
+            order: 1 !important;
+            width: min(100%, 360px) !important;
+            margin: 0 !important;
+        }
+
+        .painel-venda .dados-finalizacao-vendedor > #camposPrazoVenda {
+            order: 2 !important;
+            width: 100% !important;
+            margin: 0 !important;
+        }
+
+        .painel-venda .dados-finalizacao-vendedor > .campo-observacoes-vendedor {
+            order: 3 !important;
+            width: 100% !important;
+            margin: 0 !important;
+        }
+
+        .painel-venda .campo-observacoes-vendedor input {
+            width: 100% !important;
+            min-height: 40px;
+            box-sizing: border-box;
+        }
+
+        .painel-venda > .acoes-venda-comprovante {
+            order: 6 !important;
+            width: 100% !important;
+            margin: 0 !important;
+        }
+
+        .painel-venda > .acoes-venda-comprovante:empty {
+            display: none !important;
         }
     </style>
 
 </head>
 
-
-
-
-
 <body>
 
-
-
-
-
     <div class="layout-vendedor">
-
-
-
-
 
         <!-- ======================================
 
@@ -322,13 +376,7 @@
 
         ======================================= -->
 
-
-
         <aside class="menu-lateral-vendedor">
-
-
-
-
 
             <!-- ==================================
 
@@ -336,13 +384,7 @@
 
             =================================== -->
 
-
-
             <div class="logo-vendedor">
-
-
-
-
 
                 <div class="logo-icone">
 
@@ -350,15 +392,7 @@
 
                 </div>
 
-
-
-
-
                 <div>
-
-
-
-
 
                     <strong id="nomeLojaVendedor">
 
@@ -366,31 +400,15 @@
 
                     </strong>
 
-
-
-
-
                     <span>
 
                         Área do Vendedor
 
                     </span>
 
-
-
-
-
                 </div>
 
-
-
-
-
             </div>
-
-
-
-
 
             <!-- ==================================
 
@@ -398,13 +416,7 @@
 
             =================================== -->
 
-
-
             <div class="usuario-vendedor">
-
-
-
-
 
                 <div
 
@@ -418,15 +430,7 @@
 
                 </div>
 
-
-
-
-
                 <div class="dados-vendedor">
-
-
-
-
 
                     <strong id="nomeVendedor">
 
@@ -434,31 +438,15 @@
 
                     </strong>
 
-
-
-
-
                     <span>
 
                         Vendedor
 
                     </span>
 
-
-
-
-
                 </div>
 
-
-
-
-
             </div>
-
-
-
-
 
             <!-- ==================================
 
@@ -466,13 +454,7 @@
 
             =================================== -->
 
-
-
             <nav class="menu-vendedor">
-
-
-
-
 
                 <div class="titulo-menu">
 
@@ -480,13 +462,7 @@
 
                 </div>
 
-
-
-
-
                 <!-- DASHBOARD -->
-
-
 
                 <a
 
@@ -496,13 +472,7 @@
 
                 >
 
-
-
                     <span class="icone-menu">
-
-
-
-
 
                         <svg
 
@@ -511,10 +481,6 @@
                             aria-hidden="true"
 
                         >
-
-
-
-
 
                             <path
 
@@ -532,10 +498,6 @@
 
                             />
 
-
-
-
-
                             <path
 
                                 d="M5 9.5V21h14V9.5"
@@ -549,10 +511,6 @@
                                 stroke-linejoin="round"
 
                             />
-
-
-
-
 
                             <path
 
@@ -568,21 +526,9 @@
 
                             />
 
-
-
-
-
                         </svg>
 
-
-
-
-
                     </span>
-
-
-
-
 
                     <span>
 
@@ -590,15 +536,7 @@
 
                     </span>
 
-
-
-
-
                 </a>
-
-
-
-
 
                 <div class="titulo-menu">
 
@@ -606,13 +544,7 @@
 
                 </div>
 
-
-
-
-
                 <!-- PRODUTOS -->
-
-
 
                 <a
 
@@ -622,15 +554,7 @@
 
                 >
 
-
-
-
-
                     <span class="icone-menu">
-
-
-
-
 
                         <svg
 
@@ -639,10 +563,6 @@
                             aria-hidden="true"
 
                         >
-
-
-
-
 
                             <path
 
@@ -658,10 +578,6 @@
 
                             />
 
-
-
-
-
                             <path
 
                                 d="m4 7.5 8 4.5 8-4.5"
@@ -675,10 +591,6 @@
                                 stroke-linejoin="round"
 
                             />
-
-
-
-
 
                             <path
 
@@ -694,21 +606,9 @@
 
                             />
 
-
-
-
-
                         </svg>
 
-
-
-
-
                     </span>
-
-
-
-
 
                     <span>
 
@@ -716,19 +616,9 @@
 
                     </span>
 
-
-
-
-
                 </a>
 
-
-
-
-
                 <!-- VENDAS -->
-
-
 
                 <a
 
@@ -738,15 +628,7 @@
 
                 >
 
-
-
-
-
                     <span class="icone-menu">
-
-
-
-
 
                         <svg
 
@@ -755,10 +637,6 @@
                             aria-hidden="true"
 
                         >
-
-
-
-
 
                             <circle
 
@@ -775,10 +653,6 @@
                                 stroke-width="2"
 
                             />
-
-
-
-
 
                             <circle
 
@@ -796,10 +670,6 @@
 
                             />
 
-
-
-
-
                             <path
 
                                 d="M3 4h2l2.2 11.5h10.9L21 7H6"
@@ -816,21 +686,9 @@
 
                             />
 
-
-
-
-
                         </svg>
 
-
-
-
-
                     </span>
-
-
-
-
 
                     <span>
 
@@ -838,19 +696,9 @@
 
                     </span>
 
-
-
-
-
                 </a>
 
-
-
-
-
                 <!-- CLIENTES -->
-
-
 
                 <a
 
@@ -860,15 +708,7 @@
 
                 >
 
-
-
-
-
                     <span class="icone-menu">
-
-
-
-
 
                         <svg
 
@@ -877,10 +717,6 @@
                             aria-hidden="true"
 
                         >
-
-
-
-
 
                             <circle
 
@@ -898,10 +734,6 @@
 
                             />
 
-
-
-
-
                             <path
 
                                 d="M3.5 20c.7-3.4 2.5-5 5.5-5s4.8 1.6 5.5 5"
@@ -915,10 +747,6 @@
                                 stroke-linecap="round"
 
                             />
-
-
-
-
 
                             <path
 
@@ -934,10 +762,6 @@
 
                             />
 
-
-
-
-
                             <path
 
                                 d="M16 5.5a3 3 0 0 1 0 5.8"
@@ -952,21 +776,9 @@
 
                             />
 
-
-
-
-
                         </svg>
 
-
-
-
-
                     </span>
-
-
-
-
 
                     <span>
 
@@ -974,19 +786,20 @@
 
                     </span>
 
-
-
-
-
                 </a>
 
 
-
-
+                <a href="notinhas.html" class="item-menu">
+                    <span class="icone-menu" aria-hidden="true">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M5 4h14v16H5z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
+                            <path d="M8 9h8M8 13h8M8 17h5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                        </svg>
+                    </span>
+                    <span>Notinhas / Fiado</span>
+                </a>
 
                 <!-- ESTOQUE -->
-
-
 
                 <a
 
@@ -996,15 +809,7 @@
 
                 >
 
-
-
-
-
                     <span class="icone-menu">
-
-
-
-
 
                         <svg
 
@@ -1013,10 +818,6 @@
                             aria-hidden="true"
 
                         >
-
-
-
-
 
                             <path
 
@@ -1032,10 +833,6 @@
 
                             />
 
-
-
-
-
                             <path
 
                                 d="M4 19h16"
@@ -1049,10 +846,6 @@
                                 stroke-linecap="round"
 
                             />
-
-
-
-
 
                             <rect
 
@@ -1074,10 +867,6 @@
 
                             />
 
-
-
-
-
                             <rect
 
                                 x="12"
@@ -1097,10 +886,6 @@
                                 stroke-width="2"
 
                             />
-
-
-
-
 
                             <rect
 
@@ -1122,21 +907,9 @@
 
                             />
 
-
-
-
-
                         </svg>
 
-
-
-
-
                     </span>
-
-
-
-
 
                     <span>
 
@@ -1144,21 +917,9 @@
 
                     </span>
 
-
-
-
-
                 </a>
 
-
-
-
-
             </nav>
-
-
-
-
 
             <!-- ==================================
 
@@ -1166,13 +927,7 @@
 
             =================================== -->
 
-
-
             <div class="area-sair">
-
-
-
-
 
                 <button
 
@@ -1184,15 +939,7 @@
 
                 >
 
-
-
-
-
                     <span class="icone-menu">
-
-
-
-
 
                         <svg
 
@@ -1201,10 +948,6 @@
                             aria-hidden="true"
 
                         >
-
-
-
-
 
                             <path
 
@@ -1222,10 +965,6 @@
 
                             />
 
-
-
-
-
                             <path
 
                                 d="M14 8l4 4-4 4"
@@ -1242,10 +981,6 @@
 
                             />
 
-
-
-
-
                             <path
 
                                 d="M9 12h9"
@@ -1260,21 +995,9 @@
 
                             />
 
-
-
-
-
                         </svg>
 
-
-
-
-
                     </span>
-
-
-
-
 
                     <span>
 
@@ -1282,27 +1005,11 @@
 
                     </span>
 
-
-
-
-
                 </button>
-
-
-
-
 
             </div>
 
-
-
-
-
         </aside>
-
-
-
-
 
         <!-- ======================================
 
@@ -1310,29 +1017,13 @@
 
         ======================================= -->
 
-
-
         <main class="conteudo-vendedor">
-
-
-
-
 
             <!-- CABEÇALHO -->
 
-
-
             <header class="cabecalho-vendedor">
 
-
-
-
-
                 <div>
-
-
-
-
 
                     <h1>
 
@@ -1340,31 +1031,15 @@
 
                     </h1>
 
-
-
-
-
                     <p>
 
                         Registre uma venda para o cliente.
 
                     </p>
 
-
-
-
-
                 </div>
 
-
-
-
-
                 <div class="data-atual">
-
-
-
-
 
                     <span>
 
@@ -1372,31 +1047,15 @@
 
                     </span>
 
-
-
-
-
                     <strong id="dataAtual">
 
                         --
 
                     </strong>
 
-
-
-
-
                 </div>
 
-
-
-
-
             </header>
-
-
-
-
 
             <!-- ==================================
 
@@ -1404,25 +1063,11 @@
 
             =================================== -->
 
-
-
             <section class="painel-venda">
-
-
-
-
 
                 <div class="cabecalho-painel-venda">
 
-
-
-
-
                     <div>
-
-
-
-
 
                         <h2>
 
@@ -1430,31 +1075,41 @@
 
                         </h2>
 
-
-
-
-
                         <p>
 
                             Adicione os produtos vendidos.
 
                         </p>
 
-
-
-
-
                     </div>
-
-
-
-
 
                 </div>
 
+                <!-- ==================================
 
+                     CLIENTE
 
+                =================================== -->
 
+                <div class="campo-venda campo-cliente-vendedor">
+
+                            <label for="clienteVenda">
+
+                                Cliente
+
+                            </label>
+
+                            <select id="clienteVenda">
+
+                                <option value="">
+
+                                    Consumidor não identificado
+
+                                </option>
+
+                            </select>
+
+                        </div>
 
                 <!-- ==================================
 
@@ -1462,19 +1117,11 @@
 
                 =================================== -->
 
-
+                
 
                 <div class="adicionar-produto">
 
-
-
-
-
                     <div class="campo-venda campo-produto">
-
-
-
-
 
                         <label for="produtoVenda">
 
@@ -1482,15 +1129,7 @@
 
                         </label>
 
-
-
-
-
                         <select id="produtoVenda">
-
-
-
-
 
                             <option value="">
 
@@ -1498,37 +1137,17 @@
 
                             </option>
 
-
-
-
-
                         </select>
-
-
-
-
 
                     </div>
 
-
-
-
-
                     <div class="campo-venda campo-quantidade">
-
-
-
-
 
                         <label for="quantidadeVenda">
 
                             Quantidade
 
                         </label>
-
-
-
-
 
                         <input
 
@@ -1544,31 +1163,15 @@
 
                         >
 
-
-
-
-
                     </div>
 
-
-
-
-
                     <div class="campo-venda campo-preco">
-
-
-
-
 
                         <label>
 
                             Preço de venda
 
                         </label>
-
-
-
-
 
                         <div
 
@@ -1582,21 +1185,9 @@
 
                         </div>
 
-
-
-
-
                     </div>
 
-
-
-
-
                     <div class="campo-venda campo-botao">
-
-
-
-
 
                         <button
 
@@ -1612,29 +1203,15 @@
 
                         </button>
 
-
-
-
-
                     </div>
 
-
-
-
-
                 </div>
-
-
-
-
 
                 <!-- ==================================
 
                      MENSAGEM
 
                 =================================== -->
-
-
 
                 <div
 
@@ -1644,41 +1221,19 @@
 
                 ></div>
 
-
-
-
-
                 <!-- ==================================
 
                      CARRINHO
 
                 =================================== -->
 
-
-
                 <div class="tabela-venda-container">
-
-
-
-
 
                     <table class="tabela-venda">
 
-
-
-
-
                         <thead>
 
-
-
-
-
                             <tr>
-
-
-
-
 
                                 <th>
 
@@ -1686,19 +1241,11 @@
 
                                 </th>
 
-
-
-
-
                                 <th>
 
                                     SKU
 
                                 </th>
-
-
-
-
 
                                 <th>
 
@@ -1706,19 +1253,11 @@
 
                                 </th>
 
-
-
-
-
                                 <th>
 
                                     Preço unitário
 
                                 </th>
-
-
-
-
 
                                 <th>
 
@@ -1726,43 +1265,19 @@
 
                                 </th>
 
-
-
-
-
                                 <th>
 
                                     Ação
 
                                 </th>
 
-
-
-
-
                             </tr>
-
-
-
-
 
                         </thead>
 
-
-
-
-
                         <tbody id="listaItensVenda">
 
-
-
-
-
                             <tr>
-
-
-
-
 
                                 <td
 
@@ -1776,33 +1291,13 @@
 
                                 </td>
 
-
-
-
-
                             </tr>
-
-
-
-
 
                         </tbody>
 
-
-
-
-
                     </table>
 
-
-
-
-
                 </div>
-
-
-
-
 
                 <!-- ==================================
 
@@ -1810,229 +1305,11 @@
 
                 =================================== -->
 
+                <div class="dados-final-venda dados-final-venda-reorganizada">
 
-
-                <div class="dados-final-venda">
-
-
-
-
-
-                    <div class="dados-cliente-venda">
-
-
-
-
-
-                        <div class="campo-venda">
-
-
-
-
-
-                            <label for="clienteVenda">
-
-                                Cliente
-
-                            </label>
-
-
-
-
-
-                            <select id="clienteVenda">
-
-
-
-
-
-                                <option value="">
-
-                                    Consumidor não identificado
-
-                                </option>
-
-
-
-
-
-                            </select>
-
-
-
-
-
-                        </div>
-
-
-
-
-
-                        <div class="campo-venda">
-
-
-
-
-
-                            <label for="formaPagamento">
-
-                                Forma de pagamento
-
-                            </label>
-
-
-
-
-
-                            <select id="formaPagamento">
-
-
-
-
-
-                                <option value="">
-
-                                    Selecione
-
-                                </option>
-
-
-
-
-
-                                <option value="Dinheiro">
-
-                                    Dinheiro
-
-                                </option>
-
-
-
-
-
-                                <option value="PIX">
-
-                                    PIX
-
-                                </option>
-
-
-
-
-
-                                <option value="Cartão de Débito">
-
-                                    Cartão de Débito
-
-                                </option>
-
-
-
-
-
-                                <option value="Cartão de Crédito">
-
-                                    Cartão de Crédito
-
-                                </option>
-
-
-
-
-
-                                <option value="Boleto">
-
-                                    Boleto
-
-                                </option>
-
-
-
-
-
-                                <option value="Outro">
-
-                                    Outro
-
-                                </option>
-
-
-
-
-
-                            </select>
-
-
-
-
-
-                        </div>
-
-
-
-
-
-                        <div class="campo-venda">
-
-
-
-
-
-                            <label for="observacoesVenda">
-
-                                Observações
-
-                            </label>
-
-
-
-
-
-                            <textarea
-
-                                id="observacoesVenda"
-
-                                rows="4"
-
-                                placeholder="Observações da venda..."
-
-                            ></textarea>
-
-
-
-
-
-                        </div>
-
-
-
-
-
-                    </div>
-
-
-
-
-
-                    <!-- ==================================
-
-                         RESUMO
-
-                    =================================== -->
-
-
-
-                    <div class="resumo-venda">
-
-
-
-
+<div class="resumo-venda">
 
                         <div class="linha-resumo">
-
-
-
-
 
                             <span>
 
@@ -2040,31 +1317,15 @@
 
                             </span>
 
-
-
-
-
                             <strong id="subtotalVenda">
 
                                 R$ 0,00
 
                             </strong>
 
-
-
-
-
                         </div>
 
-
-
-
-
                         <div class="linha-resumo linha-desconto">
-
-
-
-
 
                             <label for="descontoVenda">
 
@@ -2072,15 +1333,7 @@
 
                             </label>
 
-
-
-
-
                             <div class="campo-desconto">
-
-
-
-
 
                                 <input
 
@@ -2096,37 +1349,17 @@
 
                                 >
 
-
-
-
-
                                 <span>
 
                                     R$
 
                                 </span>
 
-
-
-
-
                             </div>
-
-
-
-
 
                         </div>
 
-
-
-
-
                         <div class="linha-resumo linha-total">
-
-
-
-
 
                             <span>
 
@@ -2134,25 +1367,13 @@
 
                             </span>
 
-
-
-
-
                             <strong id="totalVenda">
 
                                 R$ 0,00
 
                             </strong>
 
-
-
-
-
                         </div>
-
-
-
-
 
                         <button
 
@@ -2168,29 +1389,122 @@
 
                         </button>
 
-
-
-
-
                     </div>
 
+    <div class="dados-finalizacao-vendedor">
 
+<div class="campo-venda campo-pagamento-vendedor">
 
+                            <label for="formaPagamento">
 
+                                Forma de pagamento
 
+                            </label>
+
+                            <select id="formaPagamento">
+
+                                <option value="">
+
+                                    Selecione
+
+                                </option>
+
+                                <option value="Dinheiro">
+
+                                    Dinheiro
+
+                                </option>
+
+                                <option value="PIX">
+
+                                    PIX
+
+                                </option>
+
+                                <option value="Cartão de Débito">
+
+                                    Cartão de Débito
+
+                                </option>
+
+                                <option value="Cartão de Crédito">
+
+                                    Cartão de Crédito
+
+                                </option>
+
+                                <option value="Boleto">
+
+                                    Boleto
+
+                                </option>
+
+                                <option value="Outro">
+
+                                    Outro
+
+                                </option>
+
+                                <option value="a_prazo">
+
+                                    A prazo (fiado)
+
+                                </option>
+
+                            </select>
+
+                        </div>
+
+<div id="camposPrazoVenda" class="configuracao-prazo-venda" hidden>
+                    <div class="campo-venda">
+                        <label for="parcelasFiadoVenda">Número de parcelas</label>
+                        <select id="parcelasFiadoVenda">
+                            <option value="1">1 parcela</option>
+                            <option value="2">2 parcelas</option>
+                            <option value="3">3 parcelas</option>
+                            <option value="4">4 parcelas</option>
+                            <option value="5">5 parcelas</option>
+                            <option value="6">6 parcelas</option>
+                            <option value="7">7 parcelas</option>
+                            <option value="8">8 parcelas</option>
+                            <option value="9">9 parcelas</option>
+                            <option value="10">10 parcelas</option>
+                            <option value="11">11 parcelas</option>
+                            <option value="12">12 parcelas</option>
+                        </select>
+                    </div>
+                    <div class="campo-venda">
+                        <label for="diasPrimeiroVencimentoVenda">Primeiro vencimento</label>
+                        <select id="diasPrimeiroVencimentoVenda">
+                            <option value="7">Em 7 dias</option>
+                            <option value="15">Em 15 dias</option>
+                            <option value="30" selected>Em 30 dias</option>
+                        </select>
+                    </div>
+                    <p class="texto-ajuda-prazo">
+                        As parcelas seguintes vencem a cada 30 dias. A venda só será registrada depois da validação do sistema.
+                    </p>
                 </div>
 
+<div class="campo-venda campo-observacoes-vendedor">
 
+                            <label for="observacoesVenda">
 
+                                Observações
 
+                            </label>
+
+                            <input type="text" id="observacoesVenda" maxlength="300" placeholder="Observações da venda...">
+
+                        </div>
+
+    </div>
+
+</div>
 
                 <div id="acoesVendaComprovante" class="acoes-venda-comprovante"></div>
 
             </section>
-
-
-
-
 
             <!-- ==================================
 
@@ -2198,19 +1512,9 @@
 
             =================================== -->
 
-
-
             <section class="painel aviso-painel">
 
-
-
-
-
                 <div class="aviso-icone">
-
-
-
-
 
                     <svg
 
@@ -2219,10 +1523,6 @@
                         aria-hidden="true"
 
                     >
-
-
-
-
 
                         <circle
 
@@ -2240,10 +1540,6 @@
 
                         />
 
-
-
-
-
                         <path
 
                             d="M12 10v6"
@@ -2258,10 +1554,6 @@
 
                         />
 
-
-
-
-
                         <circle
 
                             cx="12"
@@ -2274,37 +1566,17 @@
 
                         />
 
-
-
-
-
                     </svg>
-
-
-
-
 
                 </div>
 
-
-
-
-
                 <div>
-
-
-
-
 
                     <strong>
 
                         Segurança
 
                     </strong>
-
-
-
-
 
                     <p>
 
@@ -2316,33 +1588,13 @@
 
                     </p>
 
-
-
-
-
                 </div>
-
-
-
-
 
             </section>
 
-
-
-
-
         </main>
 
-
-
-
-
     </div>
-
-
-
-
 
     <!-- ==========================================
 
@@ -2350,23 +1602,13 @@
 
     =========================================== -->
 
-
-
     <script
 
         src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
 
     ></script>
 
-
-
-
-
     <script src="js/config.js"></script>
-
-
-
-
 
     <!-- ==========================================
 
@@ -2374,15 +1616,9 @@
 
     =========================================== -->
 
-
-
     <script>
 
-
-
         async function carregarNomeLojaVendedor() {
-
-
 
             const elemento =
 
@@ -2392,27 +1628,13 @@
 
                 );
 
-
-
-
-
             if (!elemento) {
-
-
 
                 return;
 
-
-
             }
 
-
-
-
-
             try {
-
-
 
                 const resultadoSessao =
 
@@ -2422,10 +1644,6 @@
 
                         .getSession();
 
-
-
-
-
                 const session =
 
                     resultadoSessao
@@ -2434,29 +1652,15 @@
 
                         .session;
 
-
-
-
-
                 if (!session) {
-
-
 
                     elemento.textContent =
 
                         "Sistema da Loja";
 
-
-
                     return;
 
-
-
                 }
-
-
-
-
 
                 const resultadoPerfil =
 
@@ -2476,10 +1680,6 @@
 
                         .maybeSingle();
 
-
-
-
-
                 if (
 
                     resultadoPerfil.error ||
@@ -2490,8 +1690,6 @@
 
                 ) {
 
-
-
                     console.error(
 
                         "Erro ao buscar loja:",
@@ -2500,23 +1698,13 @@
 
                     );
 
-
-
                     elemento.textContent =
 
                         "Sistema da Loja";
 
-
-
                     return;
 
-
-
                 }
-
-
-
-
 
                 const resultadoLoja =
 
@@ -2536,10 +1724,6 @@
 
                         .maybeSingle();
 
-
-
-
-
                 if (
 
                     resultadoLoja.error ||
@@ -2547,8 +1731,6 @@
                     !resultadoLoja.data
 
                 ) {
-
-
 
                     console.error(
 
@@ -2558,23 +1740,13 @@
 
                     );
 
-
-
                     elemento.textContent =
 
                         "Sistema da Loja";
 
-
-
                     return;
 
-
-
                 }
-
-
-
-
 
                 elemento.textContent =
 
@@ -2582,15 +1754,9 @@
 
                     "Sistema da Loja";
 
-
-
             }
 
-
-
             catch (erro) {
-
-
 
                 console.error(
 
@@ -2600,31 +1766,19 @@
 
                 );
 
-
-
                 elemento.textContent =
 
                     "Sistema da Loja";
 
-
-
             }
 
-
-
         }
-
-
-
-
 
         if (
 
             document.readyState === "loading"
 
         ) {
-
-
 
             document.addEventListener(
 
@@ -2634,27 +1788,15 @@
 
             );
 
-
-
         }
 
         else {
 
-
-
             carregarNomeLojaVendedor();
-
-
 
         }
 
-
-
     </script>
-
-
-
-
 
     <!-- ==========================================
 
@@ -2662,17 +1804,10 @@
 
     =========================================== -->
 
-
-
     <script src="js/comprovante-venda.js"></script>
+
     <script src="js/vendedor-vendas.js"></script>
 
-
-
-
-
 </body>
-
-
 
 </html>

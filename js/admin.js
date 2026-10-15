@@ -1651,6 +1651,18 @@ function criarCartoesIndicadoresDashboard() {
                 valor: "Carregando..."
             },
             {
+                id: "indicadorRecebidoMes",
+                titulo: "Recebido em vendas no mês",
+                descricao: "Vendas recebidas e pagamentos reais de notinhas",
+                valor: "Carregando..."
+            },
+            {
+                id: "indicadorSaldoAReceber",
+                titulo: "Saldo a receber",
+                descricao: "Dívidas ainda abertas nas notinhas",
+                valor: "Carregando..."
+            },
+            {
                 id: "indicadorLucroMes",
                 titulo: "Lucro bruto do mês",
                 descricao: "Vendas líquidas menos custo dos itens vendidos",
@@ -1659,7 +1671,7 @@ function criarCartoesIndicadoresDashboard() {
             {
                 id: "indicadorLucroLiquidoMes",
                 titulo: "Lucro líquido do mês",
-                descricao: "Lucro bruto + outras entradas − despesas operacionais",
+                descricao: "Lucro bruto + receitas adicionais reais − despesas; recebimentos a prazo não contam de novo",
                 valor: "Carregando..."
             },
             {
@@ -1946,6 +1958,179 @@ function definirValorIndicadorDashboard(
 
     }
 
+}
+
+/* ==========================================
+
+   RECEBIMENTOS DE VENDAS E SALDO A RECEBER
+
+========================================== */
+
+async function carregarIndicadoresRecebidoESaldoDashboard(
+    inicioMes,
+    inicioProximoMes
+) {
+    const dataSomenteDia = function (data) {
+        return String(data.getFullYear()) + "-" +
+            String(data.getMonth() + 1).padStart(2, "0") + "-" +
+            String(data.getDate()).padStart(2, "0");
+    };
+
+    const normalizarCategoriaDashboard = function (categoria) {
+        return String(categoria || "")
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .trim()
+            .toLowerCase();
+    };
+
+    // Indicador de dinheiro efetivamente recebido das vendas e notinhas.
+    try {
+        const resultadoFinanceiro = await adminSupabase
+            .from("financeiro")
+            .select("tipo, categoria, valor, data_movimento")
+            .gte("data_movimento", dataSomenteDia(inicioMes))
+            .lt("data_movimento", dataSomenteDia(inicioProximoMes));
+
+        if (resultadoFinanceiro.error) {
+            throw resultadoFinanceiro.error;
+        }
+
+        const categoriasRecebimentoVenda = new Set([
+            "venda",
+            "recebimento a prazo",
+            "recebimentos a prazo",
+            "recebimento de notinha",
+            "recebimentos de notinhas",
+            "recebimento de nota",
+            "recebimentos de notas"
+        ]);
+
+        const totalRecebidoEmVendas = (resultadoFinanceiro.data || []).reduce(
+            function (total, lancamento) {
+                if (lancamento.tipo !== "entrada") {
+                    return total;
+                }
+
+                const categoria = normalizarCategoriaDashboard(lancamento.categoria);
+                if (!categoriasRecebimentoVenda.has(categoria)) {
+                    return total;
+                }
+
+                return total + (Number(lancamento.valor) || 0);
+            },
+            0
+        );
+
+        definirValorIndicadorDashboard(
+            "indicadorRecebidoMes",
+            formatarMoedaDashboard(totalRecebidoEmVendas)
+        );
+    } catch (erro) {
+        console.error("Erro ao carregar recebimentos de vendas no dashboard:", erro);
+        definirValorIndicadorDashboard("indicadorRecebidoMes", "—");
+    }
+
+    // Saldo a receber = parcelas de notinhas abertas menos alocações válidas.
+    // Notinhas pagas/canceladas e recebimentos estornados não entram no saldo.
+    try {
+        const resultadoNotinhas = await adminSupabase
+            .from("notinhas")
+            .select("id")
+            .eq("status", "aberta");
+
+        if (resultadoNotinhas.error) {
+            throw resultadoNotinhas.error;
+        }
+
+        const idsNotinhasAbertas = (resultadoNotinhas.data || []).map(function (notinha) {
+            return notinha.id;
+        }).filter(function (id) {
+            return id !== null && id !== undefined;
+        });
+
+        if (idsNotinhasAbertas.length === 0) {
+            definirValorIndicadorDashboard("indicadorSaldoAReceber", formatarMoedaDashboard(0));
+            return;
+        }
+
+        const resultadoParcelas = await adminSupabase
+            .from("parcelas_notinha")
+            .select("id, valor_original")
+            .in("notinha_id", idsNotinhasAbertas);
+
+        if (resultadoParcelas.error) {
+            throw resultadoParcelas.error;
+        }
+
+        const parcelas = resultadoParcelas.data || [];
+        const idsParcelas = parcelas.map(function (parcela) {
+            return parcela.id;
+        }).filter(function (id) {
+            return id !== null && id !== undefined;
+        });
+
+        if (idsParcelas.length === 0) {
+            definirValorIndicadorDashboard("indicadorSaldoAReceber", formatarMoedaDashboard(0));
+            return;
+        }
+
+        const resultadoRecebimentos = await adminSupabase
+            .from("recebimentos_notinha")
+            .select("id")
+            .eq("status", "registrado");
+
+        if (resultadoRecebimentos.error) {
+            throw resultadoRecebimentos.error;
+        }
+
+        const idsRecebimentosValidos = new Set(
+            (resultadoRecebimentos.data || []).map(function (recebimento) {
+                return String(recebimento.id);
+            })
+        );
+
+        let alocacoes = [];
+        if (idsRecebimentosValidos.size > 0) {
+            const resultadoAlocacoes = await adminSupabase
+                .from("alocacoes_recebimento_notinha")
+                .select("parcela_id, recebimento_id, valor_aplicado")
+                .in("parcela_id", idsParcelas);
+
+            if (resultadoAlocacoes.error) {
+                throw resultadoAlocacoes.error;
+            }
+
+            alocacoes = resultadoAlocacoes.data || [];
+        }
+
+        const pagoPorParcela = new Map();
+        alocacoes.forEach(function (alocacao) {
+            if (!idsRecebimentosValidos.has(String(alocacao.recebimento_id))) {
+                return;
+            }
+
+            const chaveParcela = String(alocacao.parcela_id);
+            pagoPorParcela.set(
+                chaveParcela,
+                (pagoPorParcela.get(chaveParcela) || 0) + (Number(alocacao.valor_aplicado) || 0)
+            );
+        });
+
+        const saldoTotal = parcelas.reduce(function (total, parcela) {
+            const valorOriginal = Number(parcela.valor_original) || 0;
+            const valorPago = pagoPorParcela.get(String(parcela.id)) || 0;
+            return total + Math.max(0, valorOriginal - valorPago);
+        }, 0);
+
+        definirValorIndicadorDashboard(
+            "indicadorSaldoAReceber",
+            formatarMoedaDashboard(saldoTotal)
+        );
+    } catch (erro) {
+        console.error("Erro ao carregar saldo a receber no dashboard:", erro);
+        definirValorIndicadorDashboard("indicadorSaldoAReceber", "—");
+    }
 }
 
 /* ==========================================
@@ -2337,8 +2522,19 @@ async function carregarIndicadoresDashboard() {
                         0
                     );
 
-                // Entradas financeiras que não são vendas já estão fora do lucro bruto.
-                // Somá-las evita ignorar receitas extras, como serviços prestados.
+                // Recebimentos de notinhas são entradas de caixa, não uma nova receita:
+                // o valor da venda já foi considerado no faturamento e no lucro bruto.
+                // Só receitas adicionais reais (por exemplo, serviços prestados) entram aqui.
+                const categoriasNaoSomadasComoReceita = new Set([
+                    "venda",
+                    "recebimento a prazo",
+                    "recebimentos a prazo",
+                    "recebimento de notinha",
+                    "recebimentos de notinhas",
+                    "recebimento de nota",
+                    "recebimentos de notas"
+                ]);
+
                 const outrasEntradasOperacionaisMes =
                     lancamentosFinanceiros.reduce(
                         function (total, lancamento) {
@@ -2352,7 +2548,7 @@ async function carregarIndicadoresDashboard() {
                                 .trim()
                                 .toLowerCase();
 
-                            if (categoria === "venda") {
+                            if (categoriasNaoSomadasComoReceita.has(categoria)) {
                                 return total;
                             }
 
@@ -2442,6 +2638,11 @@ async function carregarIndicadoresDashboard() {
         );
 
     }
+
+    await carregarIndicadoresRecebidoESaldoDashboard(
+        inicioMes,
+        inicioProximoMes
+    );
 
     await carregarGraficoVendasDashboard();
 
