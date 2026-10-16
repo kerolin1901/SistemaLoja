@@ -1124,6 +1124,42 @@
                 </div>
 
 
+                <!-- BUSCA DE PRODUTOS -->
+
+                <div class="barra-busca-lista">
+
+                    <label for="buscaProdutos">
+                        Buscar produto
+                    </label>
+
+                    <div class="campo-busca-lista">
+
+                        <span aria-hidden="true">⌕</span>
+
+                        <input
+                            type="search"
+                            id="buscaProdutos"
+                            placeholder="Nome, SKU, fornecedor ou categoria..."
+                            autocomplete="off"
+                        >
+
+                        <button
+                            type="button"
+                            id="limparBuscaProdutos"
+                            aria-label="Limpar busca"
+                            title="Limpar busca"
+                        >×</button>
+
+                    </div>
+
+                    <small
+                        id="resultadoBuscaProdutos"
+                        aria-live="polite"
+                    ></small>
+
+                </div>
+
+
                 <!-- CARREGANDO -->
 
                 <div
@@ -1194,6 +1230,17 @@
                     </table>
 
 
+                </div>
+
+
+                <!-- NENHUM RESULTADO DA BUSCA -->
+
+                <div
+                    id="nenhumResultadoBusca"
+                    class="nenhum-resultado-busca"
+                    hidden
+                >
+                    Nenhum produto encontrado para essa busca.
                 </div>
 
 

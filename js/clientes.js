@@ -63,6 +63,7 @@ async function protegerPaginaClientes() {
 
         return false;
     }
+
     // Guarda o perfil autenticado para usar o loja_id ao cadastrar clientes.
     perfilClientesAtual = perfil;
 
@@ -153,6 +154,24 @@ const containerTabelaClientes =
 
 const listaClientes =
     document.getElementById("listaClientes");
+
+
+/* ==========================================
+   ELEMENTOS DA BUSCA
+========================================== */
+
+const buscaClientes =
+    document.getElementById("buscaClientes");
+
+const limparBuscaClientes =
+    document.getElementById("limparBuscaClientes");
+
+const resultadoBuscaClientes =
+    document.getElementById("resultadoBuscaClientes");
+
+const nenhumResultadoBuscaClientes =
+    document.getElementById("nenhumResultadoBuscaClientes");
+
 
 const mensagemCliente =
     document.getElementById("mensagemCliente");
@@ -291,6 +310,145 @@ function escaparHtml(valor) {
 
 
 /* ==========================================
+   BUSCA INSTANTÂNEA DE CLIENTES
+========================================== */
+
+function normalizarTextoBuscaClientes(valor) {
+
+    return String(valor ?? "")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLocaleLowerCase("pt-BR")
+        .trim();
+
+}
+
+
+function aplicarBuscaClientes() {
+
+    if (!listaClientes || !buscaClientes) {
+        return;
+    }
+
+
+    const termo =
+        normalizarTextoBuscaClientes(
+            buscaClientes.value
+        );
+
+
+    const linhas =
+        Array.from(
+            listaClientes.querySelectorAll("tr")
+        );
+
+
+    let encontrados = 0;
+
+
+    linhas.forEach(
+        function (linha) {
+
+            const textoCliente =
+                normalizarTextoBuscaClientes(
+                    linha.dataset.busca ||
+                    linha.textContent
+                );
+
+
+            const corresponde =
+                !termo ||
+                textoCliente.includes(termo);
+
+
+            linha.hidden =
+                !corresponde;
+
+
+            if (corresponde) {
+                encontrados++;
+            }
+
+        }
+    );
+
+
+    /* Botão para limpar a busca */
+
+    if (limparBuscaClientes) {
+
+        limparBuscaClientes.classList.toggle(
+            "visivel",
+            termo.length > 0
+        );
+
+    }
+
+
+    /* Contador de resultados */
+
+    if (resultadoBuscaClientes) {
+
+        resultadoBuscaClientes.textContent =
+            termo
+                ? encontrados + " de " + linhas.length +
+                    " cliente(s) encontrado(s)"
+                : linhas.length + " cliente(s) cadastrado(s)";
+
+    }
+
+
+    /* Mensagem quando a pesquisa não encontra resultados */
+
+    if (nenhumResultadoBuscaClientes) {
+
+        nenhumResultadoBuscaClientes.hidden =
+            !termo ||
+            linhas.length === 0 ||
+            encontrados > 0;
+
+    }
+
+}
+
+
+/* ==========================================
+   EVENTOS DA BUSCA
+========================================== */
+
+if (buscaClientes) {
+
+    buscaClientes.addEventListener(
+        "input",
+        aplicarBuscaClientes
+    );
+
+}
+
+
+if (limparBuscaClientes) {
+
+    limparBuscaClientes.addEventListener(
+        "click",
+        function () {
+
+            if (!buscaClientes) {
+                return;
+            }
+
+            buscaClientes.value = "";
+
+            aplicarBuscaClientes();
+
+            buscaClientes.focus();
+
+        }
+    );
+
+}
+
+
+/* ==========================================
    CARREGAR CLIENTES
 ========================================== */
 
@@ -355,6 +513,8 @@ async function carregarClientes() {
         semClientes.style.display =
             "block";
 
+        aplicarBuscaClientes();
+
         return;
     }
 
@@ -367,6 +527,16 @@ async function carregarClientes() {
 
         const tr =
             document.createElement("tr");
+
+
+        /* Dados utilizados pela busca */
+
+        tr.dataset.busca = [
+            cliente.nome,
+            cliente.telefone,
+            cliente.cpf,
+            cliente.email
+        ].filter(Boolean).join(" ");
 
 
         const tdNome =
@@ -504,6 +674,11 @@ async function carregarClientes() {
         listaClientes.appendChild(tr);
 
     });
+
+
+    /* Reaplica a busca após reconstruir a tabela */
+
+    aplicarBuscaClientes();
 }
 
 

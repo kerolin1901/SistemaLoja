@@ -1065,6 +1065,42 @@
             </div>
 
 
+            <!-- BUSCA DE CLIENTES -->
+
+            <div class="barra-busca-lista">
+
+                <label for="buscaClientes">
+                    Buscar cliente
+                </label>
+
+                <div class="campo-busca-lista">
+
+                    <span aria-hidden="true">⌕</span>
+
+                    <input
+                        type="search"
+                        id="buscaClientes"
+                        placeholder="Nome, telefone, CPF ou e-mail..."
+                        autocomplete="off"
+                    >
+
+                    <button
+                        type="button"
+                        id="limparBuscaClientes"
+                        aria-label="Limpar busca"
+                        title="Limpar busca"
+                    >×</button>
+
+                </div>
+
+                <small
+                    id="resultadoBuscaClientes"
+                    aria-live="polite"
+                ></small>
+
+            </div>
+
+
             <!-- CARREGANDO -->
 
             <div
@@ -1138,6 +1174,17 @@
                 </table>
 
 
+            </div>
+
+
+            <!-- NENHUM RESULTADO DA BUSCA -->
+
+            <div
+                id="nenhumResultadoBuscaClientes"
+                class="nenhum-resultado-busca"
+                hidden
+            >
+                Nenhum cliente encontrado para essa busca.
             </div>
 
 

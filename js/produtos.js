@@ -77,6 +77,23 @@ const nomeAdministrador =
 
 
 /* =========================================================
+   ELEMENTOS DA BUSCA DE PRODUTOS
+========================================================= */
+
+const buscaProdutos =
+    document.getElementById("buscaProdutos");
+
+const limparBuscaProdutos =
+    document.getElementById("limparBuscaProdutos");
+
+const resultadoBuscaProdutos =
+    document.getElementById("resultadoBuscaProdutos");
+
+const nenhumResultadoBusca =
+    document.getElementById("nenhumResultadoBusca");
+
+
+/* =========================================================
    ESTADO
 ========================================================= */
 
@@ -419,6 +436,14 @@ async function carregarProdutos() {
     }
 
 
+    if (nenhumResultadoBusca) {
+
+        nenhumResultadoBusca.hidden =
+            true;
+
+    }
+
+
     const {
         data,
         error
@@ -527,6 +552,170 @@ function escaparHTML(texto) {
 
 
 /* =========================================================
+   NORMALIZAR TEXTO DA BUSCA
+   IGNORA MAIÚSCULAS E ACENTOS
+========================================================= */
+
+function normalizarTextoBusca(valor) {
+
+    return String(valor ?? "")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLocaleLowerCase("pt-BR")
+        .trim();
+
+}
+
+
+/* =========================================================
+   BUSCA INSTANTÂNEA DE PRODUTOS
+========================================================= */
+
+function aplicarBuscaProdutos() {
+
+    if (
+        !listaProdutos ||
+        !buscaProdutos
+    ) {
+
+        return;
+
+    }
+
+
+    const termo =
+        normalizarTextoBusca(
+            buscaProdutos.value
+        );
+
+
+    const linhas =
+        Array.from(
+            listaProdutos.querySelectorAll("tr")
+        );
+
+
+    let encontrados = 0;
+
+
+    linhas.forEach(
+        function (linha) {
+
+            const textoProduto =
+                normalizarTextoBusca(
+                    linha.dataset.busca ||
+                    linha.textContent
+                );
+
+
+            const corresponde =
+                !termo ||
+                textoProduto.includes(termo);
+
+
+            linha.hidden =
+                !corresponde;
+
+
+            if (corresponde) {
+
+                encontrados++;
+
+            }
+
+        }
+    );
+
+
+    /* Botão para limpar a pesquisa */
+
+    if (limparBuscaProdutos) {
+
+        limparBuscaProdutos.classList.toggle(
+            "visivel",
+            termo.length > 0
+        );
+
+    }
+
+
+    /* Contador de produtos */
+
+    if (resultadoBuscaProdutos) {
+
+        if (termo) {
+
+            resultadoBuscaProdutos.textContent =
+                encontrados +
+                " de " +
+                linhas.length +
+                " produto(s) encontrado(s)";
+
+        } else {
+
+            resultadoBuscaProdutos.textContent =
+                linhas.length +
+                " produto(s) cadastrado(s)";
+
+        }
+
+    }
+
+
+    /* Mensagem quando a pesquisa não encontra resultados */
+
+    if (nenhumResultadoBusca) {
+
+        nenhumResultadoBusca.hidden =
+            !termo ||
+            linhas.length === 0 ||
+            encontrados > 0;
+
+    }
+
+}
+
+
+/* =========================================================
+   EVENTOS DA BUSCA
+========================================================= */
+
+if (buscaProdutos) {
+
+    buscaProdutos.addEventListener(
+        "input",
+        aplicarBuscaProdutos
+    );
+
+}
+
+
+if (limparBuscaProdutos) {
+
+    limparBuscaProdutos.addEventListener(
+        "click",
+        function () {
+
+            if (!buscaProdutos) {
+                return;
+            }
+
+
+            buscaProdutos.value = "";
+
+
+            aplicarBuscaProdutos();
+
+
+            buscaProdutos.focus();
+
+        }
+    );
+
+}
+
+
+/* =========================================================
    RENDERIZAR PRODUTOS
 ========================================================= */
 
@@ -552,6 +741,18 @@ function renderizarProdutos() {
                 "block";
 
         }
+
+
+        if (nenhumResultadoBusca) {
+
+            nenhumResultadoBusca.hidden =
+                true;
+
+        }
+
+
+        aplicarBuscaProdutos();
+
 
         return;
 
@@ -596,10 +797,14 @@ function renderizarProdutos() {
                 );
 
 
+            const categoriaNome =
+                produto.categorias?.nome ||
+                "Sem categoria";
+
+
             const categoria =
                 escaparHTML(
-                    produto.categorias?.nome ||
-                    "Sem categoria"
+                    categoriaNome
                 );
 
 
@@ -623,6 +828,19 @@ function renderizarProdutos() {
 
             const ativo =
                 produto.ativo === true;
+
+
+            /*
+             * Dados usados pela pesquisa.
+             * Nome, SKU, fornecedor e categoria.
+             */
+
+            tr.dataset.busca = [
+                produto.nome,
+                produto.sku,
+                produto.fornecedor,
+                categoriaNome
+            ].filter(Boolean).join(" ");
 
 
             tr.innerHTML = `
@@ -680,6 +898,7 @@ function renderizarProdutos() {
                             type="button"
                             class="btn-acao btn-editar"
                             onclick="editarProduto('${produto.id}')"
+                            title="Editar produto"
                         >
                             Editar
                         </button>
@@ -692,6 +911,11 @@ function renderizarProdutos() {
                                 '${produto.id}',
                                 ${ativo}
                             )"
+                            title="${
+                                ativo
+                                    ? "Desativar produto"
+                                    : "Ativar produto"
+                            }"
                         >
                             ${
                                 ativo
@@ -705,6 +929,7 @@ function renderizarProdutos() {
                             type="button"
                             class="btn-acao btn-excluir"
                             onclick="excluirProduto('${produto.id}')"
+                            title="Excluir produto"
                         >
                             Excluir
                         </button>
@@ -721,6 +946,14 @@ function renderizarProdutos() {
 
         }
     );
+
+
+    /*
+     * Aplica novamente a busca depois de renderizar
+     * a tabela, sem apagar o texto já digitado.
+     */
+
+    aplicarBuscaProdutos();
 
 }
 
@@ -1371,7 +1604,7 @@ async function excluirProduto(id) {
            AQUI É RPC DO BANCO.
 
            NÃO É EDGE FUNCTION.
-           
+
            NÃO USAR:
            /functions/v1/excluir_produto
         ================================================= */

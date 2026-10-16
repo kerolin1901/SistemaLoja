@@ -104,7 +104,7 @@
 
 
 /* ==========================================
-   BOTÕES
+   BOTÕES PRINCIPAIS
 ========================================== */
 
 .botao-principal,
@@ -186,26 +186,56 @@
 
 
 /* ==========================================
-   STATUS
+   STATUS DOS CLIENTES
 ========================================== */
 
 .status-cliente {
     display: inline-flex;
     align-items: center;
-    padding: 5px 9px;
+    justify-content: center;
+    gap: 7px;
+    padding: 5px 11px;
+    border: 1px solid transparent;
     border-radius: 999px;
     font-size: 12px;
     font-weight: 700;
+    line-height: 1.3;
+    white-space: nowrap;
 }
+
+/* Pequeno indicador visual do status */
+
+.status-cliente::before {
+    content: "";
+    display: inline-block;
+    flex: 0 0 7px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+}
+
+/* Cliente ativo */
 
 .status-ativo {
-    background: #dcfce7;
-    color: #166534;
+    background: #ecfdf3;
+    color: #067647;
+    border-color: #abefc6;
 }
 
+.status-ativo::before {
+    background: #12b76a;
+}
+
+/* Cliente inativo */
+
 .status-inativo {
-    background: #fee2e2;
-    color: #991b1b;
+    background: #fef3f2;
+    color: #b42318;
+    border-color: #fecdca;
+}
+
+.status-inativo::before {
+    background: #f04438;
 }
 
 
@@ -216,44 +246,92 @@
 .acoes-cliente {
     display: flex;
     align-items: center;
-    gap: 7px;
+    gap: 8px;
     flex-wrap: wrap;
 }
 
-.botao-acao {
-    border: 0;
-    border-radius: 6px;
-    padding: 7px 10px;
+/* Base uniforme para os três botões */
+
+.tabela-clientes .botao-acao {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 32px;
+    min-width: 65px;
+    box-sizing: border-box;
+    padding: 7px 11px;
+    border: 1px solid transparent;
+    border-radius: 7px;
+    font-family: inherit;
     font-size: 12px;
-    font-weight: 600;
+    font-weight: 700;
+    line-height: 1.2;
+    white-space: nowrap;
     cursor: pointer;
+    box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
+    transition:
+        background-color 0.18s ease,
+        border-color 0.18s ease,
+        box-shadow 0.18s ease,
+        transform 0.18s ease;
 }
 
-.botao-editar {
-    background: #eff6ff;
+.tabela-clientes .botao-acao:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(16, 24, 40, 0.08);
+}
+
+.tabela-clientes .botao-acao:active {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+.tabela-clientes .botao-acao:focus-visible {
+    outline: 3px solid rgba(37, 99, 235, 0.20);
+    outline-offset: 2px;
+}
+
+
+/* EDITAR: AZUL */
+
+.tabela-clientes .botao-editar {
     color: #1d4ed8;
+    background: #eff6ff;
+    border-color: #bfdbfe;
 }
 
-.botao-editar:hover {
+.tabela-clientes .botao-editar:hover {
     background: #dbeafe;
+    border-color: #93c5fd;
 }
 
-.botao-status {
-    background: #f3f4f6;
-    color: #374151;
+
+/* ATIVAR / INATIVAR: CINZA AZULADO */
+
+.tabela-clientes .botao-status {
+    color: #475569;
+    background: #f8fafc;
+    border-color: #cbd5e1;
 }
 
-.botao-status:hover {
-    background: #e5e7eb;
+.tabela-clientes .botao-status:hover {
+    color: #334155;
+    background: #f1f5f9;
+    border-color: #94a3b8;
 }
 
-.botao-excluir {
-    background: #fef2f2;
-    color: #b91c1c;
+
+/* EXCLUIR: VERMELHO */
+
+.tabela-clientes .botao-excluir {
+    color: #b42318;
+    background: #fff5f4;
+    border-color: #fecdca;
 }
 
-.botao-excluir:hover {
-    background: #fee2e2;
+.tabela-clientes .botao-excluir:hover {
+    background: #fee4e2;
+    border-color: #fda29b;
 }
 
 
@@ -327,6 +405,131 @@
 
     .acoes-formulario button {
         width: 100%;
+    }
+
+}
+
+
+/* ==========================================
+   BUSCA DA LISTA DE CLIENTES
+========================================== */
+
+.barra-busca-lista {
+    width: 100%;
+    max-width: 620px;
+    margin: 0 0 18px;
+}
+
+.barra-busca-lista label {
+    display: block;
+    margin-bottom: 7px;
+    color: #374151;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.campo-busca-lista {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 44px;
+    padding: 0 12px;
+    border: 1px solid #d8dee8;
+    border-radius: 10px;
+    background: #ffffff;
+    box-sizing: border-box;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.campo-busca-lista:focus-within {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.10);
+}
+
+.campo-busca-lista > span {
+    flex-shrink: 0;
+    color: #64748b;
+    font-size: 24px;
+    line-height: 1;
+}
+
+.campo-busca-lista input {
+    width: 100%;
+    min-width: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: #111827;
+    font-family: inherit;
+    font-size: 14px;
+    box-shadow: none;
+}
+
+.campo-busca-lista input:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.campo-busca-lista button {
+    display: none;
+    flex: 0 0 28px;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border: 0;
+    border-radius: 7px;
+    background: #f1f5f9;
+    color: #475569;
+    font-size: 21px;
+    cursor: pointer;
+}
+
+.campo-busca-lista button.visivel {
+    display: inline-flex;
+}
+
+.campo-busca-lista button:hover {
+    background: #e2e8f0;
+}
+
+.barra-busca-lista small {
+    display: block;
+    margin-top: 7px;
+    color: #64748b;
+    font-size: 12px;
+}
+
+
+/* ==========================================
+   NENHUM RESULTADO DA BUSCA
+========================================== */
+
+.nenhum-resultado-busca {
+    margin-top: 12px;
+    padding: 25px 15px;
+    border: 1px dashed #d1d5db;
+    border-radius: 10px;
+    color: #64748b;
+    font-size: 14px;
+    text-align: center;
+}
+
+[hidden] {
+    display: none !important;
+}
+
+
+/* ==========================================
+   AJUSTE DA BUSCA EM TELAS MENORES
+========================================== */
+
+@media (max-width: 600px) {
+
+    .barra-busca-lista {
+        max-width: 100%;
     }
 
 }
