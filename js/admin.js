@@ -3514,6 +3514,73 @@ function configurarBotaoSair() {
 
 /* ==========================================
 
+   ATUALIZAÇÃO AUTOMÁTICA DO DASHBOARD
+
+========================================== */
+
+let intervaloAtualizacaoDashboard = null;
+let atualizacaoDashboardEmAndamento = false;
+let ultimaAtualizacaoDashboard = 0;
+
+async function atualizarDashboardAutomaticamente() {
+
+    if (document.visibilityState !== "visible") {
+        return;
+    }
+
+    const agora = Date.now();
+
+    // Evita consultas simultâneas quando a janela recebe foco e fica visível.
+    if (
+        atualizacaoDashboardEmAndamento ||
+        agora - ultimaAtualizacaoDashboard < 5000
+    ) {
+        return;
+    }
+
+    atualizacaoDashboardEmAndamento = true;
+    ultimaAtualizacaoDashboard = agora;
+
+    try {
+        await carregarIndicadoresDashboard();
+    } catch (erro) {
+        console.error(
+            "Erro ao atualizar automaticamente o dashboard:",
+            erro
+        );
+    } finally {
+        atualizacaoDashboardEmAndamento = false;
+    }
+}
+
+function configurarAtualizacaoAutomaticaDashboard() {
+
+    if (intervaloAtualizacaoDashboard) {
+        clearInterval(intervaloAtualizacaoDashboard);
+    }
+
+    // Atualiza imediatamente quando o administrador volta para a aba.
+    document.addEventListener("visibilitychange", function () {
+        if (document.visibilityState === "visible") {
+            atualizarDashboardAutomaticamente();
+        }
+    });
+
+    window.addEventListener(
+        "focus",
+        atualizarDashboardAutomaticamente
+    );
+
+    // Também detecta vendas feitas em outra aba, janela ou computador.
+    intervaloAtualizacaoDashboard = setInterval(function () {
+        if (document.visibilityState === "visible") {
+            atualizarDashboardAutomaticamente();
+        }
+    }, 60000);
+}
+
+/* ==========================================
+
    INICIALIZAÇÃO
 
 ========================================== */
@@ -3535,6 +3602,8 @@ async function iniciarAdmin() {
     }
 
     await carregarIndicadoresDashboard();
+
+    configurarAtualizacaoAutomaticaDashboard();
 
     configurarMenuFuturo();
 
