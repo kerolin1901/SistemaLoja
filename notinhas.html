@@ -796,6 +796,17 @@
                 <strong id="totalVencido">R$ 0,00</strong>
                 <small id="quantidadeVencidas">0 parcelas atrasadas</small>
             </article>
+            <article class="metric-card metric-card-future">
+                <span class="metric-label">Saldo a vencer</span>
+                <strong id="totalAVencer">R$ 0,00</strong>
+                <small id="quantidadeAVencer">0 parcelas com vencimento futuro</small>
+            </article>
+
+            <article class="metric-card metric-card-today">
+                <span class="metric-label">Vencimentos de hoje</span>
+                <strong id="totalVenceHoje">R$ 0,00</strong>
+                <small id="quantidadeVenceHoje">0 parcelas vencem hoje</small>
+            </article>
 
             <article class="metric-card">
                 <span class="metric-label">Notinhas em aberto</span>
@@ -811,7 +822,38 @@
 
         </section>
 
-        <!-- TABELA DE NOTINHAS -->
+                <!-- VENCIMENTOS E ATRASOS -->
+        <section class="due-lists-grid" id="painelVencimentosNotinhas" aria-label="Acompanhamento de vencimentos">
+            <article class="due-list-panel due-list-overdue">
+                <div class="due-list-heading">
+                    <div>
+                        <p class="due-list-eyebrow">ATENÇÃO</p>
+                        <h2>Parcelas vencidas</h2>
+                        <p>Saldo pendente e dias de atraso por parcela.</p>
+                    </div>
+                    <span class="due-list-badge due-list-badge-overdue">Atrasadas</span>
+                </div>
+                <div id="listaParcelasVencidas" class="due-list-items">
+                    <p class="due-empty">Carregando parcelas vencidas...</p>
+                </div>
+            </article>
+
+            <article class="due-list-panel due-list-today">
+                <div class="due-list-heading">
+                    <div>
+                        <p class="due-list-eyebrow">HOJE</p>
+                        <h2>Vencimentos de hoje</h2>
+                        <p>Parcelas que vencem hoje e ainda têm saldo.</p>
+                    </div>
+                    <span class="due-list-badge due-list-badge-today">Hoje</span>
+                </div>
+                <div id="listaVencimentosHoje" class="due-list-items">
+                    <p class="due-empty">Carregando vencimentos de hoje...</p>
+                </div>
+            </article>
+        </section>
+
+<!-- TABELA DE NOTINHAS -->
 
         <section class="content-panel">
 

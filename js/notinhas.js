@@ -387,9 +387,14 @@ function notinhaEstaVencida(notinha) {
 function renderizarIndicadores() {
     let totalAberto = 0;
     let totalVencido = 0;
+    let totalAVencer = 0;
+    let totalVenceHoje = 0;
     let quantidadeAbertas = 0;
     let quantidadePagas = 0;
     let parcelasVencidas = 0;
+    let parcelasAVencer = 0;
+    let parcelasVencemHoje = 0;
+    const hojeISO = obterDataISOHoje();
 
     notinhas.forEach((notinha) => {
         const saldo = calcularSaldoNotinha(notinha);
@@ -399,9 +404,25 @@ function renderizarIndicadores() {
             quantidadeAbertas++;
 
             obterParcelas(notinha.id).forEach((parcela) => {
-                if (parcelaEstaVencida(parcela)) {
-                    totalVencido += obterSaldoParcela(parcela);
+                const saldoParcelaCentavos = Math.max(
+                    0,
+                    Math.round(obterSaldoParcela(parcela) * 100)
+                );
+                if (saldoParcelaCentavos <= 0) return;
+
+                const vencimento = String(parcela.vencimento || "").slice(0, 10);
+                if (!vencimento) return;
+
+                const saldoParcela = saldoParcelaCentavos / 100;
+                if (vencimento < hojeISO) {
+                    totalVencido += saldoParcela;
                     parcelasVencidas++;
+                } else if (vencimento === hojeISO) {
+                    totalVenceHoje += saldoParcela;
+                    parcelasVencemHoje++;
+                } else {
+                    totalAVencer += saldoParcela;
+                    parcelasAVencer++;
                 }
             });
         }
@@ -411,23 +432,104 @@ function renderizarIndicadores() {
         }
     });
 
-    elemento("totalAReceber").textContent =
-        formatarMoeda(totalAberto);
-
-    elemento("totalVencido").textContent =
-        formatarMoeda(totalVencido);
-
+    elemento("totalAReceber").textContent = formatarMoeda(totalAberto);
+    elemento("totalVencido").textContent = formatarMoeda(totalVencido);
     elemento("quantidadeVencidas").textContent =
-        parcelasVencidas +
-        (parcelasVencidas === 1
-            ? " parcela atrasada"
-            : " parcelas atrasadas");
+        parcelasVencidas + (parcelasVencidas === 1 ? " parcela atrasada" : " parcelas atrasadas");
+    elemento("totalAVencer").textContent = formatarMoeda(totalAVencer);
+    elemento("quantidadeAVencer").textContent =
+        parcelasAVencer + (parcelasAVencer === 1 ? " parcela com vencimento futuro" : " parcelas com vencimento futuro");
+    elemento("totalVenceHoje").textContent = formatarMoeda(totalVenceHoje);
+    elemento("quantidadeVenceHoje").textContent =
+        parcelasVencemHoje + (parcelasVencemHoje === 1 ? " parcela vence hoje" : " parcelas vencem hoje");
+    elemento("quantidadeAbertas").textContent = String(quantidadeAbertas);
+    elemento("quantidadePagas").textContent = String(quantidadePagas);
 
-    elemento("quantidadeAbertas").textContent =
-        String(quantidadeAbertas);
+    renderizarListasVencimento(hojeISO);
+}
 
-    elemento("quantidadePagas").textContent =
-        String(quantidadePagas);
+function renderizarListasVencimento(hojeISO) {
+    const parcelasVencidas = [];
+    const parcelasDeHoje = [];
+    const hoje = converterDataLocal(hojeISO);
+
+    notinhas.forEach((notinha) => {
+        if (notinha.status !== "aberta") return;
+
+        const cliente = clientesPorId.get(String(notinha.cliente_id));
+        const nomeCliente = cliente?.nome || "Cliente não identificado";
+        const numeroNotinha = String(notinha.numero ?? "").padStart(6, "0");
+
+        obterParcelas(notinha.id).forEach((parcela) => {
+            const saldoCentavos = Math.max(0, Math.round(obterSaldoParcela(parcela) * 100));
+            if (saldoCentavos <= 0) return;
+
+            const vencimento = String(parcela.vencimento || "").slice(0, 10);
+            if (!vencimento) return;
+
+            const item = {
+                notinhaId: notinha.id,
+                numeroNotinha,
+                cliente: nomeCliente,
+                numeroParcela: parcela.numero_parcela,
+                vencimento,
+                saldo: saldoCentavos / 100
+            };
+
+            if (vencimento < hojeISO) {
+                const dataVencimento = converterDataLocal(vencimento);
+                const diasAtraso = dataVencimento && hoje
+                    ? Math.max(1, Math.round((hoje.getTime() - dataVencimento.getTime()) / 86400000))
+                    : 0;
+                parcelasVencidas.push({ ...item, diasAtraso });
+            } else if (vencimento === hojeISO) {
+                parcelasDeHoje.push(item);
+            }
+        });
+    });
+
+    parcelasVencidas.sort((a, b) => a.vencimento.localeCompare(b.vencimento) || a.cliente.localeCompare(b.cliente, "pt-BR"));
+    parcelasDeHoje.sort((a, b) => a.cliente.localeCompare(b.cliente, "pt-BR") || Number(a.numeroParcela || 0) - Number(b.numeroParcela || 0));
+
+    const renderizarLista = (itens, vencida, mensagemVazia) => {
+        if (!itens.length) {
+            return `<p class="due-empty">${mensagemVazia}</p>`;
+        }
+
+        return itens.map((item) => {
+            const detalheParcela = item.numeroParcela
+                ? `Parcela ${escaparHTML(item.numeroParcela)}`
+                : "Parcela";
+            const textoPrazo = vencida
+                ? `${item.diasAtraso} ${item.diasAtraso === 1 ? "dia de atraso" : "dias de atraso"}`
+                : "Vence hoje";
+            return `
+                <article class="due-list-item ${vencida ? "is-overdue" : "is-due-today"}">
+                    <div class="due-item-info">
+                        <strong>${escaparHTML(item.cliente)}</strong>
+                        <small>Notinha #${escaparHTML(item.numeroNotinha)} · ${detalheParcela}</small>
+                        <small>Vencimento: ${formatarDataBR(item.vencimento)}</small>
+                    </div>
+                    <div class="due-item-actions">
+                        <strong>${formatarMoeda(item.saldo)}</strong>
+                        <small>${textoPrazo}</small>
+                        <button type="button" class="due-detail-button" data-detalhe="${escaparHTML(item.notinhaId)}">Ver notinha</button>
+                    </div>
+                </article>
+            `;
+        }).join("");
+    };
+
+    elemento("listaParcelasVencidas").innerHTML = renderizarLista(
+        parcelasVencidas,
+        true,
+        "Nenhuma parcela vencida. Todas as parcelas em aberto estão dentro do prazo."
+    );
+    elemento("listaVencimentosHoje").innerHTML = renderizarLista(
+        parcelasDeHoje,
+        false,
+        "Nenhuma parcela com saldo vence hoje."
+    );
 }
 
 /* =========================================================
@@ -1823,6 +1925,13 @@ function configurarEventosNotinhas() {
     elemento("listaNotinhas").addEventListener("click", (evento) => {
         const botao = evento.target.closest("[data-detalhe]");
 
+        if (botao) {
+            abrirDetalhesNotinha(botao.dataset.detalhe);
+        }
+    });
+
+    elemento("painelVencimentosNotinhas").addEventListener("click", (evento) => {
+        const botao = evento.target.closest("[data-detalhe]");
         if (botao) {
             abrirDetalhesNotinha(botao.dataset.detalhe);
         }

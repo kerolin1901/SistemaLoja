@@ -263,7 +263,7 @@ button:disabled {
 
 .metric-grid {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 15px;
     margin-bottom: 22px;
 }
@@ -296,6 +296,167 @@ button:disabled {
     color: var(--muted);
     font-size: 11px;
     line-height: 1.5;
+}
+
+/* =========================================================
+   RESUMO DE PARCELAS VENCIDAS E COM VENCIMENTO HOJE
+========================================================= */
+.due-lists-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    margin-bottom: 22px;
+    min-width: 0;
+}
+
+.due-list-panel {
+    min-width: 0;
+    padding: 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: 0 2px 5px rgba(15, 23, 42, 0.025);
+}
+
+.due-list-overdue {
+    border-top: 3px solid #dc2626;
+}
+
+.due-list-today {
+    border-top: 3px solid #d97706;
+}
+
+.due-list-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+
+.due-list-heading h2 {
+    margin: 0;
+    color: var(--text);
+    font-size: 16px;
+}
+
+.due-list-heading p:not(.due-list-eyebrow) {
+    margin: 6px 0 0;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.due-list-eyebrow {
+    margin: 0 0 5px;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: .08em;
+    color: #64748b;
+}
+
+.due-list-badge {
+    flex: 0 0 auto;
+    padding: 5px 9px;
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 800;
+}
+
+.due-list-badge-overdue {
+    color: #991b1b;
+    background: #fee2e2;
+}
+
+.due-list-badge-today {
+    color: #92400e;
+    background: #fef3c7;
+}
+
+.due-list-items {
+    display: flex;
+    flex-direction: column;
+}
+
+.due-list-item {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 0;
+    border-top: 1px solid #eef0f3;
+}
+
+.due-item-info,
+.due-item-actions {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+}
+
+.due-item-info strong,
+.due-item-actions > strong {
+    color: var(--text);
+    font-size: 13px;
+    overflow-wrap: anywhere;
+}
+
+.due-item-info small,
+.due-item-actions small {
+    color: var(--muted);
+    font-size: 11px;
+    line-height: 1.45;
+    overflow-wrap: anywhere;
+}
+
+.due-list-item.is-overdue .due-item-actions > strong {
+    color: #b91c1c;
+}
+
+.due-list-item.is-due-today .due-item-actions > strong {
+    color: #92400e;
+}
+
+.due-detail-button {
+    margin-top: 4px;
+    padding: 6px 9px;
+    border: 1px solid #d1d5db;
+    border-radius: 7px;
+    background: #ffffff;
+    color: #374151;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.due-detail-button:hover {
+    background: #f9fafb;
+}
+
+.due-empty {
+    margin: 0;
+    padding: 16px 0 4px;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+@media (max-width: 720px) {
+    .due-lists-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .due-list-panel {
+        padding: 15px;
+    }
+
+    .due-list-item {
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 9px;
+    }
 }
 
 .content-panel {
