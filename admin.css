@@ -1428,3 +1428,88 @@ td {
     }
 
 }
+
+/* DASHBOARD: GRAFICO E ATALHOS NO PADRAO DOS CARTOES */
+.atalhos {
+    gap: 16px;
+}
+
+.atalho {
+    --atalho-cor: #2563eb;
+    --atalho-fundo: #dbeafe;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-width: 0;
+    min-height: 154px;
+    padding: 18px;
+    border: 1px solid #e5e7eb;
+    border-left: 4px solid var(--atalho-cor);
+    border-radius: 12px;
+    background: #ffffff;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+}
+
+.atalho[href="produtos.html"] {
+    --atalho-cor: #16a34a;
+    --atalho-fundo: #dcfce7;
+}
+
+.atalho[href="categorias.html"] {
+    --atalho-cor: #7c3aed;
+    --atalho-fundo: #ede9fe;
+}
+
+.atalho[href="estoque.html"] {
+    --atalho-cor: #0891b2;
+    --atalho-fundo: #cffafe;
+}
+
+.atalho > span {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+    border-radius: 10px;
+    background: var(--atalho-fundo);
+    color: var(--atalho-cor);
+}
+
+.atalho > span svg {
+    width: 22px;
+    height: 22px;
+    max-width: 22px;
+    max-height: 22px;
+}
+
+.atalho strong {
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+.atalho small {
+    margin-top: 5px;
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+.atalho:hover {
+    border-color: #cbd5e1;
+    border-left-color: var(--atalho-cor);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+}
+
+.atalho:focus-visible {
+    outline: 3px solid rgba(37, 99, 235, 0.25);
+    outline-offset: 3px;
+}
+
+@media (max-width: 750px) {
+    .atalho {
+        min-height: 0;
+    }
+}

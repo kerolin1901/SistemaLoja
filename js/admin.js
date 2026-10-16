@@ -1975,7 +1975,8 @@ function criarCartoesIndicadoresDashboard() {
                 padding: 22px;
                 background: #ffffff;
                 border: 1px solid #e5e7eb;
-                border-radius: 16px;
+                border-left: 4px solid #2563eb;
+                border-radius: 12px;
                 box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
             }
             .grafico-vendas-cabecalho {
