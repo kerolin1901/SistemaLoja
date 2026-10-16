@@ -65,6 +65,9 @@ const saldoFinanceiro =
 const totalEntradasVendas =
     document.getElementById("totalEntradasVendas");
 
+const totalEntradasRecebimentosNotinhas =
+    document.getElementById("totalEntradasRecebimentosNotinhas");
+
 const totalOutrasEntradas =
     document.getElementById("totalOutrasEntradas");
 
@@ -217,6 +220,9 @@ const entradasPeriodo =
 const vendasPeriodo =
     document.getElementById("vendasPeriodo");
 
+const recebimentosNotinhasPeriodo =
+    document.getElementById("recebimentosNotinhasPeriodo");
+
 const outrasEntradasPeriodo =
     document.getElementById("outrasEntradasPeriodo");
 
@@ -295,6 +301,9 @@ const listaFluxo =
 const totalFluxoVendas =
     document.getElementById("totalFluxoVendas");
 
+const totalFluxoRecebimentosNotinhas =
+    document.getElementById("totalFluxoRecebimentosNotinhas");
+
 const totalFluxoOutrasEntradas =
     document.getElementById("totalFluxoOutrasEntradas");
 
@@ -368,10 +377,43 @@ function formatarMoeda(valor) {
 
 
 
+function normalizarCategoriaFinanceiro(valor) {
+    return String(valor || "")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .trim()
+        .toLowerCase();
+}
+
 function ehEntradaDeVenda(lancamento) {
     return (
         lancamento.tipo === "entrada" &&
-        String(lancamento.categoria || "").trim().toLowerCase() === "venda"
+        normalizarCategoriaFinanceiro(lancamento.categoria) === "venda"
+    );
+}
+
+function ehEntradaDeRecebimentoNotinha(lancamento) {
+    if (!lancamento || lancamento.tipo !== "entrada") {
+        return false;
+    }
+
+    // O sistema registra esses pagamentos com a categoria "RECEBIMENTO A PRAZO".
+    // A descrição também é conferida para reconhecer lançamentos antigos.
+    const categoria = normalizarCategoriaFinanceiro(lancamento.categoria);
+    const descricao = normalizarCategoriaFinanceiro(lancamento.descricao);
+    const texto = categoria + " " + descricao;
+
+    return (
+        texto.includes("recebimento a prazo") ||
+        texto.includes("recebimentos a prazo") ||
+        texto.includes("recebimento de notinha") ||
+        texto.includes("recebimentos de notinha") ||
+        texto.includes("recebimento de nota") ||
+        texto.includes("recebimentos de nota") ||
+        texto.includes("recebimento notinha") ||
+        texto.includes("recebimentos notinhas") ||
+        texto.includes("recebimento fiado") ||
+        texto.includes("recebimentos fiado")
     );
 }
 
@@ -1033,11 +1075,9 @@ async function carregarFinanceiro() {
 
 
     let entradas = 0;
-
     let entradasVendas = 0;
-
+    let entradasRecebimentosNotinhas = 0;
     let outrasEntradas = 0;
-
     let saidas = 0;
 
 
@@ -1067,6 +1107,8 @@ async function carregarFinanceiro() {
 
                 if (ehEntradaDeVenda(lancamento)) {
                     entradasVendas += valor;
+                } else if (ehEntradaDeRecebimentoNotinha(lancamento)) {
+                    entradasRecebimentosNotinhas += valor;
                 } else {
                     outrasEntradas += valor;
                 }
@@ -1120,6 +1162,11 @@ async function carregarFinanceiro() {
 
     if (totalEntradasVendas) {
         totalEntradasVendas.textContent = formatarMoeda(entradasVendas);
+    }
+
+    if (totalEntradasRecebimentosNotinhas) {
+        totalEntradasRecebimentosNotinhas.textContent =
+            formatarMoeda(entradasRecebimentosNotinhas);
     }
 
     if (totalOutrasEntradas) {
@@ -1642,6 +1689,10 @@ async function consultarFluxoCaixa() {
         vendasPeriodo.textContent = formatarMoeda(0);
     }
 
+    if (recebimentosNotinhasPeriodo) {
+        recebimentosNotinhasPeriodo.textContent = formatarMoeda(0);
+    }
+
     if (outrasEntradasPeriodo) {
         outrasEntradasPeriodo.textContent = formatarMoeda(0);
     }
@@ -1799,11 +1850,9 @@ async function consultarFluxoCaixa() {
 
 
     let totalEntradasPeriodo = 0;
-
     let totalVendasPeriodo = 0;
-
+    let totalRecebimentosNotinhasPeriodo = 0;
     let totalOutrasEntradasPeriodo = 0;
-
     let totalSaidasPeriodo = 0;
 
 
@@ -1833,6 +1882,8 @@ async function consultarFluxoCaixa() {
 
                 if (ehEntradaDeVenda(lancamento)) {
                     totalVendasPeriodo += valor;
+                } else if (ehEntradaDeRecebimentoNotinha(lancamento)) {
+                    totalRecebimentosNotinhasPeriodo += valor;
                 } else {
                     totalOutrasEntradasPeriodo += valor;
                 }
@@ -1890,6 +1941,11 @@ async function consultarFluxoCaixa() {
 
     if (vendasPeriodo) {
         vendasPeriodo.textContent = formatarMoeda(totalVendasPeriodo);
+    }
+
+    if (recebimentosNotinhasPeriodo) {
+        recebimentosNotinhasPeriodo.textContent =
+            formatarMoeda(totalRecebimentosNotinhasPeriodo);
     }
 
     if (outrasEntradasPeriodo) {
@@ -1952,6 +2008,11 @@ async function consultarFluxoCaixa() {
 
     if (totalFluxoVendas) {
         totalFluxoVendas.textContent = formatarMoeda(totalVendasPeriodo);
+    }
+
+    if (totalFluxoRecebimentosNotinhas) {
+        totalFluxoRecebimentosNotinhas.textContent =
+            formatarMoeda(totalRecebimentosNotinhasPeriodo);
     }
 
     if (totalFluxoOutrasEntradas) {
@@ -2062,6 +2123,7 @@ async function consultarFluxoCaixa() {
 
             resumoPorDia[dia] = {
                 vendas: 0,
+                recebimentosNotinhas: 0,
                 outrasEntradas: 0,
                 entrada: 0,
                 saida: 0
@@ -2100,11 +2162,12 @@ async function consultarFluxoCaixa() {
 
 
                 resumoPorDia[dia] = {
-                    vendas: 0,
-                    outrasEntradas: 0,
-                    entrada: 0,
-                    saida: 0
-                };
+                vendas: 0,
+                recebimentosNotinhas: 0,
+                outrasEntradas: 0,
+                entrada: 0,
+                saida: 0
+            };
 
 
 
@@ -2131,6 +2194,8 @@ async function consultarFluxoCaixa() {
 
                 if (ehEntradaDeVenda(lancamento)) {
                     resumoPorDia[dia].vendas += valor;
+                } else if (ehEntradaDeRecebimentoNotinha(lancamento)) {
+                    resumoPorDia[dia].recebimentosNotinhas += valor;
                 } else {
                     resumoPorDia[dia].outrasEntradas += valor;
                 }
@@ -2175,6 +2240,9 @@ async function consultarFluxoCaixa() {
 
 
             const vendas = resumoPorDia[dia].vendas;
+
+            const recebimentosNotinhas =
+                resumoPorDia[dia].recebimentosNotinhas;
 
             const outrasEntradas = resumoPorDia[dia].outrasEntradas;
 
@@ -2272,6 +2340,10 @@ async function consultarFluxoCaixa() {
             tdVendas.className = "valor-fluxo-entrada";
             tdVendas.textContent = formatarMoeda(vendas);
 
+            const tdRecebimentosNotinhas = document.createElement("td");
+            tdRecebimentosNotinhas.className = "valor-fluxo-entrada";
+            tdRecebimentosNotinhas.textContent = formatarMoeda(recebimentosNotinhas);
+
             const tdOutrasEntradas = document.createElement("td");
             tdOutrasEntradas.className = "valor-fluxo-entrada";
             tdOutrasEntradas.textContent = formatarMoeda(outrasEntradas);
@@ -2360,6 +2432,7 @@ async function consultarFluxoCaixa() {
 
             tr.appendChild(tdData);
             tr.appendChild(tdVendas);
+            tr.appendChild(tdRecebimentosNotinhas);
             tr.appendChild(tdOutrasEntradas);
             tr.appendChild(tdEntrada);
             tr.appendChild(tdSaida);
