@@ -70,6 +70,12 @@ const saldoAtualAReceber =
 
     document.getElementById("saldoAtualAReceber");
 
+const totalRecebimentosNotinhas =
+    document.getElementById("totalRecebimentosNotinhas");
+
+const quantidadeRecebimentosNotinhas =
+    document.getElementById("quantidadeRecebimentosNotinhas");
+
 const ticketMedio =
 
     document.getElementById("ticketMedio");
@@ -252,6 +258,48 @@ function formatarFormaPagamento(forma) {
     };
 
     return nomes[valor] || String(forma).trim();
+}
+
+function normalizarTextoRecebimentoNotinhaRelatorio(valor) {
+    return String(valor || "")
+        .trim()
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "");
+}
+
+function ehRecebimentoNotinhaRelatorio(lancamento) {
+    if (
+        !lancamento ||
+        normalizarTextoRecebimentoNotinhaRelatorio(lancamento.tipo) !== "entrada"
+    ) {
+        return false;
+    }
+
+    const categoria = normalizarTextoRecebimentoNotinhaRelatorio(lancamento.categoria);
+    const descricao = normalizarTextoRecebimentoNotinhaRelatorio(lancamento.descricao);
+    const texto = `${categoria} ${descricao}`;
+
+    const termosRecebimentoNotinha = [
+        "recebimento a prazo",
+        "recebimentos a prazo",
+        "recebimento de fiado",
+        "recebimentos de fiado",
+        "recebimento de notinha",
+        "recebimentos de notinha",
+        "recebimento de nota",
+        "recebimentos de nota",
+        "recebimento notinha",
+        "recebimentos notinha",
+        "recebimento notinhas",
+        "recebimentos notinhas",
+        "recebimento nota",
+        "recebimentos nota",
+        "recebimento fiado",
+        "recebimentos fiado"
+    ];
+
+    return termosRecebimentoNotinha.some(termo => texto.includes(termo));
 }
 
 /* ==========================================
@@ -560,6 +608,8 @@ function limparResultados() {
     if (resumoVendasPrazo) resumoVendasPrazo.style.display = "none";
     if (totalVendasPrazo) totalVendasPrazo.textContent = formatarMoeda(0);
     if (quantidadeVendasPrazo) quantidadeVendasPrazo.textContent = "0 vendas a prazo no período";
+    if (totalRecebimentosNotinhas) totalRecebimentosNotinhas.textContent = formatarMoeda(0);
+    if (quantidadeRecebimentosNotinhas) quantidadeRecebimentosNotinhas.textContent = "0 recebimentos no período";
 
 
     listaVendasDia.innerHTML =
@@ -619,6 +669,8 @@ async function carregarTotalRecebidoNoPeriodo(dataInicial, dataFinal) {
 
     if (!lojaIdRelatorio) {
         totalRecebidoPeriodo.textContent = "Indisponível";
+        if (totalRecebimentosNotinhas) totalRecebimentosNotinhas.textContent = "Indisponível";
+        if (quantidadeRecebimentosNotinhas) quantidadeRecebimentosNotinhas.textContent = "Nao foi possivel consultar os recebimentos";
         if (resultadoFinanceiroPeriodo) {
             resultadoFinanceiroPeriodo.textContent = "Indisponível";
         }
@@ -631,7 +683,7 @@ async function carregarTotalRecebidoNoPeriodo(dataInicial, dataFinal) {
         // do resultado financeiro líquido (entradas menos saídas).
         const resultado = await relatoriosSupabase
             .from("financeiro")
-            .select("tipo, valor, data_movimento")
+            .select("tipo, valor, data_movimento, categoria, descricao")
             .eq("loja_id", lojaIdRelatorio)
             .gte("data_movimento", dataInicial)
             .lte("data_movimento", dataFinal);
@@ -639,6 +691,23 @@ async function carregarTotalRecebidoNoPeriodo(dataInicial, dataFinal) {
         if (resultado.error) throw resultado.error;
 
         const lancamentos = resultado.data || [];
+        const lancamentosRecebimentosNotinhas = lancamentos.filter(ehRecebimentoNotinhaRelatorio);
+        const totalRecebimentosNotinhasCentavos = lancamentosRecebimentosNotinhas.reduce(
+            (total, lancamento) => total + Math.round((Number(lancamento.valor) || 0) * 100),
+            0
+        );
+
+        if (totalRecebimentosNotinhas) {
+            totalRecebimentosNotinhas.textContent = formatarMoeda(
+                totalRecebimentosNotinhasCentavos / 100
+            );
+        }
+
+        if (quantidadeRecebimentosNotinhas) {
+            const quantidade = lancamentosRecebimentosNotinhas.length;
+            quantidadeRecebimentosNotinhas.textContent =
+                `${quantidade} ${quantidade === 1 ? "recebimento" : "recebimentos"} no período`;
+        }
         const centavosPorTipo = lancamentos.reduce((totais, lancamento) => {
             const tipo = String(lancamento.tipo || "").trim().toLowerCase();
             const centavos = Math.round((Number(lancamento.valor) || 0) * 100);
@@ -661,6 +730,8 @@ async function carregarTotalRecebidoNoPeriodo(dataInicial, dataFinal) {
     } catch (erro) {
         console.error("Não foi possível consultar o resumo financeiro do período:", erro);
         totalRecebidoPeriodo.textContent = "Indisponível";
+        if (totalRecebimentosNotinhas) totalRecebimentosNotinhas.textContent = "Indisponível";
+        if (quantidadeRecebimentosNotinhas) quantidadeRecebimentosNotinhas.textContent = "Nao foi possivel consultar os recebimentos";
         if (resultadoFinanceiroPeriodo) {
             resultadoFinanceiroPeriodo.textContent = "Indisponível";
         }
@@ -2409,15 +2480,7 @@ async function imprimirRelatorioMensal() {
             .normalize("NFD")
             .replace(/[\u0300-\u036f]/g, "");
 
-        const ehRecebimentoPrazo = item => {
-            const categoria = normalizarCategoria(item.categoria);
-            return [
-                "recebimento a prazo",
-                "recebimentos a prazo",
-                "recebimento de fiado",
-                "recebimentos de fiado"
-            ].includes(categoria);
-        };
+        const ehRecebimentoPrazo = item => ehRecebimentoNotinhaRelatorio(item);
 
         const obterFormaRecebimentoPrazo = item => {
             if (item.forma_pagamento) {
@@ -2722,7 +2785,7 @@ async function imprimirRelatorioMensal() {
       <div class="panel-head">MOVIMENTAÇÃO FINANCEIRA</div>
       <div class="panel-body">
         <div class="row"><span class="name">Vendas recebidas</span><strong class="amount">${escaparHtmlRelatorio(formatarMoeda(totalVendasRecebidas))}</strong></div>
-        <div class="row"><span class="name">Recebimentos a prazo</span><strong class="amount positive">+ ${escaparHtmlRelatorio(formatarMoeda(totalRecebimentosPrazo))}</strong></div>
+        <div class="row"><span class="name">Recebimentos de Notinhas/Fiado</span><strong class="amount positive">+ ${escaparHtmlRelatorio(formatarMoeda(totalRecebimentosPrazo))}</strong></div>
         ${detalhesRecebimentosPrazo ? `<div class="method-breakdown"><span>Por forma de pagamento: ${detalhesRecebimentosPrazo}</span></div>` : ""}
         <div class="row"><span class="name">Outras entradas</span><strong class="amount positive">+ ${escaparHtmlRelatorio(formatarMoeda(totalOutrasEntradas))}</strong></div>
         <div class="row"><span class="name">TOTAL DE ENTRADAS</span><strong class="amount">${escaparHtmlRelatorio(formatarMoeda(totalEntradasFinanceiro))}</strong></div>
