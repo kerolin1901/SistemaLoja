@@ -791,3 +791,224 @@
     }
 
 }
+
+/* ==========================================
+   PADRONIZACAO DO MENU LATERAL - ADMIN GERAL
+   Patch adicional; regras originais preservadas.
+========================================== */
+.layout-admin-geral {
+    width: 100%;
+    min-height: 100vh;
+    position: relative;
+}
+
+.layout-admin-geral > .menu-geral {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 100;
+    width: 250px;
+    min-width: 250px;
+    height: 100vh;
+    min-height: 0;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.menu-geral-navegacao {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+}
+
+.menu-geral-item {
+    width: 100%;
+    min-height: 40px;
+    box-sizing: border-box;
+    padding: 10px 12px;
+    margin-bottom: 4px;
+    line-height: 1.2;
+    white-space: nowrap;
+}
+
+.menu-geral-rodape {
+    flex: 0 0 auto;
+    margin-top: auto;
+    padding: 14px 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.btn-sair-geral {
+    width: 100%;
+    min-height: 40px;
+    box-sizing: border-box;
+    padding: 10px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 7px;
+    background: transparent;
+    color: #d1d5db;
+    text-align: left;
+    justify-content: flex-start !important;
+}
+
+.btn-sair-geral:hover {
+    background: rgba(255, 255, 255, 0.07);
+    color: #ffffff;
+}
+
+.conteudo-geral {
+    margin-left: 250px;
+    width: calc(100% - 250px);
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+@media (min-width: 701px) and (max-width: 1000px) {
+    .layout-admin-geral > .menu-geral {
+        width: 220px;
+        min-width: 220px;
+    }
+
+    .conteudo-geral {
+        margin-left: 220px;
+        width: calc(100% - 220px);
+    }
+}
+
+@media (max-width: 700px) {
+    .layout-admin-geral {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .layout-admin-geral > .menu-geral {
+        position: relative;
+        top: auto;
+        left: auto;
+        right: auto;
+        bottom: auto;
+        width: 100%;
+        min-width: 0;
+        height: auto;
+        min-height: auto;
+        overflow: visible;
+    }
+
+    .menu-geral-navegacao {
+        flex: 0 0 auto;
+        max-height: 300px;
+        overflow-y: auto;
+    }
+
+    .menu-geral-rodape {
+        margin-top: 0;
+    }
+
+    .conteudo-geral {
+        margin-left: 0;
+        width: 100%;
+        min-height: auto;
+    }
+}
+
+/* =====================================================
+   PADRAO-EXATO-MENU-ADMIN-20261016
+   Replica o visual do menu do painel Admin.
+   Alteracoes restritas ao menu lateral e deslocamento do conteudo.
+===================================================== */
+.layout-admin-geral { width: 100%; min-height: 100vh; }
+.layout-admin-geral > .menu-geral {
+    position: fixed; top: 0; left: 0; bottom: 0; z-index: 100;
+    width: 260px; min-width: 260px; height: 100vh; min-height: 0;
+    box-sizing: border-box; display: flex; flex-direction: column; overflow: hidden;
+    background: #111827; color: #fff;
+}
+.logo-geral {
+    display: flex; align-items: center; gap: 12px;
+    height: 90px; flex: 0 0 90px; box-sizing: border-box;
+    padding: 20px; border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.logo-geral .logo-icone-geral {
+    width: 42px; height: 42px; min-width: 42px; flex: 0 0 42px;
+    box-sizing: border-box; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 700; letter-spacing: 0.5px;
+    color: #fff !important; background: #2563eb !important; box-shadow: none !important;
+}
+.logo-geral h1 {
+    margin: 0 !important; font-size: 15px !important; line-height: 1.2 !important;
+    font-weight: 700; color: #fff;
+}
+.usuario-geral {
+    display: flex !important; align-items: center; gap: 12px;
+    flex: 0 0 auto; box-sizing: border-box; padding: 18px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.icone-geral {
+    width: 40px; height: 40px; min-width: 40px; flex: 0 0 40px;
+    box-sizing: border-box; border-radius: 50%; display: flex;
+    align-items: center; justify-content: center;
+    background: #374151 !important; color: #fff !important;
+}
+.icone-geral svg { width: 18px; height: 18px; display: block; }
+.nome-usuario-geral {
+    display: block; max-width: 155px; overflow: hidden; text-overflow: ellipsis;
+    white-space: nowrap; color: #fff; font-size: 13px; font-weight: 700;
+}
+.tipo-usuario-geral { display: block; margin-top: 3px; color: #9ca3af; font-size: 11px; }
+.menu-geral-navegacao {
+    flex: 1 1 auto; min-height: 0; padding: 15px 12px;
+    overflow-y: auto; overscroll-behavior: contain;
+}
+.menu-geral-titulo {
+    margin: 0 !important; padding: 14px 10px 8px;
+    color: #6b7280; font-size: 10px; font-weight: 700; letter-spacing: 1px;
+}
+.menu-geral-item {
+    display: flex !important; align-items: center; gap: 12px !important;
+    width: 100%; min-height: 44px; box-sizing: border-box; padding: 0 12px;
+    margin-bottom: 4px; border-radius: 8px; color: #d1d5db;
+    text-decoration: none; font-size: 13px; font-weight: 500; line-height: 1.2;
+    white-space: nowrap; transition: background 0.2s, color 0.2s;
+}
+.menu-geral-item:hover { background: #1f2937; color: #fff; }
+.menu-geral-item.ativo { background: #2563eb; color: #fff; font-weight: 700; }
+.icone-menu-geral {
+    width: 20px; height: 20px; min-width: 20px; flex: 0 0 20px;
+    display: flex; align-items: center; justify-content: center;
+}
+.icone-menu-geral svg { width: 18px; height: 18px; display: block; }
+.menu-geral-rodape {
+    flex: 0 0 auto; margin-top: auto; box-sizing: border-box;
+    padding: 15px 12px; border-top: 1px solid rgba(255,255,255,0.08);
+}
+.btn-sair-geral {
+    display: flex !important; align-items: center; justify-content: flex-start !important;
+    gap: 12px !important; width: 100%; height: 42px; min-height: 42px;
+    box-sizing: border-box; padding: 0 12px; border: 0 !important; border-radius: 8px;
+    background: transparent; color: #d1d5db; font-size: 13px; font-weight: 400;
+    cursor: pointer; text-align: left;
+}
+.btn-sair-geral:hover { background: #1f2937; color: #fff; }
+.icone-sair-geral { width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; }
+.icone-sair-geral svg { width: 18px; height: 18px; display: block; }
+.conteudo-geral {
+    margin-left: 260px; width: calc(100% - 260px); min-width: 0;
+    min-height: 100vh; box-sizing: border-box;
+}
+@media (max-width: 700px) {
+    .layout-admin-geral { display: flex; flex-direction: column; }
+    .layout-admin-geral > .menu-geral {
+        position: relative; top: auto; left: auto; right: auto; bottom: auto;
+        width: 100%; min-width: 0; height: auto; min-height: auto; overflow: visible;
+    }
+    .logo-geral { height: auto; min-height: 90px; flex-basis: auto; }
+    .menu-geral-navegacao { flex: 0 0 auto; max-height: 300px; overflow-y: auto; }
+    .menu-geral-rodape { margin-top: 0; }
+    .conteudo-geral { margin-left: 0; width: 100%; min-height: auto; }
+}
+/* FIM PADRAO-EXATO-MENU-ADMIN-20261016 */
