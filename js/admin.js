@@ -2140,6 +2140,147 @@ function criarCartoesIndicadoresDashboard() {
                     font-size: 15px;
                 }
             }
+            /* Cartoes do Resumo da loja no mesmo padrao visual de Relatorios */
+            .indicadores-dashboard {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+                gap: 16px;
+            }
+            .indicador-dashboard {
+                display: flex;
+                align-items: center;
+                gap: 14px;
+                min-height: 92px;
+                padding: 18px;
+                border: 1px solid #e5e7eb;
+                border-left: 4px solid #2563eb;
+                border-radius: 12px;
+            }
+            .icone-indicador-dashboard {
+                width: 44px;
+                height: 44px;
+                flex: 0 0 44px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 10px;
+                background: #f1f5f9;
+                color: #334155;
+            }
+            .icone-indicador-dashboard svg {
+                width: 22px;
+                height: 22px;
+                display: block;
+            }
+            .indicador-dashboard-conteudo {
+                min-width: 0;
+                flex: 1;
+            }
+            .indicador-dashboard-titulo {
+                margin: 0 0 5px;
+                color: #64748b;
+                font-size: 12px;
+                font-weight: 600;
+                line-height: 1.3;
+            }
+            .indicador-dashboard-valor {
+                margin: 0;
+                color: #1f2937;
+                font-size: clamp(14px, 1.35vw, 20px);
+                font-weight: 700;
+                line-height: 1.25;
+                white-space: nowrap;
+                overflow-wrap: normal;
+                word-break: normal;
+                font-variant-numeric: tabular-nums;
+                letter-spacing: -0.02em;
+            }
+            .indicador-dashboard-descricao {
+                margin: 5px 0 0;
+                color: #64748b;
+                font-size: 11px;
+                line-height: 1.35;
+            }
+            #indicadoresDashboard > .indicador-dashboard:nth-child(2) {
+                border-left-color: #2563eb;
+            }
+            #indicadoresDashboard > .indicador-dashboard:nth-child(2) .icone-indicador-dashboard {
+                background: #dbeafe;
+                color: #2563eb;
+            }
+            #indicadoresDashboard > .indicador-dashboard:nth-child(3) {
+                border-left-color: #16a34a;
+            }
+            #indicadoresDashboard > .indicador-dashboard:nth-child(3) .icone-indicador-dashboard {
+                background: #dcfce7;
+                color: #16a34a;
+            }
+            #indicadoresDashboard > .indicador-dashboard:nth-child(4) {
+                border-left-color: #7c3aed;
+            }
+            #indicadoresDashboard > .indicador-dashboard:nth-child(4) .icone-indicador-dashboard {
+                background: #ede9fe;
+                color: #7c3aed;
+            }
+            #indicadoresDashboard > .indicador-dashboard:nth-child(5) {
+                border-left-color: #0891b2;
+            }
+            #indicadoresDashboard > .indicador-dashboard:nth-child(5) .icone-indicador-dashboard {
+                background: #cffafe;
+                color: #0891b2;
+            }
+            #indicadoresDashboard > .indicador-dashboard:nth-child(6) {
+                border-left-color: #7c3aed;
+            }
+            #indicadoresDashboard > .indicador-dashboard:nth-child(6) .icone-indicador-dashboard {
+                background: #ede9fe;
+                color: #7c3aed;
+            }
+            #indicadoresDashboard > .indicador-dashboard:nth-child(7) {
+                border-left-color: #f59e0b;
+            }
+            #indicadoresDashboard > .indicador-dashboard:nth-child(7) .icone-indicador-dashboard {
+                background: #fef3c7;
+                color: #b45309;
+            }
+            #indicadoresDashboard > .indicador-dashboard:nth-child(8) {
+                border-left-color: #0891b2;
+            }
+            #indicadoresDashboard > .indicador-dashboard:nth-child(8) .icone-indicador-dashboard {
+                background: #cffafe;
+                color: #0891b2;
+            }
+            #indicadoresDashboard > .indicador-dashboard:nth-child(9) {
+                border-left-color: #16a34a;
+            }
+            #indicadoresDashboard > .indicador-dashboard:nth-child(9) .icone-indicador-dashboard {
+                background: #dcfce7;
+                color: #16a34a;
+            }
+            @media (max-width: 1100px) {
+                .indicadores-dashboard {
+                    grid-template-columns: repeat(2, minmax(0, 1fr));
+                }
+            }
+            @media (max-width: 700px) {
+                .indicadores-dashboard {
+                    grid-template-columns: minmax(0, 1fr);
+                }
+            }
+            @media (max-width: 520px) {
+                .indicador-dashboard {
+                    gap: 11px;
+                    padding: 14px;
+                    min-height: 82px;
+                }
+                .icone-indicador-dashboard {
+                    width: 40px;
+                    height: 40px;
+                    flex-basis: 40px;
+                }
+                .indicador-dashboard-valor {
+                    font-size: 16px;
+                }
+            }
         `;
         document.head.appendChild(estilos);
     }
@@ -2209,9 +2350,28 @@ function criarCartoesIndicadoresDashboard() {
             }
         ];
 
+        const iconesIndicadoresDashboard = {
+            indicadorVendasHoje: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h14v16H5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 8h8M8 12h8M8 16h5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>',
+            indicadorFaturamentoHoje: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2v20M17 5.5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+            indicadorVendasMes: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M16 3v4M8 3v4M3 10h18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>',
+            indicadorRecebidoMes: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m8 12 2.5 2.5L16 9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+            indicadorSaldoAReceber: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 7v5l3 2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+            indicadorLucroMes: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17l6-6 4 3 8-8M15 6h6v6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+            indicadorLucroLiquidoMes: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V5M4 19h16M7 15l4-4 3 2 5-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+            indicadorEstoqueBaixo: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 9 5v8l-9 5-9-5V8z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="m3 8 9 5 9-5M12 13v8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>'
+        };
+
         indicadores.forEach(function (indicador) {
             const card = document.createElement("article");
             card.className = "indicador-dashboard";
+
+            const icone = document.createElement("div");
+            icone.className = "icone-indicador-dashboard";
+            icone.setAttribute("aria-hidden", "true");
+            icone.innerHTML = iconesIndicadoresDashboard[indicador.id] || "";
+
+            const conteudo = document.createElement("div");
+            conteudo.className = "indicador-dashboard-conteudo";
 
             const titulo = document.createElement("p");
             titulo.className = "indicador-dashboard-titulo";
@@ -2226,7 +2386,8 @@ function criarCartoesIndicadoresDashboard() {
             descricao.className = "indicador-dashboard-descricao";
             descricao.textContent = indicador.descricao;
 
-            card.append(titulo, valor, descricao);
+            conteudo.append(titulo, valor, descricao);
+            card.append(icone, conteudo);
             secao.appendChild(card);
         });
 
