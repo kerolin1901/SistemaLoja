@@ -364,6 +364,476 @@
         }
     </style>
 
+
+    <style id="padronizacao-final-vendas-vendedor">
+        /* Cabeçalho e painel no padrão da tela administrativa */
+        .conteudo-vendedor .cabecalho-vendedor h1 {
+            color: #111827 !important;
+            letter-spacing: -0.025em !important;
+        }
+
+        .painel-venda {
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: stretch !important;
+            gap: 0 !important;
+            min-width: 0 !important;
+        }
+
+        .painel-venda > .cabecalho-painel-venda {
+            display: flex !important;
+            flex-direction: row !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            gap: 20px !important;
+            width: 100% !important;
+            padding-bottom: 22px !important;
+            margin: 0 0 22px !important;
+            border-bottom: 1px solid #eef0f3 !important;
+        }
+
+        .painel-venda .cabecalho-painel-venda h2 {
+            margin: 0 !important;
+            color: #111827 !important;
+            font-size: 20px !important;
+            font-weight: 700 !important;
+        }
+
+        .painel-venda .cabecalho-painel-venda p {
+            margin: 6px 0 0 !important;
+            color: #6b7280 !important;
+            font-size: 13px !important;
+        }
+
+        .painel-venda .status-venda {
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            flex-shrink: 0 !important;
+            padding: 7px 12px !important;
+            border: 0 !important;
+            border-radius: 999px !important;
+            background: #eff6ff !important;
+            color: #2563eb !important;
+            font-size: 12px !important;
+            font-weight: 700 !important;
+        }
+
+        /* Cliente com a mesma largura máxima do administrador */
+        .painel-venda > .campo-cliente-vendedor {
+            order: 1 !important;
+            width: min(100%, 500px) !important;
+            margin: 0 0 20px !important;
+        }
+
+        .painel-venda > .campo-cliente-vendedor select {
+            width: 100% !important;
+        }
+
+        /* Área de produto e botão azul como na tela administrativa */
+        .painel-venda > .adicionar-produto {
+            order: 2 !important;
+            display: grid !important;
+            grid-template-columns: minmax(250px, 2fr) 130px 160px auto !important;
+            align-items: end !important;
+            gap: 14px !important;
+            width: 100% !important;
+            margin: 0 0 18px !important;
+            padding: 20px !important;
+            background: #f8fafc !important;
+            border: 1px solid #e5e7eb !important;
+            border-radius: 12px !important;
+        }
+
+        .painel-venda .campo-venda {
+            min-width: 0 !important;
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 7px !important;
+        }
+
+        .painel-venda .campo-venda label {
+            color: #374151 !important;
+            font-size: 13px !important;
+            font-weight: 600 !important;
+        }
+
+        .painel-venda .campo-venda input,
+        .painel-venda .campo-venda select,
+        .painel-venda .campo-busca-venda {
+            box-sizing: border-box !important;
+            border: 1px solid #d1d5db !important;
+            border-radius: 9px !important;
+            background: #ffffff !important;
+            color: #111827 !important;
+            font-family: inherit !important;
+            font-size: 14px !important;
+        }
+
+        .painel-venda .campo-venda input,
+        .painel-venda .campo-venda select {
+            width: 100% !important;
+            height: 44px !important;
+            min-height: 44px !important;
+            padding: 0 13px !important;
+        }
+
+        .painel-venda .campo-busca-venda {
+            width: 100% !important;
+            height: 38px !important;
+            min-height: 38px !important;
+            margin-bottom: 8px !important;
+            padding: 0 12px !important;
+        }
+
+        #btnAdicionarProduto {
+            height: 44px !important;
+            min-height: 44px !important;
+            padding: 0 20px !important;
+            border: 0 !important;
+            border-radius: 9px !important;
+            background: #2563eb !important;
+            color: #ffffff !important;
+            font-family: inherit !important;
+            font-size: 14px !important;
+            font-weight: 600 !important;
+            white-space: nowrap !important;
+            cursor: pointer !important;
+        }
+
+        #btnAdicionarProduto:hover {
+            background: #1d4ed8 !important;
+        }
+
+        .painel-venda > #mensagemVenda {
+            order: 3 !important;
+            width: 100% !important;
+            margin: 0 0 18px !important;
+        }
+
+        .painel-venda > .tabela-venda-container {
+            order: 4 !important;
+            width: 100% !important;
+            margin: 0 !important;
+            overflow-x: auto !important;
+            border: 1px solid #e5e7eb !important;
+            border-radius: 10px !important;
+        }
+
+        .painel-venda .tabela-venda {
+            width: 100% !important;
+            min-width: 680px !important;
+            border-collapse: collapse !important;
+            background: #ffffff !important;
+        }
+
+        .painel-venda .tabela-venda th {
+            padding: 11px 10px !important;
+            border-bottom: 1px solid #e5e7eb !important;
+            background: #f8fafc !important;
+            color: #6b7280 !important;
+            font-size: 10px !important;
+            font-weight: 800 !important;
+            text-align: left !important;
+            text-transform: uppercase !important;
+            white-space: nowrap !important;
+        }
+
+        .painel-venda .tabela-venda td {
+            padding: 12px 10px !important;
+            border-bottom: 1px solid #eef0f3 !important;
+            color: #374151 !important;
+            font-size: 12px !important;
+            vertical-align: middle !important;
+            background: #ffffff !important;
+        }
+
+        .painel-venda .tabela-venda tbody tr:last-child td {
+            border-bottom: 0 !important;
+        }
+
+        /* Resumo em linhas verticais, igual ao quadro "resumo-valores" do administrador */
+        .painel-venda > .dados-final-venda-reorganizada {
+            order: 5 !important;
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: stretch !important;
+            gap: 0 !important;
+            width: 100% !important;
+            margin: 0 !important;
+        }
+
+        .painel-venda .dados-final-venda-reorganizada > .resumo-venda {
+            order: 1 !important;
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: stretch !important;
+            justify-content: flex-start !important;
+            gap: 0 !important;
+            align-self: flex-end !important;
+            width: min(100%, 360px) !important;
+            box-sizing: border-box !important;
+            margin: 22px 0 0 !important;
+            padding: 18px !important;
+            border: 1px solid #e5e7eb !important;
+            border-radius: 12px !important;
+            background: #f8fafc !important;
+        }
+
+        .painel-venda .resumo-venda .linha-resumo {
+            display: flex !important;
+            flex-direction: row !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            gap: 14px !important;
+            width: 100% !important;
+            min-height: 38px !important;
+            padding: 0 !important;
+            color: #4b5563 !important;
+            font-size: 14px !important;
+            grid-column: auto !important;
+            grid-row: auto !important;
+        }
+
+        .painel-venda .resumo-venda .linha-resumo strong {
+            color: #111827 !important;
+            font-weight: 700 !important;
+        }
+
+        .painel-venda .resumo-venda .linha-desconto {
+            justify-content: space-between !important;
+            gap: 12px !important;
+            margin: 0 !important;
+            grid-column: auto !important;
+            grid-row: auto !important;
+        }
+
+        .painel-venda .resumo-venda .linha-desconto label {
+            flex: 0 0 auto !important;
+            color: #4b5563 !important;
+            font-size: 14px !important;
+        }
+
+        .painel-venda .resumo-venda .campo-desconto {
+            display: flex !important;
+            align-items: center !important;
+            flex-direction: row !important;
+            justify-content: flex-end !important;
+            gap: 6px !important;
+            width: min(100%, 270px) !important;
+            min-width: 0 !important;
+            max-width: 100% !important;
+        }
+
+        .painel-venda .resumo-venda .linha-total {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            margin-top: 10px !important;
+            padding-top: 15px !important;
+            border-top: 1px solid #dfe3e8 !important;
+            color: #111827 !important;
+            font-size: 16px !important;
+            font-weight: 700 !important;
+            grid-column: auto !important;
+            grid-row: auto !important;
+        }
+
+        .painel-venda .resumo-venda .linha-total strong {
+            color: #2563eb !important;
+            font-size: 22px !important;
+        }
+
+        /* Finalização: mesma grade da administração.
+           Pagamento na primeira coluna; prazo/dinheiro ocupam a linha inteira. */
+        .painel-venda .dados-finalizacao-vendedor {
+            order: 2 !important;
+            display: grid !important;
+            grid-template-columns: 280px minmax(0, 1fr) !important;
+            align-items: start !important;
+            gap: 16px !important;
+            width: 100% !important;
+            min-width: 0 !important;
+            margin-top: 25px !important;
+            padding-top: 22px !important;
+            border-top: 1px solid #eef0f3 !important;
+        }
+
+        .painel-venda .dados-finalizacao-vendedor > .campo-pagamento-vendedor {
+            order: 1 !important;
+            grid-column: 1 !important;
+            width: 100% !important;
+            max-width: none !important;
+            margin: 0 !important;
+        }
+
+        .painel-venda .dados-finalizacao-vendedor > #camposPrazoVenda {
+            order: 2 !important;
+            grid-column: 1 / -1 !important;
+            width: 100% !important;
+            margin: 0 !important;
+        }
+
+        .painel-venda .dados-finalizacao-vendedor > #camposDinheiroVenda {
+            order: 3 !important;
+            grid-column: 1 / -1 !important;
+            width: 100% !important;
+            margin: 0 !important;
+        }
+
+        .painel-venda #camposDinheiroVenda[hidden],
+        .painel-venda #camposPrazoVenda[hidden] {
+            display: none !important;
+        }
+
+        .painel-venda .dados-finalizacao-vendedor > .campo-observacoes-vendedor {
+            order: 4 !important;
+            grid-column: auto !important;
+            width: 100% !important;
+            min-width: 0 !important;
+            margin: 0 !important;
+        }
+
+        .painel-venda .campo-observacoes-vendedor input {
+            width: 100% !important;
+            height: 44px !important;
+            min-height: 44px !important;
+            box-sizing: border-box !important;
+        }
+
+        .painel-venda #camposDinheiroVenda {
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            gap: 12px !important;
+            padding: 14px !important;
+            border: 1px solid #bbf7d0 !important;
+            border-radius: 9px !important;
+            background: #f0fdf4 !important;
+            box-sizing: border-box !important;
+        }
+
+        .painel-venda #camposDinheiroVenda .campo-venda {
+            min-width: 0 !important;
+        }
+
+        .painel-venda #trocoVenda {
+            display: flex !important;
+            align-items: center !important;
+            width: 100% !important;
+            min-height: 44px !important;
+            padding: 0 12px !important;
+            border: 1px solid #bbf7d0 !important;
+            border-radius: 9px !important;
+            background: #ffffff !important;
+            color: #15803d !important;
+            font-size: 18px !important;
+            font-weight: 800 !important;
+            box-sizing: border-box !important;
+        }
+
+        .painel-venda #avisoDinheiroVenda {
+            grid-column: 1 / -1 !important;
+            margin: 0 !important;
+            color: #166534 !important;
+            font-size: 12px !important;
+            line-height: 1.5 !important;
+        }
+
+        .painel-venda #avisoDinheiroVenda.invalido {
+            color: #b91c1c !important;
+            font-weight: 700 !important;
+        }
+
+        .painel-venda > #acoesVendaComprovante {
+            order: 6 !important;
+            display: flex !important;
+            justify-content: flex-end !important;
+            align-items: center !important;
+            gap: 10px !important;
+            flex-wrap: wrap !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
+            margin: 0 !important;
+            padding-top: 18px !important;
+            border-top: 1px solid #eef0f3 !important;
+        }
+
+        .painel-venda > #acoesVendaComprovante button {
+            width: auto !important;
+            min-width: 0 !important;
+            min-height: 42px !important;
+            flex: 0 0 auto !important;
+            margin: 0 !important;
+        }
+
+        @media (max-width: 1050px) {
+            .painel-venda > .adicionar-produto {
+                grid-template-columns: minmax(220px, 1fr) 120px 150px !important;
+            }
+
+            .painel-venda .adicionar-produto .campo-botao {
+                grid-column: 1 / -1 !important;
+            }
+
+            #btnAdicionarProduto {
+                width: 100% !important;
+            }
+        }
+
+        @media (max-width: 800px) {
+            .painel-venda > .adicionar-produto {
+                grid-template-columns: 1fr 1fr !important;
+            }
+
+            .painel-venda > .adicionar-produto .campo-produto,
+            .painel-venda > .adicionar-produto .campo-botao {
+                grid-column: 1 / -1 !important;
+            }
+
+            .painel-venda .dados-finalizacao-vendedor {
+                grid-template-columns: minmax(0, 1fr) !important;
+            }
+
+            .painel-venda .dados-finalizacao-vendedor > .campo-pagamento-vendedor,
+            .painel-venda .dados-finalizacao-vendedor > .campo-observacoes-vendedor {
+                grid-column: 1 / -1 !important;
+            }
+
+            .painel-venda .dados-finalizacao-vendedor > #camposDinheiroVenda {
+                grid-template-columns: minmax(0, 1fr) !important;
+            }
+
+            .painel-venda .dados-final-venda-reorganizada > .resumo-venda {
+                width: 100% !important;
+            }
+
+            .painel-venda > #acoesVendaComprovante {
+                justify-content: stretch !important;
+            }
+
+            .painel-venda > #acoesVendaComprovante button {
+                flex: 1 1 100% !important;
+                width: 100% !important;
+            }
+        }
+
+        @media (max-width: 550px) {
+            .painel-venda > .adicionar-produto {
+                grid-template-columns: minmax(0, 1fr) !important;
+            }
+
+            .painel-venda > .adicionar-produto .campo-quantidade,
+            .painel-venda > .adicionar-produto .campo-preco,
+            .painel-venda > .adicionar-produto .campo-botao {
+                grid-column: 1 / -1 !important;
+            }
+
+            .painel-venda .cabecalho-painel-venda {
+                align-items: flex-start !important;
+                flex-direction: column !important;
+            }
+        }
+    </style>
+
 </head>
 
 <body>
@@ -1027,13 +1497,13 @@
 
                     <h1>
 
-                        Nova Venda
+                        Vendas
 
                     </h1>
 
                     <p>
 
-                        Registre uma venda para o cliente.
+                        Registre vendas e acompanhe seus pedidos.
 
                     </p>
 
@@ -1071,15 +1541,21 @@
 
                         <h2>
 
-                            Produtos da venda
+                            Nova venda
 
                         </h2>
 
                         <p>
 
-                            Adicione os produtos vendidos.
+                            Adicione os produtos da venda ao carrinho.
 
                         </p>
+
+                    </div>
+
+                    <div class="status-venda">
+
+                        Nova venda
 
                     </div>
 
@@ -1363,7 +1839,7 @@
 
                             <span>
 
-                                Total
+                                Total da venda
 
                             </span>
 

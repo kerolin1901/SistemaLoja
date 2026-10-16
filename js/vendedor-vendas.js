@@ -116,6 +116,13 @@ const descontoVenda =
 
     );
 
+let seletorTipoDescontoVenda = null;
+let tipoDescontoVendaAtual = "valor";
+let camposDinheiroVenda = null;
+let valorRecebidoVenda = null;
+let trocoVenda = null;
+let avisoDinheiroVenda = null;
+
 const totalVenda =
 
     document.getElementById(
@@ -2220,77 +2227,448 @@ function calcularSubtotal() {
 
 /* ==========================================
 
+   TIPO DE DESCONTO: VALOR OU PORCENTAGEM
+
+========================================== */
+
+function calcularValorDesconto(subtotal = calcularSubtotal(), tipo = tipoDescontoVendaAtual) {
+
+    const subtotalCentavos = Math.max(0, Math.round((Number(subtotal) || 0) * 100));
+    const valorInformado = Number(descontoVenda && descontoVenda.value);
+    const valor = Number.isFinite(valorInformado) ? valorInformado : 0;
+
+    if (tipo === "porcentagem") {
+        const percentual = Math.max(0, Math.min(100, valor));
+        return Math.round(subtotalCentavos * percentual / 100) / 100;
+    }
+
+    const descontoCentavos = Math.max(
+        0,
+        Math.min(subtotalCentavos, Math.round(valor * 100))
+    );
+
+    return descontoCentavos / 100;
+
+}
+
+function atualizarUnidadeDescontoVenda() {
+
+    if (!descontoVenda) return;
+
+    const container = descontoVenda.parentElement;
+    if (!container) return;
+
+    const unidade = container.querySelector("span");
+    if (unidade) {
+        unidade.textContent = tipoDescontoVendaAtual === "porcentagem" ? "%" : "R$";
+        unidade.setAttribute("aria-hidden", "true");
+    }
+
+    if (seletorTipoDescontoVenda) {
+        seletorTipoDescontoVenda.setAttribute(
+            "aria-label",
+            "Tipo de desconto: valor em reais ou porcentagem"
+        );
+    }
+
+    descontoVenda.setAttribute(
+        "aria-label",
+        tipoDescontoVendaAtual === "porcentagem"
+            ? "Percentual de desconto da venda"
+            : "Valor do desconto da venda em reais"
+    );
+
+}
+
+function configurarControleTipoDesconto() {
+
+    if (!descontoVenda || !descontoVenda.parentElement || document.getElementById("tipoDescontoVenda")) return;
+
+    const container = descontoVenda.parentElement;
+    container.style.display = "flex";
+    container.style.flexDirection = "row";
+    container.style.alignItems = "center";
+    container.style.justifyContent = "flex-end";
+    container.style.gap = "6px";
+    container.style.flexWrap = "nowrap";
+    container.style.width = "min(100%, 270px)";
+    container.style.minWidth = "0";
+    container.style.maxWidth = "100%";
+    container.style.boxSizing = "border-box";
+
+    seletorTipoDescontoVenda = document.createElement("select");
+    seletorTipoDescontoVenda.id = "tipoDescontoVenda";
+    seletorTipoDescontoVenda.innerHTML = `
+        <option value="valor">Valor (R$)</option>
+        <option value="porcentagem">Porcentagem (%)</option>
+    `;
+    seletorTipoDescontoVenda.value = "valor";
+    seletorTipoDescontoVenda.style.cssText = [
+        "flex: 0 1 112px",
+        "min-width: 88px",
+        "max-width: 112px",
+        "width: 112px",
+        "height: 38px",
+        "padding: 0 7px",
+        "border: 1px solid #d1d5db",
+        "border-radius: 8px",
+        "background: #fff",
+        "color: #253047",
+        "font: inherit",
+        "font-size: 12px",
+        "box-sizing: border-box"
+    ].join(";");
+
+    descontoVenda.style.flex = "1 1 68px";
+    descontoVenda.style.minWidth = "58px";
+    descontoVenda.style.maxWidth = "78px";
+    descontoVenda.style.height = "38px";
+    descontoVenda.style.boxSizing = "border-box";
+    descontoVenda.style.padding = "0 8px";
+
+    const unidadeInicial = container.querySelector("span");
+    if (unidadeInicial) {
+        unidadeInicial.style.position = "static";
+        unidadeInicial.style.left = "auto";
+        unidadeInicial.style.top = "auto";
+        unidadeInicial.style.transform = "none";
+        unidadeInicial.style.display = "inline-block";
+        unidadeInicial.style.flex = "0 0 20px";
+        unidadeInicial.style.minWidth = "20px";
+        unidadeInicial.style.maxWidth = "20px";
+        unidadeInicial.style.textAlign = "right";
+    }
+
+    container.insertBefore(seletorTipoDescontoVenda, descontoVenda);
+    atualizarUnidadeDescontoVenda();
+
+    seletorTipoDescontoVenda.addEventListener("change", function () {
+
+        const subtotal = calcularSubtotal();
+        const descontoMonetarioAtual = calcularValorDesconto(
+            subtotal,
+            tipoDescontoVendaAtual
+        );
+        const novoTipo = seletorTipoDescontoVenda.value === "porcentagem"
+            ? "porcentagem"
+            : "valor";
+
+        // Ao trocar a modalidade, preserva o valor monetário aproximado do desconto.
+        if (novoTipo === "porcentagem") {
+            descontoVenda.value = subtotal > 0
+                ? ((descontoMonetarioAtual / subtotal) * 100).toFixed(2)
+                : "0";
+        } else {
+            descontoVenda.value = descontoMonetarioAtual.toFixed(2);
+        }
+
+        tipoDescontoVendaAtual = novoTipo;
+        atualizarUnidadeDescontoVenda();
+        atualizarResumo();
+
+    });
+
+}
+
+/* ==========================================
+
+   RECEBIMENTO EM DINHEIRO E TROCO
+
+========================================== */
+
+function configurarCamposDinheiroVenda() {
+
+    if (!formaPagamento || !formaPagamento.parentElement) return;
+
+    const campoPagamento = formaPagamento.closest(".campo-pagamento-vendedor") || formaPagamento.parentElement;
+
+    // Usa a mesma estrutura visual da tela de vendas do administrador.
+    camposDinheiroVenda = document.getElementById("camposDinheiroVenda");
+
+    if (!camposDinheiroVenda) {
+        camposDinheiroVenda = document.createElement("div");
+        camposDinheiroVenda.id = "camposDinheiroVenda";
+        camposDinheiroVenda.className = "configuracao-dinheiro-venda";
+        camposDinheiroVenda.hidden = true;
+
+        const grupoRecebido = document.createElement("div");
+        grupoRecebido.className = "campo-venda";
+
+        const labelRecebido = document.createElement("label");
+        labelRecebido.htmlFor = "valorRecebidoVenda";
+        labelRecebido.textContent = "Valor recebido do cliente";
+
+        valorRecebidoVenda = document.createElement("input");
+        valorRecebidoVenda.type = "number";
+        valorRecebidoVenda.id = "valorRecebidoVenda";
+        valorRecebidoVenda.min = "0";
+        valorRecebidoVenda.step = "0.01";
+        valorRecebidoVenda.inputMode = "decimal";
+        valorRecebidoVenda.autocomplete = "off";
+        valorRecebidoVenda.placeholder = "Ex.: 50,00";
+        valorRecebidoVenda.style.cssText = [
+            "width:100%",
+            "min-width:0",
+            "height:44px",
+            "box-sizing:border-box",
+            "padding:0 13px",
+            "border:1px solid #d1d5db",
+            "border-radius:9px",
+            "background:#fff",
+            "color:#111827",
+            "font:inherit",
+            "font-size:14px",
+            "outline:none"
+        ].join(";");
+
+        grupoRecebido.appendChild(labelRecebido);
+        grupoRecebido.appendChild(valorRecebidoVenda);
+
+        const grupoTroco = document.createElement("div");
+        grupoTroco.className = "campo-venda";
+
+        const labelTroco = document.createElement("label");
+        labelTroco.htmlFor = "trocoVenda";
+        labelTroco.textContent = "Troco a devolver";
+
+        trocoVenda = document.createElement("output");
+        trocoVenda.id = "trocoVenda";
+        trocoVenda.className = "valor-troco-venda";
+        trocoVenda.textContent = formatarMoeda(0);
+        trocoVenda.style.cssText = [
+            "display:flex",
+            "align-items:center",
+            "min-height:44px",
+            "width:100%",
+            "box-sizing:border-box",
+            "padding:0 12px",
+            "border:1px solid #bbf7d0",
+            "border-radius:9px",
+            "background:#fff",
+            "color:#15803d",
+            "font-size:18px",
+            "font-weight:800",
+            "overflow-wrap:anywhere"
+        ].join(";");
+
+        grupoTroco.appendChild(labelTroco);
+        grupoTroco.appendChild(trocoVenda);
+
+        avisoDinheiroVenda = document.createElement("small");
+        avisoDinheiroVenda.id = "avisoDinheiroVenda";
+        avisoDinheiroVenda.className = "texto-ajuda-dinheiro";
+        avisoDinheiroVenda.textContent = "Informe quanto o cliente entregou. O troco será calculado automaticamente.";
+        avisoDinheiroVenda.style.cssText = [
+            "grid-column:1 / -1",
+            "display:block",
+            "margin:0",
+            "color:#166534",
+            "font-size:12px",
+            "line-height:1.5"
+        ].join(";");
+
+        camposDinheiroVenda.appendChild(grupoRecebido);
+        camposDinheiroVenda.appendChild(grupoTroco);
+        camposDinheiroVenda.appendChild(avisoDinheiroVenda);
+        campoPagamento.insertAdjacentElement("afterend", camposDinheiroVenda);
+    } else {
+        valorRecebidoVenda = document.getElementById("valorRecebidoVenda");
+        trocoVenda = document.getElementById("trocoVenda");
+        avisoDinheiroVenda = document.getElementById("avisoDinheiroVenda");
+
+        if (trocoVenda) {
+            trocoVenda.classList.add("valor-troco-venda");
+            trocoVenda.style.cssText += ";display:flex;align-items:center;min-height:44px;width:100%;box-sizing:border-box;padding:0 12px;border:1px solid #bbf7d0;border-radius:9px;background:#fff;color:#15803d;font-size:18px;font-weight:800;overflow-wrap:anywhere";
+        }
+        if (avisoDinheiroVenda) {
+            avisoDinheiroVenda.classList.add("texto-ajuda-dinheiro");
+        }
+    }
+
+    camposDinheiroVenda.style.cssText = [
+        "display:none",
+        "grid-column:1 / -1",
+        "grid-template-columns:repeat(2,minmax(0,1fr))",
+        "gap:12px",
+        "width:100%",
+        "box-sizing:border-box",
+        "margin-top:12px",
+        "padding:14px",
+        "border:1px solid #bbf7d0",
+        "border-radius:9px",
+        "background:#f0fdf4"
+    ].join(";");
+
+    if (!document.getElementById("estiloAvisoDinheiroVendedor")) {
+        const estilo = document.createElement("style");
+        estilo.id = "estiloAvisoDinheiroVendedor";
+        estilo.textContent = `
+            .texto-ajuda-dinheiro.invalido {
+                color: #b91c1c !important;
+                font-weight: 700 !important;
+            }
+            @media (max-width: 600px) {
+                #camposDinheiroVenda { grid-template-columns: 1fr !important; }
+            }
+        `;
+        document.head.appendChild(estilo);
+    }
+
+}
+
+function normalizarFormaPagamento(valor) {
+
+    const forma = String(valor || "")
+        .trim()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .replace(/[\s-]+/g, "_");
+
+    const formasConhecidas = {
+        dinheiro: "dinheiro",
+        pix: "pix",
+        cartao_de_debito: "cartao_debito",
+        cartao_debito: "cartao_debito",
+        cartao_de_credito: "cartao_credito",
+        cartao_credito: "cartao_credito",
+        boleto: "boleto",
+        outro: "outro",
+        a_prazo: "a_prazo"
+    };
+
+    return formasConhecidas[forma] || forma;
+
+}
+
+function valorRecebidoEmCentavos() {
+
+    if (!valorRecebidoVenda || String(valorRecebidoVenda.value).trim() === "") {
+        return null;
+    }
+
+    const valor = Number(valorRecebidoVenda.value);
+    if (!Number.isFinite(valor) || valor < 0) {
+        return null;
+    }
+
+    return Math.round(valor * 100);
+
+}
+
+function totalAtualEmCentavos() {
+
+    const subtotalCentavos = Math.max(0, Math.round(calcularSubtotal() * 100));
+    const descontoCentavos = Math.max(0, Math.min(
+        subtotalCentavos,
+        Math.round(calcularValorDesconto() * 100)
+    ));
+
+    return Math.max(0, subtotalCentavos - descontoCentavos);
+
+}
+
+function atualizarTrocoDinheiro() {
+
+    if (!trocoVenda || !valorRecebidoVenda || !formaPagamento) return;
+
+    const ehDinheiro = normalizarFormaPagamento(formaPagamento.value) === "dinheiro";
+
+    if (camposDinheiroVenda) {
+        camposDinheiroVenda.hidden = !ehDinheiro;
+        camposDinheiroVenda.style.display = ehDinheiro ? "grid" : "none";
+    }
+
+    if (!ehDinheiro) {
+        trocoVenda.textContent = formatarMoeda(0);
+        if (avisoDinheiroVenda) {
+            avisoDinheiroVenda.textContent = "Informe quanto o cliente entregou. O troco será calculado automaticamente.";
+            avisoDinheiroVenda.classList.remove("invalido");
+            avisoDinheiroVenda.style.color = "#64748b";
+        }
+        return;
+    }
+
+    const recebidoCentavos = valorRecebidoEmCentavos();
+    const totalCentavos = totalAtualEmCentavos();
+
+    if (recebidoCentavos === null) {
+        trocoVenda.textContent = formatarMoeda(0);
+        if (avisoDinheiroVenda) {
+            avisoDinheiroVenda.textContent = "Informe quanto o cliente entregou. O troco será calculado automaticamente.";
+            avisoDinheiroVenda.classList.remove("invalido");
+            avisoDinheiroVenda.style.color = "#64748b";
+        }
+        return;
+    }
+
+    if (recebidoCentavos < totalCentavos) {
+        trocoVenda.textContent = formatarMoeda(0);
+        if (avisoDinheiroVenda) {
+            avisoDinheiroVenda.textContent = `Valor insuficiente. Faltam ${formatarMoeda((totalCentavos - recebidoCentavos) / 100)}.`;
+            avisoDinheiroVenda.classList.add("invalido");
+            avisoDinheiroVenda.style.color = "#b91c1c";
+        }
+        return;
+    }
+
+    trocoVenda.textContent = formatarMoeda((recebidoCentavos - totalCentavos) / 100);
+    if (avisoDinheiroVenda) {
+        avisoDinheiroVenda.textContent = "Troco calculado automaticamente.";
+        avisoDinheiroVenda.classList.remove("invalido");
+        avisoDinheiroVenda.style.color = "#047857";
+    }
+
+}
+
+/* ==========================================
+
    ATUALIZAR RESUMO
 
 ========================================== */
 
 function atualizarResumo() {
 
-    const subtotal =
+    const subtotal = Math.max(0, calcularSubtotal());
+    let valorInformado = Number(descontoVenda.value);
 
-        calcularSubtotal();
-
-    let desconto =
-
-        Number(
-
-            descontoVenda.value
-
-        ) || 0;
-
-    if (
-
-        desconto < 0
-
-    ) {
-
-        desconto = 0;
-
-        descontoVenda.value =
-
-            "0";
-
+    if (!Number.isFinite(valorInformado) || valorInformado < 0) {
+        valorInformado = 0;
+        descontoVenda.value = "0";
     }
 
-    if (
-
-        desconto > subtotal
-
-    ) {
-
-        desconto =
-
-            subtotal;
-
-        descontoVenda.value =
-
-            subtotal.toFixed(2);
-
+    if (tipoDescontoVendaAtual === "porcentagem" && valorInformado > 100) {
+        valorInformado = 100;
+        descontoVenda.value = "100";
+    } else if (tipoDescontoVendaAtual === "valor" && valorInformado > subtotal) {
+        valorInformado = subtotal;
+        descontoVenda.value = subtotal.toFixed(2);
     }
 
-    const total =
+    const desconto = calcularValorDesconto(subtotal);
+    const subtotalCentavos = Math.max(0, Math.round(subtotal * 100));
+    const descontoCentavos = Math.max(0, Math.min(
+        subtotalCentavos,
+        Math.round(desconto * 100)
+    ));
+    const total = Math.max(0, subtotalCentavos - descontoCentavos) / 100;
 
-        subtotal -
+    if (subtotalVenda) {
+        subtotalVenda.textContent = formatarMoeda(subtotalCentavos / 100);
+    }
 
-        desconto;
+    if (totalVenda) {
+        totalVenda.textContent = formatarMoeda(total);
+    }
 
-    subtotalVenda.textContent =
-
-        formatarMoeda(
-
-            subtotal
-
-        );
-
-    totalVenda.textContent =
-
-        formatarMoeda(
-
-            total
-
-        );
+    atualizarTrocoDinheiro();
 
 }
+
+// Configura os controles depois que as funções de cálculo já estão disponíveis.
+configurarControleTipoDesconto();
+configurarCamposDinheiroVenda();
+
 
 /* ==========================================
 
@@ -2315,11 +2693,24 @@ function calcularDataPrimeiroVencimentoFiado(dias) {
 
 function atualizarCamposPrazoVenda() {
 
-    const vendaAPrazo = formaPagamento && formaPagamento.value === "a_prazo";
+    const forma = normalizarFormaPagamento(formaPagamento && formaPagamento.value);
+    const vendaAPrazo = forma === "a_prazo";
+    const vendaEmDinheiro = forma === "dinheiro";
 
     if (camposPrazoVenda) {
         camposPrazoVenda.hidden = !vendaAPrazo;
     }
+
+    if (camposDinheiroVenda) {
+        camposDinheiroVenda.hidden = !vendaEmDinheiro;
+        camposDinheiroVenda.style.display = vendaEmDinheiro ? "grid" : "none";
+    }
+
+    if (!vendaEmDinheiro && valorRecebidoVenda) {
+        valorRecebidoVenda.value = "";
+    }
+
+    atualizarTrocoDinheiro();
 
 }
 
@@ -2368,7 +2759,9 @@ async function finalizarVenda() {
 
     }
 
-    if (formaPagamento.value === "a_prazo") {
+    const forma = normalizarFormaPagamento(formaPagamento.value);
+
+    if (forma === "a_prazo") {
 
         const clienteFiado = clientes.find(
             (cliente) => String(cliente.id) === String(clienteVenda.value)
@@ -2395,39 +2788,43 @@ async function finalizarVenda() {
 
         calcularSubtotal();
 
-    const desconto =
+    const desconto = calcularValorDesconto(subtotal);
+    const subtotalCentavos = Math.max(0, Math.round(subtotal * 100));
+    const descontoCentavos = Math.max(0, Math.min(
+        subtotalCentavos,
+        Math.round(desconto * 100)
+    ));
+    const totalCentavos = Math.max(0, subtotalCentavos - descontoCentavos);
+    const total = totalCentavos / 100;
 
-        Number(
+    let recebidoDinheiroCentavos = null;
+    let trocoDinheiroCentavos = 0;
 
-            descontoVenda.value
+    if (forma === "dinheiro") {
+        recebidoDinheiroCentavos = valorRecebidoEmCentavos();
 
-        ) || 0;
+        if (recebidoDinheiroCentavos === null) {
+            mostrarMensagem("Informe o valor que o cliente entregou em dinheiro.", "erro");
+            valorRecebidoVenda?.focus();
+            return;
+        }
 
-    if (
+        if (recebidoDinheiroCentavos < totalCentavos) {
+            const faltaCentavos = totalCentavos - recebidoDinheiroCentavos;
+            mostrarMensagem(`O valor recebido é insuficiente. Faltam ${formatarMoeda(faltaCentavos / 100)}.`, "erro");
+            valorRecebidoVenda?.focus();
+            atualizarTrocoDinheiro();
+            return;
+        }
 
-        desconto < 0 ||
-
-        desconto > subtotal
-
-    ) {
-
-        mostrarMensagem(
-
-            "O desconto não pode ser maior que o subtotal.",
-
-            "erro"
-
-        );
-
-        return;
-
+        trocoDinheiroCentavos = recebidoDinheiroCentavos - totalCentavos;
     }
 
-    const total = subtotal - desconto;
-
-    const resumoFormaPagamento = formaPagamento.value === "a_prazo"
+    const resumoFormaPagamento = forma === "a_prazo"
         ? `Forma: A prazo\nParcelas: ${numeroParcelasFiado}\nPrimeiro vencimento: em ${diasPrimeiroVencimentoFiado} dias\nA dívida será registrada e não contará como valor recebido.`
-        : `Forma: ${formaPagamento.options[formaPagamento.selectedIndex].text}`;
+        : forma === "dinheiro"
+            ? `Forma: Dinheiro\nValor recebido: ${formatarMoeda(recebidoDinheiroCentavos / 100)}\nTroco: ${formatarMoeda(trocoDinheiroCentavos / 100)}`
+            : `Forma: ${formaPagamento.options[formaPagamento.selectedIndex].text}`;
 
     const confirmou = window.confirm(
         `Confirma a finalização desta venda?\n\n` +
@@ -2486,8 +2883,6 @@ async function finalizarVenda() {
         "Finalizando...";
 
     try {
-
-        const forma = formaPagamento.value.trim();
 
         let resultado;
 
@@ -2582,7 +2977,14 @@ async function finalizarVenda() {
 
                 resposta.venda_id,
 
-                btnFinalizarVenda
+                btnFinalizarVenda,
+
+                forma === "dinheiro"
+                    ? {
+                        valorRecebido: recebidoDinheiroCentavos / 100,
+                        troco: trocoDinheiroCentavos / 100
+                    }
+                    : null
 
             );
 
@@ -2647,6 +3049,11 @@ async function finalizarVenda() {
         descontoVenda.value =
 
             "0";
+
+        tipoDescontoVendaAtual = "valor";
+        if (seletorTipoDescontoVenda) seletorTipoDescontoVenda.value = "valor";
+        atualizarUnidadeDescontoVenda();
+        if (valorRecebidoVenda) valorRecebidoVenda.value = "";
 
         produtoVenda.value =
 
@@ -2838,6 +3245,10 @@ descontoVenda.addEventListener(
 
 );
 
+if (valorRecebidoVenda) {
+    valorRecebidoVenda.addEventListener("input", atualizarTrocoDinheiro);
+}
+
 /* ==========================================
 
    CANCELAR VENDA EM ANDAMENTO
@@ -2929,6 +3340,10 @@ function cancelarVendaEmAndamento() {
     if (observacoesVenda) observacoesVenda.value = "";
 
     if (descontoVenda) descontoVenda.value = "0";
+    tipoDescontoVendaAtual = "valor";
+    if (seletorTipoDescontoVenda) seletorTipoDescontoVenda.value = "valor";
+    atualizarUnidadeDescontoVenda();
+    if (valorRecebidoVenda) valorRecebidoVenda.value = "";
 
     if (produtoVenda) produtoVenda.value = "";
 
