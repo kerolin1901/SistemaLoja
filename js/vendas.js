@@ -1631,7 +1631,7 @@ async function carregarProdutosVenda() {
                 sku,
 
                 preco_venda,
-
+                preco_venda_minimo,
                 estoque,
 
                 estoque_minimo,
@@ -2152,6 +2152,8 @@ function adicionarProdutoCarrinho() {
 
                 ) || 0,
 
+            preco_venda_minimo: Number(produto.preco_venda_minimo ?? produto.preco_venda) || 0,
+
             estoque:
 
                 estoque,
@@ -2417,24 +2419,77 @@ function calcularSubtotal() {
    TIPO DE DESCONTO: VALOR OU PORCENTAGEM
 ========================================== */
 
-function calcularValorDesconto(subtotal = calcularSubtotal(), tipo = tipoDescontoVendaAtual) {
+function calcularLimiteDescontoSeguro(subtotal = calcularSubtotal()) {
+    const itens = carrinho;
+    const subtotalCentavos = Math.max(0, Math.round((Number(subtotal) || 0) * 100));
+    let valorMaximoCentavos = 0;
+    let encontrouItem = false;
 
+    // Soma a margem disponÃ­vel de CADA item. NÃ£o usa o menor percentual da venda.
+    itens.forEach((item) => {
+        const quantidade = Number(item.quantidade) || 0;
+        if (quantidade <= 0) return;
+        encontrouItem = true;
+
+        const precoCentavos = Math.max(0, Math.round((Number(item.preco_unitario) || 0) * 100));
+        const valorMinimoInformado = item.preco_venda_minimo ?? item.preco_unitario;
+        const minimoCentavos = Math.max(0, Math.round((Number(valorMinimoInformado) || 0) * 100));
+
+        const subtotalItemCentavos = Math.max(0, Math.round(precoCentavos * quantidade));
+        const minimoItemCentavos = Math.max(0, Math.round(minimoCentavos * quantidade));
+        const margemItemCentavos = Math.max(0, subtotalItemCentavos - minimoItemCentavos);
+
+        valorMaximoCentavos += margemItemCentavos;
+    });
+
+    // Nunca permite desconto acima do subtotal, nem margem negativa.
+    valorMaximoCentavos = !encontrouItem || subtotalCentavos <= 0
+        ? 0
+        : Math.max(0, Math.min(subtotalCentavos, valorMaximoCentavos));
+
+    const percentualMaximo = subtotalCentavos > 0
+        ? Math.round((valorMaximoCentavos / subtotalCentavos) * 10000) / 100
+        : 0;
+
+    return { subtotalCentavos, valorMaximoCentavos, percentualMaximo, temItens: encontrouItem };
+}
+
+function atualizarInfoDescontoMaximo(limite = calcularLimiteDescontoSeguro()) {
+    const info = document.getElementById("infoDescontoMaximo");
+    const botao = document.getElementById("btnAplicarDescontoMaximo");
+    if (!info) return;
+
+    if (!limite.temItens) {
+        info.textContent = "Adicione produtos para calcular o desconto máximo.";
+    } else {
+        info.textContent = "Desconto máximo permitido: " +
+            formatarMoeda(limite.valorMaximoCentavos / 100) +
+            " (" +
+            limite.percentualMaximo.toLocaleString("pt-BR", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }) +
+            "% do total).";
+    }
+
+    if (botao) botao.disabled = !limite.temItens;
+}
+
+function calcularValorDesconto(subtotal = calcularSubtotal(), tipo = tipoDescontoVendaAtual) {
     const subtotalCentavos = Math.max(0, Math.round((Number(subtotal) || 0) * 100));
     const valorInformado = Number(descontoVenda && descontoVenda.value);
     const valor = Number.isFinite(valorInformado) ? valorInformado : 0;
+    let descontoCentavos;
 
     if (tipo === "porcentagem") {
         const percentual = Math.max(0, Math.min(100, valor));
-        return Math.round(subtotalCentavos * percentual / 100) / 100;
+        descontoCentavos = Math.round(subtotalCentavos * percentual / 100);
+    } else {
+        descontoCentavos = Math.max(0, Math.min(subtotalCentavos, Math.round(valor * 100)));
     }
 
-    const descontoCentavos = Math.max(
-        0,
-        Math.min(subtotalCentavos, Math.round(valor * 100))
-    );
-
-    return descontoCentavos / 100;
-
+    const limite = calcularLimiteDescontoSeguro(subtotal);
+    return Math.min(descontoCentavos, limite.valorMaximoCentavos) / 100;
 }
 
 function atualizarUnidadeDescontoVenda() {
@@ -2550,6 +2605,19 @@ function configurarControleTipoDesconto() {
 }
 
 configurarControleTipoDesconto();
+const botaoAplicarDescontoMaximo = document.getElementById("btnAplicarDescontoMaximo");
+if (botaoAplicarDescontoMaximo) {
+    botaoAplicarDescontoMaximo.addEventListener("click", () => {
+        const limite = calcularLimiteDescontoSeguro();
+        descontoVenda.value = (
+            tipoDescontoVendaAtual === "porcentagem"
+                ? limite.percentualMaximo
+                : limite.valorMaximoCentavos / 100
+        ).toFixed(2);
+        atualizarResumo();
+    });
+}
+atualizarInfoDescontoMaximo();
 
 /* ==========================================
 
@@ -2567,12 +2635,14 @@ function atualizarResumo() {
         descontoVenda.value = "0";
     }
 
-    if (tipoDescontoVendaAtual === "porcentagem" && valorInformado > 100) {
-        valorInformado = 100;
-        descontoVenda.value = "100";
-    } else if (tipoDescontoVendaAtual === "valor" && valorInformado > subtotal) {
-        valorInformado = subtotal;
-        descontoVenda.value = subtotal.toFixed(2);
+        const limiteDesconto = calcularLimiteDescontoSeguro(subtotal);
+    const limiteEntrada = tipoDescontoVendaAtual === "porcentagem"
+        ? limiteDesconto.percentualMaximo
+        : limiteDesconto.valorMaximoCentavos / 100;
+
+    if (valorInformado > limiteEntrada) {
+        valorInformado = limiteEntrada;
+        descontoVenda.value = valorInformado.toFixed(2);
     }
 
     const desconto = calcularValorDesconto(subtotal);
@@ -2582,6 +2652,8 @@ function atualizarResumo() {
         Math.round(desconto * 100)
     ));
     const total = Math.max(0, subtotalCentavos - descontoCentavos) / 100;
+
+    atualizarInfoDescontoMaximo(limiteDesconto);
 
     if (valorSubtotal) {
         valorSubtotal.textContent = formatarMoeda(subtotalCentavos / 100);

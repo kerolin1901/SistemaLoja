@@ -478,7 +478,7 @@ async function carregarProdutos() {
         <tr>
 
             <td
-                colspan="6"
+                colspan="7"
                 class="carregando"
             >
                 Carregando produtos...
@@ -493,7 +493,7 @@ async function carregarProdutos() {
         await vendedorProdutosSupabase
             .from("produtos_para_venda")
             .select(
-                "id, nome, sku, categoria_id, preco_venda, estoque, estoque_minimo, ativo"
+                "id, nome, sku, categoria_id, preco_venda, preco_venda_minimo, estoque, estoque_minimo, ativo"
             )
             .order(
                 "nome",
@@ -522,7 +522,7 @@ async function carregarProdutos() {
             <tr>
 
                 <td
-                    colspan="6"
+                    colspan="7"
                     class="lista-vazia"
                 >
                     Não foi possível carregar os produtos.
@@ -828,7 +828,7 @@ function renderizarProdutos(
             <tr>
 
                 <td
-                    colspan="6"
+                    colspan="7"
                     class="lista-vazia"
                 >
 
@@ -973,6 +973,11 @@ function renderizarProdutos(
                                     )}
                                 </span>
 
+                            </td>
+                            <td>
+                                <span class="preco-venda preco-minimo-venda">
+                                    ${formatarMoeda(produto.preco_venda_minimo)}
+                                </span>
                             </td>
 
 

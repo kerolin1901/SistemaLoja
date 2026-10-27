@@ -36,6 +36,8 @@ const precoCusto =
 const precoVenda =
     document.getElementById("precoVenda");
 
+const precoVendaMinimo = document.getElementById("precoVendaMinimo");
+
 const estoque =
     document.getElementById("estoque");
 
@@ -458,6 +460,7 @@ async function carregarProdutos() {
                 categoria_id,
                 preco_custo,
                 preco_venda,
+                preco_venda_minimo,
                 estoque,
                 estoque_minimo,
                 ativo,
@@ -819,6 +822,8 @@ function renderizarProdutos() {
                     produto.preco_venda
                 );
 
+            const minimo = formatarMoeda(produto.preco_venda_minimo);
+
 
             const estoqueAtual =
                 Number(
@@ -867,6 +872,7 @@ function renderizarProdutos() {
                 <td>
                     ${venda}
                 </td>
+                <td>${minimo}</td>
 
                 <td>
                     ${estoqueAtual}
@@ -1080,6 +1086,8 @@ function editarProduto(id) {
     precoVenda.value =
         produto.preco_venda ?? "";
 
+    precoVendaMinimo.value = produto.preco_venda_minimo ?? "";
+
 
     estoque.value =
         produto.estoque ?? 0;
@@ -1165,6 +1173,8 @@ async function salvarProduto(event) {
             precoVenda.value
         );
 
+    const precoVendaMinimoValor = Number(precoVendaMinimo.value);
+
 
     const estoqueValor =
         Number(
@@ -1232,6 +1242,19 @@ async function salvarProduto(event) {
         return;
 
     }
+    if (
+        !Number.isFinite(precoVendaMinimoValor) ||
+        precoVendaMinimo.value.trim() === "" ||
+        precoVendaMinimoValor < 0 ||
+        precoVendaMinimoValor > precoVendaValor
+    ) {
+        mostrarMensagem(
+            "O preço mínimo deve ser válido e não pode superar o preço de venda.",
+            "erro"
+        );
+        precoVendaMinimo.focus();
+        return;
+    }
 
 
     if (
@@ -1291,6 +1314,8 @@ async function salvarProduto(event) {
 
         preco_venda:
             precoVendaValor,
+
+        preco_venda_minimo: precoVendaMinimoValor,
 
         estoque:
             estoqueValor,

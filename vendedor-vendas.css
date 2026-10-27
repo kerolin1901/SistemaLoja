@@ -1685,3 +1685,34 @@
         width: 100%;
     }
 }
+
+/* Controle do limite seguro de desconto */
+.conteudo-vendedor .controle-desconto-maximo {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px 12px;
+    width: 100%;
+    margin-top: 8px;
+}
+.conteudo-vendedor .controle-desconto-maximo small {
+    flex: 1 1 160px;
+    color: #64748b;
+    font-size: 12px;
+    line-height: 1.4;
+}
+.conteudo-vendedor .btn-aplicar-desconto-maximo {
+    border: 1px solid #bfdbfe;
+    border-radius: 8px;
+    padding: 8px 10px;
+    background: #eff6ff;
+    color: #1d4ed8;
+    font: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+}
+.conteudo-vendedor .btn-aplicar-desconto-maximo:hover:not(:disabled) { background: #dbeafe; }
+.conteudo-vendedor .btn-aplicar-desconto-maximo:disabled { opacity: .55; cursor: not-allowed; }
