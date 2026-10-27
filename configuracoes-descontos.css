@@ -1,0 +1,295 @@
+/* Configurações de desconto por loja */
+.painel-configuracoes-descontos {
+    display: grid;
+    gap: 18px;
+    width: 100%;
+    max-width: 980px;
+}
+
+.cartao-configuracao-desconto {
+    min-width: 0;
+    padding: 24px;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    background: #ffffff;
+    box-shadow: 0 3px 12px rgba(15, 23, 42, 0.04);
+}
+
+.cabecalho-cartao-config {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 22px;
+}
+
+.icone-configuracao {
+    display: flex;
+    flex: 0 0 44px;
+    width: 44px;
+    height: 44px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: #eff6ff;
+    color: #1d4ed8;
+    font-size: 23px;
+    font-weight: 800;
+}
+
+.icone-configuracao-verde {
+    background: #ecfdf5;
+    color: #047857;
+}
+
+.cabecalho-cartao-config h3 {
+    margin: 1px 0 7px;
+    color: #111827;
+    font-size: 18px;
+}
+
+.cabecalho-cartao-config p {
+    max-width: 700px;
+    color: #6b7280;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.linha-interruptor {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding-top: 18px;
+    border-top: 1px solid #eef0f3;
+    cursor: pointer;
+}
+
+.texto-interruptor {
+    display: grid;
+    gap: 5px;
+}
+
+.texto-interruptor strong {
+    color: #1f2937;
+    font-size: 14px;
+}
+
+.texto-interruptor small {
+    max-width: 680px;
+    color: #6b7280;
+    font-size: 12px;
+    line-height: 1.55;
+}
+
+.interruptor {
+    position: relative;
+    display: inline-flex;
+    flex: 0 0 48px;
+    width: 48px;
+    height: 28px;
+    align-items: center;
+}
+
+.interruptor input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+}
+
+.trilho-interruptor {
+    position: absolute;
+    inset: 0;
+    border-radius: 999px;
+    background: #cbd5e1;
+    transition: background 0.18s ease;
+}
+
+.trilho-interruptor::before {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #ffffff;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.22);
+    content: "";
+    transition: transform 0.18s ease;
+}
+
+.interruptor input:checked + .trilho-interruptor {
+    background: #16a34a;
+}
+
+.interruptor input:checked + .trilho-interruptor::before {
+    transform: translateX(20px);
+}
+
+.interruptor input:focus-visible + .trilho-interruptor {
+    outline: 3px solid rgba(37, 99, 235, 0.25);
+    outline-offset: 2px;
+}
+
+.campo-percentual-config {
+    display: grid;
+    gap: 8px;
+    max-width: 360px;
+    margin-top: 24px;
+}
+
+.campo-percentual-config > label {
+    color: #374151;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.entrada-percentual-config {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    max-width: 260px;
+}
+
+.entrada-percentual-config input {
+    width: 100%;
+    min-width: 0;
+    height: 44px;
+    padding: 0 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 9px;
+    color: #111827;
+    background: #ffffff;
+    font: inherit;
+    box-sizing: border-box;
+}
+
+.entrada-percentual-config input:focus {
+    border-color: #2563eb;
+    outline: 3px solid rgba(37, 99, 235, 0.12);
+}
+
+.entrada-percentual-config span {
+    color: #374151;
+    font-size: 18px;
+    font-weight: 800;
+}
+
+.campo-percentual-config > small {
+    color: #6b7280;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.aviso-config-desconto {
+    margin-top: 20px;
+    padding: 12px 14px;
+    border: 1px solid #fed7aa;
+    border-radius: 9px;
+    background: #fff7ed;
+    color: #9a3412;
+    font-size: 12px;
+    line-height: 1.55;
+}
+
+.nota-config-descontos {
+    padding: 16px 18px;
+    border: 1px solid #dbeafe;
+    border-radius: 10px;
+    background: #eff6ff;
+    color: #1e40af;
+}
+
+.nota-config-descontos strong {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 13px;
+}
+
+.nota-config-descontos p {
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+.nota-config-descontos kbd {
+    padding: 2px 5px;
+    border: 1px solid #bfdbfe;
+    border-radius: 4px;
+    background: #ffffff;
+    font-family: inherit;
+    font-size: 11px;
+}
+
+.mensagem-config-descontos {
+    padding: 12px 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 9px;
+    background: #f8fafc;
+    color: #374151;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.mensagem-config-descontos.sucesso {
+    border-color: #bbf7d0;
+    background: #f0fdf4;
+    color: #166534;
+}
+
+.mensagem-config-descontos.erro {
+    border-color: #fecaca;
+    background: #fef2f2;
+    color: #991b1b;
+}
+
+.mensagem-config-descontos.info {
+    border-color: #bfdbfe;
+    background: #eff6ff;
+    color: #1e40af;
+}
+
+.acoes-config-descontos {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.acoes-config-descontos .botao-principal {
+    min-height: 44px;
+    padding: 0 20px;
+}
+
+.botao-voltar-config {
+    display: inline-flex;
+    min-height: 44px;
+    align-items: center;
+    justify-content: center;
+    padding: 0 16px;
+    border: 1px solid #d1d5db;
+    border-radius: 9px;
+    color: #374151;
+    background: #ffffff;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.botao-voltar-config:hover {
+    background: #f9fafb;
+}
+
+@media (max-width: 700px) {
+    .conteudo-admin {
+        padding: 18px;
+    }
+    .cartao-configuracao-desconto {
+        padding: 18px;
+    }
+    .linha-interruptor {
+        align-items: flex-start;
+    }
+    .interruptor {
+        margin-top: 1px;
+    }
+}

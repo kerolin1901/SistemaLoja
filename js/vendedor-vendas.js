@@ -121,6 +121,13 @@ let tipoDescontoVendaAtual = "valor";
 let descontoMaximoAplicado = false;
 let descontoAvistaAtivo = false;
 let assinaturaCarrinhoDescontoMaximo = "";
+let configuracoesDescontosVenda = {
+    desconto_maximo_ativo: true,
+    desconto_avista_ativo: true,
+    desconto_avista_percentual: 8
+};
+let erroCarregarConfiguracoesDescontosVenda = false;
+let lojaIdDescontosVenda = null;
 const btnAplicarDescontoAvista = document.getElementById("btnAplicarDescontoAvista");
 const infoDescontoAvista = document.getElementById("infoDescontoAvista");
 let camposDinheiroVenda = null;
@@ -368,7 +375,7 @@ async function protegerVendedor() {
 
                 .select(
 
-                    "id, nome_completo, usuario, tipo, ativo"
+                    "id, nome_completo, usuario, tipo, ativo, loja_id"
 
                 )
 
@@ -486,6 +493,8 @@ async function protegerVendedor() {
 
         }
 
+        lojaIdDescontosVenda = perfil.loja_id || null;
+
         const nome =
 
             perfil.nome_completo ||
@@ -538,6 +547,78 @@ async function protegerVendedor() {
 
     }
 
+}
+
+/* ==========================================
+   CONFIGURAÇÕES DE DESCONTO POR LOJA
+========================================== */
+async function carregarConfiguracoesDescontosVenda() {
+    const padrao = {
+        desconto_maximo_ativo: true,
+        desconto_avista_ativo: true,
+        desconto_avista_percentual: 8
+    };
+
+    if (!lojaIdDescontosVenda) {
+        erroCarregarConfiguracoesDescontosVenda = true;
+        configuracoesDescontosVenda = {
+            ...padrao,
+            desconto_maximo_ativo: false,
+            desconto_avista_ativo: false
+        };
+        atualizarInfoDescontoMaximo();
+        atualizarControleDescontoAvista(0);
+        mostrarMensagem(
+            "Não foi possível identificar a loja para carregar as regras de desconto. Os botões automáticos ficaram desativados.",
+            "erro"
+        );
+        return false;
+    }
+
+    const { data, error } = await vendedorVendasSupabase
+        .from("configuracoes_descontos")
+        .select("desconto_maximo_ativo, desconto_avista_ativo, desconto_avista_percentual")
+        .eq("loja_id", lojaIdDescontosVenda)
+        .maybeSingle();
+
+    if (error) {
+        console.error("Erro ao carregar configurações de desconto:", error);
+        erroCarregarConfiguracoesDescontosVenda = true;
+        configuracoesDescontosVenda = {
+            ...padrao,
+            desconto_maximo_ativo: false,
+            desconto_avista_ativo: false
+        };
+        atualizarInfoDescontoMaximo();
+        atualizarControleDescontoAvista(0);
+        mostrarMensagem(
+            "Não foi possível carregar as configurações de desconto. Confira se o SQL de configurações foi executado no Supabase. Os botões automáticos ficaram desativados.",
+            "erro"
+        );
+        return false;
+    }
+
+    const percentual = Number(data?.desconto_avista_percentual ?? padrao.desconto_avista_percentual);
+    configuracoesDescontosVenda = {
+        desconto_maximo_ativo: data?.desconto_maximo_ativo !== false,
+        desconto_avista_ativo: data?.desconto_avista_ativo !== false,
+        desconto_avista_percentual: Number.isFinite(percentual)
+            ? Math.max(0, Math.min(99.99, percentual))
+            : padrao.desconto_avista_percentual
+    };
+    erroCarregarConfiguracoesDescontosVenda = false;
+
+    atualizarInfoDescontoMaximo();
+    atualizarControleDescontoAvista(0);
+    return true;
+}
+
+function formatarPercentualDescontoAvista() {
+    const percentual = Number(configuracoesDescontosVenda.desconto_avista_percentual) || 0;
+    return percentual.toLocaleString("pt-BR", {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2
+    }) + "%";
 }
 
 /* ==========================================
@@ -2276,7 +2357,22 @@ function calcularLimiteDescontoSeguro(subtotal = calcularSubtotal()) {
 function atualizarInfoDescontoMaximo(limite = calcularLimiteDescontoSeguro()) {
     const info = document.getElementById("infoDescontoMaximo");
     const botao = document.getElementById("btnAplicarDescontoMaximo");
+
+    if (botao) {
+        botao.hidden = erroCarregarConfiguracoesDescontosVenda || !configuracoesDescontosVenda.desconto_maximo_ativo;
+        botao.disabled = erroCarregarConfiguracoesDescontosVenda || !limite.temItens;
+    }
     if (!info) return;
+
+    info.hidden = false;
+    if (erroCarregarConfiguracoesDescontosVenda) {
+        info.textContent = "Configurações de desconto indisponíveis. Verifique a configuração da loja no Supabase.";
+        return;
+    }
+    if (!configuracoesDescontosVenda.desconto_maximo_ativo) {
+        info.textContent = "O desconto máximo automático está desativado nas configurações desta loja. O desconto manual continua sujeito ao limite pelo preço mínimo.";
+        return;
+    }
 
     if (!limite.temItens) {
         info.textContent = "Adicione produtos para calcular o desconto máximo.";
@@ -2290,8 +2386,6 @@ function atualizarInfoDescontoMaximo(limite = calcularLimiteDescontoSeguro()) {
             }) +
             "% do total).";
     }
-
-    if (botao) botao.disabled = !limite.temItens;
 }
 
 function calcularValorDesconto(subtotal = calcularSubtotal(), tipo = tipoDescontoVendaAtual) {
@@ -2313,7 +2407,7 @@ function calcularValorDesconto(subtotal = calcularSubtotal(), tipo = tipoDescont
 
 
 /* ==========================================
-   DESCONTO EXTRA DE 8% À VISTA
+   DESCONTO ADICIONAL À VISTA CONFIGURÁVEL POR LOJA
    O adicional é calculado sobre o total restante depois do desconto máximo.
 ========================================== */
 function assinaturaItensParaDescontoAvista() {
@@ -2340,24 +2434,36 @@ function formaPagamentoPermiteDescontoAvista() {
 function atualizarControleDescontoAvista(valorAdicionalCentavos = 0) {
     if (!btnAplicarDescontoAvista) return;
 
-    btnAplicarDescontoAvista.hidden = !descontoMaximoAplicado;
+    const maximoHabilitado =
+        !erroCarregarConfiguracoesDescontosVenda &&
+        configuracoesDescontosVenda.desconto_maximo_ativo;
+    const avistaHabilitado =
+        maximoHabilitado && configuracoesDescontosVenda.desconto_avista_ativo;
+    const percentualTexto = formatarPercentualDescontoAvista();
+
+    btnAplicarDescontoAvista.hidden = !descontoMaximoAplicado || !avistaHabilitado;
     btnAplicarDescontoAvista.classList.toggle("aplicado", descontoAvistaAtivo);
     btnAplicarDescontoAvista.setAttribute("aria-pressed", String(descontoAvistaAtivo));
     btnAplicarDescontoAvista.textContent = descontoAvistaAtivo
-        ? "Desconto à vista aplicado (8%)"
-        : "Aplicar +8% à vista";
+        ? `Desconto à vista aplicado (${percentualTexto})`
+        : `Aplicar +${percentualTexto} à vista`;
 
     if (!infoDescontoAvista) return;
-    infoDescontoAvista.hidden = !descontoMaximoAplicado;
+    infoDescontoAvista.hidden = !descontoMaximoAplicado || !maximoHabilitado;
 
-    if (!descontoMaximoAplicado) {
+    if (erroCarregarConfiguracoesDescontosVenda) {
+        infoDescontoAvista.textContent = "As configurações de desconto não puderam ser carregadas.";
+    } else if (!descontoMaximoAplicado || !maximoHabilitado) {
         infoDescontoAvista.textContent = "";
+    } else if (!configuracoesDescontosVenda.desconto_avista_ativo) {
+        infoDescontoAvista.textContent = "O desconto adicional à vista está desativado nas configurações desta loja.";
+        infoDescontoAvista.hidden = false;
     } else if (descontoAvistaAtivo) {
         infoDescontoAvista.textContent =
-            `Desconto adicional à vista: ${formatarMoeda(valorAdicionalCentavos / 100)}. Este adicional pode deixar o total abaixo do preço mínimo cadastrado.`;
+            `Desconto adicional à vista de ${percentualTexto}: ${formatarMoeda(valorAdicionalCentavos / 100)}. Este adicional pode deixar o total abaixo do preço mínimo cadastrado.`;
     } else {
         infoDescontoAvista.textContent =
-            "Disponível somente para Dinheiro, Pix ou Outro. O adicional de 8% é calculado depois do desconto máximo e pode ultrapassar o preço mínimo.";
+            `Disponível somente para Dinheiro, Pix ou Outro. O adicional de ${percentualTexto} é calculado depois do desconto máximo e pode ultrapassar o preço mínimo.`;
     }
 }
 
@@ -2375,12 +2481,20 @@ function calcularTotaisComDescontos(subtotal = calcularSubtotal()) {
         Math.round(calcularValorDesconto(subtotal) * 100)
     ));
     const totalAposDescontoBaseCentavos = Math.max(0, subtotalCentavos - descontoBaseCentavos);
-    const descontoAvistaCentavos = descontoMaximoAplicado && descontoAvistaAtivo
-        ? Math.min(
-            totalAposDescontoBaseCentavos,
-            Math.round(totalAposDescontoBaseCentavos * 8 / 100)
-        )
-        : 0;
+    const descontoAvistaCentavos =
+        descontoMaximoAplicado &&
+        descontoAvistaAtivo &&
+        !erroCarregarConfiguracoesDescontosVenda &&
+        configuracoesDescontosVenda.desconto_maximo_ativo &&
+        configuracoesDescontosVenda.desconto_avista_ativo
+            ? Math.min(
+                totalAposDescontoBaseCentavos,
+                Math.round(
+                    totalAposDescontoBaseCentavos *
+                    Number(configuracoesDescontosVenda.desconto_avista_percentual) / 100
+                )
+            )
+            : 0;
     const totalCentavos = Math.max(0, totalAposDescontoBaseCentavos - descontoAvistaCentavos);
 
     return {
@@ -2393,11 +2507,16 @@ function calcularTotaisComDescontos(subtotal = calcularSubtotal()) {
 }
 
 function tratarMudancaFormaPagamentoDescontoAvista() {
-    if (descontoAvistaAtivo && !formaPagamentoPermiteDescontoAvista()) {
+    if (descontoAvistaAtivo && (
+        !formaPagamentoPermiteDescontoAvista() ||
+        erroCarregarConfiguracoesDescontosVenda ||
+        !configuracoesDescontosVenda.desconto_maximo_ativo ||
+        !configuracoesDescontosVenda.desconto_avista_ativo
+    )) {
         descontoAvistaAtivo = false;
         atualizarControleDescontoAvista(0);
         mostrarMensagem(
-            "O desconto adicional de 8% foi removido porque a forma de pagamento não é elegível.",
+            `O desconto adicional à vista (${formatarPercentualDescontoAvista()}) foi removido porque a forma de pagamento ou as configurações não permitem o adicional.`,
             "info"
         );
     }
@@ -2827,6 +2946,10 @@ configurarControleTipoDesconto();
 const botaoAplicarDescontoMaximo = document.getElementById("btnAplicarDescontoMaximo");
 if (botaoAplicarDescontoMaximo) {
     botaoAplicarDescontoMaximo.addEventListener("click", () => {
+        if (erroCarregarConfiguracoesDescontosVenda || !configuracoesDescontosVenda.desconto_maximo_ativo) {
+            mostrarMensagem("O desconto máximo automático está desativado ou indisponível nas configurações desta loja.", "erro");
+            return;
+        }
         const limite = calcularLimiteDescontoSeguro();
         descontoVenda.value = (
             tipoDescontoVendaAtual === "porcentagem"
@@ -2842,6 +2965,15 @@ if (botaoAplicarDescontoMaximo) {
 
 if (btnAplicarDescontoAvista) {
     btnAplicarDescontoAvista.addEventListener("click", () => {
+        if (
+            erroCarregarConfiguracoesDescontosVenda ||
+            !configuracoesDescontosVenda.desconto_maximo_ativo ||
+            !configuracoesDescontosVenda.desconto_avista_ativo
+        ) {
+            mostrarMensagem("O desconto adicional à vista está desativado ou indisponível nas configurações desta loja.", "erro");
+            return;
+        }
+
         if (
             !descontoMaximoAplicado ||
             assinaturaCarrinhoDescontoMaximo !== assinaturaItensParaDescontoAvista()
@@ -2859,14 +2991,14 @@ if (btnAplicarDescontoAvista) {
         }
 
         if (!formaPagamentoPermiteDescontoAvista()) {
-            mostrarMensagem("Para aplicar os 8% adicionais, selecione Dinheiro, Pix ou Outro como forma de pagamento.", "erro");
+            mostrarMensagem(`Para aplicar o adicional de ${formatarPercentualDescontoAvista()}, selecione Dinheiro, Pix ou Outro como forma de pagamento.`, "erro");
             formaPagamento?.focus();
             return;
         }
 
         descontoAvistaAtivo = true;
         atualizarResumo();
-        mostrarMensagem("Desconto adicional de 8% à vista aplicado ao total restante após o desconto máximo.", "sucesso");
+        mostrarMensagem(`Desconto adicional de ${formatarPercentualDescontoAvista()} à vista aplicado ao total restante após o desconto máximo.`, "sucesso");
     });
 }
 
@@ -2996,7 +3128,7 @@ async function finalizarVenda() {
     if (descontoAvistaAtivo && !formaPagamentoPermiteDescontoAvista()) {
         descontoAvistaAtivo = false;
         atualizarResumo();
-        mostrarMensagem("O desconto adicional de 8% só pode ser usado com Dinheiro, Pix ou Outro.", "erro");
+        mostrarMensagem(`O desconto adicional de ${formatarPercentualDescontoAvista()} só pode ser usado com Dinheiro, Pix ou Outro e enquanto estiver habilitado nas configurações da loja.`, "erro");
         return;
     }
 
@@ -3042,7 +3174,7 @@ async function finalizarVenda() {
         `Confirma a finalização desta venda?\n\n` +
         `Subtotal: ${formatarMoeda(subtotal)}\n` +
         `Desconto máximo: ${formatarMoeda(descontoBase)}\n` +
-        `Desconto adicional à vista (8%): ${formatarMoeda(descontoAvista)}\n` +
+        `Desconto adicional à vista (${formatarPercentualDescontoAvista()}): ${formatarMoeda(descontoAvista)}\n` +
         `Desconto total: ${formatarMoeda(desconto)}\n` +
         `Total: ${formatarMoeda(total)}\n\n` +
         `${resumoFormaPagamento}\n\n` +
@@ -3613,6 +3745,8 @@ async function iniciarVendasVendedor() {
         return;
 
     }
+
+    await carregarConfiguracoesDescontosVenda();
 
     await carregarProdutos();
 
