@@ -522,7 +522,7 @@
 
     width: 100%;
 
-    min-width: 950px;
+    min-width: 1120px;
 
     border-collapse: collapse;
 
@@ -559,6 +559,17 @@
     font-size: 14px;
 
     color: #374151;
+
+}
+
+
+.preco-minimo-avista {
+
+    color: #15803d;
+
+    font-weight: 800;
+
+    white-space: nowrap;
 
 }
 

@@ -105,6 +105,34 @@ function formatarMoeda(valor) {
 
 
 /* ==========================================
+   PRECO MINIMO A VISTA: minimo cadastrado menos 8%
+========================================== */
+
+function calcularPrecoMinimoAvista(precoMinimo) {
+
+    if (
+        precoMinimo === null ||
+        precoMinimo === undefined ||
+        precoMinimo === ""
+    ) {
+        return "—";
+    }
+
+    const minimo = Number(precoMinimo);
+
+    if (!Number.isFinite(minimo) || minimo < 0) {
+        return "—";
+    }
+
+    const valorComDesconto =
+        Math.round((minimo * 0.92 + Number.EPSILON) * 100) / 100;
+
+    return formatarMoeda(valorComDesconto);
+
+}
+
+
+/* ==========================================
    ESCAPAR HTML
 ========================================== */
 
@@ -478,7 +506,7 @@ async function carregarProdutos() {
         <tr>
 
             <td
-                colspan="7"
+                colspan="8"
                 class="carregando"
             >
                 Carregando produtos...
@@ -522,7 +550,7 @@ async function carregarProdutos() {
             <tr>
 
                 <td
-                    colspan="7"
+                    colspan="8"
                     class="lista-vazia"
                 >
                     Não foi possível carregar os produtos.
@@ -828,7 +856,7 @@ function renderizarProdutos(
             <tr>
 
                 <td
-                    colspan="7"
+                    colspan="8"
                     class="lista-vazia"
                 >
 
@@ -977,6 +1005,12 @@ function renderizarProdutos(
                             <td>
                                 <span class="preco-venda preco-minimo-venda">
                                     ${formatarMoeda(produto.preco_venda_minimo)}
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="preco-minimo-avista">
+                                    ${calcularPrecoMinimoAvista(produto.preco_venda_minimo)}
                                 </span>
                             </td>
 

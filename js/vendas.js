@@ -106,6 +106,11 @@ const descontoVenda =
 
 let seletorTipoDescontoVenda = null;
 let tipoDescontoVendaAtual = "valor";
+let descontoMaximoAplicado = false;
+let descontoAvistaAtivo = false;
+let assinaturaCarrinhoDescontoMaximo = "";
+const btnAplicarDescontoAvista = document.getElementById("btnAplicarDescontoAvista");
+const infoDescontoAvista = document.getElementById("infoDescontoAvista");
 
 const valorTotal =
 
@@ -2492,6 +2497,101 @@ function calcularValorDesconto(subtotal = calcularSubtotal(), tipo = tipoDescont
     return Math.min(descontoCentavos, limite.valorMaximoCentavos) / 100;
 }
 
+
+/* ==========================================
+   DESCONTO EXTRA DE 8% À VISTA
+   O adicional é calculado sobre o total restante depois do desconto máximo.
+========================================== */
+function assinaturaItensParaDescontoAvista() {
+    const itens = carrinho || [];
+    return itens.map((item) => [
+        String(item.produto_id ?? item.id ?? ""),
+        Number(item.quantidade) || 0,
+        Number(item.preco_unitario ?? item.preco_venda ?? item.preco ?? 0) || 0,
+        Number(item.preco_venda_minimo ?? 0) || 0
+    ].join(":" )).sort().join("|");
+}
+
+function formaPagamentoPermiteDescontoAvista() {
+    const forma = String(formaPagamento?.value || "")
+        .trim()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .replace(/[\s-]+/g, "_");
+
+    return ["dinheiro", "pix", "outro", "outros"].includes(forma);
+}
+
+function atualizarControleDescontoAvista(valorAdicionalCentavos = 0) {
+    if (!btnAplicarDescontoAvista) return;
+
+    btnAplicarDescontoAvista.hidden = !descontoMaximoAplicado;
+    btnAplicarDescontoAvista.classList.toggle("aplicado", descontoAvistaAtivo);
+    btnAplicarDescontoAvista.setAttribute("aria-pressed", String(descontoAvistaAtivo));
+    btnAplicarDescontoAvista.textContent = descontoAvistaAtivo
+        ? "Desconto à vista aplicado (8%)"
+        : "Aplicar +8% à vista";
+
+    if (!infoDescontoAvista) return;
+    infoDescontoAvista.hidden = !descontoMaximoAplicado;
+
+    if (!descontoMaximoAplicado) {
+        infoDescontoAvista.textContent = "";
+    } else if (descontoAvistaAtivo) {
+        infoDescontoAvista.textContent =
+            `Desconto adicional à vista: ${formatarMoeda(valorAdicionalCentavos / 100)}. Este adicional pode deixar o total abaixo do preço mínimo cadastrado.`;
+    } else {
+        infoDescontoAvista.textContent =
+            "Disponível somente para Dinheiro, Pix ou Outro. O adicional de 8% é calculado depois do desconto máximo e pode ultrapassar o preço mínimo.";
+    }
+}
+
+function invalidarEstadoDescontoAvista() {
+    descontoMaximoAplicado = false;
+    descontoAvistaAtivo = false;
+    assinaturaCarrinhoDescontoMaximo = "";
+    atualizarControleDescontoAvista(0);
+}
+
+function calcularTotaisComDescontos(subtotal = calcularSubtotal()) {
+    const subtotalCentavos = Math.max(0, Math.round((Number(subtotal) || 0) * 100));
+    const descontoBaseCentavos = Math.max(0, Math.min(
+        subtotalCentavos,
+        Math.round(calcularValorDesconto(subtotal) * 100)
+    ));
+    const totalAposDescontoBaseCentavos = Math.max(0, subtotalCentavos - descontoBaseCentavos);
+    const descontoAvistaCentavos = descontoMaximoAplicado && descontoAvistaAtivo
+        ? Math.min(
+            totalAposDescontoBaseCentavos,
+            Math.round(totalAposDescontoBaseCentavos * 8 / 100)
+        )
+        : 0;
+    const totalCentavos = Math.max(0, totalAposDescontoBaseCentavos - descontoAvistaCentavos);
+
+    return {
+        subtotalCentavos,
+        descontoBaseCentavos,
+        descontoAvistaCentavos,
+        descontoTotalCentavos: subtotalCentavos - totalCentavos,
+        totalCentavos
+    };
+}
+
+function tratarMudancaFormaPagamentoDescontoAvista() {
+    if (descontoAvistaAtivo && !formaPagamentoPermiteDescontoAvista()) {
+        descontoAvistaAtivo = false;
+        atualizarControleDescontoAvista(0);
+        mostrarMensagem(
+            "O desconto adicional de 8% foi removido porque a forma de pagamento não é elegível.",
+            "info"
+        );
+    }
+
+    atualizarCamposPrazoVenda();
+    atualizarResumo();
+}
+
 function atualizarUnidadeDescontoVenda() {
 
     if (!descontoVenda) return;
@@ -2596,6 +2696,7 @@ function configurarControleTipoDesconto() {
             descontoVenda.value = descontoMonetarioAtual.toFixed(2);
         }
 
+        invalidarEstadoDescontoAvista();
         tipoDescontoVendaAtual = novoTipo;
         atualizarUnidadeDescontoVenda();
         atualizarResumo();
@@ -2614,9 +2715,44 @@ if (botaoAplicarDescontoMaximo) {
                 ? limite.percentualMaximo
                 : limite.valorMaximoCentavos / 100
         ).toFixed(2);
+        descontoMaximoAplicado = true;
+        descontoAvistaAtivo = false;
+        assinaturaCarrinhoDescontoMaximo = assinaturaItensParaDescontoAvista();
         atualizarResumo();
     });
 }
+
+if (btnAplicarDescontoAvista) {
+    btnAplicarDescontoAvista.addEventListener("click", () => {
+        if (
+            !descontoMaximoAplicado ||
+            assinaturaCarrinhoDescontoMaximo !== assinaturaItensParaDescontoAvista()
+        ) {
+            invalidarEstadoDescontoAvista();
+            mostrarMensagem("Aplique novamente o desconto máximo depois de conferir os produtos da venda.", "erro");
+            return;
+        }
+
+        if (descontoAvistaAtivo) {
+            descontoAvistaAtivo = false;
+            atualizarResumo();
+            mostrarMensagem("O desconto adicional à vista foi removido.", "info");
+            return;
+        }
+
+        if (!formaPagamentoPermiteDescontoAvista()) {
+            mostrarMensagem("Para aplicar os 8% adicionais, selecione Dinheiro, Pix ou Outro como forma de pagamento.", "erro");
+            formaPagamento?.focus();
+            return;
+        }
+
+        descontoAvistaAtivo = true;
+        atualizarResumo();
+        mostrarMensagem("Desconto adicional de 8% à vista aplicado ao total restante após o desconto máximo.", "sucesso");
+    });
+}
+
+atualizarControleDescontoAvista(0);
 atualizarInfoDescontoMaximo();
 
 /* ==========================================
@@ -2626,6 +2762,13 @@ atualizarInfoDescontoMaximo();
 ========================================== */
 
 function atualizarResumo() {
+
+    if (
+        descontoMaximoAplicado &&
+        assinaturaCarrinhoDescontoMaximo !== assinaturaItensParaDescontoAvista()
+    ) {
+        invalidarEstadoDescontoAvista();
+    }
 
     const subtotal = Math.max(0, calcularSubtotal());
     let valorInformado = Number(descontoVenda.value);
@@ -2645,13 +2788,11 @@ function atualizarResumo() {
         descontoVenda.value = valorInformado.toFixed(2);
     }
 
-    const desconto = calcularValorDesconto(subtotal);
-    const subtotalCentavos = Math.max(0, Math.round(subtotal * 100));
-    const descontoCentavos = Math.max(0, Math.min(
-        subtotalCentavos,
-        Math.round(desconto * 100)
-    ));
-    const total = Math.max(0, subtotalCentavos - descontoCentavos) / 100;
+    const totaisDesconto = calcularTotaisComDescontos(subtotal);
+    const subtotalCentavos = totaisDesconto.subtotalCentavos;
+    const descontoCentavos = totaisDesconto.descontoTotalCentavos;
+    const total = totaisDesconto.totalCentavos / 100;
+    atualizarControleDescontoAvista(totaisDesconto.descontoAvistaCentavos);
 
     atualizarInfoDescontoMaximo(limiteDesconto);
 
@@ -2685,12 +2826,7 @@ function valorRecebidoEmCentavos() {
 }
 
 function totalAtualEmCentavos() {
-    const subtotalCentavos = Math.max(0, Math.round(calcularSubtotal() * 100));
-    const descontoCentavos = Math.max(0, Math.min(
-        subtotalCentavos,
-        Math.round(calcularValorDesconto() * 100)
-    ));
-    return Math.max(0, subtotalCentavos - descontoCentavos);
+    return calcularTotaisComDescontos().totalCentavos;
 }
 
 function atualizarTrocoDinheiro() {
@@ -3599,14 +3735,21 @@ async function finalizarVenda() {
     const numeroParcelasFiado = Number(parcelasFiadoVenda?.value || 1);
     const diasPrimeiroVencimentoFiado = Number(diasPrimeiroVencimentoVenda?.value || 30);
 
+    if (descontoAvistaAtivo && !formaPagamentoPermiteDescontoAvista()) {
+        descontoAvistaAtivo = false;
+        atualizarResumo();
+        mostrarMensagem("O desconto adicional de 8% só pode ser usado com Dinheiro, Pix ou Outro.", "erro");
+        return;
+    }
+
     const subtotal = calcularSubtotal();
-    const desconto = calcularValorDesconto(subtotal);
-    const subtotalCentavos = Math.max(0, Math.round(subtotal * 100));
-    const descontoCentavos = Math.max(0, Math.min(
-        subtotalCentavos,
-        Math.round(desconto * 100)
-    ));
-    const total = Math.max(0, subtotalCentavos - descontoCentavos) / 100;
+    const totaisDesconto = calcularTotaisComDescontos(subtotal);
+    const descontoBase = totaisDesconto.descontoBaseCentavos / 100;
+    const descontoAvista = totaisDesconto.descontoAvistaCentavos / 100;
+    const desconto = totaisDesconto.descontoTotalCentavos / 100;
+    const subtotalCentavos = totaisDesconto.subtotalCentavos;
+    const descontoCentavos = totaisDesconto.descontoTotalCentavos;
+    const total = totaisDesconto.totalCentavos / 100;
 
 
 
@@ -3642,7 +3785,9 @@ async function finalizarVenda() {
     const confirmou = confirm(
         `Confirmar venda?\n\n` +
         `Subtotal: ${formatarMoeda(subtotal)}\n` +
-        `Desconto: ${formatarMoeda(desconto)}\n` +
+        `Desconto máximo: ${formatarMoeda(descontoBase)}\n` +
+        `Desconto adicional à vista (8%): ${formatarMoeda(descontoAvista)}\n` +
+        `Desconto total: ${formatarMoeda(desconto)}\n` +
         `Total: ${formatarMoeda(total)}\n\n` +
         `${resumoFormaPagamento}`
     );
@@ -3856,6 +4001,8 @@ function limparVenda() {
     carrinho =
 
         [];
+
+    invalidarEstadoDescontoAvista();
 
     clienteVenda.value =
 
@@ -4071,13 +4218,10 @@ btnAdicionarProduto.addEventListener(
 
 );
 
-descontoVenda.addEventListener(
-
-    "input",
-
-    atualizarResumo
-
-);
+descontoVenda.addEventListener("input", function () {
+    invalidarEstadoDescontoAvista();
+    atualizarResumo();
+});
 
 btnCancelarVenda.addEventListener(
 
@@ -4093,7 +4237,7 @@ if (valorRecebidoVenda) {
 
 if (formaPagamento) {
 
-    formaPagamento.addEventListener("change", atualizarCamposPrazoVenda);
+    formaPagamento.addEventListener("change", tratarMudancaFormaPagamentoDescontoAvista);
 
     atualizarCamposPrazoVenda();
 

@@ -757,3 +757,35 @@
 }
 .btn-aplicar-desconto-maximo:hover:not(:disabled) { background: #dbeafe; }
 .btn-aplicar-desconto-maximo:disabled { opacity: .55; cursor: not-allowed; }
+
+/* Desconto extra de 8% para pagamentos à vista elegíveis */
+.controle-desconto-maximo .acoes-desconto-maximo {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.btn-aplicar-desconto-avista {
+    border: 1px solid #86efac;
+    border-radius: 8px;
+    padding: 8px 10px;
+    background: #f0fdf4;
+    color: #166534;
+    font: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+}
+.btn-aplicar-desconto-avista:hover { background: #dcfce7; }
+.btn-aplicar-desconto-avista.aplicado {
+    border-color: #16a34a;
+    background: #dcfce7;
+}
+.btn-aplicar-desconto-avista[hidden],
+.info-desconto-avista[hidden] { display: none !important; }
+.controle-desconto-maximo .info-desconto-avista {
+    flex: 1 1 100%;
+    color: #166534;
+}

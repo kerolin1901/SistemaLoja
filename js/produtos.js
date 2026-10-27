@@ -536,6 +536,34 @@ function formatarMoeda(valor) {
 
 
 /* =========================================================
+   PRECO MINIMO A VISTA: minimo cadastrado menos 8%
+========================================================= */
+
+function calcularPrecoMinimoAvista(precoMinimo) {
+
+    if (
+        precoMinimo === null ||
+        precoMinimo === undefined ||
+        precoMinimo === ""
+    ) {
+        return "—";
+    }
+
+    const minimo = Number(precoMinimo);
+
+    if (!Number.isFinite(minimo) || minimo < 0) {
+        return "—";
+    }
+
+    const valorComDesconto =
+        Math.round((minimo * 0.92 + Number.EPSILON) * 100) / 100;
+
+    return formatarMoeda(valorComDesconto);
+
+}
+
+
+/* =========================================================
    ESCAPAR HTML
 ========================================================= */
 
@@ -824,6 +852,8 @@ function renderizarProdutos() {
 
             const minimo = formatarMoeda(produto.preco_venda_minimo);
 
+            const minimoAvista = calcularPrecoMinimoAvista(produto.preco_venda_minimo);
+
 
             const estoqueAtual =
                 Number(
@@ -873,6 +903,8 @@ function renderizarProdutos() {
                     ${venda}
                 </td>
                 <td>${minimo}</td>
+
+                <td><span class="preco-minimo-avista">${minimoAvista}</span></td>
 
                 <td>
                     ${estoqueAtual}
