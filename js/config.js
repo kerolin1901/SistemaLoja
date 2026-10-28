@@ -36,12 +36,8 @@ async function adicionarMenuNotinhasGlobal() {
         return;
     }
 
+
     try {
-
-        /* ======================================
-           VERIFICAR USUÁRIO
-        ====================================== */
-
         const {
             data: { user },
             error: erroUsuario
@@ -50,11 +46,6 @@ async function adicionarMenuNotinhasGlobal() {
         if (erroUsuario || !user) {
             return;
         }
-
-
-        /* ======================================
-           VERIFICAR PERFIL ATIVO
-        ====================================== */
 
         const {
             data: perfil,
@@ -65,167 +56,103 @@ async function adicionarMenuNotinhasGlobal() {
             .eq("id", user.id)
             .maybeSingle();
 
-        if (
-            erroPerfil ||
-            !perfil ||
-            perfil.ativo !== true
-        ) {
-            return;
-        }
-
-
-        /* ======================================
-           PERMISSÃO DO MENU
-        ====================================== */
-
-        const podeVerNotinhas = [
-            "admin",
-            "vendedor"
-        ].includes(perfil.tipo);
-
-        if (!podeVerNotinhas) {
-
+        if (erroPerfil || !perfil || perfil.ativo !== true) {
             menus.forEach((menu) => {
-
                 menu.querySelectorAll("a[href]").forEach((link) => {
-
-                    const destino = normalizarDestinoMenu(
-                        link.getAttribute("href")
-                    );
-
-                    if (destino.endsWith("notinhas.html")) {
+                    if (normalizarDestinoMenu(link.getAttribute("href")).endsWith("notinhas.html")) {
                         link.remove();
                     }
-
                 });
-
             });
-
             return;
         }
 
+        const podeVerNotinhas = ["admin", "vendedor"].includes(perfil.tipo);
 
-        /* ======================================
-           ADICIONAR OU REAPROVEITAR O LINK
-        ====================================== */
+        if (!podeVerNotinhas) {
+            menus.forEach((menu) => {
+                menu.querySelectorAll("a[href]").forEach((link) => {
+                    if (normalizarDestinoMenu(link.getAttribute("href")).endsWith("notinhas.html")) {
+                        link.remove();
+                    }
+                });
+            });
+            return;
+        }
 
         menus.forEach((menu) => {
+            const linksExistentes = Array.from(menu.querySelectorAll("a[href]")).filter((link) =>
+                normalizarDestinoMenu(link.getAttribute("href")).endsWith("notinhas.html")
+            );
 
-            let linkNotinhas = Array.from(
-                menu.querySelectorAll("a[href]")
-            ).find((link) => {
-
-                const destino = normalizarDestinoMenu(
-                    link.getAttribute("href")
-                );
-
-                return destino.endsWith("notinhas.html");
-
+            // Remove duplicatas do mesmo grupo, mas preserva os links separados por perfil
+// A pagina Notinhas contem um menu para cada perfil.
+            const linksPorPerfil = new Map();
+            linksExistentes.forEach((link) => {
+                const perfilLink = String(link.getAttribute("data-role") || "").trim().toLowerCase() || "__sem_perfil__";
+                if (linksPorPerfil.has(perfilLink)) {
+                    link.remove();
+                } else {
+                    linksPorPerfil.set(perfilLink, link);
+                }
             });
 
+            const linkAdmin = linksPorPerfil.get("admin");
+            const linkVendedor = linksPorPerfil.get("vendedor");
+// Estes dois links sao intencionais: notinhas.js exibe o perfil correspondente.
+            if (linkAdmin && linkVendedor) {
+                return;
+            }
 
-            /* Criar somente quando não existir */
+            let linkNotinhas =
+                linksPorPerfil.get(String(perfil.tipo || "").toLowerCase()) ||
+                linksPorPerfil.get("__sem_perfil__") ||
+                linksPorPerfil.values().next().value;
 
             if (!linkNotinhas) {
-
                 linkNotinhas = document.createElement("a");
-
                 linkNotinhas.href = "notinhas.html";
 
-                if (
-                    menu.matches(
-                        "nav.menu, nav.menu-vendedor"
-                    )
-                ) {
-
+                if (menu.matches("nav.menu, nav.menu-vendedor")) {
                     linkNotinhas.className = "item-menu";
-
                     linkNotinhas.innerHTML = `
                         <span class="icone-menu" aria-hidden="true">
                             <svg viewBox="0 0 24 24">
-                                <path
-                                    d="M5 4h14v16H5z"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    stroke-width="2"
-                                    stroke-linejoin="round"
-                                />
-                                <path
-                                    d="M8 9h8M8 13h8M8 17h5"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    stroke-width="2"
-                                    stroke-linecap="round"
-                                />
+                                <path d="M5 4h14v16H5z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
+                                <path d="M8 9h8M8 13h8M8 17h5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
                             </svg>
                         </span>
                         <span>Notinhas / Fiado</span>
                     `;
-
                 } else {
-
                     linkNotinhas.className = "notinhas-menu-link";
                     linkNotinhas.textContent = "Notinhas / Fiado";
-
                     linkNotinhas.style.display = "block";
                     linkNotinhas.style.padding = "10px 12px";
                     linkNotinhas.style.color = "inherit";
                     linkNotinhas.style.textDecoration = "none";
-
                 }
-
             }
 
-
-            /* ==================================
-               PADRONIZAR POSIÇÃO
-
-               Se Financeiro existir, Notinhas
-               fica logo abaixo dele.
-            ================================== */
-
-            const linkFinanceiro = Array.from(
-                menu.querySelectorAll("a[href]")
-            ).find((link) => {
-
+            const linkFinanceiro = Array.from(menu.querySelectorAll("a[href]")).find((link) => {
                 if (link === linkNotinhas) {
                     return false;
                 }
-
-                const destino = normalizarDestinoMenu(
-                    link.getAttribute("href")
-                );
-
-                return destino.endsWith("financeiro.html");
-
+                return normalizarDestinoMenu(link.getAttribute("href")).endsWith("financeiro.html");
             });
 
             if (linkFinanceiro) {
-
-                linkFinanceiro.insertAdjacentElement(
-                    "afterend",
-                    linkNotinhas
-                );
-
+                if (linkFinanceiro.nextElementSibling !== linkNotinhas) {
+                    linkFinanceiro.insertAdjacentElement("afterend", linkNotinhas);
+                }
             } else if (!linkNotinhas.isConnected) {
-
                 menu.appendChild(linkNotinhas);
-
             }
-
         });
-
     } catch (erro) {
-
-        console.error(
-            "Erro ao organizar o menu Notinhas / Fiado:",
-            erro
-        );
-
+        console.error("Erro ao organizar o menu Notinhas / Fiado:", erro);
     }
-
 }
-
 
 /* ==========================================
    NORMALIZAR DESTINO DOS LINKS
