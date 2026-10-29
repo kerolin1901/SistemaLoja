@@ -1183,6 +1183,88 @@
                 </div>
 
 
+                <!-- RELATÓRIO DE PRODUTOS — SOMENTE ADMINISTRADOR -->
+
+                <section
+                    class="config-relatorio-produtos"
+                    id="painelRelatorioProdutos"
+                    aria-labelledby="tituloRelatorioProdutos"
+                    hidden
+                >
+                    <div class="cabecalho-relatorio-produtos">
+                        <div>
+                            <h3 id="tituloRelatorioProdutos">Imprimir / salvar relatório de produtos</h3>
+                            <p>Filtre os produtos e escolha as colunas que aparecerão na impressão. A lista de cadastro abaixo não será alterada.</p>
+                        </div>
+                        <span class="etiqueta-admin-relatorio">Somente administrador</span>
+                    </div>
+
+                    <div class="filtros-relatorio-produtos">
+                        <div class="campo-relatorio-produtos">
+                            <label for="filtroRelatorioNome">Nome do produto</label>
+                            <input
+                                type="search"
+                                id="filtroRelatorioNome"
+                                placeholder="Digite parte do nome..."
+                                autocomplete="off"
+                            >
+                        </div>
+
+                        <div class="campo-relatorio-produtos">
+                            <label for="filtroRelatorioCategoria">Categoria</label>
+                            <select id="filtroRelatorioCategoria">
+                                <option value="">Todas as categorias</option>
+                            </select>
+                        </div>
+
+                        <div class="campo-relatorio-produtos">
+                            <label for="filtroRelatorioFornecedor">Fornecedor</label>
+                            <select id="filtroRelatorioFornecedor">
+                                <option value="">Todos os fornecedores</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="opcoes-colunas-relatorio">
+                        <span class="rotulo-colunas-relatorio">Informações que aparecerão na impressão</span>
+                        <div class="lista-colunas-relatorio">
+                            <label class="opcao-coluna-relatorio">
+                                <input type="checkbox" data-relatorio-coluna="custo" checked>
+                                <span>Custo</span>
+                            </label>
+                            <label class="opcao-coluna-relatorio">
+                                <input type="checkbox" data-relatorio-coluna="venda" checked>
+                                <span>Venda</span>
+                            </label>
+                            <label class="opcao-coluna-relatorio">
+                                <input type="checkbox" data-relatorio-coluna="precoMinimo" checked>
+                                <span>Preço mínimo</span>
+                            </label>
+                            <label class="opcao-coluna-relatorio">
+                                <input type="checkbox" data-relatorio-coluna="precoMinimoAvista" checked>
+                                <span>Preço mínimo à vista</span>
+                            </label>
+                            <label class="opcao-coluna-relatorio">
+                                <input type="checkbox" data-relatorio-coluna="estoque" checked>
+                                <span>Estoque</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="rodape-config-relatorio">
+                        <p id="resumoRelatorioProdutos" aria-live="polite">Carregando produtos para o relatório...</p>
+                        <div class="acoes-relatorio-produtos">
+                            <button type="button" class="botao-secundario" id="btnLimparFiltrosRelatorio">
+                                Limpar filtros
+                            </button>
+                            <button type="button" class="botao-principal" id="btnImprimirRelatorioProdutos">
+                                Imprimir / Salvar em PDF
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+
                 <!-- CARREGANDO -->
 
                 <div

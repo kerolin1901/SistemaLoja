@@ -96,6 +96,32 @@ const nenhumResultadoBusca =
 
 
 /* =========================================================
+   RELATÓRIO DE PRODUTOS — SOMENTE ADMINISTRADOR
+========================================================= */
+
+const painelRelatorioProdutos =
+    document.getElementById("painelRelatorioProdutos");
+
+const filtroRelatorioNome =
+    document.getElementById("filtroRelatorioNome");
+
+const filtroRelatorioCategoria =
+    document.getElementById("filtroRelatorioCategoria");
+
+const filtroRelatorioFornecedor =
+    document.getElementById("filtroRelatorioFornecedor");
+
+const resumoRelatorioProdutos =
+    document.getElementById("resumoRelatorioProdutos");
+
+const btnLimparFiltrosRelatorio =
+    document.getElementById("btnLimparFiltrosRelatorio");
+
+const btnImprimirRelatorioProdutos =
+    document.getElementById("btnImprimirRelatorioProdutos");
+
+
+/* =========================================================
    ESTADO
 ========================================================= */
 
@@ -511,7 +537,11 @@ async function carregarProdutos() {
         data || [];
 
 
+    preencherFiltrosRelatorioProdutos();
+
     renderizarProdutos();
+
+    atualizarResumoRelatorioProdutos();
 
 }
 
@@ -704,6 +734,359 @@ function aplicarBuscaProdutos() {
 
     }
 
+}
+
+
+/* =========================================================
+   FILTROS E RELATÓRIO PARA IMPRESSÃO/PDF
+   Esta funcionalidade existe somente em produtos.html,
+   página já protegida para administradores da loja.
+========================================================= */
+
+function preencherFiltrosRelatorioProdutos() {
+
+    if (!filtroRelatorioCategoria || !filtroRelatorioFornecedor) {
+        return;
+    }
+
+    const categoriaSelecionada = filtroRelatorioCategoria.value;
+    const fornecedorSelecionado = filtroRelatorioFornecedor.value;
+    const categoriasEncontradas = new Map();
+    const fornecedoresEncontrados = new Map();
+    let existeProdutoSemCategoria = false;
+    let existeProdutoSemFornecedor = false;
+
+    produtos.forEach((produto) => {
+        const categoriaId = String(produto.categoria_id || "");
+        const categoriaNome = String(produto.categorias?.nome || "").trim();
+
+        if (!categoriaId) {
+            existeProdutoSemCategoria = true;
+        } else {
+            categoriasEncontradas.set(
+                categoriaId,
+                categoriaNome || "Categoria sem nome"
+            );
+        }
+
+        const fornecedorNome = String(produto.fornecedor || "").trim();
+
+        if (!fornecedorNome) {
+            existeProdutoSemFornecedor = true;
+        } else {
+            const chaveFornecedor = normalizarTextoBusca(fornecedorNome);
+            if (!fornecedoresEncontrados.has(chaveFornecedor)) {
+                fornecedoresEncontrados.set(chaveFornecedor, fornecedorNome);
+            }
+        }
+    });
+
+    filtroRelatorioCategoria.innerHTML = "";
+    filtroRelatorioCategoria.add(new Option("Todas as categorias", ""));
+
+    Array.from(categoriasEncontradas.entries())
+        .sort((a, b) => a[1].localeCompare(b[1], "pt-BR", { sensitivity: "base" }))
+        .forEach(([id, nome]) => {
+            filtroRelatorioCategoria.add(new Option(nome, id));
+        });
+
+    if (existeProdutoSemCategoria) {
+        filtroRelatorioCategoria.add(new Option("Sem categoria", "__sem_categoria__"));
+    }
+
+    filtroRelatorioFornecedor.innerHTML = "";
+    filtroRelatorioFornecedor.add(new Option("Todos os fornecedores", ""));
+
+    Array.from(fornecedoresEncontrados.entries())
+        .sort((a, b) => a[1].localeCompare(b[1], "pt-BR", { sensitivity: "base" }))
+        .forEach(([chave, nome]) => {
+            filtroRelatorioFornecedor.add(new Option(nome, chave));
+        });
+
+    if (existeProdutoSemFornecedor) {
+        filtroRelatorioFornecedor.add(new Option("Sem fornecedor", "__sem_fornecedor_vazio__"));
+    }
+
+    const categoriaAindaExiste = Array.from(filtroRelatorioCategoria.options)
+        .some((option) => option.value === categoriaSelecionada);
+    const fornecedorAindaExiste = Array.from(filtroRelatorioFornecedor.options)
+        .some((option) => option.value === fornecedorSelecionado);
+
+    filtroRelatorioCategoria.value = categoriaAindaExiste ? categoriaSelecionada : "";
+    filtroRelatorioFornecedor.value = fornecedorAindaExiste ? fornecedorSelecionado : "";
+}
+
+
+function obterProdutosFiltradosRelatorio() {
+
+    const nomePesquisado = normalizarTextoBusca(filtroRelatorioNome?.value || "");
+    const categoriaSelecionada = filtroRelatorioCategoria?.value || "";
+    const fornecedorSelecionado = filtroRelatorioFornecedor?.value || "";
+
+    return produtos.filter((produto) => {
+        const nomeProdutoNormalizado = normalizarTextoBusca(produto.nome || "");
+        const categoriaId = String(produto.categoria_id || "");
+        const fornecedorNormalizado = normalizarTextoBusca(produto.fornecedor || "");
+
+        const correspondeNome = !nomePesquisado || nomeProdutoNormalizado.includes(nomePesquisado);
+        const correspondeCategoria = !categoriaSelecionada || (
+            categoriaSelecionada === "__sem_categoria__"
+                ? !categoriaId
+                : categoriaId === categoriaSelecionada
+        );
+        const correspondeFornecedor = !fornecedorSelecionado || (
+            fornecedorSelecionado === "__sem_fornecedor_vazio__"
+                ? !String(produto.fornecedor || "").trim()
+                : fornecedorNormalizado === fornecedorSelecionado
+        );
+
+        return correspondeNome && correspondeCategoria && correspondeFornecedor;
+    });
+}
+
+
+function obterColunasSelecionadasRelatorio() {
+
+    const colunas = {};
+
+    document.querySelectorAll("[data-relatorio-coluna]").forEach((controle) => {
+        colunas[controle.dataset.relatorioColuna] = controle.checked;
+    });
+
+    return colunas;
+}
+
+
+function formatarQuantidadeRelatorio(valor) {
+
+    const numero = Number(valor);
+
+    return (Number.isFinite(numero) ? numero : 0).toLocaleString("pt-BR", {
+        maximumFractionDigits: 3
+    });
+}
+
+
+function obterPrecoMinimoAvistaNumerico(precoMinimo) {
+
+    if (precoMinimo === null || precoMinimo === undefined || precoMinimo === "") {
+        return null;
+    }
+
+    const numero = Number(precoMinimo);
+
+    if (!Number.isFinite(numero) || numero < 0) {
+        return null;
+    }
+
+    return Math.round((numero * 0.92 + Number.EPSILON) * 100) / 100;
+}
+
+
+function atualizarResumoRelatorioProdutos() {
+
+    if (!resumoRelatorioProdutos) {
+        return;
+    }
+
+    const quantidade = obterProdutosFiltradosRelatorio().length;
+    resumoRelatorioProdutos.textContent = quantidade === 1
+        ? "1 produto será incluído no relatório. Os totais aparecerão no final da impressão."
+        : `${quantidade} produtos serão incluídos no relatório. Os totais aparecerão no final da impressão.`;
+
+    if (btnImprimirRelatorioProdutos) {
+        btnImprimirRelatorioProdutos.disabled = quantidade === 0 || perfilAtual?.tipo !== "admin";
+    }
+}
+
+
+function construirHtmlRelatorioProdutos(listaProdutos, colunas) {
+
+    const colunasTabela = [
+        { chave: "nome", titulo: "Produto", classe: "texto" },
+        { chave: "sku", titulo: "SKU", classe: "texto" },
+        { chave: "fornecedor", titulo: "Fornecedor", classe: "texto" },
+        { chave: "categoria", titulo: "Categoria", classe: "texto" }
+    ];
+
+    if (colunas.custo) colunasTabela.push({ chave: "custo", titulo: "Custo", classe: "numero" });
+    if (colunas.venda) colunasTabela.push({ chave: "venda", titulo: "Venda", classe: "numero" });
+    if (colunas.precoMinimo) colunasTabela.push({ chave: "precoMinimo", titulo: "Preço mínimo", classe: "numero" });
+    if (colunas.precoMinimoAvista) colunasTabela.push({ chave: "precoMinimoAvista", titulo: "Preço mínimo à vista", classe: "numero" });
+    if (colunas.estoque) colunasTabela.push({ chave: "estoque", titulo: "Estoque", classe: "numero" });
+
+    const linhasHtml = listaProdutos.map((produto) => {
+        const valores = {
+            nome: produto.nome || "Sem nome",
+            sku: produto.sku || "-",
+            fornecedor: produto.fornecedor || "-",
+            categoria: produto.categorias?.nome || "Sem categoria",
+            custo: formatarMoeda(produto.preco_custo),
+            venda: formatarMoeda(produto.preco_venda),
+            precoMinimo: formatarMoeda(produto.preco_venda_minimo),
+            precoMinimoAvista: calcularPrecoMinimoAvista(produto.preco_venda_minimo),
+            estoque: formatarQuantidadeRelatorio(produto.estoque)
+        };
+
+        return `<tr>${colunasTabela.map((coluna) =>
+            `<td class="${coluna.classe}">${escaparHTML(valores[coluna.chave])}</td>`
+        ).join("")}</tr>`;
+    }).join("");
+
+    const totais = listaProdutos.reduce((soma, produto) => {
+        const quantidade = Number(produto.estoque);
+        const estoqueAtual = Number.isFinite(quantidade) ? quantidade : 0;
+        const custo = Number(produto.preco_custo);
+        const venda = Number(produto.preco_venda);
+        const minimo = Number(produto.preco_venda_minimo);
+        const minimoAvista = obterPrecoMinimoAvistaNumerico(produto.preco_venda_minimo);
+
+        soma.estoque += estoqueAtual;
+        soma.custo += (Number.isFinite(custo) ? custo : 0) * estoqueAtual;
+        soma.venda += (Number.isFinite(venda) ? venda : 0) * estoqueAtual;
+        soma.precoMinimo += (Number.isFinite(minimo) && produto.preco_venda_minimo !== null && produto.preco_venda_minimo !== "" ? minimo : 0) * estoqueAtual;
+        soma.precoMinimoAvista += (minimoAvista === null ? 0 : minimoAvista) * estoqueAtual;
+
+        return soma;
+    }, { estoque: 0, custo: 0, venda: 0, precoMinimo: 0, precoMinimoAvista: 0 });
+
+    const resumo = [
+        { chave: "produtos", titulo: "Total de produtos", valor: String(listaProdutos.length), mostrar: true },
+        { chave: "estoque", titulo: "Total em estoque", valor: `${formatarQuantidadeRelatorio(totais.estoque)} unidades`, mostrar: Boolean(colunas.estoque) },
+        { chave: "custo", titulo: "Valor total a custo", valor: formatarMoeda(totais.custo), mostrar: Boolean(colunas.custo) },
+        { chave: "venda", titulo: "Valor total a preço de venda", valor: formatarMoeda(totais.venda), mostrar: Boolean(colunas.venda) },
+        { chave: "precoMinimo", titulo: "Valor total a preço mínimo", valor: formatarMoeda(totais.precoMinimo), mostrar: Boolean(colunas.precoMinimo) },
+        { chave: "precoMinimoAvista", titulo: "Valor total a preço mínimo à vista", valor: formatarMoeda(totais.precoMinimoAvista), mostrar: Boolean(colunas.precoMinimoAvista) }
+    ].filter((item) => item.mostrar);
+
+    const resumoHtml = resumo.map((item) => `
+        <div class="cartao-resumo">
+            <span>${escaparHTML(item.titulo)}</span>
+            <strong>${escaparHTML(item.valor)}</strong>
+        </div>
+    `).join("");
+
+    const partesFiltro = [];
+    if (filtroRelatorioNome?.value.trim()) {
+        partesFiltro.push(`Produto contém: ${filtroRelatorioNome.value.trim()}`);
+    }
+    if (filtroRelatorioCategoria?.value) {
+        const textoCategoria = filtroRelatorioCategoria.selectedOptions[0]?.textContent || "";
+        partesFiltro.push(`Categoria: ${textoCategoria}`);
+    }
+    if (filtroRelatorioFornecedor?.value) {
+        const textoFornecedor = filtroRelatorioFornecedor.selectedOptions[0]?.textContent || "";
+        partesFiltro.push(`Fornecedor: ${textoFornecedor}`);
+    }
+
+    const descricaoFiltros = partesFiltro.length
+        ? partesFiltro.join(" | ")
+        : "Todos os produtos da loja";
+
+    const cabecalhoHtml = colunasTabela.map((coluna) =>
+        `<th class="${coluna.classe}">${escaparHTML(coluna.titulo)}</th>`
+    ).join("");
+
+    const dataGeracao = new Date().toLocaleString("pt-BR");
+    const notaCalculo = "Os totais financeiros representam preço unitário multiplicado pela quantidade atual em estoque, somado para os produtos filtrados.";
+
+    return `<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatório de produtos - Sistema da Loja</title>
+    <style>
+        @page { size: A4 landscape; margin: 11mm; }
+        * { box-sizing: border-box; }
+        body { margin: 0; color: #172033; font-family: Arial, Helvetica, sans-serif; font-size: 10px; }
+        .cabecalho { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; margin-bottom: 14px; border-bottom: 2px solid #1d4ed8; padding-bottom: 10px; }
+        h1 { margin: 0 0 5px; font-size: 21px; }
+        .subtitulo { margin: 0; color: #475569; font-size: 11px; }
+        .data-geracao { color: #475569; font-size: 10px; text-align: right; white-space: nowrap; }
+        .filtros-aplicados { margin: 0 0 12px; padding: 8px 10px; background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 10px; }
+        table { width: 100%; border-collapse: collapse; table-layout: auto; }
+        thead { display: table-header-group; }
+        tr { break-inside: avoid; page-break-inside: avoid; }
+        th, td { padding: 6px 7px; border: 1px solid #cbd5e1; vertical-align: top; }
+        th { background: #eaf0f8; color: #172033; text-align: left; font-size: 9px; }
+        td { font-size: 9px; overflow-wrap: anywhere; }
+        .numero { text-align: right; white-space: nowrap; }
+        .resumo { margin-top: 15px; break-inside: avoid; page-break-inside: avoid; }
+        .resumo h2 { margin: 0 0 8px; font-size: 14px; }
+        .cartoes-resumo { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+        .cartao-resumo { min-height: 53px; border: 1px solid #cbd5e1; border-radius: 5px; padding: 9px; }
+        .cartao-resumo span { display: block; margin-bottom: 5px; color: #475569; font-size: 9px; }
+        .cartao-resumo strong { display: block; font-size: 13px; }
+        .nota { margin-top: 9px; color: #475569; font-size: 9px; line-height: 1.4; }
+        @media screen { body { padding: 22px; max-width: 1400px; margin: 0 auto; } }
+        @media print { body { padding: 0; } .filtros-aplicados { print-color-adjust: exact; -webkit-print-color-adjust: exact; } th { print-color-adjust: exact; -webkit-print-color-adjust: exact; } }
+    </style>
+</head>
+<body>
+    <header class="cabecalho">
+        <div>
+            <h1>Relatório de produtos e estoque</h1>
+            <p class="subtitulo">Sistema da Loja — relatório administrativo</p>
+        </div>
+        <div class="data-geracao">Gerado em: ${escaparHTML(dataGeracao)}</div>
+    </header>
+    <p class="filtros-aplicados"><strong>Filtros:</strong> ${escaparHTML(descricaoFiltros)} · <strong>Produtos listados:</strong> ${listaProdutos.length}</p>
+    <table>
+        <thead><tr>${cabecalhoHtml}</tr></thead>
+        <tbody>${linhasHtml || `<tr><td colspan="${colunasTabela.length}">Nenhum produto encontrado.</td></tr>`}</tbody>
+    </table>
+    <section class="resumo">
+        <h2>Resumo final do relatório</h2>
+        <div class="cartoes-resumo">${resumoHtml}</div>
+        <p class="nota">${escaparHTML(notaCalculo)}</p>
+    </section>
+    <script>window.addEventListener("load", function () { window.setTimeout(function () { window.focus(); window.print(); }, 250); });</script>
+</body>
+</html>`;
+}
+
+
+function imprimirRelatorioProdutos() {
+
+    if (perfilAtual?.tipo !== "admin") {
+        alert("Esta função está disponível somente para o administrador da loja.");
+        return;
+    }
+
+    const listaFiltrada = obterProdutosFiltradosRelatorio();
+
+    if (listaFiltrada.length === 0) {
+        alert("Nenhum produto corresponde aos filtros selecionados.");
+        atualizarResumoRelatorioProdutos();
+        return;
+    }
+
+    const colunas = obterColunasSelecionadasRelatorio();
+    const janelaRelatorio = window.open("", "_blank");
+
+    if (!janelaRelatorio) {
+        alert("O navegador bloqueou a nova janela. Permita pop-ups para este site e tente novamente.");
+        return;
+    }
+
+    janelaRelatorio.document.open();
+    janelaRelatorio.document.write(construirHtmlRelatorioProdutos(listaFiltrada, colunas));
+    janelaRelatorio.document.close();
+}
+
+
+function limparFiltrosRelatorioProdutos() {
+
+    if (filtroRelatorioNome) filtroRelatorioNome.value = "";
+    if (filtroRelatorioCategoria) filtroRelatorioCategoria.value = "";
+    if (filtroRelatorioFornecedor) filtroRelatorioFornecedor.value = "";
+
+    document.querySelectorAll("[data-relatorio-coluna]").forEach((controle) => {
+        controle.checked = true;
+    });
+
+    atualizarResumoRelatorioProdutos();
 }
 
 
@@ -1809,6 +2192,31 @@ if (btnAtualizar) {
 
 
 /* =========================================================
+   EVENTOS DO RELATÓRIO — SOMENTE ADMINISTRADOR
+========================================================= */
+
+[filtroRelatorioNome, filtroRelatorioCategoria, filtroRelatorioFornecedor].forEach((controle) => {
+    if (!controle) return;
+    controle.addEventListener(
+        controle === filtroRelatorioNome ? "input" : "change",
+        atualizarResumoRelatorioProdutos
+    );
+});
+
+document.querySelectorAll("[data-relatorio-coluna]").forEach((controle) => {
+    controle.addEventListener("change", atualizarResumoRelatorioProdutos);
+});
+
+if (btnLimparFiltrosRelatorio) {
+    btnLimparFiltrosRelatorio.addEventListener("click", limparFiltrosRelatorioProdutos);
+}
+
+if (btnImprimirRelatorioProdutos) {
+    btnImprimirRelatorioProdutos.addEventListener("click", imprimirRelatorioProdutos);
+}
+
+
+/* =========================================================
    SAIR
 ========================================================= */
 
@@ -1848,6 +2256,11 @@ async function iniciarProdutos() {
 
     await carregarProdutos();
 
+    if (painelRelatorioProdutos && perfilAtual?.tipo === "admin") {
+        painelRelatorioProdutos.hidden = false;
+    }
+
+    atualizarResumoRelatorioProdutos();
 }
 
 
