@@ -1010,5 +1010,87 @@
 
 </div>
 
+
+<script>
+/* AJUSTE_DUPLICATA_MENU_NOTINHAS */
+(() => {
+    const normalizar = (texto) =>
+        String(texto || "").replace(/\s+/g, " ").trim().toLowerCase();
+
+    function corrigirMenuNotinhas() {
+        const menu = document.querySelector("nav.menu");
+        const perfilTexto = normalizar(
+            document.querySelector("#tipoUsuario")?.textContent
+        );
+
+        if (!menu) return;
+
+        const perfil = perfilTexto.includes("administrador")
+            ? "admin"
+            : perfilTexto.includes("vendedor")
+                ? "vendedor"
+                : "";
+
+        if (!perfil) return;
+
+        const itens = Array.from(menu.children).filter((item) =>
+            normalizar(item.textContent) === "notinhas / fiado"
+        );
+
+        if (itens.length <= 1) return;
+
+        const itemCorreto = itens.find((item) => {
+            const papel =
+                item.getAttribute("data-role") ||
+                item.querySelector("[data-role]")?.getAttribute("data-role");
+
+            return normalizar(papel) === perfil;
+        }) || itens.find((item) => {
+            const link = item.matches("a[href]")
+                ? item
+                : item.querySelector("a[href]");
+
+            if (!link) return false;
+
+            try {
+                return new URL(link.getAttribute("href"), location.href)
+                    .pathname.toLowerCase().endsWith("/notinhas.html");
+            } catch {
+                return false;
+            }
+        });
+
+        if (!itemCorreto) return;
+
+        itens.forEach((item) => {
+            if (item !== itemCorreto) item.remove();
+        });
+    }
+
+    function iniciarCorrecao() {
+        corrigirMenuNotinhas();
+
+        const observador = new MutationObserver(corrigirMenuNotinhas);
+
+        observador.observe(document.body, {
+            childList: true,
+            subtree: true,
+            characterData: true,
+            attributes: true,
+            attributeFilter: ["class", "data-role"]
+        });
+
+        window.setTimeout(() => observador.disconnect(), 15000);
+    }
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", iniciarCorrecao, {
+            once: true
+        });
+    } else {
+        iniciarCorrecao();
+    }
+})();
+</script>
 </body>
 </html>
