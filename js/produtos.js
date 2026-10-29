@@ -59,6 +59,9 @@ const btnCancelar =
 const btnAtualizar =
     document.getElementById("btnAtualizar");
 
+const btnSair =
+    document.getElementById("btnSair");
+
 const listaProdutos =
     document.getElementById("listaProdutos");
 
@@ -1010,6 +1013,8 @@ function construirHtmlRelatorioProdutos(listaProdutos, colunas) {
         tr { break-inside: avoid; page-break-inside: avoid; }
         th, td { padding: 6px 7px; border: 1px solid #cbd5e1; vertical-align: top; }
         th { background: #eaf0f8; color: #172033; text-align: left; font-size: 9px; }
+        tbody tr:nth-child(odd) { background-color: #ffffff; }
+        tbody tr:nth-child(even) { background-color: #f1f5f9; }
         td { font-size: 9px; overflow-wrap: anywhere; }
         .numero { text-align: right; white-space: nowrap; }
         .resumo { margin-top: 15px; break-inside: avoid; page-break-inside: avoid; }
@@ -1020,7 +1025,16 @@ function construirHtmlRelatorioProdutos(listaProdutos, colunas) {
         .cartao-resumo strong { display: block; font-size: 13px; }
         .nota { margin-top: 9px; color: #475569; font-size: 9px; line-height: 1.4; }
         @media screen { body { padding: 22px; max-width: 1400px; margin: 0 auto; } }
-        @media print { body { padding: 0; } .filtros-aplicados { print-color-adjust: exact; -webkit-print-color-adjust: exact; } th { print-color-adjust: exact; -webkit-print-color-adjust: exact; } }
+        @media print {
+            body { padding: 0; }
+            .filtros-aplicados,
+            th,
+            tbody tr:nth-child(odd),
+            tbody tr:nth-child(even) {
+                print-color-adjust: exact;
+                -webkit-print-color-adjust: exact;
+            }
+        }
     </style>
 </head>
 <body>
@@ -2222,13 +2236,29 @@ if (btnImprimirRelatorioProdutos) {
 
 async function sairProdutos() {
 
-    await produtosSupabase
-        .auth
-        .signOut();
+    if (btnSair) {
+        btnSair.disabled = true;
+        btnSair.setAttribute("aria-busy", "true");
+    }
 
-    window.location.href =
-        "index.html";
+    try {
+        const { error } = await produtosSupabase.auth.signOut({
+            scope: "local"
+        });
 
+        if (error) {
+            console.error("Erro ao sair da tela de produtos:", error);
+        }
+    } catch (erro) {
+        console.error("Erro ao sair da tela de produtos:", erro);
+    } finally {
+        sessionStorage.removeItem("sistemaLojaPerfil");
+        window.location.href = "index.html";
+    }
+}
+
+if (btnSair) {
+    btnSair.addEventListener("click", sairProdutos);
 }
 
 
