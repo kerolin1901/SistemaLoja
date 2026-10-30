@@ -900,9 +900,16 @@ function atualizarResumoRelatorioProdutos() {
     }
 
     const quantidade = obterProdutosFiltradosRelatorio().length;
+    const mostrarResultadosFinais = Boolean(
+        document.querySelector('[data-relatorio-coluna="resultadosFinais"]')?.checked
+    );
+    const mensagemResultados = mostrarResultadosFinais
+        ? "Os resultados finais aparecerão no final da impressão."
+        : "Os resultados finais não aparecerão na impressão.";
+
     resumoRelatorioProdutos.textContent = quantidade === 1
-        ? "1 produto será incluído no relatório. Os totais aparecerão no final da impressão."
-        : `${quantidade} produtos serão incluídos no relatório. Os totais aparecerão no final da impressão.`;
+        ? `1 produto será incluído no relatório. ${mensagemResultados}`
+        : `${quantidade} produtos serão incluídos no relatório. ${mensagemResultados}`;
 
     if (btnImprimirRelatorioProdutos) {
         btnImprimirRelatorioProdutos.disabled = quantidade === 0 || perfilAtual?.tipo !== "admin";
@@ -1140,11 +1147,13 @@ function construirHtmlRelatorioProdutos(listaProdutos, colunas) {
         <thead><tr>${cabecalhoHtml}</tr></thead>
         ${corpoTabelaHtml || `<tbody><tr><td colspan="${colunasTabela.length}">Nenhum produto encontrado.</td></tr></tbody>`}
     </table>
+    ${colunas.resultadosFinais ? `
     <section class="resumo">
         <h2>Resumo final do relatório</h2>
         <div class="cartoes-resumo">${resumoHtml}</div>
         <p class="nota">${escaparHTML(notaCalculo)}</p>
     </section>
+    ` : ""}
     <script>window.addEventListener("load", function () { window.setTimeout(function () { window.focus(); window.print(); }, 250); });</script>
 </body>
 </html>`;
