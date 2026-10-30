@@ -136,6 +136,9 @@ let categorias = [];
 
 let produtos = [];
 
+let percentualDescontoAvistaProdutos = 8;
+let descontoAvistaProdutosAtivo = true;
+
 
 /* =========================================================
    MENSAGENS
@@ -440,6 +443,31 @@ function preencherCategorias() {
 }
 
 
+
+
+async function carregarConfiguracoesPrecoAvistaProdutos() {
+    if (!perfilAtual?.loja_id) return false;
+    const { data, error } = await produtosSupabase
+        .from("configuracoes_descontos")
+        .select("desconto_avista_ativo, desconto_avista_percentual")
+        .eq("loja_id", perfilAtual.loja_id)
+        .maybeSingle();
+
+    if (error) {
+        console.error("Não foi possível carregar o percentual de desconto à vista para a tela de produtos:", error);
+        mostrarMensagem("Não foi possível atualizar o preço mínimo à vista com a configuração da loja. Atualize a página ou confira as permissões.", "erro");
+        return false;
+    }
+
+    const percentual = Number(data?.desconto_avista_percentual ?? 8);
+    percentualDescontoAvistaProdutos = Number.isFinite(percentual)
+        ? Math.max(0, Math.min(99.99, percentual))
+        : 8;
+    descontoAvistaProdutosAtivo = data?.desconto_avista_ativo !== false;
+    return true;
+}
+
+
 /* =========================================================
    CARREGAR PRODUTOS
 ========================================================= */
@@ -573,26 +601,12 @@ function formatarMoeda(valor) {
 ========================================================= */
 
 function calcularPrecoMinimoAvista(precoMinimo) {
-
-    if (
-        precoMinimo === null ||
-        precoMinimo === undefined ||
-        precoMinimo === ""
-    ) {
-        return "—";
-    }
-
+    if (precoMinimo === null || precoMinimo === undefined || precoMinimo === "") return "—";
     const minimo = Number(precoMinimo);
-
-    if (!Number.isFinite(minimo) || minimo < 0) {
-        return "—";
-    }
-
-    const valorComDesconto =
-        Math.round((minimo * 0.92 + Number.EPSILON) * 100) / 100;
-
+    if (!Number.isFinite(minimo) || minimo < 0) return "—";
+    const percentual = descontoAvistaProdutosAtivo ? percentualDescontoAvistaProdutos : 0;
+    const valorComDesconto = Math.round((minimo * (1 - percentual / 100) + Number.EPSILON) * 100) / 100;
     return formatarMoeda(valorComDesconto);
-
 }
 
 
@@ -871,18 +885,11 @@ function formatarQuantidadeRelatorio(valor) {
 
 
 function obterPrecoMinimoAvistaNumerico(precoMinimo) {
-
-    if (precoMinimo === null || precoMinimo === undefined || precoMinimo === "") {
-        return null;
-    }
-
+    if (precoMinimo === null || precoMinimo === undefined || precoMinimo === "") return null;
     const numero = Number(precoMinimo);
-
-    if (!Number.isFinite(numero) || numero < 0) {
-        return null;
-    }
-
-    return Math.round((numero * 0.92 + Number.EPSILON) * 100) / 100;
+    if (!Number.isFinite(numero) || numero < 0) return null;
+    const percentual = descontoAvistaProdutosAtivo ? percentualDescontoAvistaProdutos : 0;
+    return Math.round((numero * (1 - percentual / 100) + Number.EPSILON) * 100) / 100;
 }
 
 
@@ -2195,6 +2202,8 @@ if (btnAtualizar) {
 
             limparMensagem();
 
+            await carregarConfiguracoesPrecoAvistaProdutos();
+
             await carregarCategorias();
 
             await carregarProdutos();
@@ -2281,6 +2290,8 @@ async function iniciarProdutos() {
 
     }
 
+
+    await carregarConfiguracoesPrecoAvistaProdutos();
 
     await carregarCategorias();
 

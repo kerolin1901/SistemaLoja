@@ -2331,6 +2331,7 @@ function removerProdutoCarrinho(
     );
 
     renderizarCarrinho();
+    atualizarResumo();
 
 }
 
@@ -2452,7 +2453,7 @@ function definirQuantidadeCarrinho(
 
     if (
 
-        quantidade > estoque
+        !item.avulso && quantidade > estoque
 
     ) {
 
@@ -2475,6 +2476,7 @@ function definirQuantidadeCarrinho(
         quantidade;
 
     renderizarCarrinho();
+    atualizarResumo();
 
 }
 
@@ -2505,8 +2507,8 @@ function calcularSubtotal() {
    TIPO DE DESCONTO: VALOR OU PORCENTAGEM
 ========================================== */
 
-function calcularLimiteDescontoSeguro(subtotal = calcularSubtotal()) {
-    const itens = carrinho;
+function calcularLimiteDescontoSeguro(subtotal = calcularSubtotalProdutosCadastrados()) {
+    const itens = carrinho.filter(item => !item.avulso && item.produto_id != null);
     const subtotalCentavos = Math.max(0, Math.round((Number(subtotal) || 0) * 100));
     let valorMaximoCentavos = 0;
     let encontrouItem = false;
@@ -2574,7 +2576,7 @@ function atualizarInfoDescontoMaximo(limite = calcularLimiteDescontoSeguro()) {
     }
 }
 
-function calcularValorDesconto(subtotal = calcularSubtotal(), tipo = tipoDescontoVendaAtual) {
+function calcularValorDesconto(subtotal = calcularSubtotalProdutosCadastrados(), tipo = tipoDescontoVendaAtual) {
     const subtotalCentavos = Math.max(0, Math.round((Number(subtotal) || 0) * 100));
     const valorInformado = Number(descontoVenda && descontoVenda.value);
     const valor = Number.isFinite(valorInformado) ? valorInformado : 0;
@@ -2597,7 +2599,7 @@ function calcularValorDesconto(subtotal = calcularSubtotal(), tipo = tipoDescont
    O adicional é calculado sobre o total restante depois do desconto máximo.
 ========================================== */
 function assinaturaItensParaDescontoAvista() {
-    const itens = carrinho || [];
+    const itens = (carrinho || []).filter(item => !item.avulso && item.produto_id != null);
     return itens.map((item) => [
         String(item.produto_id ?? item.id ?? ""),
         Number(item.quantidade) || 0,
@@ -2662,11 +2664,12 @@ function invalidarEstadoDescontoAvista() {
 
 function calcularTotaisComDescontos(subtotal = calcularSubtotal()) {
     const subtotalCentavos = Math.max(0, Math.round((Number(subtotal) || 0) * 100));
+    const subtotalProdutosCentavos = Math.max(0, Math.round(calcularSubtotalProdutosCadastrados() * 100));
     const descontoBaseCentavos = Math.max(0, Math.min(
-        subtotalCentavos,
-        Math.round(calcularValorDesconto(subtotal) * 100)
+        subtotalProdutosCentavos,
+        Math.round(calcularValorDesconto(subtotalProdutosCentavos / 100) * 100)
     ));
-    const totalAposDescontoBaseCentavos = Math.max(0, subtotalCentavos - descontoBaseCentavos);
+    const saldoProdutosAposDescontoCentavos = Math.max(0, subtotalProdutosCentavos - descontoBaseCentavos);
     const descontoAvistaCentavos =
         descontoMaximoAplicado &&
         descontoAvistaAtivo &&
@@ -2674,20 +2677,28 @@ function calcularTotaisComDescontos(subtotal = calcularSubtotal()) {
         configuracoesDescontosVenda.desconto_maximo_ativo &&
         configuracoesDescontosVenda.desconto_avista_ativo
             ? Math.min(
-                totalAposDescontoBaseCentavos,
+                saldoProdutosAposDescontoCentavos,
                 Math.round(
-                    totalAposDescontoBaseCentavos *
+                    saldoProdutosAposDescontoCentavos *
                     Number(configuracoesDescontosVenda.desconto_avista_percentual) / 100
                 )
             )
             : 0;
-    const totalCentavos = Math.max(0, totalAposDescontoBaseCentavos - descontoAvistaCentavos);
+    const descontoAvulsoCentavos = calcularDescontoManualAvulsosCentavos();
+    const descontoProdutosCentavos = descontoBaseCentavos + descontoAvistaCentavos;
+    const descontoTotalCentavos = Math.min(
+        subtotalCentavos,
+        descontoProdutosCentavos + descontoAvulsoCentavos
+    );
+    const totalCentavos = Math.max(0, subtotalCentavos - descontoTotalCentavos);
 
     return {
         subtotalCentavos,
         descontoBaseCentavos,
         descontoAvistaCentavos,
-        descontoTotalCentavos: subtotalCentavos - totalCentavos,
+        descontoAvulsoCentavos,
+        descontoProdutosCentavos,
+        descontoTotalCentavos,
         totalCentavos
     };
 }
@@ -2797,7 +2808,7 @@ function configurarControleTipoDesconto() {
 
     seletorTipoDescontoVenda.addEventListener("change", function () {
 
-        const subtotal = calcularSubtotal();
+        const subtotal = calcularSubtotalProdutosCadastrados();
         const descontoMonetarioAtual = calcularValorDesconto(
             subtotal,
             tipoDescontoVendaAtual
@@ -2910,7 +2921,7 @@ function atualizarResumo() {
         descontoVenda.value = "0";
     }
 
-        const limiteDesconto = calcularLimiteDescontoSeguro(subtotal);
+        const limiteDesconto = calcularLimiteDescontoSeguro();
     const limiteEntrada = tipoDescontoVendaAtual === "porcentagem"
         ? limiteDesconto.percentualMaximo
         : limiteDesconto.valorMaximoCentavos / 100;
@@ -3070,6 +3081,176 @@ function atualizarQuantidadeItens() {
    RENDERIZAR CARRINHO
 
 ========================================== */
+
+
+
+/* ==========================================
+   MODO EMERGÊNCIA — PRODUTO AVULSO
+   Desconto independente dos descontos dos produtos cadastrados.
+========================================== */
+function converterEntradaNumericaAvulsa(valor) {
+    let texto = String(valor ?? "").trim().replace(/[R$\s]/g, "");
+    if (texto.includes(",")) texto = texto.replace(/\./g, "").replace(",", ".");
+    return Number(texto);
+}
+
+
+function adicionarProdutoAvulso() {
+    const modalId = "modalProdutoAvulsoEmergencia";
+    document.getElementById(modalId)?.remove();
+
+    if (!document.getElementById("modalProdutoAvulsoEmergenciaStyle")) {
+        const style = document.createElement("style");
+        style.id = "modalProdutoAvulsoEmergenciaStyle";
+        style.textContent = "\n#modalProdutoAvulsoEmergencia {\n  position: fixed; inset: 0; z-index: 10050; display: flex;\n  align-items: center; justify-content: center; padding: 20px;\n  background: rgba(15, 23, 42, .62); backdrop-filter: blur(4px);\n}\n#modalProdutoAvulsoEmergencia[hidden] { display: none !important; }\n#modalProdutoAvulsoEmergencia .avulso-dialog {\n  width: min(100%, 560px); max-height: min(92vh, 760px); overflow: auto;\n  background: #fff; color: #172033; border-radius: 18px;\n  box-shadow: 0 24px 80px rgba(0,0,0,.28); border: 1px solid #e5eaf2;\n  animation: avulsoEntrar .18s ease-out;\n}\n@keyframes avulsoEntrar { from { opacity: 0; transform: translateY(10px) scale(.985); } to { opacity: 1; transform: translateY(0) scale(1); } }\n#modalProdutoAvulsoEmergencia .avulso-head {\n  display: flex; align-items: flex-start; justify-content: space-between; gap: 14px;\n  padding: 22px 24px 17px; border-bottom: 1px solid #edf0f5;\n}\n#modalProdutoAvulsoEmergencia .avulso-title { margin: 0; font-size: 19px; font-weight: 750; color: #172033; }\n#modalProdutoAvulsoEmergencia .avulso-subtitle { margin: 5px 0 0; font-size: 13px; line-height: 1.45; color: #64748b; }\n#modalProdutoAvulsoEmergencia .avulso-badge {\n  display: inline-flex; align-items: center; margin-top: 10px; padding: 5px 9px;\n  border-radius: 999px; color: #9a3412; background: #fff7ed; border: 1px solid #fed7aa;\n  font-size: 11px; font-weight: 700; letter-spacing: .02em;\n}\n#modalProdutoAvulsoEmergencia .avulso-fechar {\n  flex: 0 0 auto; width: 34px; height: 34px; border: 0; border-radius: 9px;\n  background: #f1f5f9; color: #475569; font-size: 21px; cursor: pointer;\n}\n#modalProdutoAvulsoEmergencia .avulso-fechar:hover { background: #e2e8f0; }\n#modalProdutoAvulsoEmergencia .avulso-form { padding: 21px 24px 22px; }\n#modalProdutoAvulsoEmergencia .avulso-campo { display: flex; flex-direction: column; gap: 7px; min-width: 0; margin-bottom: 16px; }\n#modalProdutoAvulsoEmergencia .avulso-campo label { font-size: 12px; font-weight: 700; color: #334155; }\n#modalProdutoAvulsoEmergencia .avulso-campo input {\n  width: 100%; min-height: 43px; box-sizing: border-box; padding: 10px 12px;\n  border: 1px solid #cbd5e1; border-radius: 9px; outline: none; background: #fff;\n  color: #0f172a; font: inherit; font-size: 14px; transition: border-color .15s, box-shadow .15s;\n}\n#modalProdutoAvulsoEmergencia .avulso-campo input:focus { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,.12); }\n#modalProdutoAvulsoEmergencia .avulso-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 13px; }\n#modalProdutoAvulsoEmergencia .avulso-resumo {\n  margin: 3px 0 17px; padding: 15px 16px; border: 1px solid #dbeafe;\n  border-radius: 12px; background: #f8fbff;\n}\n#modalProdutoAvulsoEmergencia .avulso-linha-resumo { display: flex; justify-content: space-between; gap: 12px; color: #64748b; font-size: 12px; }\n#modalProdutoAvulsoEmergencia .avulso-linha-resumo + .avulso-linha-resumo { margin-top: 7px; }\n#modalProdutoAvulsoEmergencia .avulso-total { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 12px; padding-top: 11px; border-top: 1px solid #dbeafe; }\n#modalProdutoAvulsoEmergencia .avulso-total span { color: #1e293b; font-size: 13px; font-weight: 700; }\n#modalProdutoAvulsoEmergencia .avulso-total strong { color: #1d4ed8; font-size: 22px; font-weight: 800; }\n#modalProdutoAvulsoEmergencia .avulso-aviso { margin: 0 0 16px; color: #64748b; font-size: 11px; line-height: 1.5; }\n#modalProdutoAvulsoEmergencia .avulso-erro { min-height: 18px; margin: -4px 0 10px; color: #b91c1c; font-size: 12px; }\n#modalProdutoAvulsoEmergencia .avulso-acoes { display: flex; justify-content: flex-end; gap: 10px; padding-top: 3px; }\n#modalProdutoAvulsoEmergencia .avulso-btn { min-height: 42px; padding: 10px 17px; border-radius: 9px; font-size: 13px; font-weight: 700; cursor: pointer; }\n#modalProdutoAvulsoEmergencia .avulso-btn-cancelar { background: #fff; border: 1px solid #cbd5e1; color: #334155; }\n#modalProdutoAvulsoEmergencia .avulso-btn-adicionar { background: #2563eb; border: 1px solid #2563eb; color: #fff; }\n#modalProdutoAvulsoEmergencia .avulso-btn-adicionar:hover { background: #1d4ed8; }\n@media (max-width: 560px) {\n  #modalProdutoAvulsoEmergencia { padding: 10px; }\n  #modalProdutoAvulsoEmergencia .avulso-head { padding: 18px 18px 14px; }\n  #modalProdutoAvulsoEmergencia .avulso-form { padding: 18px; }\n  #modalProdutoAvulsoEmergencia .avulso-grid { grid-template-columns: 1fr 1fr; }\n  #modalProdutoAvulsoEmergencia .avulso-campo-desconto { grid-column: 1 / -1; }\n  #modalProdutoAvulsoEmergencia .avulso-acoes { flex-direction: column-reverse; }\n  #modalProdutoAvulsoEmergencia .avulso-btn { width: 100%; }\n}\n";
+        document.head.appendChild(style);
+    }
+
+    const overlay = document.createElement("div");
+    overlay.id = modalId;
+    overlay.innerHTML = `
+        <section class="avulso-dialog" role="dialog" aria-modal="true" aria-labelledby="tituloModalProdutoAvulso">
+            <header class="avulso-head">
+                <div>
+                    <h2 class="avulso-title" id="tituloModalProdutoAvulso">Adicionar produto avulso</h2>
+                    <p class="avulso-subtitle">Preencha os dados do item que ainda não está cadastrado.</p>
+                    <span class="avulso-badge">SEM CONTROLE DE ESTOQUE</span>
+                </div>
+                <button type="button" class="avulso-fechar" data-avulso-fechar aria-label="Fechar">×</button>
+            </header>
+            <form class="avulso-form" data-avulso-form novalidate>
+                <div class="avulso-campo">
+                    <label for="avulsoDescricao">Descrição do produto</label>
+                    <input id="avulsoDescricao" name="descricao" type="text" maxlength="200" placeholder="Ex.: Vara de pesca, anzol, acessório..." autocomplete="off" required>
+                </div>
+                <div class="avulso-grid">
+                    <div class="avulso-campo">
+                        <label for="avulsoPreco">Preço unitário (R$)</label>
+                        <input id="avulsoPreco" name="preco" type="text" inputmode="decimal" placeholder="0,00" autocomplete="off" required>
+                    </div>
+                    <div class="avulso-campo">
+                        <label for="avulsoQuantidade">Quantidade</label>
+                        <input id="avulsoQuantidade" name="quantidade" type="number" min="1" step="1" value="1" required>
+                    </div>
+                    <div class="avulso-campo avulso-campo-desconto">
+                        <label for="avulsoDesconto">Desconto manual (%)</label>
+                        <input id="avulsoDesconto" name="desconto" type="text" inputmode="decimal" value="0" autocomplete="off" required>
+                    </div>
+                </div>
+                <div class="avulso-resumo" aria-live="polite">
+                    <div class="avulso-linha-resumo"><span>Subtotal</span><strong data-avulso-subtotal>R$ 0,00</strong></div>
+                    <div class="avulso-linha-resumo"><span>Desconto manual</span><strong data-avulso-desconto-valor>R$ 0,00</strong></div>
+                    <div class="avulso-total"><span>Total do item</span><strong data-avulso-total>R$ 0,00</strong></div>
+                </div>
+                <p class="avulso-aviso">O desconto é aplicado uma única vez neste item e não interfere no desconto máximo nem no desconto à vista dos produtos cadastrados. Este produto não terá baixa no estoque.</p>
+                <p class="avulso-erro" data-avulso-erro role="alert"></p>
+                <footer class="avulso-acoes">
+                    <button type="button" class="avulso-btn avulso-btn-cancelar" data-avulso-fechar>Cancelar</button>
+                    <button type="submit" class="avulso-btn avulso-btn-adicionar">Adicionar ao carrinho</button>
+                </footer>
+            </form>
+        </section>`;
+    document.body.appendChild(overlay);
+
+    const form = overlay.querySelector("[data-avulso-form]");
+    const descricaoCampo = overlay.querySelector("#avulsoDescricao");
+    const precoCampo = overlay.querySelector("#avulsoPreco");
+    const quantidadeCampo = overlay.querySelector("#avulsoQuantidade");
+    const descontoCampo = overlay.querySelector("#avulsoDesconto");
+    const erroCampo = overlay.querySelector("[data-avulso-erro]");
+    const subtotalResumo = overlay.querySelector("[data-avulso-subtotal]");
+    const descontoResumo = overlay.querySelector("[data-avulso-desconto-valor]");
+    const totalResumo = overlay.querySelector("[data-avulso-total]");
+
+    const fechar = () => {
+        document.removeEventListener("keydown", tratarTeclaEsc);
+        overlay.remove();
+    };
+    const tratarTeclaEsc = (evento) => {
+        if (evento.key === "Escape") fechar();
+    };
+    overlay.querySelectorAll("[data-avulso-fechar]").forEach((botao) => botao.addEventListener("click", fechar));
+    overlay.addEventListener("mousedown", (evento) => {
+        if (evento.target === overlay) fechar();
+    });
+    document.addEventListener("keydown", tratarTeclaEsc);
+
+    const obterValores = () => {
+        const preco = converterEntradaNumericaAvulsa(precoCampo.value);
+        const quantidade = Number(quantidadeCampo.value);
+        const percentual = converterEntradaNumericaAvulsa(descontoCampo.value);
+        const precoCentavos = Number.isFinite(preco) ? Math.round(preco * 100) : 0;
+        const subtotalCentavos = precoCentavos * (Number.isInteger(quantidade) && quantidade > 0 ? quantidade : 0);
+        const percentualSeguro = Number.isFinite(percentual) ? Math.max(0, Math.min(100, percentual)) : 0;
+        const descontoCentavos = Math.round(subtotalCentavos * percentualSeguro / 100);
+        return { preco, quantidade, percentual, subtotalCentavos, descontoCentavos, totalCentavos: Math.max(0, subtotalCentavos - descontoCentavos) };
+    };
+    const formatarCentavos = (centavos) => formatarMoeda(centavos / 100);
+    const atualizarPrevia = () => {
+        const valores = obterValores();
+        subtotalResumo.textContent = formatarCentavos(valores.subtotalCentavos);
+        descontoResumo.textContent = `-${formatarCentavos(valores.descontoCentavos)}`;
+        totalResumo.textContent = formatarCentavos(valores.totalCentavos);
+    };
+    [precoCampo, quantidadeCampo, descontoCampo].forEach((campo) => campo.addEventListener("input", atualizarPrevia));
+
+    form.addEventListener("submit", (evento) => {
+        evento.preventDefault();
+        const nome = descricaoCampo.value.trim();
+        const valores = obterValores();
+        let mensagemErro = "";
+        if (!nome || nome.length > 200) mensagemErro = "Informe a descrição do produto (até 200 caracteres).";
+        else if (!Number.isFinite(valores.preco) || valores.preco <= 0) mensagemErro = "Informe um preço unitário maior que zero.";
+        else if (!Number.isInteger(valores.quantidade) || valores.quantidade < 1) mensagemErro = "Informe uma quantidade inteira maior que zero.";
+        else if (!Number.isFinite(valores.percentual) || valores.percentual < 0 || valores.percentual > 100) mensagemErro = "O desconto deve ficar entre 0% e 100%.";
+        else if (!Number.isSafeInteger(valores.subtotalCentavos) || valores.subtotalCentavos <= 0) mensagemErro = "Confira o preço e a quantidade informados.";
+
+        if (mensagemErro) {
+            erroCampo.textContent = mensagemErro;
+            return;
+        }
+
+        const precoArredondado = valores.subtotalCentavos / 100 / valores.quantidade;
+        const percentualArredondado = Math.round(valores.percentual * 100) / 100;
+        carrinho.push({
+            id: `avulso_${Date.now()}_${carrinho.length + 1}`,
+            produto_id: null,
+            avulso: true,
+            descricao_avulsa: nome,
+            nome,
+            sku: "AVULSO",
+            preco_unitario: precoArredondado,
+            preco_venda_minimo: precoArredondado,
+            estoque: null,
+            quantidade: valores.quantidade,
+            desconto_percentual: percentualArredondado
+        });
+        fechar();
+        renderizarCarrinho();
+        atualizarResumo();
+        mostrarMensagem("Produto avulso adicionado. Desconto manual separado dos produtos cadastrados.", "sucesso");
+    });
+
+    window.requestAnimationFrame(() => descricaoCampo.focus());
+    atualizarPrevia();
+}
+
+
+function calcularSubtotalProdutosCadastrados() {
+    return carrinho.reduce((total, item) => {
+        if (item.avulso || item.produto_id == null) return total;
+        return total + (Number(item.preco_unitario) || 0) * (Number(item.quantidade) || 0);
+    }, 0);
+}
+
+function calcularDescontoManualAvulsosCentavos() {
+    return carrinho.reduce((total, item) => {
+        if (!item.avulso) return total;
+        const subtotalCentavos = Math.round((Number(item.preco_unitario) || 0) * 100) * (Number(item.quantidade) || 0);
+        const percentual = Math.max(0, Math.min(100, Number(item.desconto_percentual) || 0));
+        return total + Math.round(subtotalCentavos * percentual / 100);
+    }, 0);
+}
 
 function renderizarCarrinho() {
 
@@ -3343,13 +3524,7 @@ function renderizarCarrinho() {
 
                 );
 
-            const estoque =
-
-                Number(
-
-                    item.estoque
-
-                );
+            const estoque = item.avulso ? null : Number(item.estoque);
 
             const podeDiminuir =
 
@@ -3359,13 +3534,7 @@ function renderizarCarrinho() {
 
                 ) > 1;
 
-            const podeAumentar =
-
-                Number(
-
-                    item.quantidade
-
-                ) < estoque;
+            const podeAumentar = item.avulso || Number(item.quantidade) < estoque;
 
             const linha =
 
@@ -3435,7 +3604,7 @@ function renderizarCarrinho() {
 
                             min="1"
 
-                            max="${estoque}"
+                            ${item.avulso ? "" : `max="${estoque}"`}
 
                             step="1"
 
@@ -3467,7 +3636,7 @@ function renderizarCarrinho() {
 
                     <small class="estoque-item">
 
-                        Estoque: ${estoque}
+                        ${item.avulso ? "Sem controle de estoque" : `Estoque: ${estoque}`}
 
                     </small>
 
@@ -3491,11 +3660,8 @@ function renderizarCarrinho() {
 
                     <span class="subtotal-item">
 
-                        ${formatarMoeda(
-
-                            subtotal
-
-                        )}
+                        ${formatarMoeda(subtotal)}
+                        ${item.avulso ? `<small style="display:block;color:#9a3412;">Desconto manual: ${Number(item.desconto_percentual || 0).toLocaleString("pt-BR")}% (-${formatarMoeda(subtotal * Number(item.desconto_percentual || 0) / 100)})</small>` : ""}
 
                     </span>
 
@@ -3878,7 +4044,9 @@ async function finalizarVenda() {
     const totaisDesconto = calcularTotaisComDescontos(subtotal);
     const descontoBase = totaisDesconto.descontoBaseCentavos / 100;
     const descontoAvista = totaisDesconto.descontoAvistaCentavos / 100;
-    const desconto = totaisDesconto.descontoTotalCentavos / 100;
+    const desconto = totaisDesconto.descontoProdutosCentavos / 100;
+    const descontoAvulso = totaisDesconto.descontoAvulsoCentavos / 100;
+    const descontoTotalGeral = totaisDesconto.descontoTotalCentavos / 100;
     const subtotalCentavos = totaisDesconto.subtotalCentavos;
     const descontoCentavos = totaisDesconto.descontoTotalCentavos;
     const total = totaisDesconto.totalCentavos / 100;
@@ -3919,7 +4087,9 @@ async function finalizarVenda() {
         `Subtotal: ${formatarMoeda(subtotal)}\n` +
         `Desconto máximo: ${formatarMoeda(descontoBase)}\n` +
         `Desconto adicional à vista (${formatarPercentualDescontoAvista()}): ${formatarMoeda(descontoAvista)}\n` +
-        `Desconto total: ${formatarMoeda(desconto)}\n` +
+        `Desconto dos produtos cadastrados: ${formatarMoeda(desconto)}\n` +
+        `Desconto manual dos avulsos: ${formatarMoeda(descontoAvulso)}\n` +
+        `Desconto total: ${formatarMoeda(descontoTotalGeral)}\n` +
         `Total: ${formatarMoeda(total)}\n\n` +
         `${resumoFormaPagamento}`
     );
@@ -3948,24 +4118,19 @@ async function finalizarVenda() {
 
             ) {
 
+                if (item.avulso) {
+                    return {
+                        produto_id: null,
+                        descricao_avulsa: item.descricao_avulsa,
+                        preco_unitario: Number(item.preco_unitario),
+                        desconto_percentual: Number(item.desconto_percentual),
+                        quantidade: Number(item.quantidade)
+                    };
+                }
+
                 return {
-
-                    produto_id:
-
-                        Number(
-
-                            item.produto_id
-
-                        ),
-
-                    quantidade:
-
-                        Number(
-
-                            item.quantidade
-
-                        )
-
+                    produto_id: Number(item.produto_id),
+                    quantidade: Number(item.quantidade)
                 };
 
             }
@@ -4349,6 +4514,8 @@ btnAdicionarProduto.addEventListener(
     adicionarProdutoCarrinho
 
 );
+
+document.getElementById("btnAdicionarProdutoAvulso")?.addEventListener("click", adicionarProdutoAvulso);
 
 descontoVenda.addEventListener("input", function () {
     invalidarEstadoDescontoAvista();

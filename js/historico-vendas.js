@@ -977,6 +977,15 @@ async function excluirVenda(
    ABRIR DETALHES
 ========================================== */
 
+function escaparTextoHistorico(valor) {
+    return String(valor ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
 async function abrirDetalhesVenda(
     vendaId
 ) {
@@ -1034,6 +1043,8 @@ async function abrirDetalhesVenda(
         .select(`
             id,
             produto_id,
+            descricao_avulsa,
+            desconto_item,
             quantidade,
             preco_unitario,
             subtotal
@@ -1070,12 +1081,7 @@ async function abrirDetalhesVenda(
     const produtoIds =
         [
             ...new Set(
-                (itens || []).map(
-                    item =>
-                        Number(
-                            item.produto_id
-                        )
-                )
+                (itens || []).map(item => item.produto_id).filter(valor => valor != null).map(Number)
             )
         ];
 
@@ -1239,7 +1245,11 @@ async function abrirDetalhesVenda(
                         </th>
 
                         <th>
-                            Subtotal
+                            Desconto
+                        </th>
+
+                        <th>
+                            Total do item
                         </th>
 
                     </tr>
@@ -1269,11 +1279,11 @@ async function abrirDetalhesVenda(
                 <tr>
 
                     <td>
-                        ${produto?.nome || "Produto"}
+                        ${escaparTextoHistorico(item.descricao_avulsa || produto?.nome || "Produto")}
                     </td>
 
                     <td>
-                        ${produto?.sku || "-"}
+                        ${item.descricao_avulsa ? "AVULSO" : escaparTextoHistorico(produto?.sku || "-")}
                     </td>
 
                     <td>
@@ -1285,7 +1295,11 @@ async function abrirDetalhesVenda(
                     </td>
 
                     <td>
-                        ${formatarMoeda(item.subtotal)}
+                        ${formatarMoeda(item.desconto_item || 0)}
+                    </td>
+
+                    <td>
+                        ${formatarMoeda(Math.max(0, Number(item.subtotal || 0) - Number(item.desconto_item || 0)))}
                     </td>
 
                 </tr>

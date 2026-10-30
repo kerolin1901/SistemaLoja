@@ -1132,6 +1132,10 @@ async function carregarItens(
 
                 produto_id,
 
+                descricao_avulsa,
+
+                desconto_item,
+
                 quantidade,
 
                 preco_unitario,
@@ -1188,100 +1192,96 @@ async function carregarItens(
 ========================================== */
 
 function aplicarValoresLiquidosAosItens() {
-
     const vendasPorId = new Map(
         vendasRelatorio.map(venda => [String(venda.id), venda])
     );
-
     const itensPorVenda = new Map();
 
     itensRelatorio.forEach(item => {
         const chaveVenda = String(item.venda_id);
-
-        if (!itensPorVenda.has(chaveVenda)) {
-            itensPorVenda.set(chaveVenda, []);
-        }
-
+        if (!itensPorVenda.has(chaveVenda)) itensPorVenda.set(chaveVenda, []);
         const subtotalInformado = Number(item.subtotal);
-        const subtotalCalculado =
-            (Number(item.preco_unitario) || 0) *
-            (Number(item.quantidade) || 0);
-
-        const subtotalBruto =
-            item.subtotal !== null &&
-            item.subtotal !== undefined &&
-            Number.isFinite(subtotalInformado)
-                ? subtotalInformado
-                : subtotalCalculado;
-
+        const subtotalCalculado = (Number(item.preco_unitario) || 0) * (Number(item.quantidade) || 0);
+        const subtotalBruto = item.subtotal !== null && item.subtotal !== undefined && Number.isFinite(subtotalInformado)
+            ? subtotalInformado
+            : subtotalCalculado;
         itensPorVenda.get(chaveVenda).push({
             item,
             brutoCentavos: Math.max(0, Math.round(subtotalBruto * 100))
         });
     });
 
-    itensPorVenda.forEach((itens, chaveVenda) => {
+    itensPorVenda.forEach((registros, chaveVenda) => {
         const venda = vendasPorId.get(chaveVenda);
         const totalLiquidoCentavos = venda
             ? Math.max(0, Math.round((Number(venda.total) || 0) * 100))
             : null;
 
-        const brutoTotalCentavos = itens.reduce(
-            (total, registro) => total + registro.brutoCentavos,
-            0
+        // Vendas novas guardam o desconto exato em cada linha. Usa esse valor,
+        // sem redistribuir o desconto manual dos avulsos entre outros itens.
+        const todosTemDescontoPorItem = registros.every(registro =>
+            registro.item.desconto_item !== null &&
+            registro.item.desconto_item !== undefined &&
+            Number.isFinite(Number(registro.item.desconto_item))
         );
 
+        if (todosTemDescontoPorItem) {
+            let somaLiquida = 0;
+            registros.forEach(registro => {
+                const descontoCentavos = Math.max(0, Math.round((Number(registro.item.desconto_item) || 0) * 100));
+                const liquidoCentavos = Math.max(0, registro.brutoCentavos - descontoCentavos);
+                registro.item.valorLiquidoRelatorio = liquidoCentavos / 100;
+                somaLiquida += liquidoCentavos;
+            });
+
+            // Ajuste de centavos somente se houver diferença residual de arredondamento.
+            if (totalLiquidoCentavos !== null && registros.length && somaLiquida !== totalLiquidoCentavos) {
+                const ultimo = registros[registros.length - 1].item;
+                const atualCentavos = Math.round((Number(ultimo.valorLiquidoRelatorio) || 0) * 100);
+                const ajustadoCentavos = Math.max(0, atualCentavos + (totalLiquidoCentavos - somaLiquida));
+                ultimo.valorLiquidoRelatorio = ajustadoCentavos / 100;
+            }
+            return;
+        }
+
+        // Compatibilidade com vendas antigas que não gravaram desconto por item.
+        const brutoTotalCentavos = registros.reduce((total, registro) => total + registro.brutoCentavos, 0);
         if (totalLiquidoCentavos === null) {
-            itens.forEach(registro => {
-                registro.item.valorLiquidoRelatorio =
-                    registro.brutoCentavos / 100;
+            registros.forEach(registro => {
+                registro.item.valorLiquidoRelatorio = registro.brutoCentavos / 100;
             });
             return;
         }
-
         if (brutoTotalCentavos <= 0) {
-            itens.forEach((registro, indice) => {
-                registro.item.valorLiquidoRelatorio =
-                    indice === itens.length - 1
-                        ? totalLiquidoCentavos / 100
-                        : 0;
+            registros.forEach((registro, indice) => {
+                registro.item.valorLiquidoRelatorio = indice === registros.length - 1
+                    ? totalLiquidoCentavos / 100
+                    : 0;
             });
             return;
         }
 
-        const alocacoes = itens.map(registro => {
-            const valorExato =
-                totalLiquidoCentavos *
-                registro.brutoCentavos /
-                brutoTotalCentavos;
-
+        const alocacoes = registros.map(registro => {
+            const valorExato = totalLiquidoCentavos * registro.brutoCentavos / brutoTotalCentavos;
             return {
                 ...registro,
                 centavosAlocados: Math.floor(valorExato),
                 resto: valorExato - Math.floor(valorExato)
             };
         });
-
         let centavosRestantes = totalLiquidoCentavos - alocacoes.reduce(
             (total, registro) => total + registro.centavosAlocados,
             0
         );
-
-        const ordemPorResto = [...alocacoes].sort(
-            (a, b) => b.resto - a.resto
-        );
-
+        const ordemPorResto = [...alocacoes].sort((a, b) => b.resto - a.resto);
         let indiceResto = 0;
-
         while (centavosRestantes > 0 && ordemPorResto.length > 0) {
             ordemPorResto[indiceResto].centavosAlocados += 1;
             centavosRestantes -= 1;
             indiceResto = (indiceResto + 1) % ordemPorResto.length;
         }
-
         alocacoes.forEach(registro => {
-            registro.item.valorLiquidoRelatorio =
-                registro.centavosAlocados / 100;
+            registro.item.valorLiquidoRelatorio = registro.centavosAlocados / 100;
         });
     });
 }
@@ -1598,9 +1598,11 @@ function montarProdutosVendidos() {
 
             const nome =
 
-                produto?.nome ||
+                item.descricao_avulsa || produto?.nome || "Produto não encontrado";
 
-                "Produto não encontrado";
+            const chaveItem = item.produto_id != null
+                ? `produto_${item.produto_id}`
+                : `avulso_${String(item.descricao_avulsa || "Produto avulso").trim().toLocaleLowerCase("pt-BR")}`;
 
             const quantidade =
 
@@ -1634,25 +1636,20 @@ function montarProdutosVendidos() {
 
                 quantidade;
 
-            const lucroItem =
-
-                faturamentoItem -
-
-                custoItem;
+            // Produto avulso não tem custo cadastrado; não presume lucro.
+            const lucroItem = item.produto_id == null
+                ? 0
+                : faturamentoItem - custoItem;
 
             if (
 
-                !mapa.has(
-
-                    item.produto_id
-
-                )
+                !mapa.has(chaveItem)
 
             ) {
 
                 mapa.set(
 
-                    item.produto_id,
+                    chaveItem,
 
                     {
 
@@ -1672,11 +1669,7 @@ function montarProdutosVendidos() {
 
             const registro =
 
-                mapa.get(
-
-                    item.produto_id
-
-                );
+                mapa.get(chaveItem);
 
             registro.quantidade +=
 
@@ -2346,9 +2339,11 @@ function obterProdutosParaImpressao() {
 
         const produto = produtosRelatorio.find(p => p.id === item.produto_id);
 
-        const chave = item.produto_id || produto?.id || item.id;
+        const chave = item.produto_id != null
+            ? `produto_${item.produto_id}`
+            : `avulso_${String(item.descricao_avulsa || "Produto avulso").trim().toLocaleLowerCase("pt-BR")}`;
 
-        const nome = produto?.nome || "Produto não encontrado";
+        const nome = item.descricao_avulsa || produto?.nome || "Produto não encontrado";
 
         const quantidade = Number(item.quantidade) || 0;
 

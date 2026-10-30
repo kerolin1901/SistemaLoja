@@ -83,6 +83,10 @@ const btnSair =
 let produtos =
     [];
 
+let lojaIdVendedorProdutos = null;
+let percentualDescontoAvistaVendedorProdutos = 8;
+let descontoAvistaAtivoVendedorProdutos = true;
+
 
 /* ==========================================
    FORMATAÇÃO DE MOEDA
@@ -109,26 +113,12 @@ function formatarMoeda(valor) {
 ========================================== */
 
 function calcularPrecoMinimoAvista(precoMinimo) {
-
-    if (
-        precoMinimo === null ||
-        precoMinimo === undefined ||
-        precoMinimo === ""
-    ) {
-        return "—";
-    }
-
+    if (precoMinimo === null || precoMinimo === undefined || precoMinimo === "") return "—";
     const minimo = Number(precoMinimo);
-
-    if (!Number.isFinite(minimo) || minimo < 0) {
-        return "—";
-    }
-
-    const valorComDesconto =
-        Math.round((minimo * 0.92 + Number.EPSILON) * 100) / 100;
-
+    if (!Number.isFinite(minimo) || minimo < 0) return "—";
+    const percentual = descontoAvistaAtivoVendedorProdutos ? percentualDescontoAvistaVendedorProdutos : 0;
+    const valorComDesconto = Math.round((minimo * (1 - percentual / 100) + Number.EPSILON) * 100) / 100;
     return formatarMoeda(valorComDesconto);
-
 }
 
 
@@ -253,7 +243,7 @@ async function protegerVendedor() {
             await vendedorProdutosSupabase
                 .from("perfis")
                 .select(
-                    "id, nome_completo, usuario, tipo, ativo"
+                    "id, nome_completo, usuario, tipo, ativo, loja_id"
                 )
                 .eq(
                     "id",
@@ -290,6 +280,8 @@ async function protegerVendedor() {
 
         const perfil =
             resultadoPerfil.data;
+
+        lojaIdVendedorProdutos = perfil.loja_id || null;
 
 
         /* ======================================
@@ -415,6 +407,35 @@ async function protegerVendedor() {
 
         return false;
     }
+}
+
+
+
+
+async function carregarConfiguracoesPrecoAvistaVendedorProdutos() {
+    if (!lojaIdVendedorProdutos) {
+        console.warn("Não foi possível identificar a loja do vendedor para carregar o desconto à vista.");
+        return false;
+    }
+
+    const { data, error } = await vendedorProdutosSupabase
+        .from("configuracoes_descontos")
+        .select("desconto_avista_ativo, desconto_avista_percentual")
+        .eq("loja_id", lojaIdVendedorProdutos)
+        .maybeSingle();
+
+    if (error) {
+        console.error("Não foi possível carregar o percentual de desconto à vista para os produtos do vendedor:", error);
+        mostrarMensagem("Não foi possível atualizar o preço mínimo à vista com a configuração da loja. Atualize a página ou peça ao administrador para conferir as permissões.", "erro");
+        return false;
+    }
+
+    const percentual = Number(data?.desconto_avista_percentual ?? 8);
+    percentualDescontoAvistaVendedorProdutos = Number.isFinite(percentual)
+        ? Math.max(0, Math.min(99.99, percentual))
+        : 8;
+    descontoAvistaAtivoVendedorProdutos = data?.desconto_avista_ativo !== false;
+    return true;
 }
 
 
@@ -1147,6 +1168,9 @@ async function iniciarVendedorProdutos() {
 
         return;
     }
+
+
+    await carregarConfiguracoesPrecoAvistaVendedorProdutos();
 
 
     await carregarCategorias();

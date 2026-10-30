@@ -142,11 +142,12 @@
       const unitario = Number(item.preco_unitario) || 0;
 
       return {
-        nome: campo(produto, ["nome", "descricao"]) || "Produto",
-        sku: campo(produto, ["sku"]),
+        nome: item.descricao_avulsa || campo(produto, ["nome", "descricao"]) || "Produto avulso",
+        sku: item.descricao_avulsa ? "AVULSO" : campo(produto, ["sku"]),
         quantidade,
         unitario,
-        subtotal: Number(item.subtotal ?? (quantidade * unitario)) || 0
+        subtotal: Number(item.subtotal ?? (quantidade * unitario)) || 0,
+        desconto: Number(item.desconto_item) || 0
       };
     });
 
@@ -174,8 +175,9 @@
           ${esc(item.nome)}
           ${item.sku ? `<small>SKU: ${esc(item.sku)}</small>` : ""}
           <small>${item.quantidade} x ${moeda(item.unitario)}</small>
+          ${item.desconto > 0 ? `<small>Desconto do item: -${moeda(item.desconto)}</small>` : ""}
         </td>
-        <td class="valor">${moeda(item.subtotal)}</td>
+        <td class="valor">${moeda(Math.max(0, item.subtotal - item.desconto))}</td>
       </tr>
     `).join("");
 
