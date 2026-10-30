@@ -205,6 +205,10 @@ let clientesVenda = [];
 let carrinho = [];
 
 let buscaProdutoVenda = null;
+let wrapperBuscaProdutoVenda = null;
+let listaSugestoesProdutoVenda = null;
+let produtosSugestoesVenda = [];
+let indiceSugestaoProdutoVenda = -1;
 
 let buscaClienteVenda = null;
 
@@ -1386,62 +1390,272 @@ function criarBuscaCliente() {
 
 ========================================== */
 
-function criarBuscaProduto() {
 
-    if (
+/* ==========================================
+   AUTOCOMPLETE DE PRODUTOS
+========================================== */
 
-        buscaProdutoVenda
+function aplicarEstiloAutocompleteProdutoVenda() {
+    if (document.getElementById("estiloAutocompleteProdutoVenda")) return;
 
-    ) {
+    const estilo = document.createElement("style");
+    estilo.id = "estiloAutocompleteProdutoVenda";
+    estilo.textContent = `
+        .autocomplete-produto-venda {
+            position: relative !important;
+            display: block !important;
+            width: 100% !important;
+            min-width: 0 !important;
+            z-index: 80;
+        }
+        .autocomplete-produto-venda .campo-busca-venda {
+            display: block !important;
+            width: 100% !important;
+            margin-bottom: 0 !important;
+        }
+        .lista-sugestoes-produto-venda {
+            position: absolute;
+            top: calc(100% + 5px);
+            left: 0;
+            right: 0;
+            z-index: 10050;
+            max-height: 290px;
+            overflow-y: auto;
+            background: #fff;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            box-shadow: 0 12px 30px rgba(15, 23, 42, .18);
+            padding: 5px;
+        }
+        .lista-sugestoes-produto-venda[hidden] { display: none !important; }
+        .sugestao-produto-venda {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            width: 100%;
+            padding: 10px 11px;
+            border: 0;
+            border-radius: 7px;
+            background: #fff;
+            color: #1f2937;
+            text-align: left;
+            cursor: pointer;
+        }
+        .sugestao-produto-venda:hover,
+        .sugestao-produto-venda.ativa {
+            background: #eff6ff;
+        }
+        .sugestao-produto-venda .sugestao-dados {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            min-width: 0;
+        }
+        .sugestao-produto-venda strong {
+            overflow: hidden;
+            color: #111827;
+            font-size: 13px;
+            font-weight: 700;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .sugestao-produto-venda small {
+            color: #64748b;
+            font-size: 11px;
+        }
+        .sugestao-produto-venda .sugestao-preco {
+            flex: 0 0 auto;
+            color: #1d4ed8;
+            font-size: 12px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+        .sugestao-produto-venda-vazia {
+            padding: 13px 11px;
+            color: #64748b;
+            font-size: 12px;
+        }
+        @media (max-width: 560px) {
+            .lista-sugestoes-produto-venda { max-height: 220px; }
+        }
+    `;
+    document.head.appendChild(estilo);
+}
 
+function ocultarSugestoesProdutoVenda() {
+    if (listaSugestoesProdutoVenda) {
+        listaSugestoesProdutoVenda.hidden = true;
+        listaSugestoesProdutoVenda.innerHTML = "";
+    }
+    produtosSugestoesVenda = [];
+    indiceSugestaoProdutoVenda = -1;
+    if (wrapperBuscaProdutoVenda) {
+        wrapperBuscaProdutoVenda.classList.remove("com-sugestoes-abertas");
+    }
+}
+
+function renderizarSugestoesProdutoVenda(lista, textoBusca) {
+    if (!listaSugestoesProdutoVenda) return;
+
+    listaSugestoesProdutoVenda.innerHTML = "";
+    produtosSugestoesVenda = Array.isArray(lista) ? lista : [];
+    indiceSugestaoProdutoVenda = -1;
+
+    if (!String(textoBusca || "").trim()) {
+        ocultarSugestoesProdutoVenda();
         return;
-
     }
 
-    buscaProdutoVenda =
+    if (produtosSugestoesVenda.length === 0) {
+        const vazio = document.createElement("div");
+        vazio.className = "sugestao-produto-venda-vazia";
+        vazio.textContent = "Nenhum produto encontrado. Confira o nome ou SKU.";
+        listaSugestoesProdutoVenda.appendChild(vazio);
+    } else {
+        produtosSugestoesVenda.forEach(function (produto, indice) {
+            const botao = document.createElement("button");
+            botao.type = "button";
+            botao.className = "sugestao-produto-venda";
+            botao.dataset.indice = String(indice);
 
-        document.createElement(
+            const dados = document.createElement("span");
+            dados.className = "sugestao-dados";
 
-            "input"
+            const nome = document.createElement("strong");
+            nome.textContent = produto.nome || "Produto sem nome";
+            dados.appendChild(nome);
 
-        );
+            const detalhe = document.createElement("small");
+            const sku = produto.sku ? `SKU: ${produto.sku}` : "Sem SKU";
+            const estoque = produto.estoque !== undefined && produto.estoque !== null
+                ? `Estoque: ${produto.estoque}`
+                : "";
+            detalhe.textContent = [sku, estoque].filter(Boolean).join(" • ");
+            dados.appendChild(detalhe);
 
-    buscaProdutoVenda.type =
+            const preco = document.createElement("span");
+            preco.className = "sugestao-preco";
+            preco.textContent = formatarMoeda(produto.preco_venda);
 
-        "text";
+            botao.appendChild(dados);
+            botao.appendChild(preco);
+            botao.addEventListener("mousedown", function (evento) {
+                // Evita que o campo perca o foco antes do clique na sugestão.
+                evento.preventDefault();
+            });
+            botao.addEventListener("click", function () {
+                selecionarSugestaoProdutoVenda(produto);
+            });
+            listaSugestoesProdutoVenda.appendChild(botao);
+        });
+    }
 
-    buscaProdutoVenda.id =
+    listaSugestoesProdutoVenda.hidden = false;
+    if (wrapperBuscaProdutoVenda) {
+        wrapperBuscaProdutoVenda.classList.add("com-sugestoes-abertas");
+    }
+}
 
-        "buscaProdutoVenda";
+function selecionarSugestaoProdutoVenda(produto) {
+    if (!produto) return;
 
-    buscaProdutoVenda.className =
+    produtoVenda.value = String(produto.id);
+    if (buscaProdutoVenda) {
+        buscaProdutoVenda.value = String(produto.nome || "");
+    }
+    ocultarSugestoesProdutoVenda();
+    atualizarPrecoProduto();
+}
 
-        "campo-busca-venda";
+function moverSelecaoSugestaoProdutoVenda(direcao) {
+    if (!listaSugestoesProdutoVenda || listaSugestoesProdutoVenda.hidden) return;
 
-    buscaProdutoVenda.placeholder =
-
-        "🔎 Digite o nome ou SKU do produto";
-
-    buscaProdutoVenda.autocomplete =
-
-        "off";
-
-    produtoVenda.parentNode.insertBefore(
-
-        buscaProdutoVenda,
-
-        produtoVenda
-
+    const botoes = Array.from(
+        listaSugestoesProdutoVenda.querySelectorAll("button.sugestao-produto-venda")
     );
+    if (!botoes.length) return;
 
-    buscaProdutoVenda.addEventListener(
+    indiceSugestaoProdutoVenda += direcao;
+    if (indiceSugestaoProdutoVenda < 0) indiceSugestaoProdutoVenda = botoes.length - 1;
+    if (indiceSugestaoProdutoVenda >= botoes.length) indiceSugestaoProdutoVenda = 0;
 
-        "input",
+    botoes.forEach(function (botao, indice) {
+        botao.classList.toggle("ativa", indice === indiceSugestaoProdutoVenda);
+    });
+}
 
-        filtrarProdutos
+function confirmarSugestaoProdutoVenda() {
+    if (!produtosSugestoesVenda.length) return false;
+    const indice = indiceSugestaoProdutoVenda >= 0 ? indiceSugestaoProdutoVenda : 0;
+    selecionarSugestaoProdutoVenda(produtosSugestoesVenda[indice]);
+    return true;
+}
 
-    );
+function limparBuscaProdutoVenda() {
+    if (buscaProdutoVenda) buscaProdutoVenda.value = "";
+    produtoVenda.value = "";
+    ocultarSugestoesProdutoVenda();
+}
 
+
+function criarBuscaProduto() {
+    if (buscaProdutoVenda) return;
+
+    aplicarEstiloAutocompleteProdutoVenda();
+
+    buscaProdutoVenda = document.createElement("input");
+    buscaProdutoVenda.type = "text";
+    buscaProdutoVenda.id = "buscaProdutoVenda";
+    buscaProdutoVenda.className = "campo-busca-venda";
+    buscaProdutoVenda.placeholder = "🔎 Digite o nome ou SKU do produto";
+    buscaProdutoVenda.autocomplete = "off";
+    buscaProdutoVenda.setAttribute("aria-autocomplete", "list");
+    buscaProdutoVenda.setAttribute("aria-controls", "listaSugestoesProdutoVenda");
+
+    wrapperBuscaProdutoVenda = document.createElement("div");
+    wrapperBuscaProdutoVenda.className = "autocomplete-produto-venda";
+    produtoVenda.parentNode.insertBefore(wrapperBuscaProdutoVenda, produtoVenda);
+    wrapperBuscaProdutoVenda.appendChild(buscaProdutoVenda);
+
+    listaSugestoesProdutoVenda = document.createElement("div");
+    listaSugestoesProdutoVenda.id = "listaSugestoesProdutoVenda";
+    listaSugestoesProdutoVenda.className = "lista-sugestoes-produto-venda";
+    listaSugestoesProdutoVenda.hidden = true;
+    wrapperBuscaProdutoVenda.appendChild(listaSugestoesProdutoVenda);
+
+    // O select original continua no DOM para preservar a lógica já existente,
+    // mas a escolha passa a ser feita pelo autocomplete que abre ao digitar.
+    produtoVenda.style.display = "none";
+    produtoVenda.setAttribute("aria-hidden", "true");
+    produtoVenda.tabIndex = -1;
+
+    const rotulo = produtoVenda.parentNode.querySelector('label[for="produtoVenda"]');
+    if (rotulo) rotulo.htmlFor = "buscaProdutoVenda";
+
+    buscaProdutoVenda.addEventListener("input", filtrarProdutos);
+    buscaProdutoVenda.addEventListener("focus", function () {
+        // Com o campo vazio, exibe a lista completa; com texto, exibe os resultados filtrados.
+        filtrarProdutos();
+    });
+    buscaProdutoVenda.addEventListener("keydown", function (evento) {
+        if (evento.key === "ArrowDown") {
+            evento.preventDefault();
+            moverSelecaoSugestaoProdutoVenda(1);
+        } else if (evento.key === "ArrowUp") {
+            evento.preventDefault();
+            moverSelecaoSugestaoProdutoVenda(-1);
+        } else if (evento.key === "Enter") {
+            if (confirmarSugestaoProdutoVenda()) evento.preventDefault();
+        } else if (evento.key === "Escape") {
+            ocultarSugestoesProdutoVenda();
+        }
+    });
+    document.addEventListener("click", function (evento) {
+        if (wrapperBuscaProdutoVenda && !wrapperBuscaProdutoVenda.contains(evento.target)) {
+            ocultarSugestoesProdutoVenda();
+        }
+    });
 }
 
 /* ==========================================
@@ -1863,105 +2077,25 @@ function preencherListaProdutos(
 }
 
 function filtrarProdutos() {
+    const texto = String(buscaProdutoVenda?.value || "").trim().toLowerCase();
 
-    const texto =
-
-        (
-
-            buscaProdutoVenda.value ||
-
-            ""
-
-        )
-
-            .trim()
-
-            .toLowerCase();
-
-    if (!texto) {
-
-        preencherListaProdutos(
-
-            produtosVenda
-
-        );
-
-        atualizarPrecoProduto();
-
-        return;
-
-    }
-
-    const encontrados =
-
-        produtosVenda.filter(
-
-            function (produto) {
-
-                const nome =
-
-                    String(
-
-                        produto.nome ||
-
-                        ""
-
-                    ).toLowerCase();
-
-                const sku =
-
-                    String(
-
-                        produto.sku ||
-
-                        ""
-
-                    ).toLowerCase();
-
-                return (
-
-                    nome.includes(texto) ||
-
-                    sku.includes(texto)
-
-                );
-
-            }
-
-        );
-
-    preencherListaProdutos(
-
-        encontrados
-
-    );
-
-    if (
-
-        encontrados.length === 1
-
-    ) {
-
-        produtoVenda.value =
-
-            String(
-
-                encontrados[0].id
-
-            );
-
-        atualizarPrecoProduto();
-
-        return;
-
-    }
-
-    produtoVenda.value =
-
-        "";
-
+    produtoVenda.value = "";
     atualizarPrecoProduto();
 
+    if (!texto) {
+        preencherListaProdutos(produtosVenda);
+        renderizarSugestoesProdutoVenda(produtosVenda, "__todos_os_produtos__");
+        return;
+    }
+
+    const encontrados = produtosVenda.filter(function (produto) {
+        const nome = String(produto.nome || "").toLowerCase();
+        const sku = String(produto.sku || "").toLowerCase();
+        return nome.includes(texto) || sku.includes(texto);
+    });
+
+    preencherListaProdutos(encontrados);
+    renderizarSugestoesProdutoVenda(encontrados, texto);
 }
 
 /* ==========================================
@@ -2254,29 +2388,11 @@ function adicionarProdutoCarrinho() {
 
     renderizarCarrinho();
 
-    produtoVenda.value =
+    limparBuscaProdutoVenda();
+    preencherListaProdutos(produtosVenda);
 
-        "";
-
-    quantidadeVenda.value =
-
-        1;
-
-    precoVenda.value =
-
-        "R$ 0,00";
-
-    if (
-
-        buscaProdutoVenda
-
-    ) {
-
-        buscaProdutoVenda.value =
-
-            "";
-
-    }
+    quantidadeVenda.value = 1;
+    precoVenda.value = "R$ 0,00";
 
     mostrarMensagem(
 
