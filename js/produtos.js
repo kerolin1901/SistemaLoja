@@ -925,7 +925,28 @@ function construirHtmlRelatorioProdutos(listaProdutos, colunas) {
     if (colunas.precoMinimoAvista) colunasTabela.push({ chave: "precoMinimoAvista", titulo: "Preço mínimo à vista", classe: "numero" });
     if (colunas.estoque) colunasTabela.push({ chave: "estoque", titulo: "Estoque", classe: "numero" });
 
-    const linhasHtml = listaProdutos.map((produto) => {
+    const compararTextoRelatorio = (valorA, valorB) =>
+        String(valorA || "").localeCompare(String(valorB || ""), "pt-BR", {
+            sensitivity: "base",
+            numeric: true
+        });
+
+    const produtosOrdenados = [...listaProdutos].sort((produtoA, produtoB) => {
+        const categoriaA = produtoA.categorias?.nome || "Sem categoria";
+        const categoriaB = produtoB.categorias?.nome || "Sem categoria";
+        const comparacaoCategoria = compararTextoRelatorio(categoriaA, categoriaB);
+
+        if (!filtroRelatorioCategoria?.value && comparacaoCategoria !== 0) {
+            return comparacaoCategoria;
+        }
+
+        const comparacaoNome = compararTextoRelatorio(produtoA.nome, produtoB.nome);
+        if (comparacaoNome !== 0) return comparacaoNome;
+
+        return compararTextoRelatorio(produtoA.sku, produtoB.sku);
+    });
+
+    const criarLinhaProdutoRelatorio = (produto, indice) => {
         const valores = {
             nome: produto.nome || "Sem nome",
             sku: produto.sku || "-",
@@ -938,10 +959,67 @@ function construirHtmlRelatorioProdutos(listaProdutos, colunas) {
             estoque: formatarQuantidadeRelatorio(produto.estoque)
         };
 
-        return `<tr>${colunasTabela.map((coluna) =>
+        const classeFaixa = indice % 2 === 0 ? "linha-impar" : "linha-par";
+        const celulas = colunasTabela.map((coluna) =>
             `<td class="${coluna.classe}">${escaparHTML(valores[coluna.chave])}</td>`
-        ).join("")}</tr>`;
-    }).join("");
+        ).join("");
+
+        return `<tr class="linha-produto ${classeFaixa}">${celulas}</tr>`;
+    };
+
+    let corpoTabelaHtml = "";
+    const todasCategoriasSelecionadas = !filtroRelatorioCategoria?.value;
+
+    if (todasCategoriasSelecionadas) {
+        const gruposPorCategoria = new Map();
+
+        produtosOrdenados.forEach((produto) => {
+            const categoriaId = String(produto.categoria_id || "__sem_categoria__");
+            const nomeCategoria = String(produto.categorias?.nome || "Sem categoria").trim() || "Sem categoria";
+
+            if (!gruposPorCategoria.has(categoriaId)) {
+                gruposPorCategoria.set(categoriaId, {
+                    nome: nomeCategoria,
+                    produtos: []
+                });
+            }
+
+            gruposPorCategoria.get(categoriaId).produtos.push(produto);
+        });
+
+        const gruposOrdenados = Array.from(gruposPorCategoria.values())
+            .sort((grupoA, grupoB) => compararTextoRelatorio(grupoA.nome, grupoB.nome));
+
+        corpoTabelaHtml = gruposOrdenados.map((grupo) => {
+            const linhasGrupo = grupo.produtos
+                .map((produto, indice) => criarLinhaProdutoRelatorio(produto, indice))
+                .join("");
+
+            return `
+                <tbody class="grupo-categoria">
+                    <tr class="titulo-categoria">
+                        <td colspan="${colunasTabela.length}">
+                            ${escaparHTML(grupo.nome)}
+                            <span class="quantidade-categoria">${grupo.produtos.length} ${grupo.produtos.length === 1 ? "produto" : "produtos"}</span>
+                        </td>
+                    </tr>
+                    ${linhasGrupo}
+                </tbody>
+            `;
+        }).join("");
+    } else {
+        const linhasOrdenadas = [...listaProdutos]
+            .sort((produtoA, produtoB) => {
+                const comparacaoNome = compararTextoRelatorio(produtoA.nome, produtoB.nome);
+                return comparacaoNome !== 0
+                    ? comparacaoNome
+                    : compararTextoRelatorio(produtoA.sku, produtoB.sku);
+            })
+            .map((produto, indice) => criarLinhaProdutoRelatorio(produto, indice))
+            .join("");
+
+        corpoTabelaHtml = `<tbody>${linhasOrdenadas}</tbody>`;
+    }
 
     const totais = listaProdutos.reduce((soma, produto) => {
         const quantidade = Number(produto.estoque);
@@ -1020,10 +1098,14 @@ function construirHtmlRelatorioProdutos(listaProdutos, colunas) {
         tr { break-inside: avoid; page-break-inside: avoid; }
         th, td { padding: 6px 7px; border: 1px solid #cbd5e1; vertical-align: top; }
         th { background: #eaf0f8; color: #172033; text-align: left; font-size: 9px; }
-        tbody tr:nth-child(odd) { background-color: #ffffff; }
-        tbody tr:nth-child(even) { background-color: #f1f5f9; }
-        td { font-size: 9px; overflow-wrap: anywhere; }
+        .linha-impar { background-color: #ffffff; }
+        .linha-par { background-color: #f1f5f9; }
+        .titulo-categoria td { padding: 8px 9px; background: #dbeafe; color: #1e3a8a; border-top: 2px solid #93c5fd; font-size: 10px; font-weight: 700; letter-spacing: .3px; text-transform: uppercase; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+        .quantidade-categoria { float: right; color: #475569; font-size: 9px; font-weight: 600; text-transform: none; }
+        .linha-produto td { font-size: 9px; overflow-wrap: anywhere; }
         .numero { text-align: right; white-space: nowrap; }
+        .grupo-categoria { break-inside: auto; page-break-inside: auto; }
+        .titulo-categoria { break-after: avoid; page-break-after: avoid; }
         .resumo { margin-top: 15px; break-inside: avoid; page-break-inside: avoid; }
         .resumo h2 { margin: 0 0 8px; font-size: 14px; }
         .cartoes-resumo { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
@@ -1036,8 +1118,9 @@ function construirHtmlRelatorioProdutos(listaProdutos, colunas) {
             body { padding: 0; }
             .filtros-aplicados,
             th,
-            tbody tr:nth-child(odd),
-            tbody tr:nth-child(even) {
+            .linha-impar,
+            .linha-par,
+            .titulo-categoria td {
                 print-color-adjust: exact;
                 -webkit-print-color-adjust: exact;
             }
@@ -1055,7 +1138,7 @@ function construirHtmlRelatorioProdutos(listaProdutos, colunas) {
     <p class="filtros-aplicados"><strong>Filtros:</strong> ${escaparHTML(descricaoFiltros)} · <strong>Produtos listados:</strong> ${listaProdutos.length}</p>
     <table>
         <thead><tr>${cabecalhoHtml}</tr></thead>
-        <tbody>${linhasHtml || `<tr><td colspan="${colunasTabela.length}">Nenhum produto encontrado.</td></tr>`}</tbody>
+        ${corpoTabelaHtml || `<tbody><tr><td colspan="${colunasTabela.length}">Nenhum produto encontrado.</td></tr></tbody>`}
     </table>
     <section class="resumo">
         <h2>Resumo final do relatório</h2>
@@ -1066,7 +1149,6 @@ function construirHtmlRelatorioProdutos(listaProdutos, colunas) {
 </body>
 </html>`;
 }
-
 
 function imprimirRelatorioProdutos() {
 
