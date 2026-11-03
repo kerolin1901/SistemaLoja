@@ -1,0 +1,519 @@
+/* ==========================================================
+   SISTEMA DA LOJA — EXPERIÊNCIA MOBILE
+   Estilos ativados somente em telas de até 768px.
+   A apresentação para computador permanece inalterada.
+========================================================== */
+
+.mobile-appbar,
+.mobile-menu-overlay,
+.mobile-menu-close {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    html,
+    body {
+        min-width: 320px;
+        width: 100%;
+        overflow-x: hidden;
+    }
+
+    img,
+    svg,
+    video,
+    canvas {
+        max-width: 100%;
+    }
+
+    body.mobile-menu-open {
+        overflow: hidden;
+        touch-action: none;
+    }
+
+    /* Barra superior fixa */
+    .mobile-appbar {
+        position: fixed;
+        z-index: 1100;
+        inset: 0 0 auto 0;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-height: calc(60px + env(safe-area-inset-top, 0px));
+        padding: env(safe-area-inset-top, 0px) 14px 0;
+        background: #ffffff;
+        border-bottom: 1px solid #e5e7eb;
+        box-shadow: 0 2px 10px rgba(15, 23, 42, 0.06);
+    }
+
+    .mobile-menu-toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex: 0 0 42px;
+        width: 42px;
+        height: 42px;
+        padding: 0;
+        border: 1px solid #e5e7eb;
+        border-radius: 11px;
+        background: #f8fafc;
+        color: #111827;
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .mobile-menu-toggle svg {
+        width: 22px;
+        height: 22px;
+        max-width: none;
+    }
+
+    .mobile-appbar-identidade {
+        display: flex;
+        flex: 1 1 auto;
+        flex-direction: column;
+        min-width: 0;
+        line-height: 1.2;
+    }
+
+    .mobile-appbar-identidade strong {
+        overflow: hidden;
+        color: #111827;
+        font-size: 14px;
+        font-weight: 750;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .mobile-appbar-identidade span {
+        overflow: hidden;
+        margin-top: 3px;
+        color: #64748b;
+        font-size: 11px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    /* Fundo ao abrir a navegação */
+    .mobile-menu-overlay {
+        position: fixed;
+        z-index: 1190;
+        inset: 0;
+        display: block;
+        padding: 0;
+        border: 0;
+        background: rgba(15, 23, 42, 0.48);
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.22s ease, visibility 0.22s ease;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    body.mobile-menu-open .mobile-menu-overlay {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    /* Mesmo menu para administrador, vendedor e administrador geral */
+    .menu-lateral,
+    .menu-lateral-vendedor,
+    .menu-geral,
+    .layout-admin-geral > .menu-geral {
+        position: fixed !important;
+        z-index: 1200 !important;
+        top: 0 !important;
+        right: auto !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        width: min(300px, 88vw) !important;
+        min-width: 0 !important;
+        max-width: 88vw !important;
+        height: 100vh !important;
+        height: 100dvh !important;
+        min-height: 0 !important;
+        max-height: 100vh !important;
+        max-height: 100dvh !important;
+        margin: 0 !important;
+        overflow: hidden !important;
+        transform: translateX(-105%);
+        transition: transform 0.24s ease;
+        box-shadow: 12px 0 35px rgba(15, 23, 42, 0.22);
+        will-change: transform;
+    }
+
+    body.mobile-menu-open .menu-lateral,
+    body.mobile-menu-open .menu-lateral-vendedor,
+    body.mobile-menu-open .menu-geral,
+    body.mobile-menu-open .layout-admin-geral > .menu-geral {
+        transform: translateX(0);
+    }
+
+    .menu-lateral .menu,
+    .menu-lateral-vendedor .menu-vendedor,
+    .menu-geral .menu-geral-navegacao {
+        flex: 1 1 auto;
+        min-height: 0;
+        overflow-x: hidden;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .logo-admin,
+    .logo-vendedor,
+    .logo-geral {
+        padding-right: 58px !important;
+    }
+
+    .mobile-menu-close {
+        position: absolute;
+        z-index: 3;
+        top: 17px;
+        right: 13px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 38px;
+        height: 38px;
+        padding: 0;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.08);
+        color: #ffffff;
+        cursor: pointer;
+    }
+
+    .mobile-menu-close svg {
+        width: 19px;
+        height: 19px;
+        max-width: none;
+    }
+
+    /* Layout ocupa toda a largura disponível */
+    .layout-admin,
+    .layout-vendedor,
+    .layout-admin-geral {
+        display: block !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        min-height: 100vh;
+    }
+
+    .conteudo-admin,
+    .conteudo-vendedor,
+    .conteudo-geral {
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: calc(76px + env(safe-area-inset-top, 0px)) 14px 28px !important;
+        box-sizing: border-box;
+    }
+
+    .cabecalho-admin,
+    .cabecalho-vendedor {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        gap: 8px;
+        width: 100%;
+        min-width: 0;
+        margin-bottom: 18px;
+    }
+
+    .cabecalho-admin h1,
+    .cabecalho-admin h2,
+    .cabecalho-vendedor h1 {
+        max-width: 100%;
+        font-size: clamp(21px, 6vw, 26px) !important;
+        line-height: 1.2;
+        overflow-wrap: anywhere;
+    }
+
+    .cabecalho-admin p,
+    .cabecalho-vendedor p {
+        font-size: 13px;
+        line-height: 1.45;
+    }
+
+    .data-atual {
+        text-align: left !important;
+    }
+
+    /* Cartões, painéis e áreas de trabalho */
+    .painel,
+    .painel-vendas,
+    .painel-venda,
+    .painel-produtos,
+    .painel-estoque,
+    .painel-clientes,
+    .painel-financeiro,
+    .painel-notinhas {
+        width: 100%;
+        min-width: 0;
+        max-width: 100%;
+        padding: 16px !important;
+        border-radius: 12px;
+    }
+
+    .cards-dashboard,
+    .cards-estoque,
+    .cards-estoque-vendedor,
+    .cards-dashboard-vendedor,
+    .atalhos {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 10px !important;
+    }
+
+    .card-dashboard,
+    .card-estoque,
+    .card-estoque-vendedor,
+    .atalho {
+        min-width: 0;
+        padding: 14px;
+    }
+
+    /* Formulários e filtros */
+    .campos-produto,
+    .campos-estoque,
+    .campos-usuario,
+    .grid-financeiro,
+    .filtros-fluxo,
+    .filtros-relatorio-produtos,
+    .dados-finalizacao,
+    .dados-final-venda {
+        grid-template-columns: minmax(0, 1fr) !important;
+        width: 100%;
+        min-width: 0;
+    }
+
+    .area-adicionar-produto {
+        grid-template-columns: minmax(0, 1fr) !important;
+        gap: 12px;
+        padding: 14px;
+    }
+
+    .campo-produto,
+    .campo-estoque,
+    .campo-usuario,
+    .campo-venda,
+    .campo-financeiro,
+    .campo-fluxo,
+    .campo-relatorio-produtos,
+    .produto-campo {
+        width: 100%;
+        min-width: 0;
+        max-width: 100%;
+    }
+
+    input,
+    select,
+    textarea {
+        max-width: 100%;
+        min-width: 0;
+        font-size: 16px !important;
+    }
+
+    .campo-venda input,
+    .campo-venda select,
+    .campo-produto input,
+    .campo-produto select,
+    .campo-estoque input,
+    .campo-estoque select,
+    .campo-financeiro input,
+    .campo-financeiro select {
+        min-height: 44px;
+    }
+
+    .acoes-produto,
+    .acoes-estoque,
+    .acoes-usuario,
+    .acoes-financeiro,
+    .acoes-venda,
+    .acoes-formulario,
+    .acoes-relatorio-produtos {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 9px;
+        width: 100%;
+    }
+
+    .acoes-produto button,
+    .acoes-estoque button,
+    .acoes-usuario button,
+    .acoes-financeiro button,
+    .acoes-venda button,
+    .acoes-formulario button,
+    .acoes-relatorio-produtos button {
+        min-height: 42px;
+    }
+
+    /* Vendas: campos e resumo em coluna, sem mexer na lógica */
+    .titulo-painel-vendas {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .dados-finalizacao,
+    .dados-final-venda {
+        gap: 14px !important;
+    }
+
+    .resumo-venda,
+    .resumo-valores {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .linha-resumo {
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .linha-desconto,
+    .controle-desconto-maximo {
+        align-items: flex-start;
+        flex-wrap: wrap;
+        gap: 9px;
+    }
+
+    .campo-desconto {
+        width: min(150px, 100%);
+    }
+
+    .acoes-venda {
+        justify-content: stretch;
+    }
+
+    .acoes-venda button,
+    .btn-finalizar-venda,
+    .btn-cancelar-venda {
+        flex: 1 1 100%;
+        width: 100%;
+        min-height: 46px;
+    }
+
+    /* Tabelas não estouram a tela: rolagem horizontal dentro do quadro */
+    .tabela-container,
+    .tabela-wrapper,
+    .tabela-scroll,
+    .tabela-produtos-container,
+    .tabela-estoque-vendedor-container,
+    .tabela-clientes-container,
+    .tabela-venda-container,
+    .tabela-geral-container,
+    .tabela-fluxo-container,
+    .tabela-financeiro-container,
+    .tabela-relatorio-container,
+    .tabela-categorias-container,
+    .tabela-dashboard-container,
+    .table-container,
+    .table-wrap,
+    .admin-edit-table-wrap,
+    .detail-table {
+        display: block;
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        overflow-x: auto !important;
+        overflow-y: visible;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior-x: contain;
+    }
+
+    .tabela-container table,
+    .tabela-wrapper table,
+    .tabela-scroll table,
+    [class*="tabela"][class*="container"] table,
+    [class*="table"][class*="container"] table,
+    .admin-edit-table-wrap table,
+    .detail-table table {
+        width: max-content;
+        min-width: 100%;
+    }
+
+    /* Janelas e formulários sobrepostos */
+    .modal-backdrop,
+    .modal-overlay,
+    .modal-venda {
+        padding: 10px !important;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .modal,
+    .modal-large,
+    .modal-conteudo,
+    .modal-venda > div {
+        width: 100% !important;
+        max-width: 100% !important;
+        max-height: calc(100dvh - 20px);
+        overflow-x: hidden;
+        overflow-y: auto;
+        box-sizing: border-box;
+    }
+
+    /* Campos de relatório e escolhas em várias colunas */
+    .lista-colunas-relatorio,
+    .opcoes-colunas-relatorio {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 9px;
+    }
+
+    .filtros-relatorio-produtos,
+    .opcoes-colunas-relatorio,
+    .lista-colunas-relatorio {
+        min-width: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .conteudo-admin,
+    .conteudo-vendedor,
+    .conteudo-geral {
+        padding-right: 11px !important;
+        padding-left: 11px !important;
+    }
+
+    .cards-dashboard,
+    .cards-estoque,
+    .cards-estoque-vendedor,
+    .cards-dashboard-vendedor,
+    .atalhos {
+        grid-template-columns: minmax(0, 1fr) !important;
+    }
+
+    .painel,
+    .painel-vendas,
+    .painel-venda,
+    .painel-produtos,
+    .painel-estoque,
+    .painel-clientes,
+    .painel-financeiro,
+    .painel-notinhas {
+        padding: 13px !important;
+    }
+
+    .lista-colunas-relatorio,
+    .opcoes-colunas-relatorio {
+        grid-template-columns: minmax(0, 1fr) !important;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .menu-lateral,
+    .menu-lateral-vendedor,
+    .menu-geral,
+    .mobile-menu-overlay {
+        transition: none !important;
+    }
+}
+
+@media print {
+    .mobile-appbar,
+    .mobile-menu-overlay,
+    .mobile-menu-close {
+        display: none !important;
+    }
+}
