@@ -1806,7 +1806,13 @@ function converterEntradaNumericaAvulsa(valor) {
 }
 
 
-function adicionarProdutoAvulso() {
+function adicionarProdutoAvulso(indiceParaEditar = null) {
+    const listaItensAvulsos = itensVenda;
+    const indiceEdicao = indiceParaEditar === null || indiceParaEditar === undefined
+        ? null
+        : Number(indiceParaEditar);
+    const itemEmEdicao = indiceEdicao === null ? null : listaItensAvulsos[indiceEdicao];
+    if (indiceEdicao !== null && (!itemEmEdicao || !itemEmEdicao.avulso)) return;
     const modalId = "modalProdutoAvulsoEmergencia";
     document.getElementById(modalId)?.remove();
 
@@ -1873,6 +1879,21 @@ function adicionarProdutoAvulso() {
     const descontoResumo = overlay.querySelector("[data-avulso-desconto-valor]");
     const totalResumo = overlay.querySelector("[data-avulso-total]");
 
+    const tituloModal = overlay.querySelector("#tituloModalProdutoAvulso");
+    const subtituloModal = overlay.querySelector(".avulso-subtitle");
+    const badgeModal = overlay.querySelector(".avulso-badge");
+    const botaoSalvar = overlay.querySelector(".avulso-btn-adicionar");
+    if (itemEmEdicao) {
+        tituloModal.textContent = "Editar produto avulso";
+        subtituloModal.textContent = "Altere os dados do item que já está no carrinho.";
+        badgeModal.textContent = "EDITANDO ITEM DO CARRINHO";
+        botaoSalvar.textContent = "Salvar alterações";
+        descricaoCampo.value = itemEmEdicao.descricao_avulsa || itemEmEdicao.nome || "";
+        precoCampo.value = (Number(itemEmEdicao.preco_unitario) || 0).toFixed(2).replace(".", ",");
+        quantidadeCampo.value = String(Number(itemEmEdicao.quantidade) || 1);
+        descontoCampo.value = (Number(itemEmEdicao.desconto_percentual) || 0).toFixed(2).replace(".", ",");
+    }
+
     const fechar = () => {
         document.removeEventListener("keydown", tratarTeclaEsc);
         overlay.remove();
@@ -1923,8 +1944,7 @@ function adicionarProdutoAvulso() {
 
         const precoArredondado = valores.subtotalCentavos / 100 / valores.quantidade;
         const percentualArredondado = Math.round(valores.percentual * 100) / 100;
-        itensVenda.push({
-            id: `avulso_${Date.now()}_${itensVenda.length + 1}`,
+        const dadosAvulsosAtualizados = {
             produto_id: null,
             avulso: true,
             descricao_avulsa: nome,
@@ -1935,11 +1955,26 @@ function adicionarProdutoAvulso() {
             estoque: null,
             quantidade: valores.quantidade,
             desconto_percentual: percentualArredondado
-        });
+        };
+
+        if (itemEmEdicao) {
+            const indiceAtual = listaItensAvulsos.indexOf(itemEmEdicao);
+            if (indiceAtual < 0) {
+                erroCampo.textContent = "Este item não está mais no carrinho. Feche e tente novamente.";
+                return;
+            }
+            Object.assign(itemEmEdicao, dadosAvulsosAtualizados);
+        } else {
+            listaItensAvulsos.push({
+                id: `avulso_${Date.now()}_${listaItensAvulsos.length + 1}`,
+                ...dadosAvulsosAtualizados
+            });
+        }
+
         fechar();
         renderizarItens();
         atualizarResumo();
-        mostrarMensagem("Produto avulso adicionado. Desconto manual separado dos produtos cadastrados.", "sucesso");
+        mostrarMensagem(itemEmEdicao ? "Produto avulso atualizado com sucesso." : "Produto avulso adicionado. Desconto manual separado dos produtos cadastrados.", "sucesso");
     });
 
     window.requestAnimationFrame(() => descricaoCampo.focus());
@@ -1995,6 +2030,11 @@ function renderizarItens() {
 
     }
 
+    const distribuicaoDescontos = calcularDistribuicaoDescontoPorItem(
+        itensVenda,
+        calcularTotaisComDescontos()
+    );
+
     listaItensVenda.innerHTML =
 
         itensVenda
@@ -2022,6 +2062,11 @@ function renderizarItens() {
                             item.preco_unitario
 
                         );
+
+                    const descontoDistribuido = distribuicaoDescontos.get(indice);
+                    const precoUnitarioComDesconto = descontoDistribuido
+                        ? descontoDistribuido.precoUnitarioLiquidoCentavos / 100
+                        : Number(item.preco_unitario);
 
                     const estoque = item.avulso ? null : Number(item.estoque);
 
@@ -2151,18 +2196,13 @@ function renderizarItens() {
 
                             <td>
 
-                                <span
-
-                                    class="preco-item"
-
-                                >
-
-                                    ${formatarMoeda(
-
-                                        item.preco_unitario
-
-                                    )}
-
+                                <span class="preco-item" style="display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 8px;">
+                                    <span data-preco-original="${indice}" style="color:${descontoDistribuido?.descontoCentavos > 0 ? "#64748b;text-decoration:line-through;" : "#374151;"}">
+                                        ${descontoDistribuido?.descontoCentavos > 0 ? "De: " : ""}${formatarMoeda(item.preco_unitario)}
+                                    </span>
+                                    <strong data-preco-final="${indice}" ${descontoDistribuido?.descontoCentavos > 0 ? "" : "hidden"} style="color:#15803d;font-size:13px;">
+                                        Por: ${formatarMoeda(precoUnitarioComDesconto)} / un.
+                                    </strong>
                                 </span>
 
                             </td>
@@ -2176,7 +2216,9 @@ function renderizarItens() {
                                 >
 
                                     ${formatarMoeda(subtotal)}
-                                    ${item.avulso ? `<small style="display:block;color:#9a3412;">Desconto manual: ${Number(item.desconto_percentual || 0).toLocaleString("pt-BR")}% (-${formatarMoeda(subtotal * Number(item.desconto_percentual || 0) / 100)})</small>` : ""}
+                                    ${item.avulso
+                            ? `<small style="display:block;color:#9a3412;">Desconto manual: ${Number(item.desconto_percentual || 0).toLocaleString("pt-BR")}% (-${formatarMoeda(subtotal * Number(item.desconto_percentual || 0) / 100)})</small><small style="display:block;color:#15803d;">Total com desconto: ${formatarMoeda(Math.max(0, Math.round(subtotal * 100) - Math.round(subtotal * 100 * Number(item.desconto_percentual || 0) / 100)) / 100)}</small>`
+                            : `<small data-subtotal-liquido="${indice}" hidden style="color:#15803d;"></small>`}
 
                                 </span>
 
@@ -2184,19 +2226,10 @@ function renderizarItens() {
 
                             <td>
 
-                                <button
-
-                                    type="button"
-
-                                    class="botao-remover-item"
-
-                                    data-indice="${indice}"
-
-                                >
-
-                                    Remover
-
-                                </button>
+                                <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;">
+                                    ${item.avulso ? `<button type="button" class="botao-editar-avulso" data-indice="${indice}" style="min-height:32px;padding:4px 9px;border:1px solid #bfdbfe;border-radius:7px;background:#eff6ff;color:#1d4ed8;font-weight:600;cursor:pointer;">Editar</button>` : ""}
+                                    <button type="button" class="botao-remover-item" data-indice="${indice}">Remover</button>
+                                </div>
 
                             </td>
 
@@ -2420,6 +2453,14 @@ function configurarBotoesCarrinho() {
 
         );
 
+
+    document
+        .querySelectorAll(".botao-editar-avulso")
+        .forEach((botao) => {
+            botao.addEventListener("click", () => {
+                adicionarProdutoAvulso(Number(botao.dataset.indice));
+            });
+        });
 }
 
 /* ==========================================
@@ -2814,6 +2855,120 @@ function calcularTotaisComDescontos(subtotal = calcularSubtotal()) {
         descontoTotalCentavos,
         totalCentavos
     };
+}
+
+/*
+ * Replica no navegador o rateio em centavos realizado por finalizar_venda.
+ * A ordem segue os itens enviados no carrinho para manter o preço exibido
+ * alinhado ao desconto individual gravado pela RPC.
+ */
+function calcularDistribuicaoDescontoPorItem(itens, totaisDesconto) {
+    const entradas = (itens || [])
+        .map((item, indice) => ({ item, indice }))
+        .filter(({ item }) => !item.avulso && item.produto_id != null);
+
+    const detalhes = entradas.map(({ item, indice }) => {
+        const quantidade = Number(item.quantidade) || 0;
+        const precoUnitarioCentavos = Math.max(0, Math.round((Number(item.preco_unitario) || 0) * 100));
+        const minimoUnitarioCentavos = Math.max(0, Math.round((Number(item.preco_venda_minimo ?? item.preco_unitario) || 0) * 100));
+        const subtotalCentavos = Math.max(0, Math.round(precoUnitarioCentavos * quantidade));
+        const minimoCentavos = Math.max(0, Math.round(minimoUnitarioCentavos * quantidade));
+        return {
+            indice,
+            quantidade,
+            precoUnitarioCentavos,
+            subtotalCentavos,
+            margemCentavos: Math.max(0, subtotalCentavos - minimoCentavos)
+        };
+    });
+
+    let descontoBaseRestante = Math.max(0, Number(totaisDesconto?.descontoBaseCentavos) || 0);
+    let descontoAvistaRestante = Math.max(0, Number(totaisDesconto?.descontoAvistaCentavos) || 0);
+    let margemRestante = detalhes.reduce((soma, item) => soma + item.margemCentavos, 0);
+    let saldoRestante = Math.max(
+        0,
+        detalhes.reduce((soma, item) => soma + item.subtotalCentavos, 0) - descontoBaseRestante
+    );
+
+    const resultado = new Map();
+
+    detalhes.forEach((item) => {
+        let descontoBaseItem = 0;
+        if (descontoBaseRestante > 0 && item.margemCentavos > 0) {
+            if (margemRestante <= item.margemCentavos) {
+                descontoBaseItem = Math.min(descontoBaseRestante, item.margemCentavos);
+            } else {
+                descontoBaseItem = Math.min(
+                    item.margemCentavos,
+                    descontoBaseRestante,
+                    Math.round(descontoBaseRestante * item.margemCentavos / margemRestante)
+                );
+            }
+        }
+
+        descontoBaseRestante = Math.max(0, descontoBaseRestante - descontoBaseItem);
+        margemRestante = Math.max(0, margemRestante - item.margemCentavos);
+
+        const saldoItem = Math.max(0, item.subtotalCentavos - descontoBaseItem);
+        let descontoAvistaItem = 0;
+        if (descontoAvistaRestante > 0 && saldoItem > 0) {
+            if (saldoRestante <= saldoItem) {
+                descontoAvistaItem = Math.min(descontoAvistaRestante, saldoItem);
+            } else {
+                descontoAvistaItem = Math.min(
+                    saldoItem,
+                    descontoAvistaRestante,
+                    Math.round(descontoAvistaRestante * saldoItem / saldoRestante)
+                );
+            }
+        }
+
+        descontoAvistaRestante = Math.max(0, descontoAvistaRestante - descontoAvistaItem);
+        saldoRestante = Math.max(0, saldoRestante - saldoItem);
+
+        const descontoCentavos = descontoBaseItem + descontoAvistaItem;
+        const totalLiquidoCentavos = Math.max(0, item.subtotalCentavos - descontoCentavos);
+        const precoUnitarioLiquidoCentavos = item.quantidade > 0
+            ? Math.round(totalLiquidoCentavos / item.quantidade)
+            : item.precoUnitarioCentavos;
+
+        resultado.set(item.indice, {
+            subtotalCentavos: item.subtotalCentavos,
+            descontoBaseCentavos: descontoBaseItem,
+            descontoAvistaCentavos: descontoAvistaItem,
+            descontoCentavos,
+            totalLiquidoCentavos,
+            precoUnitarioLiquidoCentavos
+        });
+    });
+
+    return resultado;
+}
+
+
+function atualizarPrecosExibidosCarrinho(totaisDesconto = calcularTotaisComDescontos()) {
+    if (!listaItensVenda) return;
+    const distribuicao = calcularDistribuicaoDescontoPorItem(itensVenda, totaisDesconto);
+    listaItensVenda.querySelectorAll("[data-preco-final]").forEach((precoFinal) => {
+        const indice = Number(precoFinal.dataset.precoFinal);
+        const desconto = distribuicao.get(indice);
+        const precoOriginal = listaItensVenda.querySelector(`[data-preco-original="${indice}"]`);
+        if (!precoOriginal) return;
+        const aplicar = Boolean(desconto && desconto.descontoCentavos > 0);
+        precoOriginal.style.textDecoration = aplicar ? "line-through" : "none";
+        precoOriginal.style.color = aplicar ? "#64748b" : "#374151";
+        precoOriginal.textContent = `${aplicar ? "De: " : ""}${formatarMoeda(Number(itensVenda[indice]?.preco_unitario) || 0)}`;
+        precoFinal.hidden = !aplicar;
+        if (aplicar) {
+            precoFinal.textContent = `Por: ${formatarMoeda(desconto.precoUnitarioLiquidoCentavos / 100)} / un.`;
+        }
+        const subtotalLiquido = listaItensVenda.querySelector(`[data-subtotal-liquido="${indice}"]`);
+        if (subtotalLiquido) {
+            subtotalLiquido.hidden = !aplicar;
+            subtotalLiquido.style.display = aplicar ? "block" : "none";
+            if (aplicar) subtotalLiquido.textContent = `Total com desconto: ${formatarMoeda(desconto.totalLiquidoCentavos / 100)}`;
+        }
+    });
 }
 
 function tratarMudancaFormaPagamentoDescontoAvista() {
@@ -3247,6 +3402,7 @@ function atualizarResumo() {
         totalVenda.textContent = formatarMoeda(total);
     }
 
+    atualizarPrecosExibidosCarrinho(totaisDesconto);
     atualizarTrocoDinheiro();
 
 }
@@ -3886,7 +4042,7 @@ btnAdicionarProduto.addEventListener(
 
 );
 
-document.getElementById("btnAdicionarProdutoAvulso")?.addEventListener("click", adicionarProdutoAvulso);
+document.getElementById("btnAdicionarProdutoAvulso")?.addEventListener("click", () => adicionarProdutoAvulso());
 
 quantidadeVenda.addEventListener(
 
