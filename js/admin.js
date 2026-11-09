@@ -2346,7 +2346,7 @@ function criarCartoesIndicadoresDashboard() {
             {
                 id: "indicadorEstoqueBaixo",
                 titulo: "Estoque baixo",
-                descricao: "Produtos esgotados ou no mínimo",
+                descricao: "Produtos e cores esgotados ou no estoque mínimo",
                 valor: "Carregando..."
             }
         ];
@@ -3340,57 +3340,38 @@ async function carregarIndicadoresDashboard() {
 
     try {
 
-        const resultadoProdutos =
+        const resultadoProdutos = await adminSupabase
+            .from("produtos")
+            .select("id, estoque, estoque_minimo, controla_cores, ativo")
+            .eq("ativo", true);
 
-            await adminSupabase
+        if (resultadoProdutos.error) throw resultadoProdutos.error;
 
-                .from("produtos")
+        const produtosAtivos = resultadoProdutos.data || [];
+        const idsProdutosComCores = produtosAtivos
+            .filter((produto) => produto.controla_cores === true)
+            .map((produto) => Number(produto.id));
+        let coresAtivas = [];
 
-                .select(
-
-                    "estoque, estoque_minimo, ativo"
-
-                )
-
-                .eq(
-
-                    "ativo",
-
-                    true
-
-                );
-
-        if (resultadoProdutos.error) {
-
-            throw resultadoProdutos.error;
-
+        if (idsProdutosComCores.length) {
+            const resultadoCores = await adminSupabase
+                .from("produtos_cores")
+                .select("produto_id, estoque, estoque_minimo, ativo")
+                .in("produto_id", idsProdutosComCores)
+                .eq("ativo", true);
+            if (resultadoCores.error) throw resultadoCores.error;
+            coresAtivas = resultadoCores.data || [];
         }
 
-        const quantidadeEstoqueBaixo =
-
-            (resultadoProdutos.data || []).filter(
-
-                function (produto) {
-
-                    const estoque =
-
-                        Number(produto.estoque) || 0;
-
-                    const estoqueMinimo =
-
-                        Number(produto.estoque_minimo) || 0;
-
-                    return (
-
-                        estoque <= 0 ||
-
-                        estoque <= estoqueMinimo
-
-                    );
-
+        const quantidadeEstoqueBaixo = produtosAtivos.reduce((total, produto) => {
+            if (produto.controla_cores === true) {
+                const variantes = coresAtivas.filter((cor) => String(cor.produto_id) === String(produto.id));
+                if (variantes.length) {
+                    return total + variantes.filter((cor) => Number(cor.estoque || 0) <= Number(cor.estoque_minimo || 0)).length;
                 }
-
-            ).length;
+            }
+            return total + (Number(produto.estoque || 0) <= Number(produto.estoque_minimo || 0) ? 1 : 0);
+        }, 0);
 
         definirValorIndicadorDashboard(
 

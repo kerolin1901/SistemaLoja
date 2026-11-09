@@ -223,6 +223,67 @@ function mostrarNomeVendedor() {
 }
 
 
+
+/* ==========================================
+   ESTOQUE — CONTAGEM POR VARIANTE DE COR
+   Não consulta nem exibe custos ou lucro.
+========================================== */
+
+async function atualizarEstoquePorCorDashboardVendedor() {
+    try {
+        const { data: produtos, error: erroProdutos } = await dashboardVendedorSupabase
+            .from("produtos_para_venda")
+            .select("id, estoque, estoque_minimo, ativo")
+            .eq("ativo", true);
+        if (erroProdutos) throw erroProdutos;
+
+        const listaProdutos = produtos || [];
+        const ids = listaProdutos.map((produto) => Number(produto.id));
+        let cores = [];
+        if (ids.length) {
+            const { data, error } = await dashboardVendedorSupabase
+                .from("produtos_cores")
+                .select("produto_id, estoque, estoque_minimo, ativo")
+                .in("produto_id", ids)
+                .eq("ativo", true);
+            if (error) throw error;
+            cores = data || [];
+        }
+
+        const coresPorProduto = new Map();
+        cores.forEach((cor) => {
+            const chave = String(cor.produto_id);
+            if (!coresPorProduto.has(chave)) coresPorProduto.set(chave, []);
+            coresPorProduto.get(chave).push(cor);
+        });
+
+        let baixo = 0;
+        let esgotado = 0;
+        listaProdutos.forEach((produto) => {
+            const variantes = coresPorProduto.get(String(produto.id)) || [];
+            if (variantes.length) {
+                variantes.forEach((cor) => {
+                    const saldo = Number(cor.estoque || 0);
+                    const minimo = Number(cor.estoque_minimo || 0);
+                    if (saldo <= 0) esgotado++;
+                    else if (saldo <= minimo) baixo++;
+                });
+                return;
+            }
+
+            const saldo = Number(produto.estoque || 0);
+            const minimo = Number(produto.estoque_minimo || 0);
+            if (saldo <= 0) esgotado++;
+            else if (saldo <= minimo) baixo++;
+        });
+
+        if (estoqueBaixo) estoqueBaixo.textContent = String(baixo);
+        if (produtosEsgotados) produtosEsgotados.textContent = String(esgotado);
+    } catch (erro) {
+        console.warn("Não foi possível recalcular os alertas por cor do dashboard do vendedor:", erro);
+    }
+}
+
 /* ==========================================
    CARREGAR DASHBOARD
 ========================================== */
@@ -296,6 +357,8 @@ async function carregarDashboardVendedor() {
             dados.esgotados
         ) || 0;
 
+
+    await atualizarEstoquePorCorDashboardVendedor();
 
     /* ======================================
        ÚLTIMAS VENDAS

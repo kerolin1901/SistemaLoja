@@ -1134,6 +1134,8 @@ async function carregarItens(
 
                 descricao_avulsa,
 
+                cor_vendida,
+
                 desconto_item,
 
                 quantidade,
@@ -2349,9 +2351,11 @@ function obterProdutosParaImpressao() {
 
         const valorTotal = Number(item.valorLiquidoRelatorio ?? item.subtotal) || 0;
 
+        const cor = String(item.cor_vendida || "").trim();
+
         if (!mapa.has(chave)) {
 
-            mapa.set(chave, { nome, quantidade: 0, valorTotal: 0 });
+            mapa.set(chave, { nome, quantidade: 0, valorTotal: 0, cores: new Map() });
 
         }
 
@@ -2360,6 +2364,18 @@ function obterProdutosParaImpressao() {
         registro.quantidade += quantidade;
 
         registro.valorTotal += valorTotal;
+
+        // A cor é gravada no próprio item da venda. Agrupamos por produto e cor
+        // para que o PDF mostre a quantidade e o valor líquido de cada variante.
+        if (cor) {
+            const chaveCor = cor.toLocaleLowerCase("pt-BR");
+            if (!registro.cores.has(chaveCor)) {
+                registro.cores.set(chaveCor, { nome: cor, quantidade: 0, valorTotal: 0 });
+            }
+            const registroCor = registro.cores.get(chaveCor);
+            registroCor.quantidade += quantidade;
+            registroCor.valorTotal += valorTotal;
+        }
 
     });
 
@@ -2632,16 +2648,27 @@ async function imprimirRelatorioMensal() {
             maximumFractionDigits: 1
         }) + "%";
 
-        const linhasProdutos = produtos.map(produto => `
-            <tr>
-                <td>
-                    <strong>${escaparHtmlRelatorio(produto.nome)}</strong>
-                    <span class="product-sub">Valor líquido após distribuição proporcional dos descontos</span>
-                </td>
-                <td class="right">${Number(produto.quantidade) || 0} un.</td>
-                <td class="right product-total">${escaparHtmlRelatorio(formatarMoeda(produto.valorTotal))}</td>
-            </tr>
-        `).join("");
+        const linhasProdutos = produtos.map(produto => {
+            const resumoCores = produto.cores && produto.cores.size
+                ? Array.from(produto.cores.values())
+                    .sort((a, b) => a.nome.localeCompare(b.nome, "pt-BR"))
+                    .map(cor => `${escaparHtmlRelatorio(cor.nome)}: ${Number(cor.quantidade) || 0} un. (${escaparHtmlRelatorio(formatarMoeda(cor.valorTotal))})`)
+                    .join(" · ")
+                : "";
+
+            return `
+                <tr>
+                    <td>
+                        <strong>${escaparHtmlRelatorio(produto.nome)}</strong>
+                        ${resumoCores
+                            ? `<span class="product-sub product-colors"><strong>Vendas por cor:</strong> ${resumoCores}</span>`
+                            : `<span class="product-sub">Valor líquido após distribuição proporcional dos descontos</span>`}
+                    </td>
+                    <td class="right">${Number(produto.quantidade) || 0} un.</td>
+                    <td class="right product-total">${escaparHtmlRelatorio(formatarMoeda(produto.valorTotal))}</td>
+                </tr>
+            `;
+        }).join("");
 
         const periodo = `${formatarData(dataInicial)} — ${formatarData(dataFinal)}`;
         const dataEmissao = new Date().toLocaleDateString("pt-BR");
@@ -2689,6 +2716,8 @@ async function imprimirRelatorioMensal() {
   tbody td { padding:12px 9px; border-bottom:1px solid #e8edf4; vertical-align:middle; font-size:10px; }
   .right { text-align:right; white-space:nowrap; }
   .product-sub { display:block; color:var(--muted); font-size:8.5px; font-weight:400; margin-top:3px; }
+  .product-colors { color:#334155; line-height:1.5; }
+  .product-colors strong { color:var(--navy); font-weight:700; }
   .product-total { color:var(--navy); font-weight:800; }
   tfoot td { padding:11px 9px; border-top:2px solid var(--navy); font-weight:800; }
   .total-label { text-align:right; color:var(--navy); }

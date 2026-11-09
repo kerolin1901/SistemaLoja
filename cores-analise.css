@@ -1,0 +1,19 @@
+/* =========================================================
+   ANÁLISE DE VENDAS POR COR — ESTOQUE
+========================================================= */
+.sl-vendas-cor-painel{margin:22px 0;padding:22px;background:#fff;border:1px solid #e6eaf0;border-radius:16px;box-shadow:0 7px 24px rgba(20,35,60,.045);color:#1c293c}
+.sl-vendas-cor-cabecalho{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:16px}
+.sl-vendas-cor-cabecalho h2{margin:0;font-size:20px;color:#19263a}.sl-vendas-cor-cabecalho p{margin:5px 0 0;color:#7b8797;font-size:12px}
+.sl-vendas-cor-controles{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.sl-vendas-cor-controles label,.sl-vendas-cor-filtro label{font-size:12px;font-weight:700;color:#617086}
+.sl-vendas-cor-controles select,.sl-vendas-cor-controles button,.sl-vendas-cor-filtro input{min-height:38px;padding:0 11px;border:1px solid #dbe1e9;border-radius:8px;background:#fff;color:#26354a;font:inherit;font-size:13px}
+.sl-vendas-cor-controles button{background:#243b63;color:#fff;border-color:#243b63;font-weight:700;cursor:pointer}.sl-vendas-cor-controles button:disabled{opacity:.6;cursor:wait}
+.sl-vendas-cor-resumo{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:14px 0}
+.sl-vendas-cor-resumo>div{padding:12px 14px;border:1px solid #e9edf2;border-radius:10px;background:#fafbfd}.sl-vendas-cor-resumo span{display:block;color:#7b8797;font-size:11px}.sl-vendas-cor-resumo strong{display:block;margin-top:5px;color:#1e2c42;font-size:18px;overflow-wrap:anywhere}
+.sl-vendas-cor-filtro{display:flex;align-items:center;gap:10px;margin:13px 0}.sl-vendas-cor-filtro input{flex:1;max-width:340px}
+.sl-vendas-cor-tabela-wrap{overflow-x:auto;border:1px solid #e8edf2;border-radius:10px}.sl-vendas-cor-tabela{width:100%;border-collapse:collapse;min-width:560px}.sl-vendas-cor-tabela th,.sl-vendas-cor-tabela td{padding:12px 13px;text-align:left;border-bottom:1px solid #edf0f4;font-size:12px}.sl-vendas-cor-tabela th{background:#f7f9fc;color:#617086;font-size:11px;text-transform:uppercase;letter-spacing:.04em}.sl-vendas-cor-tabela td{color:#26354a}.sl-vendas-cor-tabela tbody tr:last-child td{border-bottom:0}.sl-vendas-cor-tabela tbody tr:hover{background:#fafbfd}
+.sl-vendas-cor-nota{margin:11px 0 0;color:#8b96a5;font-size:11px;line-height:1.5}
+@media(max-width:700px){.sl-vendas-cor-painel{padding:15px}.sl-vendas-cor-cabecalho{align-items:stretch;flex-direction:column}.sl-vendas-cor-controles{align-items:stretch}.sl-vendas-cor-controles select{flex:1}.sl-vendas-cor-resumo{grid-template-columns:1fr}.sl-vendas-cor-filtro{align-items:stretch;flex-direction:column}.sl-vendas-cor-filtro input{max-width:none;width:100%}}
+
+.sl-filtro-movimentacoes{display:flex;align-items:center;gap:10px;margin:0 0 12px}.sl-filtro-movimentacoes label{font-size:12px;font-weight:700;color:#617086}.sl-filtro-movimentacoes input{width:min(360px,100%);min-height:38px;padding:0 11px;border:1px solid #dbe1e9;border-radius:8px;background:#fff;color:#26354a;font:inherit;font-size:13px}@media(max-width:620px){.sl-filtro-movimentacoes{align-items:stretch;flex-direction:column}.sl-filtro-movimentacoes input{width:100%}}
+.sl-ranking-duplo{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(max-width:1050px){.sl-ranking-duplo{grid-template-columns:1fr}}

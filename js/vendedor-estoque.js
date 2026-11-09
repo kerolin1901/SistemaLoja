@@ -550,34 +550,18 @@ function obterSituacao(
     produto
 ) {
 
-    const estoque =
-        Number(
-            produto.estoque
-        ) || 0;
-
-
-    const minimo =
-        Number(
-            produto.estoque_minimo
-        ) || 0;
-
-
-    if (
-        estoque <= 0
-    ) {
-
-        return "esgotado";
+    const cores = coresPorProdutoVendedor.get(String(produto.id)) || [];
+    if (cores.length) {
+        const todasEsgotadas = cores.every((cor) => Number(cor.estoque || 0) <= 0);
+        if (todasEsgotadas) return "esgotado";
+        const algumaAbaixoDoMinimo = cores.some((cor) => Number(cor.estoque || 0) <= Number(cor.estoque_minimo || 0));
+        return algumaAbaixoDoMinimo ? "baixo" : "normal";
     }
 
-
-    if (
-        estoque <= minimo
-    ) {
-
-        return "baixo";
-    }
-
-
+    const estoque = Number(produto.estoque) || 0;
+    const minimo = Number(produto.estoque_minimo) || 0;
+    if (estoque <= 0) return "esgotado";
+    if (estoque <= minimo) return "baixo";
     return "normal";
 }
 
@@ -611,22 +595,25 @@ function atualizarIndicadores() {
         );
 
 
-    const quantidadeBaixo =
-        ativos.filter(
-            produto =>
-                obterSituacao(
-                    produto
-                ) === "baixo"
-        ).length;
+    let quantidadeBaixo = 0;
+    let quantidadeEsgotados = 0;
 
+    ativos.forEach((produto) => {
+        const cores = coresPorProdutoVendedor.get(String(produto.id)) || [];
+        if (cores.length) {
+            cores.forEach((cor) => {
+                const saldo = Number(cor.estoque || 0);
+                const minimo = Number(cor.estoque_minimo || 0);
+                if (saldo <= 0) quantidadeEsgotados++;
+                else if (saldo <= minimo) quantidadeBaixo++;
+            });
+            return;
+        }
 
-    const quantidadeEsgotados =
-        ativos.filter(
-            produto =>
-                obterSituacao(
-                    produto
-                ) === "esgotado"
-        ).length;
+        const situacao = obterSituacao(produto);
+        if (situacao === "baixo") quantidadeBaixo++;
+        if (situacao === "esgotado") quantidadeEsgotados++;
+    });
 
 
     totalProdutos.textContent =

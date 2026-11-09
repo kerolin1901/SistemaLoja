@@ -543,26 +543,32 @@ async function carregarEstoque() {
         let statusClasse =
             "status-normal";
 
-
-        if (estoque <= 0) {
-
-            statusTexto =
-                "Esgotado";
-
-            statusClasse =
-                "status-esgotado";
-
-            quantidadeEstoqueBaixo++;
-
-        } else if (estoque <= minimo) {
-
-            statusTexto =
-                "Estoque baixo";
-
-            statusClasse =
-                "status-baixo";
-
-            quantidadeEstoqueBaixo++;
+        // Para produtos controlados por cor, a situação do produto considera
+        // as variantes, e o indicador conta cada cor como um ponto de reposição.
+        const variantesAtivas = (coresPorProduto.get(String(produto.id)) || [])
+            .filter((cor) => cor.ativo === true);
+        if (produto.controla_cores === true && variantesAtivas.length) {
+            const todasEsgotadas = variantesAtivas.every((cor) => Number(cor.estoque || 0) <= 0);
+            const algumaAbaixoDoMinimo = variantesAtivas.some((cor) => Number(cor.estoque || 0) <= Number(cor.estoque_minimo || 0));
+            if (todasEsgotadas) {
+                statusTexto = "Esgotado";
+                statusClasse = "status-esgotado";
+            } else if (algumaAbaixoDoMinimo) {
+                statusTexto = "Estoque baixo";
+                statusClasse = "status-baixo";
+            }
+            variantesAtivas.forEach((cor) => {
+                if (Number(cor.estoque || 0) <= Number(cor.estoque_minimo || 0)) quantidadeEstoqueBaixo++;
+            });
+        } else {
+            if (estoque <= 0) {
+                statusTexto = "Esgotado";
+                statusClasse = "status-esgotado";
+            } else if (estoque <= minimo) {
+                statusTexto = "Estoque baixo";
+                statusClasse = "status-baixo";
+            }
+            if (estoque <= minimo) quantidadeEstoqueBaixo++;
         }
 
 
@@ -782,6 +788,35 @@ async function carregarEstoque() {
 
 
 /* ==========================================
+   FILTRO DO HISTÓRICO DE MOVIMENTAÇÕES
+========================================== */
+
+function configurarFiltroMovimentacoes() {
+    const tabela = listaMovimentacoes?.closest(".tabela-container");
+    if (!tabela || !tabela.parentNode) return;
+
+    let campo = document.getElementById("filtroMovimentacoesEstoque");
+    if (!campo) {
+        const area = document.createElement("div");
+        area.className = "sl-filtro-movimentacoes";
+        area.innerHTML = '<label for="filtroMovimentacoesEstoque">Filtrar por produto ou cor</label><input id="filtroMovimentacoesEstoque" type="search" placeholder="Ex.: Óculos, azul, marrom...">';
+        tabela.parentNode.insertBefore(area, tabela);
+        campo = area.querySelector("input");
+        campo.addEventListener("input", aplicarFiltroMovimentacoes);
+    }
+    aplicarFiltroMovimentacoes();
+}
+
+function aplicarFiltroMovimentacoes() {
+    const campo = document.getElementById("filtroMovimentacoesEstoque");
+    if (!campo || !listaMovimentacoes) return;
+    const termo = campo.value.trim().toLocaleLowerCase("pt-BR");
+    listaMovimentacoes.querySelectorAll("tr").forEach((linha) => {
+        linha.style.display = !termo || linha.textContent.toLocaleLowerCase("pt-BR").includes(termo) ? "" : "none";
+    });
+}
+
+/* ==========================================
    CARREGAR MOVIMENTAÇÕES
 ========================================== */
 
@@ -872,6 +907,7 @@ async function carregarMovimentacoes() {
     const movimentacoes =
         resultado.data || [];
 
+    configurarFiltroMovimentacoes();
 
     if (movimentacoes.length === 0) {
 
@@ -1029,6 +1065,8 @@ async function carregarMovimentacoes() {
             );
         }
     );
+
+    configurarFiltroMovimentacoes();
 }
 
 
