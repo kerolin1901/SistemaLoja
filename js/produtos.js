@@ -27,6 +27,12 @@ const skuProduto =
 const fornecedorProduto =
     document.getElementById("fornecedorProduto");
 
+const observacoesProduto =
+    document.getElementById("observacoesProduto");
+
+const btnAtualizarFornecedores =
+    document.getElementById("btnAtualizarFornecedores");
+
 const categoriaProduto =
     document.getElementById("categoriaProduto");
 
@@ -137,6 +143,7 @@ let produtoEditandoId = null;
 let produtoEditandoControlaCores = false;
 
 let categorias = [];
+let fornecedoresProdutos = [];
 
 let produtos = [];
 
@@ -447,6 +454,67 @@ function preencherCategorias() {
 }
 
 
+/* =========================================================
+   FORNECEDORES CADASTRADOS DA LOJA
+========================================================= */
+
+async function carregarFornecedoresProdutos() {
+    if (!perfilAtual?.loja_id || !fornecedorProduto) return false;
+
+    const { data, error } = await produtosSupabase
+        .from("fornecedores")
+        .select("id, nome, ativo")
+        .eq("loja_id", perfilAtual.loja_id)
+        .order("nome", { ascending: true });
+
+    if (error) {
+        console.error("Erro ao carregar fornecedores:", error);
+        mostrarMensagem("Não foi possível carregar os fornecedores. Confira se a migração de fornecedores foi executada no Supabase.", "erro");
+        return false;
+    }
+
+    fornecedoresProdutos = data || [];
+    preencherFornecedoresProdutos();
+    return true;
+}
+
+function preencherFornecedoresProdutos(valorSelecionado = "") {
+    if (!fornecedorProduto) return;
+
+    fornecedorProduto.innerHTML = '<option value="">Sem fornecedor vinculado</option>';
+
+    fornecedoresProdutos.forEach((fornecedor) => {
+        const option = document.createElement("option");
+        option.value = String(fornecedor.id);
+        option.textContent = fornecedor.ativo === false
+            ? `${fornecedor.nome} (inativo)`
+            : fornecedor.nome;
+        option.disabled = fornecedor.ativo === false;
+        option.dataset.nome = fornecedor.nome;
+        fornecedorProduto.appendChild(option);
+    });
+
+    if (valorSelecionado) fornecedorProduto.value = String(valorSelecionado);
+}
+
+if (btnAtualizarFornecedores) {
+    btnAtualizarFornecedores.addEventListener("click", async () => {
+        const valorAtual = fornecedorProduto?.value || "";
+        btnAtualizarFornecedores.disabled = true;
+        try {
+            const carregou = await carregarFornecedoresProdutos();
+            if (!carregou) return;
+            if (valorAtual && [...fornecedorProduto.options].some((option) => option.value === valorAtual)) {
+                fornecedorProduto.value = valorAtual;
+            }
+            mostrarMensagem("Lista de fornecedores atualizada.", "sucesso");
+        } finally {
+            btnAtualizarFornecedores.disabled = false;
+        }
+    });
+}
+
+
 
 
 async function carregarConfiguracoesPrecoAvistaProdutos() {
@@ -518,6 +586,8 @@ async function carregarProdutos() {
                 nome,
                 sku,
                 fornecedor,
+                fornecedor_id,
+                observacoes,
                 categoria_id,
                 preco_custo,
                 preco_venda,
@@ -1327,6 +1397,11 @@ function renderizarProdutos() {
                     "-"
                 );
 
+            const observacaoProduto = String(produto.observacoes || "").trim();
+            const observacaoProdutoHtml = observacaoProduto
+                ? `<small class="produto-nome-observacao" title="${escaparHTML(observacaoProduto)}">${escaparHTML(observacaoProduto.length > 100 ? observacaoProduto.slice(0, 97) + "..." : observacaoProduto)}</small>`
+                : "";
+
 
             const categoriaNome =
                 produto.categorias?.nome ||
@@ -1381,6 +1456,7 @@ function renderizarProdutos() {
             tr.innerHTML = `
                 <td>
                     ${nome}
+                    ${observacaoProdutoHtml}
                 </td>
 
                 <td>
@@ -1515,6 +1591,10 @@ function limparFormulario() {
         formProduto.reset();
     }
 
+    // Remove opções temporárias de fornecedores antigos e restaura a lista cadastrada.
+    if (fornecedorProduto) preencherFornecedoresProdutos();
+    if (observacoesProduto) observacoesProduto.value = "";
+
 
     produtoEditandoId =
         null;
@@ -1624,8 +1704,19 @@ function editarProduto(id) {
         produto.sku || "";
 
 
-    fornecedorProduto.value =
-        produto.fornecedor || "";
+    fornecedorProduto.value = produto.fornecedor_id ? String(produto.fornecedor_id) : "";
+
+    // Mantém visível eventual fornecedor antigo ainda não vinculado, sem apagar o texto ao salvar.
+    if (!produto.fornecedor_id && produto.fornecedor) {
+        const legado = document.createElement("option");
+        legado.value = "__fornecedor_legado__";
+        legado.textContent = `${produto.fornecedor} (vínculo antigo)`;
+        legado.dataset.nome = produto.fornecedor;
+        fornecedorProduto.appendChild(legado);
+        fornecedorProduto.value = legado.value;
+    }
+
+    if (observacoesProduto) observacoesProduto.value = produto.observacoes || "";
 
 
     categoriaProduto.value =
@@ -1705,9 +1796,13 @@ async function salvarProduto(event) {
             .trim();
 
 
-    const fornecedor =
-        fornecedorProduto.value
-            .trim();
+    const fornecedorSelecionadoId = fornecedorProduto.value || "";
+    const fornecedorSelecionado = fornecedoresProdutos.find((item) => String(item.id) === fornecedorSelecionadoId);
+    const opcaoFornecedor = fornecedorProduto.selectedOptions?.[0];
+    const fornecedor = fornecedorSelecionado?.nome
+        || (fornecedorSelecionadoId === "__fornecedor_legado__" ? (opcaoFornecedor?.dataset.nome || "") : "");
+    const fornecedorId = fornecedorSelecionado ? fornecedorSelecionado.id : null;
+    const observacoes = observacoesProduto?.value.trim() || null;
 
 
     const categoriaId =
@@ -1854,6 +1949,12 @@ async function salvarProduto(event) {
 
         fornecedor:
             fornecedor || null,
+
+        fornecedor_id:
+            fornecedorId,
+
+        observacoes:
+            observacoes,
 
         categoria_id:
             categoriaId,
@@ -2413,6 +2514,8 @@ async function iniciarProdutos() {
     await carregarConfiguracoesPrecoAvistaProdutos();
 
     await carregarCategorias();
+
+    await carregarFornecedoresProdutos();
 
     await carregarProdutos();
 

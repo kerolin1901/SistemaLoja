@@ -878,19 +878,22 @@
                         </div>
 
 
-                        <!-- FORNECEDOR -->
+                        <!-- FORNECEDOR CADASTRADO -->
 
-                        <div class="campo-produto">
+                        <div class="campo-produto campo-fornecedor-produto">
 
                             <label for="fornecedorProduto">
                                 Fornecedor
                             </label>
 
-                            <input
-                                type="text"
-                                id="fornecedorProduto"
-                                placeholder="Ex.: Distribuidora ABC"
-                            >
+                            <select id="fornecedorProduto">
+                                <option value="">Sem fornecedor vinculado</option>
+                            </select>
+
+                            <small class="ajuda-fornecedor-produto">
+                                <a href="fornecedores.html" target="_blank" rel="noopener">Cadastrar / gerenciar fornecedores</a>
+                                <button type="button" id="btnAtualizarFornecedores" title="Atualizar lista de fornecedores">↻ Atualizar</button>
+                            </small>
 
                         </div>
 
@@ -1050,6 +1053,18 @@
                         </div>
 
 
+                    </div>
+
+                    <!-- OBSERVAÇÕES LIVRES DO PRODUTO -->
+                    <div class="campo-produto campo-observacoes-produto">
+                        <label for="observacoesProduto">Observações</label>
+                        <textarea
+                            id="observacoesProduto"
+                            rows="3"
+                            maxlength="2000"
+                            placeholder="Ex.: preço promocional na compra, condição negociada, compra em dólar, data e cotação utilizada..."
+                        ></textarea>
+                        <small>Campo livre para registrar informações importantes sobre a compra ou o produto.</small>
                     </div>
 
 

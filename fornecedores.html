@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fornecedores - Sistema da Loja</title>
+    <link rel="stylesheet" href="admin.css">
+    <link rel="stylesheet" href="fornecedores.css">
+    <link rel="stylesheet" href="mobile.css">
+</head>
+<body>
+<div class="layout-admin">
+<aside class="menu-lateral">
+
+
+            <!-- LOGO -->
+
+            <div class="logo-admin">
+
+                <div class="logo-icone">
+                    SL
+                </div>
+
+                <div>
+
+                    <strong>
+                        Sistema da Loja
+                    </strong>
+
+                    <span>
+                        Administração
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- USUÁRIO LOGADO -->
+
+            <div class="usuario-logado">
+
+                <div class="avatar-admin">
+                    A
+                </div>
+
+                <div class="dados-usuario">
+
+                    <strong id="nomeAdministrador">
+                        Administrador
+                    </strong>
+
+                    <span>
+                        Administrador
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- MENU -->
+
+            <nav class="menu">
+
+
+                <!-- ======================================
+                     PRINCIPAL
+                ======================================= -->
+
+                <div class="titulo-menu">
+                    PRINCIPAL
+                </div>
+
+
+                <!-- DASHBOARD -->
+
+                <a
+                    href="admin.html"
+                    class="item-menu"
+                >
+
+                    <span class="icone-menu">
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                        >
+
+                            <path
+                                d="M3 10.5 12 3l9 7.5"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+
+                            <path
+                                d="M5 9.5V21h14V9.5"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linejoin="round"
+                            />
+
+                            <path
+                                d="M9 21v-6h6v6"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linejoin="round"
+                            />
+
+                        </svg>
+
+                    </span>
+
+                    <span>
+                        Dashboard
+                    </span>
+
+                </a>
+
+
+                <!-- USUÁRIOS -->
+
+                <a
+                    href="usuarios.html"
+                    class="item-menu"
+                >
+
+                    <span class="icone-menu">
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                        >
+
+                            <circle
+                                cx="9"
+                                cy="8"
+                                r="3"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            />
+
+                            <path
+                                d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                            />
+
+                            <path
+                                d="M16 5.5a3 3 0 0 1 0 5.8"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                            />
+
+                            <path
+                                d="M17 14.5c2.3.7 4 2.8 4 5.5"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                            />
+
+                        </svg>
+
+                    </span>
+
+                    <span>
+                        Usuários
+                    </span>
+
+                </a>
+
+
+                <!-- LOJAS - SOMENTE ADMIN GERAL -->
+
+                <a
+                    href="lojas.html"
+                    class="item-menu"
+                    id="menuLojas"
+                    style="display: none;"
+                >
+
+                    <span class="icone-menu">
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                        >
+
+                            <path
+                                d="M4 10h16"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                            />
+
+                            <path
+                                d="M5 10v10h14V10"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linejoin="round"
+                            />
+
+                            <path
+                                d="M3 10 5 4h14l2 6"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linejoin="round"
+                            />
+
+                            <path
+                                d="M9 20v-5h6v5"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linejoin="round"
+                            />
+
+                        </svg>
+
+                    </span>
+
+                    <span>
+                        Lojas
+                    </span>
+
+                </a>
+
+
+                <!-- ======================================
+                     ESTOQUE E VENDAS
+                ======================================= -->
+
+                <div class="titulo-menu">
+                    ESTOQUE E VENDAS
+                </div>
+
+
+                <!-- PRODUTOS -->
+
+                <a
+                    href="produtos.html"
+                    class="item-menu"
+                >
+
+                    <span class="icone-menu">
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                        >
+
+                            <path
+                                d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Z"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linejoin="round"
+                            />
+
+                            <path
+                                d="m4 7.5 8 4.5 8-4.5"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linejoin="round"
+                            />
+
+                            <path
+                                d="M12 12v9"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            />
+
+                        </svg>
+
+                    </span>
+
+                    <span>
+                        Produtos
+                    </span>
+
+                </a>
+
+                <a href="fornecedores.html" class="item-menu ativo">
+                    <span class="icone-menu" aria-hidden="true">▦</span>
+                    <span>Fornecedores</span>
+                </a>
+
+
+                <!-- CATEGORIAS -->
+
+                <a
+                    href="categorias.html"
+                    class="item-menu"
+                >
+
+                    <span class="icone-menu">
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                        >
+
+                            <path
+                                d="M4 5h6v6H4z"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linejoin="round"
+                            />
+
+                            <path
+                                d="M14 5h6v6h-6z"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linejoin="round"
+                            />
+
+                            <path
+                                d="M4 13h6v6H4z"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linejoin="round"
+                            />
+
+                            <path
+                                d="M14 13h6v6h-6z"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linejoin="round"
+                            />
+
+                        </svg>
+
+                    </span>
+
+                    <span>
+                        Categorias
+                    </span>
+
+                </a>
+
+
+                <!-- ESTOQUE -->
+
+                <a
+                    href="estoque.html"
+                    class="item-menu"
+                >
+
+                    <span class="icone-menu">
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                        >
+
+                            <path
+                                d="M4 4h16v16H4z"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linejoin="round"
+                            />
+
+                            <path
+                                d="M8 8h8"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                            />
+
+                            <path
+                                d="M8 12h8"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                            />
+
+                            <path
+                                d="M8 16h5"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                            />
+
+                        </svg>
+
+                    </span>
+
+                    <span>
+                        Estoque
+                    </span>
+
+                </a>
+
+
+                <!-- VENDAS -->
+
+                <a
+                    href="vendas.html"
+                    class="item-menu"
+                >
+
+                    <span class="icone-menu">
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                        >
+
+                            <path
+                                d="M3 4h2l2.2 11.2a2 2 0 0 0 2 1.6h7.6a2 2 0 0 0 2-1.6L21 8H6"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+
+                            <circle
+                                cx="10"
+                                cy="20"
+                                r="1"
+                                fill="currentColor"
+                            />
+
+                            <circle
+                                cx="18"
+                                cy="20"
+                                r="1"
+                                fill="currentColor"
+                            />
+
+                        </svg>
+
+                    </span>
+
+                    <span>
+                        Vendas
+                    </span>
+
+                </a>
+
+
+                <!-- HISTÓRICO DE VENDAS -->
+
+                <a
+                    href="historico-vendas.html"
+                    class="item-menu"
+                >
+
+                    <span class="icone-menu">
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                        >
+
+                            <path
+                                d="M4 5h16v14H4z"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linejoin="round"
+                            />
+
+                            <path
+                                d="M8 9h8"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                            />
+
+                            <path
+                                d="M8 13h6"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                            />
+
+                            <path
+                                d="M8 17h4"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                            />
+
+                        </svg>
+
+                    </span>
+
+                    <span>
+                        Histórico de vendas
+                    </span>
+
+                </a>
+
+
+                <!-- CLIENTES -->
+
+                <a
+                    href="clientes.html"
+                    class="item-menu"
+                >
+
+                    <span class="icone-menu">
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                        >
+
+                            <circle
+                                cx="12"
+                                cy="8"
+                                r="3"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            />
+
+                            <path
+                                d="M5 20c0-3.9 3.1-7 7-7s7 3.1 7 7"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                            />
+
+                        </svg>
+
+                    </span>
+
+                    <span>
+                        Clientes
+                    </span>
+
+                </a>
+
+
+                <!-- ======================================
+                     FINANCEIRO
+                ======================================= -->
+
+                <div class="titulo-menu">
+                    FINANCEIRO
+                </div>
+
+
+                <!-- FINANCEIRO -->
+
+                <a
+                    href="financeiro.html"
+                    class="item-menu"
+                >
+
+                    <span class="icone-menu">
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                        >
+
+                            <circle
+                                cx="12"
+                                cy="12"
+                                r="8"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            />
+
+                            <path
+                                d="M12 7v10"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                            />
+
+                            <path
+                                d="M15 9.5c-.7-.8-1.7-1.2-3-1.2-1.6 0-2.7.8-2.7 2 0 3 5.7 1.1 5.7 4 0 1.3-1.2 2.2-3 2.2-1.4 0-2.6-.5-3.3-1.4"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.7"
+                                stroke-linecap="round"
+                            />
+
+                        </svg>
+
+                    </span>
+
+                    <span>
+                        Financeiro
+                    </span>
+
+                </a>
+
+
+                <!-- RELATÓRIOS -->
+
+                <a
+                    href="relatorios.html"
+                    class="item-menu"
+                >
+
+                    <span class="icone-menu">
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                        >
+
+                            <path
+                                d="M4 19V5"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                            />
+
+                            <path
+                                d="M4 19h16"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                            />
+
+                            <path
+                                d="m7 15 3-3 3 2 5-6"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+
+                        </svg>
+
+                    </span>
+
+                    <span>
+                        Relatórios
+                    </span>
+
+                </a>
+
+
+            
+                <a href="auditoria.html" class="item-menu">
+                    <span class="icone-menu" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M5 4h14v16H5z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                            <path d="M8 8h8M8 12h5M8 16h8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </span>
+                    <span>Auditoria</span>
+                </a></nav>
+
+
+            <!-- SAIR -->
+
+            <div class="area-sair">
+
+                <button
+                    type="button"
+                    id="btnSair"
+                    class="botao-sair"
+                >
+
+                    <span class="icone-menu">
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                        >
+
+                            <path
+                                d="M10 5H5v14h5"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+
+                            <path
+                                d="M13 8l4 4-4 4"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+
+                            <path
+                                d="M9 12h8"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                            />
+
+                        </svg>
+
+                    </span>
+
+                    <span>
+                        Sair
+                    </span>
+
+                </button>
+
+            </div>
+
+
+        </aside>
+<main class="conteudo-admin">
+    <header class="cabecalho-admin">
+        <div>
+            <h1>Fornecedores</h1>
+            <p>Cadastre e organize os fornecedores da sua loja.</p>
+        </div>
+        <div class="data-atual"><span>Hoje</span><strong id="dataAtual">--</strong></div>
+    </header>
+
+    <div id="mensagemFornecedores" class="mensagem-admin" role="status" aria-live="polite"></div>
+
+    <section class="painel-fornecedores">
+        <div class="titulo-painel-fornecedores">
+            <div>
+                <h2 id="tituloFormularioFornecedor">Cadastrar fornecedor</h2>
+                <p>As informações ficam vinculadas somente à loja atual.</p>
+            </div>
+        </div>
+        <form id="formFornecedor">
+            <div class="campos-fornecedor">
+                <div class="campo-fornecedor campo-fornecedor-grande">
+                    <label for="fornecedorNome">Nome / Razão social *</label>
+                    <input id="fornecedorNome" type="text" maxlength="120" required placeholder="Ex.: Distribuidora ABC">
+                </div>
+                <div class="campo-fornecedor">
+                    <label for="fornecedorCnpj">CNPJ</label>
+                    <input id="fornecedorCnpj" type="text" maxlength="20" placeholder="00.000.000/0000-00">
+                </div>
+                <div class="campo-fornecedor">
+                    <label for="fornecedorContato">Pessoa de contato</label>
+                    <input id="fornecedorContato" type="text" maxlength="100" placeholder="Nome do representante">
+                </div>
+                <div class="campo-fornecedor">
+                    <label for="fornecedorTelefone">Telefone / WhatsApp</label>
+                    <input id="fornecedorTelefone" type="tel" maxlength="30" placeholder="(00) 00000-0000">
+                </div>
+                <div class="campo-fornecedor">
+                    <label for="fornecedorEmail">E-mail</label>
+                    <input id="fornecedorEmail" type="email" maxlength="160" placeholder="vendas@fornecedor.com">
+                </div>
+                <div class="campo-fornecedor campo-fornecedor-grande">
+                    <label for="fornecedorEndereco">Endereço</label>
+                    <input id="fornecedorEndereco" type="text" maxlength="240" placeholder="Rua, número, cidade e estado">
+                </div>
+                <div class="campo-fornecedor campo-fornecedor-grande">
+                    <label for="fornecedorObservacoes">Observações</label>
+                    <textarea id="fornecedorObservacoes" rows="3" maxlength="1500" placeholder="Condições comerciais, prazo de entrega, dias de pedido... "></textarea>
+                </div>
+                <div class="campo-fornecedor campo-fornecedor-status">
+                    <label class="checkbox-fornecedor"><input id="fornecedorAtivo" type="checkbox" checked><span>Fornecedor ativo</span></label>
+                </div>
+            </div>
+            <div class="acoes-fornecedores">
+                <button type="submit" class="botao-fornecedor-principal" id="btnSalvarFornecedor">Cadastrar fornecedor</button>
+                <button type="button" class="botao-fornecedor-secundario" id="btnCancelarFornecedor" hidden>Cancelar edição</button>
+            </div>
+        </form>
+    </section>
+
+    <section class="painel-fornecedores painel-lista-fornecedores">
+        <div class="titulo-painel-fornecedores titulo-lista-fornecedores">
+            <div><h2>Fornecedores cadastrados</h2><p id="resumoFornecedores">Carregando fornecedores...</p></div>
+            <button type="button" class="botao-fornecedor-secundario" id="btnAtualizarFornecedoresPagina">↻ Atualizar</button>
+        </div>
+        <div class="busca-fornecedores">
+            <label for="buscaFornecedores">Buscar fornecedor</label>
+            <input id="buscaFornecedores" type="search" placeholder="Nome, CNPJ, contato, telefone ou e-mail...">
+        </div>
+        <div id="carregandoFornecedores" class="estado-fornecedores">Carregando fornecedores...</div>
+        <div id="semFornecedores" class="estado-fornecedores" hidden>Nenhum fornecedor cadastrado nesta loja.</div>
+        <div class="tabela-fornecedores-container">
+            <table class="tabela-fornecedores">
+                <thead><tr><th>Fornecedor</th><th>CNPJ</th><th>Contato</th><th>Telefone</th><th>Status</th><th>Ações</th></tr></thead>
+                <tbody id="listaFornecedores"></tbody>
+            </table>
+        </div>
+        <div id="semResultadoFornecedores" class="estado-fornecedores" hidden>Nenhum fornecedor encontrado para essa busca.</div>
+    </section>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/config.js"></script>
+<script src="js/layout.js"></script>
+<script src="js/fornecedores.js"></script>
+<script src="js/mobile.js"></script>
+</body>
+</html>

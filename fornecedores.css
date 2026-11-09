@@ -1,0 +1,26 @@
+/* Sistema da Loja — Cadastro de fornecedores */
+.painel-fornecedores{background:#fff;border-radius:14px;padding:24px;margin-bottom:22px;box-shadow:0 2px 10px rgba(0,0,0,.05);min-width:0}
+.titulo-painel-fornecedores{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:22px}
+.titulo-painel-fornecedores h2{font-size:20px;margin:0 0 6px;color:#172033}
+.titulo-painel-fornecedores p{margin:0;color:#64748b;font-size:13px}
+.campos-fornecedor{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.campo-fornecedor{min-width:0}
+.campo-fornecedor-grande{grid-column:span 2}
+.campo-fornecedor label{display:block;font-size:13px;font-weight:600;margin-bottom:7px;color:#243047}
+.campo-fornecedor input,.campo-fornecedor textarea{width:100%;box-sizing:border-box;padding:11px 12px;border:1px solid #d1d5db;border-radius:8px;background:#fff;color:#1f2937;font:inherit;font-size:14px;outline:none}
+.campo-fornecedor input:focus,.campo-fornecedor textarea:focus{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.1)}
+.campo-fornecedor textarea{resize:vertical;min-height:76px}
+.campo-fornecedor-status{display:flex;align-items:end}
+.checkbox-fornecedor{display:flex!important;align-items:center;gap:9px;min-height:42px;margin:0!important;font-weight:500!important;cursor:pointer}
+.checkbox-fornecedor input{width:17px;height:17px}
+.acoes-fornecedores{display:flex;gap:10px;margin-top:22px;flex-wrap:wrap}
+.botao-fornecedor-principal,.botao-fornecedor-secundario{border:0;border-radius:8px;padding:10px 16px;font-size:13px;font-weight:600;cursor:pointer}
+.botao-fornecedor-principal{background:#2563eb;color:#fff}.botao-fornecedor-principal:hover{background:#1d4ed8}.botao-fornecedor-principal:disabled{opacity:.6;cursor:wait}
+.botao-fornecedor-secundario{background:#f1f5f9;color:#334155;border:1px solid #dbe2ea}.botao-fornecedor-secundario:hover{background:#e2e8f0}
+.busca-fornecedores{max-width:520px;margin-bottom:16px}.busca-fornecedores label{display:block;font-size:13px;font-weight:600;margin-bottom:7px}.busca-fornecedores input{width:100%;box-sizing:border-box;border:1px solid #d1d5db;border-radius:8px;padding:11px 12px;font-size:14px}
+.tabela-fornecedores-container{width:100%;overflow-x:auto}.tabela-fornecedores{width:100%;border-collapse:collapse;min-width:760px}.tabela-fornecedores th,.tabela-fornecedores td{padding:12px 10px;border-bottom:1px solid #e5eaf1;text-align:left;font-size:12px;vertical-align:middle}.tabela-fornecedores th{background:#f8fafc;color:#64748b;font-size:10px;text-transform:uppercase;letter-spacing:.03em}.tabela-fornecedores tbody tr:hover{background:#f8fbff}
+.status-fornecedor{display:inline-flex;padding:4px 9px;border-radius:999px;font-size:11px;font-weight:700}.status-fornecedor.ativo{background:#dcfce7;color:#166534}.status-fornecedor.inativo{background:#f1f5f9;color:#64748b}
+.acoes-linha-fornecedor{display:flex;gap:6px;flex-wrap:wrap}.acao-fornecedor{border:1px solid #dbe2ea;background:#fff;color:#334155;border-radius:6px;padding:6px 9px;font-size:11px;font-weight:600;cursor:pointer}.acao-fornecedor.editar{color:#1d4ed8;background:#eff6ff;border-color:#bfdbfe}.acao-fornecedor.inativar{color:#b45309;background:#fffbeb;border-color:#fde68a}.acao-fornecedor.ativar{color:#15803d;background:#f0fdf4;border-color:#bbf7d0}
+.estado-fornecedores{padding:18px;text-align:center;color:#64748b;font-size:13px}.mensagem-admin{margin-bottom:14px}
+@media(max-width:900px){.campos-fornecedor{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.painel-fornecedores{padding:16px}.campos-fornecedor{grid-template-columns:1fr}.campo-fornecedor-grande{grid-column:span 1}.titulo-painel-fornecedores{align-items:flex-start;flex-direction:column}}
