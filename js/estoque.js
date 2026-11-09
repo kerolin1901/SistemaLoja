@@ -80,6 +80,8 @@ const estoqueSupabase = supabaseClient;
 let usuarioAtual = null;
 let movimentacaoEmAndamento = false;
 let produtosSelectEstoque = [];
+let produtosEstoqueListaCompras = [];
+let coresEstoqueListaCompras = new Map();
 
 
 /* ==========================================
@@ -420,6 +422,7 @@ async function carregarEstoque() {
                 id,
                 nome,
                 sku,
+                fornecedor,
                 estoque,
                 estoque_minimo,
                 controla_cores,
@@ -491,6 +494,10 @@ async function carregarEstoque() {
         }
     }
 
+    produtosEstoqueListaCompras = produtos;
+    coresEstoqueListaCompras = coresPorProduto;
+    configurarFiltrosListaCompras(produtos);
+
     if (produtos.length === 0) {
 
         if (semEstoque) {
@@ -547,7 +554,10 @@ async function carregarEstoque() {
         // as variantes, e o indicador conta cada cor como um ponto de reposição.
         const variantesAtivas = (coresPorProduto.get(String(produto.id)) || [])
             .filter((cor) => cor.ativo === true);
+        const statusVariantes = variantesAtivas.map((cor) => obterStatusEstoqueCompra(cor.estoque, cor.estoque_minimo));
+        let statusListaProduto = [obterStatusEstoqueCompra(estoque, minimo)];
         if (produto.controla_cores === true && variantesAtivas.length) {
+            statusListaProduto = [...new Set(statusVariantes)];
             const todasEsgotadas = variantesAtivas.every((cor) => Number(cor.estoque || 0) <= 0);
             const algumaAbaixoDoMinimo = variantesAtivas.some((cor) => Number(cor.estoque || 0) <= Number(cor.estoque_minimo || 0));
             if (todasEsgotadas) {
@@ -588,6 +598,11 @@ async function carregarEstoque() {
 
         const tr =
             document.createElement("tr");
+        tr.dataset.produtoId = String(produto.id);
+        tr.dataset.fornecedor = normalizarTextoListaCompras(produto.fornecedor || "") || "__sem_fornecedor__";
+        tr.dataset.statusList = statusListaProduto.join(" ");
+        tr.dataset.busca = normalizarTextoListaCompras(`${produto.nome || ""} ${produto.sku || ""} ${produto.fornecedor || ""}`);
+        tr.dataset.temCores = produto.controla_cores === true && variantesAtivas.length ? "true" : "false";
 
 
         const tdProduto =
@@ -668,6 +683,9 @@ async function carregarEstoque() {
             const cores = coresPorProduto.get(String(produto.id)) || [];
             const linhaCores = document.createElement("tr");
             linhaCores.className = "sl-estoque-cores-row";
+            linhaCores.dataset.produtoId = String(produto.id);
+            linhaCores.dataset.fornecedor = tr.dataset.fornecedor;
+            linhaCores.dataset.busca = tr.dataset.busca;
 
             const detalhe = document.createElement("td");
             detalhe.colSpan = 6;
@@ -718,6 +736,8 @@ async function carregarEstoque() {
 
                     const cartao = document.createElement("article");
                     cartao.className = "sl-estoque-cor-cartao";
+                    cartao.dataset.status = obterStatusEstoqueCompra(quantidadeCor, minimoCor);
+                    cartao.dataset.busca = normalizarTextoListaCompras(`${produto.nome || ""} ${produto.sku || ""} ${produto.fornecedor || ""} ${cor.nome_cor || ""}`);
 
                     const topoCartao = document.createElement("div");
                     topoCartao.className = "sl-estoque-cor-topo";
@@ -784,7 +804,224 @@ async function carregarEstoque() {
         totalEstoqueBaixo.textContent =
             quantidadeEstoqueBaixo;
     }
+
+    aplicarFiltrosListaCompras();
 }
+
+
+/* ==========================================
+   FILTROS E IMPRESSÃO DA LISTA DE COMPRAS
+========================================== */
+
+function normalizarTextoListaCompras(valor) {
+    return String(valor ?? "")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLocaleLowerCase("pt-BR")
+        .trim();
+}
+
+function obterStatusEstoqueCompra(estoque, minimo) {
+    const atual = Number(estoque || 0);
+    const limite = Number(minimo || 0);
+    if (atual <= 0) return "esgotado";
+    if (atual <= limite) return "baixo";
+    return "normal";
+}
+
+function configurarFiltrosListaCompras(produtos) {
+    const seletor = document.getElementById("filtroFornecedorEstoque");
+    if (!seletor) return;
+
+    const valorAnterior = seletor.value;
+    const fornecedores = new Map();
+    let existeSemFornecedor = false;
+
+    (produtos || []).forEach((produto) => {
+        const nome = String(produto.fornecedor || "").trim();
+        if (!nome) {
+            existeSemFornecedor = true;
+            return;
+        }
+        const chave = normalizarTextoListaCompras(nome);
+        if (!fornecedores.has(chave)) fornecedores.set(chave, nome);
+    });
+
+    seletor.innerHTML = "";
+    seletor.add(new Option("Todos os fornecedores", ""));
+    [...fornecedores.entries()]
+        .sort((a, b) => a[1].localeCompare(b[1], "pt-BR", { sensitivity: "base" }))
+        .forEach(([chave, nome]) => seletor.add(new Option(nome, chave)));
+    if (existeSemFornecedor) seletor.add(new Option("Sem fornecedor cadastrado", "__sem_fornecedor_vazio__"));
+
+    seletor.value = [...seletor.options].some((opcao) => opcao.value === valorAnterior) ? valorAnterior : "";
+}
+
+function aplicarFiltrosListaCompras() {
+    if (!listaEstoque) return;
+
+    const fornecedorSelecionado = document.getElementById("filtroFornecedorEstoque")?.value || "";
+    const statusSelecionado = document.getElementById("filtroStatusEstoque")?.value || "todos";
+    const termo = normalizarTextoListaCompras(document.getElementById("buscaProdutoEstoque")?.value || "");
+    const linhasProduto = [...listaEstoque.querySelectorAll("tr:not(.sl-estoque-cores-row)")];
+    let quantidadeVisivel = 0;
+
+    linhasProduto.forEach((linha) => {
+        const fornecedor = linha.dataset.fornecedor || "__sem_fornecedor__";
+        const correspondeFornecedor = !fornecedorSelecionado || (
+            fornecedorSelecionado === "__sem_fornecedor_vazio__"
+                ? fornecedor === "__sem_fornecedor__"
+                : fornecedor === fornecedorSelecionado
+        );
+        const statusProduto = (linha.dataset.statusList || "").split(/\s+/).filter(Boolean);
+        const correspondeStatusProduto = statusSelecionado === "todos" || statusProduto.includes(statusSelecionado);
+        const correspondeBuscaProduto = !termo || (linha.dataset.busca || "").includes(termo);
+        const linhaCores = linha.nextElementSibling?.classList.contains("sl-estoque-cores-row")
+            ? linha.nextElementSibling
+            : null;
+        let algumaCorVisivel = false;
+
+        if (linhaCores) {
+            linhaCores.querySelectorAll(".sl-estoque-cor-cartao").forEach((cartao) => {
+                const correspondeStatus = statusSelecionado === "todos" || cartao.dataset.status === statusSelecionado;
+                const correspondeBusca = !termo || (cartao.dataset.busca || "").includes(termo);
+                const mostrar = correspondeFornecedor && correspondeStatus && correspondeBusca;
+                cartao.style.display = mostrar ? "" : "none";
+                if (mostrar) algumaCorVisivel = true;
+            });
+        }
+
+        const correspondeBusca = correspondeBuscaProduto || algumaCorVisivel;
+        const correspondeStatus = correspondeStatusProduto || algumaCorVisivel;
+        const mostrarProduto = correspondeFornecedor && correspondeBusca && correspondeStatus;
+        linha.style.display = mostrarProduto ? "" : "none";
+        if (linhaCores) linhaCores.style.display = mostrarProduto && algumaCorVisivel ? "" : "none";
+        if (mostrarProduto) quantidadeVisivel++;
+    });
+
+    const resumo = document.getElementById("resumoFiltroEstoque");
+    if (resumo) resumo.textContent = `${quantidadeVisivel} ${quantidadeVisivel === 1 ? "produto" : "produtos"} na lista`;
+}
+
+function escaparHtmlListaCompras(valor) {
+    return String(valor ?? "").replace(/[&<>"']/g, (caractere) => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;"
+    })[caractere]);
+}
+
+function obterItensListaComprasImpressao() {
+    const fornecedorSelecionado = document.getElementById("filtroFornecedorEstoque")?.value || "";
+    const statusSelecionado = document.getElementById("filtroStatusEstoque")?.value || "todos";
+    const termo = normalizarTextoListaCompras(document.getElementById("buscaProdutoEstoque")?.value || "");
+    const itens = [];
+
+    (produtosEstoqueListaCompras || []).forEach((produto) => {
+        const fornecedorNome = String(produto.fornecedor || "").trim() || "Sem fornecedor cadastrado";
+        const fornecedorChave = normalizarTextoListaCompras(produto.fornecedor || "") || "__sem_fornecedor__";
+        const correspondeFornecedor = !fornecedorSelecionado || (
+            fornecedorSelecionado === "__sem_fornecedor_vazio__"
+                ? fornecedorChave === "__sem_fornecedor__"
+                : fornecedorChave === fornecedorSelecionado
+        );
+        if (!correspondeFornecedor) return;
+
+        const variantes = produto.controla_cores === true
+            ? (coresEstoqueListaCompras.get(String(produto.id)) || []).filter((cor) => cor.ativo === true)
+            : [];
+        const registros = variantes.length
+            ? variantes.map((cor) => ({
+                produto: produto.nome || "Produto sem nome",
+                cor: cor.nome_cor || "Cor sem nome",
+                sku: produto.sku || "-",
+                estoque: Number(cor.estoque || 0),
+                minimo: Number(cor.estoque_minimo || 0),
+                fornecedor: fornecedorNome
+            }))
+            : [{
+                produto: produto.nome || "Produto sem nome",
+                cor: "-",
+                sku: produto.sku || "-",
+                estoque: Number(produto.estoque || 0),
+                minimo: Number(produto.estoque_minimo || 0),
+                fornecedor: fornecedorNome
+            }];
+
+        registros.forEach((item) => {
+            item.status = obterStatusEstoqueCompra(item.estoque, item.minimo);
+            const correspondeStatus = statusSelecionado === "todos" || item.status === statusSelecionado;
+            const texto = normalizarTextoListaCompras(`${item.produto} ${item.cor} ${item.sku} ${item.fornecedor}`);
+            const correspondeBusca = !termo || texto.includes(termo);
+            if (correspondeStatus && correspondeBusca) itens.push(item);
+        });
+    });
+
+    return itens;
+}
+
+function imprimirListaComprasEstoque() {
+    const itens = obterItensListaComprasImpressao();
+    if (!itens.length) {
+        alert("Não há produtos para imprimir com os filtros selecionados.");
+        return;
+    }
+
+    const janela = window.open("", "_blank");
+    if (!janela) {
+        alert("O navegador bloqueou a janela de impressão. Permita pop-ups para este site e tente novamente.");
+        return;
+    }
+
+    const fornecedorSelecionado = document.getElementById("filtroFornecedorEstoque")?.selectedOptions?.[0]?.textContent || "Todos os fornecedores";
+    const statusSelecionado = document.getElementById("filtroStatusEstoque")?.selectedOptions?.[0]?.textContent || "Todas as situações";
+    const busca = document.getElementById("buscaProdutoEstoque")?.value.trim() || "";
+    const fornecedores = new Map();
+    itens.forEach((item) => {
+        if (!fornecedores.has(item.fornecedor)) fornecedores.set(item.fornecedor, []);
+        fornecedores.get(item.fornecedor).push(item);
+    });
+
+    const ordemStatus = [
+        ["esgotado", "Esgotados"],
+        ["baixo", "Estoque baixo / no mínimo"],
+        ["normal", "Estoque normal"]
+    ];
+    const formatar = (valor) => Number(valor || 0).toLocaleString("pt-BR", { maximumFractionDigits: 3 });
+    const secoesFornecedores = [...fornecedores.entries()]
+        .sort((a, b) => a[0].localeCompare(b[0], "pt-BR", { sensitivity: "base" }))
+        .map(([nomeFornecedor, itensFornecedor], indiceFornecedor) => {
+            const grupos = ordemStatus.map(([status, titulo]) => {
+                const grupo = itensFornecedor.filter((item) => item.status === status);
+                if (!grupo.length) return "";
+                const linhas = grupo
+                    .sort((a, b) => `${a.produto} ${a.cor}`.localeCompare(`${b.produto} ${b.cor}`, "pt-BR", { sensitivity: "base" }))
+                    .map((item) => `<tr><td>${escaparHtmlListaCompras(item.produto)}</td><td>${escaparHtmlListaCompras(item.cor)}</td><td>${escaparHtmlListaCompras(item.sku)}</td><td class="numero">${formatar(item.estoque)}</td><td class="numero">${formatar(item.minimo)}</td><td class="numero">${formatar(Math.max(0, item.minimo - item.estoque))}</td></tr>`)
+                    .join("");
+                const classe = status === "esgotado" ? "grupo-esgotado" : status === "baixo" ? "grupo-baixo" : "grupo-normal";
+                return `<section class="grupo ${classe}"><h3>${titulo} <span>${grupo.length} ${grupo.length === 1 ? "item" : "itens"}</span></h3><table><thead><tr><th>Produto</th><th>Cor / variante</th><th>SKU</th><th>Estoque atual</th><th>Estoque mínimo</th><th>Falta p/ mínimo</th></tr></thead><tbody>${linhas}</tbody></table></section>`;
+            }).join("");
+            return `<section class="fornecedor ${indiceFornecedor ? "quebra-pagina" : ""}"><h2>${escaparHtmlListaCompras(nomeFornecedor)}</h2>${grupos}</section>`;
+        }).join("");
+
+    const data = new Date().toLocaleDateString("pt-BR");
+    const textoBusca = busca ? `<p><strong>Busca:</strong> ${escaparHtmlListaCompras(busca)}</p>` : "";
+    const documento = `<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Lista de compras - Estoque</title><style>
+        *{box-sizing:border-box}body{font-family:Arial,Helvetica,sans-serif;color:#172033;margin:24px;font-size:11px}header{border-bottom:2px solid #1e3a8a;padding-bottom:12px;margin-bottom:16px}h1{font-size:22px;margin:0 0 6px}header p{margin:3px 0;color:#475569}.fornecedor{margin:18px 0 26px}.fornecedor h2{font-size:16px;background:#eef3fb;border-left:4px solid #1e3a8a;padding:9px 11px;margin:0 0 12px}.grupo{margin:12px 0 18px;break-inside:avoid}.grupo h3{font-size:12px;margin:0 0 6px;padding:7px 9px;background:#f3f4f6}.grupo h3 span{float:right;font-weight:normal}.grupo-esgotado h3{background:#fff0f0;color:#991b1b}.grupo-baixo h3{background:#fff7e8;color:#92400e}.grupo-normal h3{background:#eefbf3;color:#166534}table{width:100%;border-collapse:collapse}th,td{border:1px solid #d9e0e9;padding:7px 8px;text-align:left}th{background:#f8fafc;font-size:9px;text-transform:uppercase;color:#475569}td.numero{text-align:right;font-variant-numeric:tabular-nums}.nota{margin-top:18px;color:#64748b;font-size:9px}.vazio{padding:20px;text-align:center}@media print{body{margin:12mm}.quebra-pagina{break-before:page;page-break-before:always}.grupo,table{break-inside:avoid}thead{display:table-header-group}tr{break-inside:avoid}}@page{size:A4 portrait;margin:12mm}
+        </style></head><body><header><h1>Lista de compras / conferência de estoque</h1><p><strong>Data:</strong> ${data}</p><p><strong>Fornecedor filtrado:</strong> ${escaparHtmlListaCompras(fornecedorSelecionado)}</p><p><strong>Situação:</strong> ${escaparHtmlListaCompras(statusSelecionado)}</p>${textoBusca}</header>${secoesFornecedores}<p class="nota">Relatório gerado pelo Sistema da Loja. “Falta p/ mínimo” indica a quantidade necessária para alcançar o estoque mínimo cadastrado.</p><script>window.addEventListener('load',function(){setTimeout(function(){window.print();},250);});</script></body></html>`;
+
+    janela.document.open();
+    janela.document.write(documento);
+    janela.document.close();
+}
+
+function configurarControlesListaCompras() {
+    ["filtroFornecedorEstoque", "filtroStatusEstoque"].forEach((id) => {
+        document.getElementById(id)?.addEventListener("change", aplicarFiltrosListaCompras);
+    });
+    document.getElementById("buscaProdutoEstoque")?.addEventListener("input", aplicarFiltrosListaCompras);
+    document.getElementById("btnImprimirListaCompras")?.addEventListener("click", imprimirListaComprasEstoque);
+}
+
+configurarControlesListaCompras();
 
 
 /* ==========================================

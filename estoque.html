@@ -25,6 +25,7 @@
     <link rel="stylesheet" href="mobile.css">
     <link rel="stylesheet" href="cores.css">
     <link rel="stylesheet" href="cores-analise.css">
+    <link rel="stylesheet" href="lista-compras-estoque.css">
 
 </head>
 
@@ -1218,6 +1219,42 @@
 
             </div>
 
+
+            <!-- FILTROS E LISTA DE COMPRAS -->
+            <div class="sl-lista-compras-controles">
+                <div class="sl-lista-compras-intro">
+                    <div>
+                        <strong>Localizar itens para reposição</strong>
+                        <span>Filtre por situação e fornecedor ou imprima a lista organizada para compras.</span>
+                    </div>
+                    <span id="resumoFiltroEstoque" class="sl-lista-compras-resumo">Carregando produtos...</span>
+                </div>
+
+                <div class="sl-lista-compras-filtros">
+                    <div class="sl-lista-compras-campo">
+                        <label for="filtroFornecedorEstoque">Fornecedor</label>
+                        <select id="filtroFornecedorEstoque">
+                            <option value="">Todos os fornecedores</option>
+                        </select>
+                    </div>
+                    <div class="sl-lista-compras-campo">
+                        <label for="filtroStatusEstoque">Situação do estoque</label>
+                        <select id="filtroStatusEstoque">
+                            <option value="todos">Todas as situações</option>
+                            <option value="baixo">Estoque baixo / no mínimo</option>
+                            <option value="esgotado">Esgotados</option>
+                            <option value="normal">Estoque normal</option>
+                        </select>
+                    </div>
+                    <div class="sl-lista-compras-campo sl-lista-compras-busca">
+                        <label for="buscaProdutoEstoque">Produto ou cor</label>
+                        <input type="search" id="buscaProdutoEstoque" placeholder="Digite o produto, SKU ou cor...">
+                    </div>
+                    <button type="button" id="btnImprimirListaCompras" class="sl-btn-imprimir-compras">
+                        <span aria-hidden="true">▤</span> Imprimir lista
+                    </button>
+                </div>
+            </div>
 
             <!-- CARREGANDO -->
 

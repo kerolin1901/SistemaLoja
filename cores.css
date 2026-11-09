@@ -36,7 +36,7 @@
 /* Fotos das variantes por cor */
 .sl-cores-linha-com-foto{grid-template-columns:minmax(150px,1.1fr) repeat(4,minmax(110px,1fr)) auto;align-items:center}
 .sl-cor-foto-gestao{display:grid;gap:7px;justify-items:start}
-.sl-cor-foto-gestao>img,.sl-cor-foto-vazia{width:94px;height:84px;object-fit:cover;border-radius:10px;border:1px solid #cbd5e1;background:#f8fafc}
+.sl-cor-foto-gestao>img,.sl-cor-foto-vazia{width:94px;height:84px;object-fit:contain;border-radius:10px;border:1px solid #cbd5e1;background:#f8fafc}
 .sl-cor-foto-vazia{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:3px;color:#64748b}
 .sl-cor-foto-vazia span{font-size:25px}.sl-cor-foto-vazia small{font-size:11px}
 .sl-cor-foto-acoes{display:flex;gap:6px;flex-wrap:wrap}.sl-cor-foto-acoes button{font-size:12px;padding:7px 9px}.sl-btn-remover-foto{background:#fee2e2;color:#991b1b}.sl-cor-foto-ajuda{font-size:11px!important;color:#64748b!important;font-weight:400!important}
@@ -46,7 +46,7 @@
 .sl-cor-opcao:hover:not(:disabled){border-color:#93c5fd;background:#f8fbff}.sl-cor-opcao.selecionada{border-color:#2563eb;background:#eff6ff;box-shadow:0 0 0 2px rgba(37,99,235,.12)}.sl-cor-opcao:disabled{opacity:.48;cursor:not-allowed}
 .sl-cor-opcao-imagem{width:100%;height:124px;display:flex;align-items:center;justify-content:center;overflow:hidden;border-radius:8px;background:#f1f5f9}
 .sl-cor-opcao-imagem img{width:100%;height:100%;object-fit:contain}.sl-cor-opcao-sem-foto{font-size:36px;opacity:.55}
-.sl-cor-opcao-dados{display:grid;gap:4px}.sl-cor-opcao-dados strong{font-size:15px}.sl-cor-opcao-dados small{font-size:12px;color:#64748b}.sl-cor-miniatura-carrinho{width:42px;height:42px;object-fit:cover;border-radius:7px;border:1px solid #e2e8f0;flex:0 0 42px}.produto-item-nome:has(.sl-cor-miniatura-carrinho){display:flex;align-items:center;gap:9px}.sl-cor-carrinho-texto{min-width:0;display:grid;gap:2px}
+.sl-cor-opcao-dados{display:grid;gap:4px}.sl-cor-opcao-dados strong{font-size:15px}.sl-cor-opcao-dados small{font-size:12px;color:#64748b}.sl-cor-miniatura-carrinho{width:42px;height:42px;object-fit:contain;border-radius:7px;border:1px solid #e2e8f0;flex:0 0 42px}.produto-item-nome:has(.sl-cor-miniatura-carrinho){display:flex;align-items:center;gap:9px}.sl-cor-carrinho-texto{min-width:0;display:grid;gap:2px}
 @media(max-width:760px){.sl-cores-linha-com-foto{grid-template-columns:1fr}.sl-cor-foto-gestao{grid-template-columns:auto 1fr;align-items:center}.sl-cor-foto-ajuda{grid-column:1/-1}.sl-cores-opcoes-venda{grid-template-columns:repeat(2,minmax(0,1fr))}.sl-cor-opcao-imagem{height:104px}}
 
 
@@ -153,7 +153,10 @@
     height: 42px !important;
     min-height: 42px;
     max-height: 42px !important;
-    object-fit: cover !important;
+    object-fit: contain !important;
+    object-position: center !important;
+    padding: 3px;
+    background: #f8fafc;
     flex: 0 0 42px;
 }
 @media (max-width: 760px) {
@@ -195,3 +198,46 @@
 .sl-cores-resumo-quantidade strong { color: #1d4ed8; font-size: 14px; }
 .sl-cores-aviso-quantidade { margin: 7px 0 0; color: #64748b; font-size: 12px; }
 .sl-cores-aviso-quantidade.erro { color: #dc2626; }
+
+/* Aumenta discretamente a área visual das fotos na seleção de cores.
+   Mantém object-fit: contain e os controles de quantidade intactos. */
+.sl-cores-venda-dialog {
+    width: min(840px, calc(100vw - 28px)) !important;
+}
+.sl-cores-opcoes-venda {
+    grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr)) !important;
+}
+.sl-cor-opcao-imagem {
+    flex-basis: 156px !important;
+    height: 156px !important;
+    min-height: 156px !important;
+    max-height: 156px !important;
+}
+@media (max-width: 760px) {
+    .sl-cores-venda-dialog {
+        width: min(100%, calc(100vw - 24px)) !important;
+    }
+    .sl-cor-opcao-imagem {
+        flex-basis: 136px !important;
+        height: 136px !important;
+        min-height: 136px !important;
+        max-height: 136px !important;
+    }
+}
+
+/* Seleção de cores na venda: área de foto sempre quadrada */
+.sl-cores-venda-dialog .sl-cor-opcao-imagem {
+    width: 100% !important;
+    aspect-ratio: 1 / 1 !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    flex: 0 0 auto !important;
+    overflow: hidden !important;
+}
+.sl-cores-venda-dialog .sl-cor-opcao-imagem img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+    object-position: center !important;
+}
