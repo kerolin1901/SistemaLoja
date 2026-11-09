@@ -12,6 +12,8 @@
 const vendedorEstoqueSupabase =
     supabaseClient;
 
+let coresPorProdutoVendedor = new Map();
+
 
 /* ==========================================
    ELEMENTOS
@@ -409,6 +411,24 @@ async function carregarEstoque() {
     produtos =
         resultado.data || [];
 
+    coresPorProdutoVendedor = new Map();
+    const ids = produtos.map((produto) => Number(produto.id));
+    if (ids.length) {
+        const resultadoCores = await vendedorEstoqueSupabase.from("produtos_cores")
+            .select("id, produto_id, nome_cor, estoque, estoque_minimo, ativo")
+            .in("produto_id", ids)
+            .eq("ativo", true)
+            .order("nome_cor", { ascending: true });
+        if (resultadoCores.error) {
+            console.error("Erro ao consultar estoque por cor:", resultadoCores.error);
+        } else {
+            for (const cor of (resultadoCores.data || [])) {
+                const chave = String(cor.produto_id);
+                if (!coresPorProdutoVendedor.has(chave)) coresPorProdutoVendedor.set(chave, []);
+                coresPorProdutoVendedor.get(chave).push(cor);
+            }
+        }
+    }
 
     await carregarNomesCategorias();
 
@@ -816,78 +836,84 @@ function renderizarEstoque(
                     }
 
 
-                    return `
-
+                    const coresProduto = coresPorProdutoVendedor.get(String(produto.id)) || [];
+                    const linhaPrincipal = `
                         <tr>
-
                             <td>
-
-                                <div
-                                    class="nome-produto-estoque"
-                                >
-                                    ${escaparHTML(
-                                        produto.nome
-                                    )}
+                                <div class="nome-produto-estoque">
+                                    ${escaparHTML(produto.nome)}
                                 </div>
-
                             </td>
-
-
                             <td>
-
-                                <span
-                                    class="sku-produto-estoque"
-                                >
-                                    ${escaparHTML(
-                                        produto.sku ||
-                                        "-"
-                                    )}
+                                <span class="sku-produto-estoque">
+                                    ${escaparHTML(produto.sku || "-")}
                                 </span>
-
                             </td>
-
-
                             <td>
-
-                                ${escaparHTML(
-                                    produto.categoria_nome ||
-                                    "Sem categoria"
-                                )}
-
+                                ${escaparHTML(produto.categoria_nome || "Sem categoria")}
                             </td>
-
-
                             <td>
-
-                                <strong
-                                    class="${classeQuantidade}"
-                                >
-                                    ${estoque}
-                                </strong>
-
+                                <strong class="${classeQuantidade}">${estoque}</strong>
                             </td>
-
-
+                            <td>${minimo}</td>
                             <td>
-
-                                ${minimo}
-
-                            </td>
-
-
-                            <td>
-
-                                <span
-                                    class="situacao-estoque ${classeSituacao}"
-                                >
+                                <span class="situacao-estoque ${classeSituacao}">
                                     ${textoSituacao}
                                 </span>
-
                             </td>
-
                         </tr>
-
                     `;
+
+                    if (!coresProduto.length) {
+                        return linhaPrincipal;
+                    }
+
+                    const cartoesCores = coresProduto.map((cor) => {
+                        const quantidadeCor = Number(cor.estoque || 0);
+                        const minimoCor = Number(cor.estoque_minimo || 0);
+                        let textoStatusCor = "Normal";
+                        let classeStatusCor = "normal";
+
+                        if (quantidadeCor <= 0) {
+                            textoStatusCor = "Esgotado";
+                            classeStatusCor = "esgotado";
+                        } else if (quantidadeCor <= minimoCor) {
+                            textoStatusCor = "Estoque baixo";
+                            classeStatusCor = "baixo";
+                        }
+
+                        return `
+                            <article class="sl-estoque-cor-cartao">
+                                <div class="sl-estoque-cor-topo">
+                                    <strong class="sl-estoque-cor-nome">${escaparHTML(cor.nome_cor || "Cor sem nome")}</strong>
+                                    <span class="sl-estoque-cor-status ${classeStatusCor}">${textoStatusCor}</span>
+                                </div>
+                                <div class="sl-estoque-cor-metricas">
+                                    <div><span>Disponível</span><strong>${quantidadeCor.toLocaleString("pt-BR")} un.</strong></div>
+                                    <div><span>Mínimo</span><strong>${minimoCor.toLocaleString("pt-BR")} un.</strong></div>
+                                </div>
+                            </article>
+                        `;
+                    }).join("");
+
+                    const linhaCores = `
+                        <tr class="sl-estoque-cores-row-vendedor">
+                            <td colspan="6">
+                                <section class="sl-estoque-cores">
+                                    <div class="sl-estoque-cores-cabecalho">
+                                        <div>
+                                            <strong>Estoque por cor</strong>
+                                            <small>Saldo e estoque mínimo de cada variante</small>
+                                        </div>
+                                        <span class="sl-estoque-cores-contagem">${coresProduto.length} ${coresProduto.length === 1 ? "cor cadastrada" : "cores cadastradas"}</span>
+                                    </div>
+                                    <div class="sl-estoque-cores-grade">${cartoesCores}</div>
+                                </section>
+                            </td>
+                        </tr>
+                    `;
+
+                    return linhaPrincipal + linhaCores;
 
                 }
             )

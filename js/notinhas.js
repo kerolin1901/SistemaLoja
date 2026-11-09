@@ -1847,10 +1847,26 @@ async function cancelarNotinhaAdmin(evento) {
     }
 
     try {
-        const { data, error } = await notinhasSupabase.rpc("cancelar_notinha_admin", {
+        let devolucoesCores = [];
+        if (produtosDevolvidos) {
+            devolucoesCores = await window.SistemaLojaCoresDevolucao.obter(
+                notinhasSupabase,
+                Number(notinha.venda_id)
+            );
+            if (devolucoesCores === null) {
+                if (botao) {
+                    botao.disabled = false;
+                    botao.textContent = "Confirmar cancelamento";
+                }
+                return;
+            }
+        }
+
+        const { data, error } = await notinhasSupabase.rpc("cancelar_notinha_admin_com_cores", {
             p_notinha_id: Number(notinha.id),
             p_motivo: motivo,
-            p_produtos_devolvidos: produtosDevolvidos
+            p_produtos_devolvidos: produtosDevolvidos,
+            p_devolucoes_cores: devolucoesCores
         });
 
         if (error) {

@@ -498,3 +498,135 @@
     }
 
 }
+/* ==========================================
+   DETALHAMENTO ORGANIZADO DO ESTOQUE POR COR
+========================================== */
+.sl-estoque-cores-row-vendedor > td {
+    padding: 12px 16px 16px !important;
+    background: #f8fafc !important;
+    border-bottom: 1px solid #e5eaf1 !important;
+}
+
+.sl-estoque-cores {
+    display: grid;
+    gap: 10px;
+    min-width: 0;
+}
+
+.sl-estoque-cores-cabecalho {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.sl-estoque-cores-cabecalho > div {
+    display: grid;
+    gap: 2px;
+}
+
+.sl-estoque-cores-cabecalho > div > strong {
+    color: #334155;
+    font-size: 12px;
+    font-weight: 750;
+}
+
+.sl-estoque-cores-cabecalho small {
+    color: #8491a3;
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.sl-estoque-cores-contagem {
+    padding: 4px 9px;
+    border: 1px solid #dbe5f1;
+    border-radius: 999px;
+    background: #fff;
+    color: #64748b;
+    font-size: 10px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.sl-estoque-cores-grade {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 190px), 1fr));
+    gap: 9px;
+    min-width: 0;
+}
+
+.sl-estoque-cor-cartao {
+    display: grid;
+    gap: 10px;
+    min-width: 0;
+    padding: 11px 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 11px;
+    background: #fff;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, .025);
+}
+
+.sl-estoque-cor-topo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    min-width: 0;
+}
+
+.sl-estoque-cor-nome {
+    overflow: hidden;
+    color: #1e293b;
+    font-size: 12px;
+    font-weight: 750;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.sl-estoque-cor-status {
+    flex: 0 0 auto;
+    padding: 3px 7px;
+    border-radius: 999px;
+    font-size: 9px;
+    font-weight: 750;
+    line-height: 1.3;
+    white-space: nowrap;
+}
+
+.sl-estoque-cor-status.normal { background: #dcfce7; color: #166534; }
+.sl-estoque-cor-status.baixo { background: #fef3c7; color: #92400e; }
+.sl-estoque-cor-status.esgotado { background: #fee2e2; color: #991b1b; }
+.sl-estoque-cor-status.inativa { background: #e2e8f0; color: #475569; }
+
+.sl-estoque-cor-metricas {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    padding-top: 8px;
+    border-top: 1px solid #f1f5f9;
+}
+
+.sl-estoque-cor-metricas > div {
+    display: grid;
+    gap: 3px;
+    min-width: 0;
+}
+
+.sl-estoque-cor-metricas span {
+    color: #8491a3;
+    font-size: 10px;
+    font-weight: 550;
+}
+
+.sl-estoque-cor-metricas strong {
+    color: #334155;
+    font-size: 12px;
+    font-weight: 750;
+    font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 640px) {
+    .sl-estoque-cores-row-vendedor > td { padding: 10px !important; }
+    .sl-estoque-cores-grade { grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr)); }
+}

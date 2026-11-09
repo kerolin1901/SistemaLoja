@@ -44,6 +44,9 @@ const estoque =
 const estoqueMinimo =
     document.getElementById("estoqueMinimo");
 
+const avisoEstoquePorCores =
+    document.getElementById("avisoEstoquePorCores");
+
 const produtoAtivo =
     document.getElementById("produtoAtivo");
 
@@ -131,6 +134,7 @@ const btnImprimirRelatorioProdutos =
 let perfilAtual = null;
 
 let produtoEditandoId = null;
+let produtoEditandoControlaCores = false;
 
 let categorias = [];
 
@@ -520,6 +524,7 @@ async function carregarProdutos() {
                 preco_venda_minimo,
                 estoque,
                 estoque_minimo,
+                controla_cores,
                 ativo,
                 criado_em,
                 atualizado_em,
@@ -1429,6 +1434,15 @@ function renderizarProdutos() {
 
                         <button
                             type="button"
+                            class="btn-acao sl-cores-produto-botao"
+                            data-gerenciar-cores="${produto.id}"
+                            title="${produto.controla_cores === true ? "Gerenciar cores" : "Ativar controle por cores"}"
+                        >
+                            ${produto.controla_cores === true ? "Cores" : "Ativar cores"}
+                        </button>
+
+                        <button
+                            type="button"
                             class="btn-acao btn-editar"
                             onclick="editarProduto('${produto.id}')"
                             title="Editar produto"
@@ -1505,6 +1519,11 @@ function limparFormulario() {
     produtoEditandoId =
         null;
 
+    produtoEditandoControlaCores = false;
+
+    if (estoque) estoque.disabled = false;
+    if (estoqueMinimo) estoqueMinimo.disabled = false;
+    if (avisoEstoquePorCores) avisoEstoquePorCores.hidden = true;
 
     if (produtoAtivo) {
 
@@ -1573,6 +1592,13 @@ function editarProduto(id) {
     produtoEditandoId =
         produto.id;
 
+    produtoEditandoControlaCores = produto.controla_cores === true;
+
+    if (estoque) estoque.disabled = produtoEditandoControlaCores;
+    if (estoqueMinimo) estoqueMinimo.disabled = produtoEditandoControlaCores;
+    if (avisoEstoquePorCores) {
+        avisoEstoquePorCores.hidden = !produtoEditandoControlaCores;
+    }
 
     if (tituloFormulario) {
 
@@ -1785,10 +1811,8 @@ async function salvarProduto(event) {
 
 
     if (
-        !Number.isFinite(
-            estoqueValor
-        ) ||
-        estoqueValor < 0
+        !produtoEditandoControlaCores &&
+        (!Number.isFinite(estoqueValor) || estoqueValor < 0)
     ) {
 
         mostrarMensagem(
@@ -1804,10 +1828,8 @@ async function salvarProduto(event) {
 
 
     if (
-        !Number.isFinite(
-            estoqueMinimoValor
-        ) ||
-        estoqueMinimoValor < 0
+        !produtoEditandoControlaCores &&
+        (!Number.isFinite(estoqueMinimoValor) || estoqueMinimoValor < 0)
     ) {
 
         mostrarMensagem(
@@ -1855,6 +1877,12 @@ async function salvarProduto(event) {
 
     };
 
+    // Produtos com controle por cores não podem ter o estoque total alterado
+    // pelo formulário comum. O total será calculado pelas variantes.
+    if (produtoEditandoControlaCores) {
+        delete dadosProduto.estoque;
+        delete dadosProduto.estoque_minimo;
+    }
 
     if (btnSalvar) {
 

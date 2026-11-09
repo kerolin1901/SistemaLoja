@@ -912,14 +912,24 @@ async function excluirVenda(
         "Excluindo...";
 
     try {
+        const devolucoesCores = await window.SistemaLojaCoresDevolucao.obter(
+            historicoSupabase,
+            Number(vendaId)
+        );
+        if (devolucoesCores === null) {
+            botao.disabled = false;
+            botao.textContent = textoOriginal;
+            return;
+        }
 
         const {
             data,
             error
         } = await historicoSupabase.rpc(
-            "excluir_venda",
+            "excluir_venda_com_cores",
             {
-                p_venda_id: Number(vendaId)
+                p_venda_id: Number(vendaId),
+                p_devolucoes_cores: devolucoesCores
             }
         );
 
@@ -1043,6 +1053,8 @@ async function abrirDetalhesVenda(
         .select(`
             id,
             produto_id,
+            produto_cor_id,
+            cor_vendida,
             descricao_avulsa,
             desconto_item,
             quantidade,
@@ -1280,6 +1292,7 @@ async function abrirDetalhesVenda(
 
                     <td>
                         ${escaparTextoHistorico(item.descricao_avulsa || produto?.nome || "Produto")}
+                        ${item.cor_vendida ? `<small class="sl-cor-item">Cor: ${escaparTextoHistorico(item.cor_vendida)}</small>` : ""}
                     </td>
 
                     <td>

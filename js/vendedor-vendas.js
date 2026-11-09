@@ -194,6 +194,7 @@ let produtos = [];
 let clientes = [];
 
 let itensVenda = [];
+let dadosCoresVendaVendedor = { controle: new Map(), cores: new Map() };
 
 let buscaProdutoVenda = null;
 let wrapperBuscaProdutoVenda = null;
@@ -1108,6 +1109,14 @@ async function carregarProdutos() {
 
         resultado.data || [];
 
+    try {
+        dadosCoresVendaVendedor = await window.SistemaLojaCoresVenda.carregar(vendedorVendasSupabase, produtos);
+    } catch (erroCores) {
+        console.error("Não foi possível carregar as cores dos produtos:", erroCores);
+        dadosCoresVendaVendedor = { controle: new Map(), cores: new Map() };
+        mostrarMensagem("Não foi possível consultar as cores dos produtos. Produtos com controle por cores terão a venda bloqueada pelo banco até a conexão ser restabelecida.", "erro");
+    }
+
     criarBuscaProduto();
 
     preencherListaProdutos(
@@ -1566,7 +1575,7 @@ function atualizarPrecoProduto() {
 
 ========================================== */
 
-function adicionarProduto() {
+async function adicionarProduto() {
 
     mostrarMensagem(
 
@@ -1656,31 +1665,24 @@ function adicionarProduto() {
 
     }
 
-    const estoque =
-
-        Number(
-
-            produto.estoque
-
+    let varianteSelecionada;
+    try {
+        varianteSelecionada = await window.SistemaLojaCoresVenda.selecionar(
+            produto,
+            quantidade,
+            dadosCoresVendaVendedor
         );
+    } catch (erroCor) {
+        mostrarMensagem(erroCor.message || "Não foi possível selecionar a cor.", "erro");
+        return;
+    }
+    if (!varianteSelecionada) return;
 
-    const itemExistente =
-
-        itensVenda.find(
-
-            function (item) {
-
-                return (
-
-                    String(item.produto_id) ===
-
-                    String(produto.id)
-
-                );
-
-            }
-
-        );
+    const estoque = Number(varianteSelecionada.estoque) || 0;
+    const itemExistente = itensVenda.find(function (item) {
+        return String(item.produto_id) === String(produto.id) &&
+            Number(item.produto_cor_id || 0) === Number(varianteSelecionada.produto_cor_id || 0);
+    });
 
     const quantidadeAtual =
 
@@ -1755,6 +1757,9 @@ function adicionarProduto() {
                 ),
 
             preco_venda_minimo: Number(produto.preco_venda_minimo ?? produto.preco_venda) || 0,
+            produto_cor_id: varianteSelecionada.produto_cor_id,
+            cor_vendida: varianteSelecionada.cor_vendida,
+            cor_foto_url: varianteSelecionada.foto_url || null,
 
             estoque:
 
@@ -2092,11 +2097,14 @@ function renderizarItens() {
 
                                 >
 
-                                    ${escaparHTML(
 
-                                        item.nome
+                                    ${item.cor_foto_url ? `<img class="sl-cor-miniatura-carrinho" src="${escaparHTML(item.cor_foto_url)}" alt="Foto ${escaparHTML(item.cor_vendida || "da variante")}" loading="lazy">` : ""}
 
-                                    )}
+
+                                    <span class="sl-cor-carrinho-texto">${escaparHTML(item.nome)}
+
+
+                                    ${item.cor_vendida ? `<small class="sl-cor-item">Cor: ${escaparHTML(item.cor_vendida)}</small>` : ""}</span>
 
                                 </div>
 
@@ -3638,8 +3646,10 @@ async function finalizarVenda() {
             ? `Forma: Dinheiro\nValor recebido: ${formatarMoeda(recebidoDinheiroCentavos / 100)}\nTroco: ${formatarMoeda(trocoDinheiroCentavos / 100)}`
             : `Forma: ${formaPagamento.options[formaPagamento.selectedIndex].text}`;
 
+    // Confirmação padronizada com a tela de vendas do administrador.
+    // Ela deve acontecer antes de qualquer chamada RPC ou atualização de estoque.
     const confirmou = window.confirm(
-        `Confirma a finalização desta venda?\n\n` +
+        `Confirmar venda?\n\n` +
         `Subtotal: ${formatarMoeda(subtotal)}\n` +
         `Desconto máximo: ${formatarMoeda(descontoBase)}\n` +
         `Desconto adicional à vista (${formatarPercentualDescontoAvista()}): ${formatarMoeda(descontoAvista)}\n` +
@@ -3647,8 +3657,7 @@ async function finalizarVenda() {
         `Desconto manual dos avulsos: ${formatarMoeda(descontoAvulso)}\n` +
         `Desconto total: ${formatarMoeda(descontoTotalGeral)}\n` +
         `Total: ${formatarMoeda(total)}\n\n` +
-        `${resumoFormaPagamento}\n\n` +
-        `O estoque será atualizado uma única vez.`
+        `${resumoFormaPagamento}`
     );
 
     if (!confirmou) {
@@ -3675,6 +3684,7 @@ async function finalizarVenda() {
 
                 return {
                     produto_id: Number(item.produto_id),
+                    produto_cor_id: item.produto_cor_id ? Number(item.produto_cor_id) : null,
                     quantidade: Number(item.quantidade)
                 };
 
@@ -3958,65 +3968,45 @@ async function finalizarVenda() {
 
 function configurarBotaoSair() {
 
-    const botao =
+    const botao = document.getElementById("btnSair");
 
-        document.getElementById(
-
-            "btnSair"
-
-        );
-
-    if (!botao) {
-
+    if (!botao || botao.dataset.sairConfigurado === "true") {
         return;
-
     }
 
-    botao.addEventListener(
+    // Evita registrar o mesmo evento mais de uma vez.
+    botao.dataset.sairConfigurado = "true";
 
-        "click",
+    botao.addEventListener("click", async function (evento) {
 
-        async function () {
+        evento.preventDefault();
 
-            try {
-
-                await vendedorVendasSupabase
-
-                    .auth
-
-                    .signOut({
-
-                        scope: "local"
-
-                    });
-
-            }
-
-            catch (erro) {
-
-                console.error(
-
-                    "Erro ao sair:",
-
-                    erro
-
-                );
-
-            }
-
-            sessionStorage.removeItem(
-
-                "sistemaLojaPerfil"
-
-            );
-
-            window.location.href =
-
-                "index.html";
-
+        // Impede cliques repetidos enquanto a sessão é encerrada.
+        if (botao.disabled) {
+            return;
         }
 
-    );
+        botao.disabled = true;
+        botao.setAttribute("aria-busy", "true");
+
+        try {
+            const { error } = await vendedorVendasSupabase.auth.signOut({
+                scope: "local"
+            });
+
+            if (error) {
+                throw error;
+            }
+
+        } catch (erro) {
+            console.error("Erro ao sair:", erro);
+
+        } finally {
+            sessionStorage.removeItem("sistemaLojaPerfil");
+            window.location.replace("index.html");
+        }
+
+    });
 
 }
 
@@ -4205,6 +4195,9 @@ btnFinalizarVenda.addEventListener(
 
 async function iniciarVendasVendedor() {
 
+    // Registra o botão Sair imediatamente, antes de qualquer consulta assíncrona.
+    configurarBotaoSair();
+
     mostrarDataAtual();
 
     const autorizado =
@@ -4226,8 +4219,6 @@ async function iniciarVendasVendedor() {
     renderizarItens();
 
     atualizarResumo();
-
-    configurarBotaoSair();
 
 }
 

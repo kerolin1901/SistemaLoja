@@ -9,6 +9,10 @@ const formMovimentacao =
 const produtoEstoque =
     document.getElementById("produtoEstoque");
 
+const corEstoqueCampo = document.getElementById("corEstoqueCampo");
+const corEstoque = document.getElementById("corEstoque");
+let coresProdutoSelecionado = [];
+
 const tipoMovimentacao =
     document.getElementById("tipoMovimentacao");
 
@@ -75,6 +79,7 @@ const estoqueSupabase = supabaseClient;
 
 let usuarioAtual = null;
 let movimentacaoEmAndamento = false;
+let produtosSelectEstoque = [];
 
 
 /* ==========================================
@@ -289,7 +294,7 @@ async function carregarProdutosSelect() {
         await estoqueSupabase
             .from("produtos")
             .select(
-                "id, nome, sku, ativo"
+                "id, nome, sku, ativo, controla_cores"
             )
             .eq("ativo", true)
             .order(
@@ -321,6 +326,7 @@ async function carregarProdutosSelect() {
     const produtos =
         resultado.data || [];
 
+    produtosSelectEstoque = produtos;
 
     produtos.forEach(function (produto) {
 
@@ -331,6 +337,9 @@ async function carregarProdutosSelect() {
         option.value =
             produto.id;
 
+
+        option.dataset.controlaCores =
+            produto.controla_cores === true ? "true" : "false";
 
         if (produto.sku) {
 
@@ -345,11 +354,41 @@ async function carregarProdutosSelect() {
                 produto.nome;
         }
 
+        if (produto.controla_cores === true) {
+            option.textContent += " (estoque por cores)";
+        }
 
         produtoEstoque.appendChild(option);
     });
 }
 
+
+async function atualizarSeletorCoresEstoque() {
+    coresProdutoSelecionado = [];
+    if (corEstoque) corEstoque.innerHTML = '<option value="">Selecione uma cor</option>';
+    const produto = produtosSelectEstoque.find((item) => String(item.id) === String(produtoEstoque?.value));
+    const usaCores = produto?.controla_cores === true;
+    corEstoqueCampo?.classList.toggle("ativo", usaCores);
+    if (!usaCores) return;
+
+    const { data, error } = await estoqueSupabase.from("produtos_cores")
+        .select("id, nome_cor, estoque, estoque_minimo, ativo")
+        .eq("produto_id", Number(produto.id))
+        .eq("ativo", true)
+        .order("nome_cor", { ascending: true });
+    if (error) {
+        console.error("Erro ao carregar cores para movimentação:", error);
+        mostrarMensagem("Não foi possível carregar as cores deste produto.", "erro");
+        return;
+    }
+    coresProdutoSelecionado = data || [];
+    for (const cor of coresProdutoSelecionado) {
+        const option = document.createElement("option");
+        option.value = cor.id;
+        option.textContent = `${cor.nome_cor} — estoque: ${formatarNumero(cor.estoque)}`;
+        corEstoque?.appendChild(option);
+    }
+}
 
 /* ==========================================
    CARREGAR ESTOQUE
@@ -383,6 +422,7 @@ async function carregarEstoque() {
                 sku,
                 estoque,
                 estoque_minimo,
+                controla_cores,
                 ativo,
                 categorias (
                     nome
@@ -433,6 +473,23 @@ async function carregarEstoque() {
     const produtos =
         resultado.data || [];
 
+    const idsProdutosComCores = produtos.filter((produto) => produto.controla_cores === true).map((produto) => Number(produto.id));
+    let coresPorProduto = new Map();
+    if (idsProdutosComCores.length) {
+        const resultadoCores = await estoqueSupabase.from("produtos_cores")
+            .select("id, produto_id, nome_cor, estoque, estoque_minimo, ativo")
+            .in("produto_id", idsProdutosComCores)
+            .order("nome_cor", { ascending: true });
+        if (resultadoCores.error) {
+            console.error("Erro ao carregar detalhes das cores:", resultadoCores.error);
+        } else {
+            for (const cor of (resultadoCores.data || [])) {
+                const chave = String(cor.produto_id);
+                if (!coresPorProduto.has(chave)) coresPorProduto.set(chave, []);
+                coresPorProduto.get(chave).push(cor);
+            }
+        }
+    }
 
     if (produtos.length === 0) {
 
@@ -600,6 +657,103 @@ async function carregarEstoque() {
 
 
         listaEstoque.appendChild(tr);
+
+        if (produto.controla_cores === true) {
+            const cores = coresPorProduto.get(String(produto.id)) || [];
+            const linhaCores = document.createElement("tr");
+            linhaCores.className = "sl-estoque-cores-row";
+
+            const detalhe = document.createElement("td");
+            detalhe.colSpan = 6;
+            detalhe.className = "sl-estoque-cores-celula";
+
+            if (!cores.length) {
+                detalhe.textContent = "O controle por cores está ativo, mas nenhuma variante foi encontrada.";
+                detalhe.classList.add("sl-estoque-cores-vazio");
+            } else {
+                const painelCores = document.createElement("section");
+                painelCores.className = "sl-estoque-cores";
+                painelCores.setAttribute("aria-label", `Estoque por cor de ${produto.nome || "produto"}`);
+
+                const cabecalhoCores = document.createElement("div");
+                cabecalhoCores.className = "sl-estoque-cores-cabecalho";
+
+                const textosCabecalho = document.createElement("div");
+                const tituloCores = document.createElement("strong");
+                tituloCores.textContent = "Estoque por cor";
+                const subtituloCores = document.createElement("small");
+                subtituloCores.textContent = "Saldo e estoque mínimo de cada variante";
+                textosCabecalho.append(tituloCores, subtituloCores);
+
+                const totalCores = document.createElement("span");
+                totalCores.className = "sl-estoque-cores-contagem";
+                totalCores.textContent = `${cores.length} ${cores.length === 1 ? "cor cadastrada" : "cores cadastradas"}`;
+                cabecalhoCores.append(textosCabecalho, totalCores);
+
+                const gradeCores = document.createElement("div");
+                gradeCores.className = "sl-estoque-cores-grade";
+
+                for (const cor of cores) {
+                    const quantidadeCor = Number(cor.estoque || 0);
+                    const minimoCor = Number(cor.estoque_minimo || 0);
+                    let textoStatus = "Normal";
+                    let classeStatus = "normal";
+
+                    if (cor.ativo !== true) {
+                        textoStatus = "Inativa";
+                        classeStatus = "inativa";
+                    } else if (quantidadeCor <= 0) {
+                        textoStatus = "Esgotado";
+                        classeStatus = "esgotado";
+                    } else if (quantidadeCor <= minimoCor) {
+                        textoStatus = "Estoque baixo";
+                        classeStatus = "baixo";
+                    }
+
+                    const cartao = document.createElement("article");
+                    cartao.className = "sl-estoque-cor-cartao";
+
+                    const topoCartao = document.createElement("div");
+                    topoCartao.className = "sl-estoque-cor-topo";
+
+                    const nomeCor = document.createElement("strong");
+                    nomeCor.className = "sl-estoque-cor-nome";
+                    nomeCor.textContent = cor.nome_cor || "Cor sem nome";
+
+                    const statusCor = document.createElement("span");
+                    statusCor.className = `sl-estoque-cor-status ${classeStatus}`;
+                    statusCor.textContent = textoStatus;
+                    topoCartao.append(nomeCor, statusCor);
+
+                    const metricas = document.createElement("div");
+                    metricas.className = "sl-estoque-cor-metricas";
+
+                    const blocoDisponivel = document.createElement("div");
+                    const labelDisponivel = document.createElement("span");
+                    labelDisponivel.textContent = "Disponível";
+                    const valorDisponivel = document.createElement("strong");
+                    valorDisponivel.textContent = `${formatarNumero(quantidadeCor)} un.`;
+                    blocoDisponivel.append(labelDisponivel, valorDisponivel);
+
+                    const blocoMinimo = document.createElement("div");
+                    const labelMinimo = document.createElement("span");
+                    labelMinimo.textContent = "Mínimo";
+                    const valorMinimo = document.createElement("strong");
+                    valorMinimo.textContent = `${formatarNumero(minimoCor)} un.`;
+                    blocoMinimo.append(labelMinimo, valorMinimo);
+
+                    metricas.append(blocoDisponivel, blocoMinimo);
+                    cartao.append(topoCartao, metricas);
+                    gradeCores.appendChild(cartao);
+                }
+
+                painelCores.append(cabecalhoCores, gradeCores);
+                detalhe.appendChild(painelCores);
+            }
+
+            linhaCores.appendChild(detalhe);
+            listaEstoque.appendChild(linhaCores);
+        }
     });
 
 
@@ -663,6 +817,7 @@ async function carregarMovimentacoes() {
                 quantidade,
                 estoque_anterior,
                 estoque_novo,
+                cor_movimentada,
                 motivo,
                 criado_em,
                 produtos (
@@ -798,7 +953,9 @@ async function carregarMovimentacoes() {
                 document.createElement("strong");
 
             strongProduto.textContent =
-                nomeProduto;
+                movimentacao.cor_movimentada
+                    ? `${nomeProduto} — ${movimentacao.cor_movimentada}`
+                    : nomeProduto;
 
             tdProduto.appendChild(
                 strongProduto
@@ -883,258 +1040,102 @@ async function registrarMovimentacao(event) {
 
     event.preventDefault();
 
-
     if (movimentacaoEmAndamento) {
         return;
     }
 
-
-    const produtoId =
-        produtoEstoque.value;
-
-
-    const tipo =
-        tipoMovimentacao.value;
-
-
-    const quantidade =
-        Number(
-            quantidadeMovimentacao.value
-        );
-
-
-    const motivo =
-        motivoMovimentacao.value.trim();
-
+    const produtoId = Number(produtoEstoque.value);
+    const tipo = tipoMovimentacao.value;
+    const quantidade = Number(quantidadeMovimentacao.value);
+    const motivo = motivoMovimentacao.value.trim();
 
     if (!produtoId) {
-
-        mostrarMensagem(
-            "Selecione um produto.",
-            "erro"
-        );
-
+        mostrarMensagem("Selecione um produto.", "erro");
         return;
     }
 
-
-    if (
-        !quantidade ||
-        quantidade <= 0
-    ) {
-
+    const produtoSelecionado = produtosSelectEstoque.find(
+        (produto) => Number(produto.id) === produtoId
+    );
+    const usaCores = produtoSelecionado?.controla_cores === true;
+    const quantidadeValida = Number.isFinite(quantidade) && (tipo === "ajuste" && usaCores ? quantidade >= 0 : quantidade > 0);
+    if (!quantidadeValida) {
         mostrarMensagem(
-            "Informe uma quantidade válida.",
+            tipo === "ajuste" && usaCores
+                ? "Informe um estoque final válido (zero ou maior)."
+                : "Informe uma quantidade válida e maior que zero.",
             "erro"
         );
-
         return;
     }
-
 
     if (!usuarioAtual) {
-
-        mostrarMensagem(
-            "Usuário administrador não identificado.",
-            "erro"
-        );
-
+        mostrarMensagem("Usuário administrador não identificado.", "erro");
         return;
     }
 
+    if (!produtoSelecionado) {
+        mostrarMensagem("Produto não encontrado. Atualize a página e tente novamente.", "erro");
+        return;
+    }
 
-    movimentacaoEmAndamento =
-        true;
+    const corSelecionada = usaCores
+        ? coresProdutoSelecionado.find((cor) => String(cor.id) === String(corEstoque?.value))
+        : null;
+    if (usaCores && !corSelecionada) {
+        mostrarMensagem("Selecione a cor que deseja movimentar.", "erro");
+        corEstoque?.focus();
+        return;
+    }
 
-
-    mostrarMensagem(
-        "Registrando movimentação..."
-    );
-
+    movimentacaoEmAndamento = true;
+    mostrarMensagem("Registrando movimentação...");
 
     try {
+        const { data, error } = usaCores
+            ? await estoqueSupabase.rpc("movimentar_estoque_cor", {
+                p_produto_cor_id: Number(corSelecionada.id),
+                p_tipo: tipo,
+                p_quantidade: quantidade,
+                p_motivo: motivo || null
+            })
+            : await estoqueSupabase.rpc("registrar_movimentacao_estoque_produto", {
+                p_produto_id: produtoId,
+                p_tipo: tipo,
+                p_quantidade: quantidade,
+                p_motivo: motivo || null
+            });
 
-        const resultadoProduto =
-            await estoqueSupabase
-                .from("produtos")
-                .select(
-                    "id, nome, estoque, ativo"
-                )
-                .eq(
-                    "id",
-                    produtoId
-                )
-                .single();
-
-
-        if (
-            resultadoProduto.error ||
-            !resultadoProduto.data
-        ) {
-
-            throw new Error(
-                "Produto não encontrado."
-            );
+        if (error) {
+            throw error;
         }
 
-
-        const produto =
-            resultadoProduto.data;
-
-
-        if (!produto.ativo) {
-
-            throw new Error(
-                "Este produto está inativo."
-            );
+        if (!data || data.sucesso !== true) {
+            throw new Error("O banco não confirmou a movimentação do estoque.");
         }
 
-
-        const estoqueAnterior =
-            Number(
-                produto.estoque || 0
-            );
-
-
-        let estoqueNovo =
-            estoqueAnterior;
-
-
-        if (tipo === "entrada") {
-
-            estoqueNovo =
-                estoqueAnterior +
-                quantidade;
-
-        } else if (tipo === "saida") {
-
-            estoqueNovo =
-                estoqueAnterior -
-                quantidade;
-
-        } else if (tipo === "ajuste") {
-
-            estoqueNovo =
-                quantidade;
-
-        } else {
-
-            throw new Error(
-                "Tipo de movimentação inválido."
-            );
-        }
-
-
-        if (estoqueNovo < 0) {
-
-            throw new Error(
-                "A saída não pode deixar o estoque negativo."
-            );
-        }
-
-
-        const atualizacao =
-            await estoqueSupabase
-                .from("produtos")
-                .update({
-                    estoque:
-                        estoqueNovo,
-
-                    atualizado_em:
-                        new Date().toISOString()
-                })
-                .eq(
-                    "id",
-                    produtoId
-                );
-
-
-        if (atualizacao.error) {
-            throw atualizacao.error;
-        }
-
-
-        const historico =
-            await estoqueSupabase
-                .from("movimentacoes_estoque")
-                .insert({
-                    produto_id:
-                        produtoId,
-
-                    usuario_id:
-                        usuarioAtual.id,
-
-                    tipo:
-                        tipo,
-
-                    quantidade:
-                        quantidade,
-
-                    estoque_anterior:
-                        estoqueAnterior,
-
-                    estoque_novo:
-                        estoqueNovo,
-
-                    motivo:
-                        motivo || null
-                });
-
-
-        if (historico.error) {
-
-            console.error(
-                "Erro ao registrar histórico:",
-                historico.error
-            );
-
-            mostrarMensagem(
-                "Estoque atualizado, mas o histórico não foi registrado.",
-                "erro"
-            );
-
-        } else {
-
-            mostrarMensagem(
-                "Movimentação registrada com sucesso.",
-                "sucesso"
-            );
-        }
-
+        mostrarMensagem("Movimentação registrada com sucesso.", "sucesso");
 
         formMovimentacao.reset();
-
-        tipoMovimentacao.value =
-            "entrada";
-
+        tipoMovimentacao.value = "entrada";
 
         await carregarProdutosSelect();
-
+        // O reset do formulário não dispara o evento change do seletor.
+        // Atualize a área de cores para não deixar uma variante antiga visível.
+        await atualizarSeletorCoresEstoque();
         await carregarEstoque();
-
         await carregarMovimentacoes();
 
-
     } catch (erro) {
-
-        console.error(
-            "Erro ao registrar movimentação:",
-            erro
-        );
-
+        console.error("Erro ao registrar movimentação:", erro);
         mostrarMensagem(
-            erro.message ||
-            "Não foi possível registrar a movimentação.",
+            erro.message || "Não foi possível registrar a movimentação.",
             "erro"
         );
-
     } finally {
-
-        movimentacaoEmAndamento =
-            false;
+        movimentacaoEmAndamento = false;
     }
 }
-
 
 /* ==========================================
    CANCELAR
@@ -1197,6 +1198,10 @@ async function sair() {
 /* ==========================================
    EVENTOS
 ========================================== */
+
+if (produtoEstoque) {
+    produtoEstoque.addEventListener("change", atualizarSeletorCoresEstoque);
+}
 
 if (formMovimentacao) {
 

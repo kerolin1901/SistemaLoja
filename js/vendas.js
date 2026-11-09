@@ -203,6 +203,7 @@ let produtosVenda = [];
 let clientesVenda = [];
 
 let carrinho = [];
+let dadosCoresVenda = { controle: new Map(), cores: new Map() };
 
 let buscaProdutoVenda = null;
 let wrapperBuscaProdutoVenda = null;
@@ -1988,6 +1989,14 @@ async function carregarProdutosVenda() {
 
         data || [];
 
+    try {
+        dadosCoresVenda = await window.SistemaLojaCoresVenda.carregar(vendasSupabase, produtosVenda);
+    } catch (erroCores) {
+        console.error("Não foi possível carregar as cores dos produtos:", erroCores);
+        dadosCoresVenda = { controle: new Map(), cores: new Map() };
+        mostrarMensagem("Não foi possível consultar as cores dos produtos. Produtos com controle por cores terão a venda bloqueada pelo banco até a conexão ser restabelecida.", "erro");
+    }
+
     preencherListaProdutos(
 
         produtosVenda
@@ -2176,7 +2185,7 @@ function atualizarPrecoProduto() {
 
 ========================================== */
 
-function adicionarProdutoCarrinho() {
+async function adicionarProdutoCarrinho() {
 
     const produtoId =
 
@@ -2264,49 +2273,34 @@ function adicionarProdutoCarrinho() {
 
     }
 
-    const estoque =
-
-        Number(
-
-            produto.estoque
-
-        ) || 0;
-
-    if (
-
-        estoque <= 0
-
-    ) {
-
-        mostrarMensagem(
-
-            `O produto "${produto.nome}" está sem estoque.`,
-
-            "erro"
-
+    let varianteSelecionada;
+    try {
+        varianteSelecionada = await window.SistemaLojaCoresVenda.selecionar(
+            produto,
+            quantidade,
+            dadosCoresVenda
         );
-
+    } catch (erroCor) {
+        mostrarMensagem(erroCor.message || "Não foi possível selecionar a cor.", "erro");
         return;
+    }
+    if (!varianteSelecionada) return;
 
+    const estoque = Number(varianteSelecionada.estoque) || 0;
+    if (estoque <= 0) {
+        mostrarMensagem(
+            varianteSelecionada.produto_cor_id
+                ? `A cor ${varianteSelecionada.cor_vendida} do produto "${produto.nome}" está sem estoque.`
+                : `O produto "${produto.nome}" está sem estoque.`,
+            "erro"
+        );
+        return;
     }
 
-    const itemExistente =
-
-        carrinho.find(
-
-            function (item) {
-
-                return (
-
-                    Number(item.produto_id) ===
-
-                    produtoId
-
-                );
-
-            }
-
-        );
+    const itemExistente = carrinho.find(function (item) {
+        return Number(item.produto_id) === produtoId &&
+            Number(item.produto_cor_id || 0) === Number(varianteSelecionada.produto_cor_id || 0);
+    });
 
     const quantidadeFinal =
 
@@ -2326,7 +2320,7 @@ function adicionarProdutoCarrinho() {
 
         mostrarMensagem(
 
-            `Estoque insuficiente para "${produto.nome}". Estoque disponível: ${estoque}.`,
+            `Estoque insuficiente para "${produto.nome}"${varianteSelecionada.cor_vendida ? ` na cor ${varianteSelecionada.cor_vendida}` : ""}. Estoque disponível: ${estoque}.`,
 
             "erro"
 
@@ -2373,6 +2367,9 @@ function adicionarProdutoCarrinho() {
                 ) || 0,
 
             preco_venda_minimo: Number(produto.preco_venda_minimo ?? produto.preco_venda) || 0,
+            produto_cor_id: varianteSelecionada.produto_cor_id,
+            cor_vendida: varianteSelecionada.cor_vendida,
+            cor_foto_url: varianteSelecionada.foto_url || null,
 
             estoque:
 
@@ -3826,11 +3823,14 @@ function renderizarCarrinho() {
 
                     <div class="produto-item-nome">
 
-                        ${escaparHTML(
 
-                            item.nome
+                        ${item.cor_foto_url ? `<img class="sl-cor-miniatura-carrinho" src="${escaparHTML(item.cor_foto_url)}" alt="Foto ${escaparHTML(item.cor_vendida || "da variante")}" loading="lazy">` : ""}
 
-                        )}
+
+                        <span class="sl-cor-carrinho-texto">${escaparHTML(item.nome)}
+
+
+                        ${item.cor_vendida ? `<small class="sl-cor-item">Cor: ${escaparHTML(item.cor_vendida)}</small>` : ""}</span>
 
                     </div>
 
@@ -4406,6 +4406,7 @@ async function finalizarVenda() {
 
                 return {
                     produto_id: Number(item.produto_id),
+                    produto_cor_id: item.produto_cor_id ? Number(item.produto_cor_id) : null,
                     quantidade: Number(item.quantidade)
                 };
 
