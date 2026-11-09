@@ -179,6 +179,18 @@ const mensagemCliente =
 const btnSair =
     document.getElementById("btnSair");
 
+const modalHistoricoCliente = document.getElementById("modalHistoricoCliente");
+const fecharHistoricoCliente = document.getElementById("fecharHistoricoCliente");
+const historicoClienteTitulo = document.getElementById("historicoClienteTitulo");
+const historicoClienteContato = document.getElementById("historicoClienteContato");
+const historicoClienteCarregando = document.getElementById("historicoClienteCarregando");
+const historicoClienteConteudo = document.getElementById("historicoClienteConteudo");
+const historicoClienteIndicadores = document.getElementById("historicoClienteIndicadores");
+const historicoClientePagamentos = document.getElementById("historicoClientePagamentos");
+const historicoClienteCompras = document.getElementById("historicoClienteCompras");
+const historicoClienteNotinhas = document.getElementById("historicoClienteNotinhas");
+const historicoClienteErro = document.getElementById("historicoClienteErro");
+
 
 /* ==========================================
    SUPABASE
@@ -600,6 +612,13 @@ async function carregarClientes() {
             "acoes-cliente";
 
 
+        const botaoHistorico = document.createElement("button");
+        botaoHistorico.type = "button";
+        botaoHistorico.className = "botao-acao botao-historico";
+        botaoHistorico.textContent = "Histórico";
+        botaoHistorico.addEventListener("click", () => verHistoricoCliente(cliente));
+
+
         const botaoEditar =
             document.createElement("button");
 
@@ -656,6 +675,7 @@ async function carregarClientes() {
         );
 
 
+        acoes.appendChild(botaoHistorico);
         acoes.appendChild(botaoEditar);
         acoes.appendChild(botaoStatus);
         acoes.appendChild(botaoExcluir);
@@ -681,6 +701,246 @@ async function carregarClientes() {
     aplicarBuscaClientes();
 }
 
+
+/* =========================================================
+   HISTÓRICO INTELIGENTE DO CLIENTE
+   Usa vendas finalizadas, itens e saldo real de notinhas.
+========================================================= */
+
+function formatarMoedaCliente(valor) {
+    return (Number(valor) || 0).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+}
+
+function formatarDataHoraCliente(valor) {
+    if (!valor) return "-";
+    const data = new Date(valor);
+    return Number.isNaN(data.getTime()) ? "-" : data.toLocaleString("pt-BR", { dateStyle: "short", timeStyle: "short" });
+}
+
+function rotuloFormaPagamentoCliente(valor) {
+    const chave = String(valor || "").trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[_-]+/g, " ").replace(/\s+/g, " ");
+    const nomes = {
+        dinheiro: "Dinheiro", pix: "PIX", cartao: "Cartão", credito: "Cartão de crédito",
+        "cartao credito": "Cartão de crédito", "cartao de credito": "Cartão de crédito",
+        debito: "Cartão de débito", "cartao debito": "Cartão de débito", "cartao de debito": "Cartão de débito",
+        boleto: "Boleto", transferencia: "Transferência", outro: "Outro", outros: "Outros", "a prazo": "A prazo"
+    };
+    return nomes[chave] || (valor ? String(valor) : "Não informado");
+}
+
+async function buscarTodasPaginasCliente(criarConsulta) {
+    const todos = [];
+    const tamanho = 1000;
+    let inicio = 0;
+    while (true) {
+        const { data, error } = await criarConsulta().range(inicio, inicio + tamanho - 1);
+        if (error) throw error;
+        const pagina = data || [];
+        todos.push(...pagina);
+        if (pagina.length < tamanho) break;
+        inicio += tamanho;
+    }
+    return todos;
+}
+
+function abrirModalHistoricoCliente() {
+    if (!modalHistoricoCliente) return;
+    modalHistoricoCliente.hidden = false;
+    document.body.classList.add("historico-cliente-modal-aberto");
+    fecharHistoricoCliente?.focus();
+}
+
+function fecharModalHistoricoCliente() {
+    if (!modalHistoricoCliente) return;
+    modalHistoricoCliente.hidden = true;
+    document.body.classList.remove("historico-cliente-modal-aberto");
+}
+
+function renderizarComprasCliente(vendas, itens, produtos) {
+    if (!vendas.length) {
+        historicoClienteCompras.innerHTML = '<div class="historico-cliente-vazio">Este cliente ainda não possui compras finalizadas.</div>';
+        return;
+    }
+    const itensPorVenda = new Map();
+    (itens || []).forEach(item => {
+        const chave = String(item.venda_id);
+        if (!itensPorVenda.has(chave)) itensPorVenda.set(chave, []);
+        itensPorVenda.get(chave).push(item);
+    });
+
+    historicoClienteCompras.innerHTML = `
+        <table class="historico-cliente-tabela">
+            <thead><tr><th>Data</th><th>Venda</th><th>Produtos / cores</th><th>Pagamento</th><th>Total</th></tr></thead>
+            <tbody>
+                ${vendas.map(venda => {
+                    const linhas = itensPorVenda.get(String(venda.id)) || [];
+                    const resumoItens = linhas.length
+                        ? linhas.map(item => {
+                            const produto = produtos.get(String(item.produto_id));
+                            const nome = item.descricao_avulsa || produto?.nome || "Produto";
+                            const cor = String(item.cor_vendida || "").trim();
+                            const quantidade = Number(item.quantidade) || 0;
+                            return `<span class="historico-cliente-item">${escaparHtml(nome)}${cor ? ` <em>${escaparHtml(cor)}</em>` : ""} × ${quantidade.toLocaleString("pt-BR", { maximumFractionDigits: 3 })}</span>`;
+                        }).join("")
+                        : '<span class="historico-cliente-sem-item">Itens não disponíveis</span>';
+                    return `<tr>
+                        <td>${escaparHtml(formatarDataHoraCliente(venda.criado_em))}</td>
+                        <td>#${escaparHtml(venda.id)}</td>
+                        <td><div class="historico-cliente-itens">${resumoItens}</div></td>
+                        <td>${escaparHtml(rotuloFormaPagamentoCliente(venda.forma_pagamento))}</td>
+                        <td><strong>${escaparHtml(formatarMoedaCliente(venda.total))}</strong></td>
+                    </tr>`;
+                }).join("")}
+            </tbody>
+        </table>
+    `;
+}
+
+async function carregarNotinhasAbertasCliente(clienteId) {
+    const { data: notinhas, error: erroNotinhas } = await clientesSupabase
+        .from("notinhas")
+        .select("id, loja_id, numero, cliente_id, venda_id, emitida_em, total, status")
+        .eq("loja_id", perfilClientesAtual.loja_id)
+        .eq("cliente_id", clienteId)
+        .eq("status", "aberta")
+        .order("emitida_em", { ascending: false });
+    if (erroNotinhas) throw erroNotinhas;
+    if (!notinhas?.length) return [];
+
+    const ids = notinhas.map(n => n.id);
+    const { data: parcelas, error: erroParcelas } = await clientesSupabase
+        .from("parcelas_notinha")
+        .select("id, loja_id, notinha_id, valor_original")
+        .eq("loja_id", perfilClientesAtual.loja_id)
+        .in("notinha_id", ids);
+    if (erroParcelas) throw erroParcelas;
+
+    const listaParcelas = parcelas || [];
+    const idsParcelas = listaParcelas.map(p => p.id);
+    let alocacoes = [];
+    if (idsParcelas.length) {
+        const { data, error } = await clientesSupabase
+            .from("alocacoes_recebimento_notinha")
+            .select("parcela_id, valor_aplicado")
+            .eq("loja_id", perfilClientesAtual.loja_id)
+            .in("parcela_id", idsParcelas);
+        if (error) throw error;
+        alocacoes = data || [];
+    }
+
+    const pagoPorParcela = new Map();
+    alocacoes.forEach(a => {
+        const chave = String(a.parcela_id);
+        pagoPorParcela.set(chave, (pagoPorParcela.get(chave) || 0) + (Number(a.valor_aplicado) || 0));
+    });
+    const resumoPorNotinha = new Map();
+    listaParcelas.forEach(p => {
+        const chave = String(p.notinha_id);
+        if (!resumoPorNotinha.has(chave)) resumoPorNotinha.set(chave, { total: 0, pago: 0, saldo: 0 });
+        const resumo = resumoPorNotinha.get(chave);
+        const original = Math.round((Number(p.valor_original) || 0) * 100);
+        const pago = Math.min(original, Math.round((pagoPorParcela.get(String(p.id)) || 0) * 100));
+        resumo.total += original;
+        resumo.pago += pago;
+        resumo.saldo += Math.max(0, original - pago);
+    });
+    return notinhas.map(n => {
+        const r = resumoPorNotinha.get(String(n.id)) || { total: 0, pago: 0, saldo: Math.round((Number(n.total) || 0) * 100) };
+        return { ...n, totalCalculado: r.total / 100, pagoCalculado: r.pago / 100, saldoCalculado: r.saldo / 100 };
+    }).filter(n => n.saldoCalculado > 0);
+}
+
+async function verHistoricoCliente(cliente) {
+    if (!perfilClientesAtual?.loja_id || !modalHistoricoCliente) return;
+    abrirModalHistoricoCliente();
+    historicoClienteTitulo.textContent = `Histórico — ${cliente.nome || "Cliente"}`;
+    historicoClienteContato.textContent = [cliente.telefone, cliente.email].filter(Boolean).join(" · ") || "Ficha de relacionamento do cliente";
+    historicoClienteCarregando.hidden = false;
+    historicoClienteConteudo.hidden = true;
+    historicoClienteErro.hidden = true;
+    historicoClienteCarregando.textContent = "Carregando compras e pendências...";
+
+    try {
+        const vendas = await buscarTodasPaginasCliente(() => clientesSupabase
+            .from("vendas")
+            .select("id, loja_id, usuario_id, cliente_id, subtotal, desconto, total, forma_pagamento, status, observacoes, criado_em")
+            .eq("loja_id", perfilClientesAtual.loja_id)
+            .eq("cliente_id", cliente.id)
+            .eq("status", "finalizada")
+            .order("criado_em", { ascending: false }));
+
+        const idsVendas = vendas.map(v => v.id);
+        const itens = [];
+        for (let i = 0; i < idsVendas.length; i += 100) {
+            const lote = idsVendas.slice(i, i + 100);
+            const dados = await buscarTodasPaginasCliente(() => clientesSupabase
+                .from("itens_venda")
+                .select("id, venda_id, produto_id, descricao_avulsa, cor_vendida, quantidade, preco_unitario, subtotal")
+                .in("venda_id", lote)
+                .order("id", { ascending: true }));
+            itens.push(...dados);
+        }
+
+        const idsProdutos = [...new Set(itens.map(i => i.produto_id).filter(Boolean).map(String))];
+        const produtos = new Map();
+        for (let i = 0; i < idsProdutos.length; i += 100) {
+            const lote = idsProdutos.slice(i, i + 100);
+            const { data, error } = await clientesSupabase.from("produtos").select("id, nome").in("id", lote);
+            if (error) throw error;
+            (data || []).forEach(p => produtos.set(String(p.id), p));
+        }
+
+        const totalGasto = vendas.reduce((soma, venda) => soma + (Number(venda.total) || 0), 0);
+        const ultimaCompra = vendas[0]?.criado_em;
+        const pagamentos = new Map();
+        vendas.forEach(venda => {
+            const forma = rotuloFormaPagamentoCliente(venda.forma_pagamento);
+            pagamentos.set(forma, (pagamentos.get(forma) || 0) + 1);
+        });
+
+        historicoClienteIndicadores.innerHTML = `
+            <article><span>Total comprado</span><strong>${escaparHtml(formatarMoedaCliente(totalGasto))}</strong></article>
+            <article><span>Compras finalizadas</span><strong>${vendas.length.toLocaleString("pt-BR")}</strong></article>
+            <article><span>Última compra</span><strong>${escaparHtml(ultimaCompra ? formatarDataHoraCliente(ultimaCompra) : "Sem compras")}</strong></article>
+        `;
+
+        historicoClientePagamentos.innerHTML = pagamentos.size
+            ? [...pagamentos.entries()].sort((a,b) => b[1]-a[1]).map(([nome,quantidade]) => `<span>${escaparHtml(nome)} <strong>${quantidade} ${quantidade===1?"compra":"compras"}</strong></span>`).join("")
+            : '<div class="historico-cliente-vazio">Ainda não há formas de pagamento registradas.</div>';
+
+        renderizarComprasCliente(vendas, itens, produtos);
+
+        try {
+            const notinhas = await carregarNotinhasAbertasCliente(cliente.id);
+            const saldoAberto = notinhas.reduce((soma, n) => soma + n.saldoCalculado, 0);
+            historicoClienteNotinhas.innerHTML = notinhas.length
+                ? `<div class="historico-cliente-saldo"><span>Saldo total em aberto</span><strong>${escaparHtml(formatarMoedaCliente(saldoAberto))}</strong></div>
+                   <div class="historico-cliente-notinhas-lista">${notinhas.map(n => `<article><div><strong>Notinha ${escaparHtml(n.numero || `#${n.id}`)}</strong><small>Emitida em ${escaparHtml(formatarDataHoraCliente(n.emitida_em))}</small></div><div><span>Total ${escaparHtml(formatarMoedaCliente(n.totalCalculado || n.total))}</span><strong>Em aberto: ${escaparHtml(formatarMoedaCliente(n.saldoCalculado))}</strong></div></article>`).join("")}</div>`
+                : '<div class="historico-cliente-vazio">Nenhuma notinha com saldo pendente para este cliente.</div>';
+        } catch (erroNotinhas) {
+            console.error("Erro ao consultar notinhas do cliente:", erroNotinhas);
+            historicoClienteNotinhas.innerHTML = '<div class="historico-cliente-vazio">Não foi possível consultar as notinhas deste cliente. Verifique a instalação e as permissões do módulo de fiado.</div>';
+        }
+
+        historicoClienteCarregando.hidden = true;
+        historicoClienteConteudo.hidden = false;
+    } catch (erro) {
+        console.error("Erro ao carregar histórico do cliente:", erro);
+        historicoClienteCarregando.hidden = true;
+        historicoClienteErro.hidden = false;
+        historicoClienteErro.textContent = `Não foi possível carregar o histórico: ${erro?.message || "Verifique a conexão e as permissões do Supabase."}`;
+    }
+}
+
+if (fecharHistoricoCliente) fecharHistoricoCliente.addEventListener("click", fecharModalHistoricoCliente);
+if (modalHistoricoCliente) {
+    modalHistoricoCliente.addEventListener("click", evento => {
+        if (evento.target === modalHistoricoCliente || (evento.target instanceof Element && evento.target.closest("[data-fechar-historico]"))) fecharModalHistoricoCliente();
+    });
+    document.addEventListener("keydown", evento => {
+        if (evento.key === "Escape" && !modalHistoricoCliente.hidden) fecharModalHistoricoCliente();
+    });
+}
 
 /* ==========================================
    EDITAR CLIENTE

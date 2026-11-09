@@ -1,0 +1,38 @@
+.auditoria-etiqueta{display:block;color:#64748b;font-size:11px;font-weight:800;letter-spacing:.12em;margin-bottom:7px}
+.auditoria-cabecalho{align-items:center;gap:18px}
+.auditoria-cabecalho h2{margin:0 0 7px}
+.auditoria-cabecalho p{margin:0;color:#64748b;max-width:680px}
+.auditoria-painel{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:22px;box-shadow:0 4px 16px rgba(15,23,42,.04)}
+.auditoria-filtros{display:grid;grid-template-columns:repeat(5,minmax(130px,1fr));gap:13px;align-items:end}
+.auditoria-campo{display:flex;flex-direction:column;gap:6px;min-width:0}
+.auditoria-campo label{font-size:12px;font-weight:700;color:#475569}
+.auditoria-campo input,.auditoria-campo select{width:100%;min-height:41px;padding:9px 11px;border:1px solid #dbe2ea;border-radius:9px;background:#fff;color:#1e293b;font:inherit;font-size:13px;box-sizing:border-box;outline:none}
+.auditoria-campo input:focus,.auditoria-campo select:focus{border-color:#60a5fa;box-shadow:0 0 0 3px rgba(59,130,246,.12)}
+.auditoria-campo-busca{grid-column:span 2}
+.auditoria-resumo{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;margin:18px 0 14px;padding:11px 13px;background:#f8fafc;border-radius:9px;color:#64748b;font-size:12px}
+.auditoria-resumo span:first-child{font-weight:800;color:#334155}
+.auditoria-estado{padding:26px 18px;text-align:center;border:1px dashed #cbd5e1;border-radius:12px;background:#f8fafc;color:#64748b;font-size:13px}
+.auditoria-erro{padding:15px 16px;margin:12px 0;background:#fef2f2;border:1px solid #fecaca;border-radius:10px;color:#991b1b;font-size:13px;line-height:1.5}
+.auditoria-erro[hidden]{display:none}
+.auditoria-lista{display:grid;gap:12px}
+.auditoria-registro{border:1px solid #e2e8f0;border-radius:13px;overflow:hidden;background:#fff}
+.auditoria-registro-cabecalho{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:14px 16px}
+.auditoria-registro-identificacao{display:flex;align-items:center;gap:11px;min-width:0}
+.auditoria-registro-identificacao>div{display:flex;flex-direction:column;gap:5px;min-width:0}
+.auditoria-registro-identificacao strong{color:#172033;font-size:14px}
+.auditoria-registro-identificacao small{color:#64748b;font-size:11px}
+.auditoria-registro-icone{display:grid;place-items:center;flex:0 0 34px;width:34px;height:34px;border-radius:10px;background:#eff6ff;color:#1d4ed8;font-weight:800;font-size:19px}
+.auditoria-tag{flex:0 0 auto;padding:5px 9px;border-radius:999px;background:#eff6ff;color:#1d4ed8;font-size:11px;font-weight:800}
+.auditoria-tag.criado{background:#ecfdf3;color:#067647}
+.auditoria-tag.removido{background:#fef2f2;color:#b42318}
+.auditoria-registro-meta{display:flex;gap:14px;flex-wrap:wrap;padding:9px 16px;background:#f8fafc;border-top:1px solid #eef2f7;border-bottom:1px solid #eef2f7;color:#64748b;font-size:11px}
+.auditoria-alteracoes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 16px;padding:5px 16px 12px}
+.auditoria-alteracao{padding:10px 0;border-bottom:1px solid #f1f5f9;min-width:0}
+.auditoria-alteracao>strong{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:#64748b;margin-bottom:6px}
+.auditoria-alteracao>div{display:flex;align-items:center;gap:9px;flex-wrap:wrap;font-size:12px;overflow-wrap:anywhere}
+.auditoria-valor-antigo{color:#b42318;text-decoration:line-through}
+.auditoria-valor-novo{color:#067647;font-weight:700}
+.auditoria-seta{color:#94a3b8}
+.auditoria-sem-detalhe{margin:12px 16px;color:#64748b;font-size:12px}
+@media(max-width:1050px){.auditoria-filtros{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:700px){.auditoria-painel{padding:14px}.auditoria-cabecalho{align-items:flex-start;flex-direction:column}.auditoria-filtros{grid-template-columns:repeat(2,minmax(0,1fr))}.auditoria-campo-busca{grid-column:span 2}.auditoria-resumo{flex-direction:column}.auditoria-alteracoes{grid-template-columns:1fr}.auditoria-registro-cabecalho{align-items:flex-start}}

@@ -698,6 +698,18 @@
 
             </a>
 
+                <!-- AUDITORIA DO SISTEMA -->
+                <a href="auditoria.html" class="item-menu">
+                    <span class="icone-menu" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M5 4h14v16H5z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                            <path d="M8 8h8M8 12h5M8 16h8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </span>
+                    <span>Auditoria</span>
+                </a>
+
+
 
         </nav>
 
@@ -1192,6 +1204,39 @@
 
         </section>
 
+
+
+        <!-- HISTÓRICO INTELIGENTE DO CLIENTE -->
+        <div class="modal-historico-cliente" id="modalHistoricoCliente" hidden>
+            <div class="modal-historico-cliente-fundo" data-fechar-historico></div>
+            <section class="modal-historico-cliente-conteudo" role="dialog" aria-modal="true" aria-labelledby="historicoClienteTitulo">
+                <header class="historico-cliente-cabecalho">
+                    <div>
+                        <span class="historico-cliente-etiqueta">RELACIONAMENTO</span>
+                        <h2 id="historicoClienteTitulo">Histórico do cliente</h2>
+                        <p id="historicoClienteContato"></p>
+                    </div>
+                    <button type="button" class="historico-cliente-fechar" id="fecharHistoricoCliente" aria-label="Fechar">×</button>
+                </header>
+                <div id="historicoClienteCarregando" class="historico-cliente-estado">Carregando compras e pendências...</div>
+                <div id="historicoClienteConteudo" hidden>
+                    <div class="historico-cliente-indicadores" id="historicoClienteIndicadores"></div>
+                    <section class="historico-cliente-secao">
+                        <div class="historico-cliente-titulo-secao"><div><h3>Formas de pagamento utilizadas</h3><p>Distribuição das compras finalizadas deste cliente.</p></div></div>
+                        <div id="historicoClientePagamentos" class="historico-cliente-pagamentos"></div>
+                    </section>
+                    <section class="historico-cliente-secao">
+                        <div class="historico-cliente-titulo-secao"><div><h3>Compras realizadas</h3><p>Histórico das vendas finalizadas, com produtos e cores.</p></div></div>
+                        <div id="historicoClienteCompras" class="historico-cliente-tabela-wrap"></div>
+                    </section>
+                    <section class="historico-cliente-secao">
+                        <div class="historico-cliente-titulo-secao"><div><h3>Notinhas em aberto</h3><p>Saldo pendente calculado pelas parcelas e pagamentos registrados.</p></div></div>
+                        <div id="historicoClienteNotinhas" class="historico-cliente-notinhas"></div>
+                    </section>
+                </div>
+                <div id="historicoClienteErro" class="historico-cliente-erro" hidden></div>
+            </section>
+        </div>
 
     </main>
 
