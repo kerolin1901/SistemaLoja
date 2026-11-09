@@ -1665,112 +1665,48 @@ async function adicionarProduto() {
 
     }
 
-    let varianteSelecionada;
+    let variantesSelecionadas;
     try {
-        varianteSelecionada = await window.SistemaLojaCoresVenda.selecionar(
-            produto,
-            quantidade,
-            dadosCoresVendaVendedor
+        variantesSelecionadas = await window.SistemaLojaCoresVenda.selecionar(
+            produto, quantidade, dadosCoresVendaVendedor
         );
     } catch (erroCor) {
-        mostrarMensagem(erroCor.message || "Não foi possível selecionar a cor.", "erro");
+        mostrarMensagem(erroCor.message || "Não foi possível selecionar as cores.", "erro");
         return;
     }
-    if (!varianteSelecionada) return;
+    if (!variantesSelecionadas) return;
 
-    const estoque = Number(varianteSelecionada.estoque) || 0;
-    const itemExistente = itensVenda.find(function (item) {
-        return String(item.produto_id) === String(produto.id) &&
-            Number(item.produto_cor_id || 0) === Number(varianteSelecionada.produto_cor_id || 0);
-    });
-
-    const quantidadeAtual =
-
-        itemExistente
-
-            ? Number(
-
-                itemExistente.quantidade
-
-            )
-
-            : 0;
-
-    const quantidadeFinal =
-
-        quantidadeAtual +
-
-        quantidade;
-
-    if (
-
-        quantidadeFinal >
-
-        estoque
-
-    ) {
-
-        mostrarMensagem(
-
-            "A quantidade solicitada ultrapassa o estoque disponível. Estoque: " +
-
-            estoque,
-
-            "erro"
-
-        );
-
-        return;
-
-    }
-
-    if (itemExistente) {
-
-        itemExistente.quantidade =
-
-            quantidadeFinal;
-
-    }
-
-    else {
-
-        itensVenda.push({
-
-            produto_id:
-
-                produto.id,
-
-            nome:
-
-                produto.nome,
-
-            sku:
-
-                produto.sku,
-
-            preco_unitario:
-
-                Number(
-
-                    produto.preco_venda
-
-                ),
-
-            preco_venda_minimo: Number(produto.preco_venda_minimo ?? produto.preco_venda) || 0,
-            produto_cor_id: varianteSelecionada.produto_cor_id,
-            cor_vendida: varianteSelecionada.cor_vendida,
-            cor_foto_url: varianteSelecionada.foto_url || null,
-
-            estoque:
-
-                estoque,
-
-            quantidade:
-
-                quantidade
-
+    for (const varianteSelecionada of variantesSelecionadas) {
+        const estoque = Number(varianteSelecionada.estoque) || 0;
+        const itemExistente = itensVenda.find(function (item) {
+            return String(item.produto_id) === String(produto.id) &&
+                Number(item.produto_cor_id || 0) === Number(varianteSelecionada.produto_cor_id || 0);
         });
-
+        const quantidadeAtual = itemExistente ? Number(itemExistente.quantidade) : 0;
+        const quantidadeFinal = quantidadeAtual + varianteSelecionada.quantidade;
+        if (estoque <= 0 || quantidadeFinal > estoque) {
+            mostrarMensagem(
+                `Estoque insuficiente para "${produto.nome}"${varianteSelecionada.cor_vendida ? ` na cor ${varianteSelecionada.cor_vendida}` : ""}. Estoque disponível: ${estoque}.`,
+                "erro"
+            );
+            return;
+        }
+        if (itemExistente) {
+            itemExistente.quantidade = quantidadeFinal;
+        } else {
+            itensVenda.push({
+                produto_id: produto.id,
+                nome: produto.nome,
+                sku: produto.sku,
+                preco_unitario: Number(produto.preco_venda),
+                preco_venda_minimo: Number(produto.preco_venda_minimo ?? produto.preco_venda) || 0,
+                produto_cor_id: varianteSelecionada.produto_cor_id,
+                cor_vendida: varianteSelecionada.cor_vendida,
+                cor_foto_url: varianteSelecionada.foto_url || null,
+                estoque: estoque,
+                quantidade: varianteSelecionada.quantidade
+            });
+        }
     }
 
     renderizarItens();

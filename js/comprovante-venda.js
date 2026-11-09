@@ -147,7 +147,8 @@
         quantidade,
         unitario,
         subtotal: Number(item.subtotal ?? (quantidade * unitario)) || 0,
-        desconto: Number(item.desconto_item) || 0
+        desconto: Number(item.desconto_item) || 0,
+        cor: campo(item, ["cor_vendida"])
       };
     });
 
@@ -174,6 +175,7 @@
         <td class="produto">
           ${esc(item.nome)}
           ${item.sku ? `<small>SKU: ${esc(item.sku)}</small>` : ""}
+          ${item.cor ? `<small>Cor: ${esc(item.cor)}</small>` : ""}
           <small>${item.quantidade} x ${moeda(item.unitario)}</small>
           ${item.desconto > 0 ? `<small>Desconto do item: -${moeda(item.desconto)}</small>` : ""}
         </td>

@@ -2273,114 +2273,55 @@ async function adicionarProdutoCarrinho() {
 
     }
 
-    let varianteSelecionada;
+    let variantesSelecionadas;
     try {
-        varianteSelecionada = await window.SistemaLojaCoresVenda.selecionar(
-            produto,
-            quantidade,
-            dadosCoresVenda
+        variantesSelecionadas = await window.SistemaLojaCoresVenda.selecionar(
+            produto, quantidade, dadosCoresVenda
         );
     } catch (erroCor) {
-        mostrarMensagem(erroCor.message || "Não foi possível selecionar a cor.", "erro");
+        mostrarMensagem(erroCor.message || "Não foi possível selecionar as cores.", "erro");
         return;
     }
-    if (!varianteSelecionada) return;
+    if (!variantesSelecionadas) return;
 
-    const estoque = Number(varianteSelecionada.estoque) || 0;
-    if (estoque <= 0) {
-        mostrarMensagem(
-            varianteSelecionada.produto_cor_id
-                ? `A cor ${varianteSelecionada.cor_vendida} do produto "${produto.nome}" está sem estoque.`
-                : `O produto "${produto.nome}" está sem estoque.`,
-            "erro"
-        );
-        return;
-    }
+    for (const varianteSelecionada of variantesSelecionadas) {
+        const estoque = Number(varianteSelecionada.estoque) || 0;
+        if (estoque <= 0 || varianteSelecionada.quantidade > estoque) {
+            mostrarMensagem(
+                `Estoque insuficiente para "${produto.nome}"${varianteSelecionada.cor_vendida ? ` na cor ${varianteSelecionada.cor_vendida}` : ""}. Disponível: ${estoque}.`,
+                "erro"
+            );
+            return;
+        }
 
-    const itemExistente = carrinho.find(function (item) {
-        return Number(item.produto_id) === produtoId &&
-            Number(item.produto_cor_id || 0) === Number(varianteSelecionada.produto_cor_id || 0);
-    });
-
-    const quantidadeFinal =
-
-        itemExistente
-
-            ? Number(itemExistente.quantidade) +
-
-              quantidade
-
-            : quantidade;
-
-    if (
-
-        quantidadeFinal > estoque
-
-    ) {
-
-        mostrarMensagem(
-
-            `Estoque insuficiente para "${produto.nome}"${varianteSelecionada.cor_vendida ? ` na cor ${varianteSelecionada.cor_vendida}` : ""}. Estoque disponível: ${estoque}.`,
-
-            "erro"
-
-        );
-
-        return;
-
-    }
-
-    if (
-
-        itemExistente
-
-    ) {
-
-        itemExistente.quantidade =
-
-            quantidadeFinal;
-
-    }
-
-    else {
-
-        carrinho.push({
-
-            produto_id:
-
-                produto.id,
-
-            nome:
-
-                produto.nome,
-
-            sku:
-
-                produto.sku || "",
-
-            preco_unitario:
-
-                Number(
-
-                    produto.preco_venda
-
-                ) || 0,
-
-            preco_venda_minimo: Number(produto.preco_venda_minimo ?? produto.preco_venda) || 0,
-            produto_cor_id: varianteSelecionada.produto_cor_id,
-            cor_vendida: varianteSelecionada.cor_vendida,
-            cor_foto_url: varianteSelecionada.foto_url || null,
-
-            estoque:
-
-                estoque,
-
-            quantidade:
-
-                quantidade
-
+        const itemExistente = carrinho.find(function (item) {
+            return Number(item.produto_id) === produtoId &&
+                Number(item.produto_cor_id || 0) === Number(varianteSelecionada.produto_cor_id || 0);
         });
-
+        const quantidadeFinal = (itemExistente ? Number(itemExistente.quantidade) : 0) + varianteSelecionada.quantidade;
+        if (quantidadeFinal > estoque) {
+            mostrarMensagem(
+                `Estoque insuficiente para "${produto.nome}"${varianteSelecionada.cor_vendida ? ` na cor ${varianteSelecionada.cor_vendida}` : ""}. Estoque disponível: ${estoque}.`,
+                "erro"
+            );
+            return;
+        }
+        if (itemExistente) {
+            itemExistente.quantidade = quantidadeFinal;
+        } else {
+            carrinho.push({
+                produto_id: produto.id,
+                nome: produto.nome,
+                sku: produto.sku || "",
+                preco_unitario: Number(produto.preco_venda) || 0,
+                preco_venda_minimo: Number(produto.preco_venda_minimo ?? produto.preco_venda) || 0,
+                produto_cor_id: varianteSelecionada.produto_cor_id,
+                cor_vendida: varianteSelecionada.cor_vendida,
+                cor_foto_url: varianteSelecionada.foto_url || null,
+                estoque: estoque,
+                quantidade: varianteSelecionada.quantidade
+            });
+        }
     }
 
     renderizarCarrinho();

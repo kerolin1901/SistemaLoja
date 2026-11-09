@@ -167,3 +167,31 @@
 @media (max-width: 380px) {
     .sl-cores-opcoes-venda { grid-template-columns: minmax(0, 1fr); }
 }
+
+
+/* Quantidades por cor na seleção da venda */
+.sl-cor-quantidade-card { cursor: default; }
+.sl-cor-quantidade-card.selecionada { border-color: #2563eb !important; box-shadow: 0 0 0 1px #2563eb; }
+.sl-cor-quantidade-controle {
+    display: grid; grid-template-columns: 34px minmax(48px, 1fr) 34px;
+    gap: 6px; align-items: center; padding: 9px 10px 11px;
+}
+.sl-cor-quantidade-controle button {
+    height: 34px; border: 1px solid #cbd5e1; border-radius: 8px;
+    background: #f8fafc; color: #1e293b; font-size: 21px; font-weight: 700;
+    cursor: pointer; line-height: 1;
+}
+.sl-cor-quantidade-controle button:disabled { opacity: .4; cursor: not-allowed; }
+.sl-cor-quantidade-controle input {
+    width: 100%; min-width: 0; height: 34px; box-sizing: border-box;
+    border: 1px solid #cbd5e1; border-radius: 8px; text-align: center;
+    font: inherit; font-weight: 700; color: #172033;
+}
+.sl-cores-resumo-quantidade {
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 12px; padding: 10px 12px; margin-top: 12px;
+    border-radius: 9px; background: #f1f5f9; color: #334155; font-size: 13px;
+}
+.sl-cores-resumo-quantidade strong { color: #1d4ed8; font-size: 14px; }
+.sl-cores-aviso-quantidade { margin: 7px 0 0; color: #64748b; font-size: 12px; }
+.sl-cores-aviso-quantidade.erro { color: #dc2626; }
