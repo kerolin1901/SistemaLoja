@@ -2257,6 +2257,13 @@ function criarCartoesIndicadoresDashboard() {
                 background: #dcfce7;
                 color: #16a34a;
             }
+            #indicadoresDashboard > .indicador-dashboard:nth-child(10) {
+                border-left-color: #dc2626;
+            }
+            #indicadoresDashboard > .indicador-dashboard:nth-child(10) .icone-indicador-dashboard {
+                background: #fee2e2;
+                color: #dc2626;
+            }
             @media (max-width: 1100px) {
                 .indicadores-dashboard {
                     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -2346,7 +2353,13 @@ function criarCartoesIndicadoresDashboard() {
             {
                 id: "indicadorEstoqueBaixo",
                 titulo: "Estoque baixo",
-                descricao: "Produtos e cores esgotados ou no estoque mínimo",
+                descricao: "Produtos e cores com saldo positivo no mínimo ou abaixo dele",
+                valor: "Carregando..."
+            },
+            {
+                id: "indicadorEstoqueEsgotado",
+                titulo: "Esgotados",
+                descricao: "Produtos e cores com saldo zerado",
                 valor: "Carregando..."
             }
         ];
@@ -2359,7 +2372,8 @@ function criarCartoesIndicadoresDashboard() {
             indicadorSaldoAReceber: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 7v5l3 2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>',
             indicadorLucroMes: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17l6-6 4 3 8-8M15 6h6v6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>',
             indicadorLucroLiquidoMes: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V5M4 19h16M7 15l4-4 3 2 5-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-            indicadorEstoqueBaixo: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 9 5v8l-9 5-9-5V8z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="m3 8 9 5 9-5M12 13v8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>'
+            indicadorEstoqueBaixo: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 9 5v8l-9 5-9-5V8z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="m3 8 9 5 9-5M12 13v8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>',
+            indicadorEstoqueEsgotado: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m9 9 6 6m0-6-6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>'
         };
 
         indicadores.forEach(function (indicador) {
@@ -3363,22 +3377,38 @@ async function carregarIndicadoresDashboard() {
             coresAtivas = resultadoCores.data || [];
         }
 
-        const quantidadeEstoqueBaixo = produtosAtivos.reduce((total, produto) => {
-            if (produto.controla_cores === true) {
-                const variantes = coresAtivas.filter((cor) => String(cor.produto_id) === String(produto.id));
-                if (variantes.length) {
-                    return total + variantes.filter((cor) => Number(cor.estoque || 0) <= Number(cor.estoque_minimo || 0)).length;
-                }
+        let quantidadeEstoqueBaixo = 0;
+        let quantidadeEstoqueEsgotado = 0;
+
+        produtosAtivos.forEach((produto) => {
+            const variantes = produto.controla_cores === true
+                ? coresAtivas.filter((cor) => String(cor.produto_id) === String(produto.id))
+                : [];
+
+            if (variantes.length) {
+                variantes.forEach((cor) => {
+                    const saldo = Number(cor.estoque || 0);
+                    const minimo = Number(cor.estoque_minimo || 0);
+                    if (saldo <= 0) quantidadeEstoqueEsgotado++;
+                    else if (saldo <= minimo) quantidadeEstoqueBaixo++;
+                });
+                return;
             }
-            return total + (Number(produto.estoque || 0) <= Number(produto.estoque_minimo || 0) ? 1 : 0);
-        }, 0);
+
+            const saldo = Number(produto.estoque || 0);
+            const minimo = Number(produto.estoque_minimo || 0);
+            if (saldo <= 0) quantidadeEstoqueEsgotado++;
+            else if (saldo <= minimo) quantidadeEstoqueBaixo++;
+        });
 
         definirValorIndicadorDashboard(
-
             "indicadorEstoqueBaixo",
-
             String(quantidadeEstoqueBaixo)
+        );
 
+        definirValorIndicadorDashboard(
+            "indicadorEstoqueEsgotado",
+            String(quantidadeEstoqueEsgotado)
         );
 
     }
@@ -3396,6 +3426,14 @@ async function carregarIndicadoresDashboard() {
         definirValorIndicadorDashboard(
 
             "indicadorEstoqueBaixo",
+
+            "—"
+
+        );
+
+        definirValorIndicadorDashboard(
+
+            "indicadorEstoqueEsgotado",
 
             "—"
 

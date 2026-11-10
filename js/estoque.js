@@ -61,6 +61,9 @@ const totalItens =
 const totalEstoqueBaixo =
     document.getElementById("totalEstoqueBaixo");
 
+const totalEsgotados =
+    document.getElementById("totalEsgotados");
+
 const nomeAdministrador =
     document.getElementById("nomeAdministrador");
 
@@ -523,6 +526,10 @@ async function carregarEstoque() {
                 "0";
         }
 
+        if (totalEsgotados) {
+            totalEsgotados.textContent =
+                "0";
+        }
 
         return;
     }
@@ -530,6 +537,7 @@ async function carregarEstoque() {
 
     let quantidadeTotal = 0;
     let quantidadeEstoqueBaixo = 0;
+    let quantidadeEsgotados = 0;
 
 
     produtos.forEach(function (produto) {
@@ -568,17 +576,24 @@ async function carregarEstoque() {
                 statusClasse = "status-baixo";
             }
             variantesAtivas.forEach((cor) => {
-                if (Number(cor.estoque || 0) <= Number(cor.estoque_minimo || 0)) quantidadeEstoqueBaixo++;
+                const saldoCor = Number(cor.estoque || 0);
+                const minimoCor = Number(cor.estoque_minimo || 0);
+                if (saldoCor <= 0) {
+                    quantidadeEsgotados++;
+                } else if (saldoCor <= minimoCor) {
+                    quantidadeEstoqueBaixo++;
+                }
             });
         } else {
             if (estoque <= 0) {
                 statusTexto = "Esgotado";
                 statusClasse = "status-esgotado";
+                quantidadeEsgotados++;
             } else if (estoque <= minimo) {
                 statusTexto = "Estoque baixo";
                 statusClasse = "status-baixo";
+                quantidadeEstoqueBaixo++;
             }
-            if (estoque <= minimo) quantidadeEstoqueBaixo++;
         }
 
 
@@ -803,6 +818,11 @@ async function carregarEstoque() {
 
         totalEstoqueBaixo.textContent =
             quantidadeEstoqueBaixo;
+    }
+
+    if (totalEsgotados) {
+        totalEsgotados.textContent =
+            quantidadeEsgotados;
     }
 
     aplicarFiltrosListaCompras();
